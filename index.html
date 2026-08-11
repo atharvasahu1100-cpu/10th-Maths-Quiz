@@ -1,0 +1,317 @@
+08.12 3:27 AM
+index.html
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP Board 10th Math Quiz</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 15px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .menu-screen, .quiz-screen {
+            display: none;
+        }
+        .menu-screen.active, .quiz-screen.active {
+            display: block;
+        }
+        .chapter-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background-color: #f8f9fa;
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            transition: 0.2s;
+        }
+        .chapter-btn:hover {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+            color: #0d47a1;
+        }
+        .question {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: left;
+            transition: 0.3s;
+        }
+        .options button.correct {
+            background-color: #2ecc71 !important;
+            color: white;
+            border-color: #27ae60;
+        }
+        .options button.wrong {
+            background-color: #e74c3c !important;
+            color: white;
+            border-color: #c0392b;
+        }
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .back-btn {
+            background-color: #95a5a6;
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+        #result-box {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>MP Board 10th Math Quiz</h1>
+    <div class="subtitle">कक्षा 10वीं गणित - निशुल्क अभ्यास ऐप</div>
+    <!-- अध्याय चयन मेनू -->
+    <div id="menu-screen" class="menu-screen active">
+        <h3 style="color: #e67e22; font-size: 16px; border-bottom: 2px solid #eee; padding-bottom: 8px;">सभी अध्याय चुनें:</h3>
+        <div id="chapter-list"></div>
+    </div>
+    <!-- क्विज़ स्क्रीन -->
+    <div id="quiz-screen" class="quiz-screen">
+        <button class="action-btn back-btn" onclick="goBackToMenu()">← अध्यायों की सूची पर वापस जाएं</button>
+        <h3 id="current-chapter-title" style="color: #e67e22; font-size: 16px; margin-top: 5px;"></h3>
+        <div id="quiz-content">
+            <div class="question" id="question-text"></div>
+            <div class="options" id="options-box"></div>
+            <button id="next-btn" class="action-btn" style="display:none;" onclick="nextQuestion()">अगला प्रश्न</button>
+        </div>
+        <div id="result-box" style="display:none;">
+            <p id="final-score-text"></p>
+            <button class="action-btn" onclick="goBackToMenu()">दूसरे अध्याय पर जाएँ</button>
+        </div>
+    </div>
+</div>
+<script>
+    const allChaptersData = [
+        {
+            title: "अध्याय 1: वास्तविक संख्याएँ",
+            questions: [
+                { q: "संख्या 140 का अभाज्य गुणनखंडन क्या है?", options: ["2 × 2 × 5 × 7", "2 × 3 × 5 × 7", "2 × 2 × 3 × 7", "5 × 5 × 2 × 7"], ans: 0 },
+                { q: "संख्याओं 26 और 91 का HCF क्या होगा?", options: ["13", "7", "2", "26"], ans: 0 },
+                { q: "यदि HCF (306, 657) = 9 है, तो LCM ज्ञात कीजिए:", options: ["22338", "22328", "23338", "22238"], ans: 0 },
+                { q: "निम्नलिखित में से कौन सी एक अपरिमेय संख्या है?", options: ["√3", "√4", "9", "4/5"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 2: बहुपद",
+            questions: [
+                { q: "घात दो के बहुपद को क्या कहते हैं?", options: ["द्विघात बहुपद", "रैखिक बहुपद", "त्रिघात बहुपद", "इनमें से कोई नहीं"], ans: 0 },
+                { q: "द्विघात बहुपद ax² + bx + c के शून्यकों का योग होता है:", options: ["-b/a", "c/a", "a/b", "-c/a"], ans: 0 },
+                { q: "यदि किसी बहुपद का ग्राफ x-अक्ष को 3 बिंदुओं पर काटता है, तो शून्यकों की संख्या होगी:", options: ["3", "2", "1", "0"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 3: दो चर वाले रैखिक समीकरण युग्म",
+            questions: [
+                { q: "यदि a1/a2 = b1/b2 ≠ c1/c2 हो, तो रैखिक समीकरण युग्म का:", options: ["कोई हल नहीं होगा", "अद्वितीय हल होगा", "अनेक हल होंगे", "दो हल होंगे"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 4: द्विघात समीकरण",
+            questions: [
+                { q: "द्विघात समीकरण का मानक रूप क्या है?", options: ["ax² + bx + c = 0", "ax + b = 0", "ax³ + bx² = 0", "कोई नहीं"], ans: 0 },
+                { q: "द्विघात समीकरण ax² + bx + c = 0 के मूल वास्तविक नहीं होंगे यदि विविक्तकर (D):", options: ["D < 0", "D > 0", "D = 0", "D ≥ 0"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 5: समांतर श्रेढियाँ",
+            questions: [
+                { q: "AP: 10, 7, 4, ... का 10वाँ पद क्या है?", options: ["-17", "10", "24", "-35"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 6: त्रिभुज",
+            questions: [
+                { q: "सभी समबाहु त्रिभुज होते हैं:", options: ["समरूप", "सर्वांगसम", "समान नहीं", "इनमें से कोई नहीं"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 7: निर्देशांक ज्यामिति",
+            questions: [
+                { q: "मूलबिंदु के निर्देशांक होते हैं:", options: ["(0, 0)", "(1, 1)", "(0, 1)", "(1, 0)"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 8: त्रिकोणमिति का परिचय",
+            questions: [
+                { q: "9sec²A - 9tan²A बराबर है:", options: ["9", "1", "8", "0"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 9: त्रिकोणमिति के कुछ अनुप्रयोग",
+            questions: [
+                { q: "मीनार के पाद से 30 मीटर की दूरी पर स्थित बिंदु का उन्नयन कोण 30° है, ऊँचाई है:", options: ["10√3 मीटर", "30 मीटर", "15 मीटर", "30√3 मीटर"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 10: वृत्त",
+            questions: [
+                { q: "एक वृत्त की कितनी स्पर्श रेखाएँ हो सकती हैं?", options: ["अनेक (अनंत)", "एक", "दो", "शून्य"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 11: वृत्तों से संबंधित क्षेत्रफल",
+            questions: [
+                { q: "r त्रिज्या वाले वृत्त का क्षेत्रफल क्या होता है?", options: ["πr²", "2πr", "πr", "2πr²"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 12: पृष्ठीय क्षेत्रफल और आयतन",
+            questions: [
+                { q: "एक गोले का पृष्ठीय क्षेत्रफल होता है:", options: ["4πr²", "2πr²", "πr²", "4/3 πr³"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 13: सांख्यिकी",
+            questions: [
+                { q: "बहुलक, माध्यक और माध्य के बीच संबंध क्या है?", options: ["3 माध्यक = बहुलक + 2 माध्य", "मानक सूत्र", "माध्यक = बहुलक + माध्य", "इनमें से कोई नहीं"], ans: 0 }
+            ]
+        },
+        {
+            title: "अध्याय 14: प्रायिकता",
+            questions: [
+                { q: "किसी घटना की प्रायिकता का अधिकतम मान कितना होता है?", options: ["1", "0", "0.5", "2"], ans: 0 },
+                { q: "निश्चित घटना की प्रायिकता होती है:", options: ["1", "0", "-1", "इनमें से कोई नहीं"], ans: 0 }
+            ]
+        }
+    ];
+    let selectedChapterIndex = 0;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    const menuScreen = document.getElementById("menu-screen");
+    const quizScreen = document.getElementById("quiz-screen");
+    const chapterList = document.getElementById("chapter-list");
+    const currentChapterTitle = document.getElementById("current-chapter-title");
+    const questionText = document.getElementById("question-text");
+    const optionsBox = document.getElementById("options-box");
+    const nextBtn = document.getElementById("next-btn");
+    const quizContent = document.getElementById("quiz-content");
+    const resultBox = document.getElementById("result-box");
+    const finalScoreText = document.getElementById("final-score-text");
+    function initMenu() {
+        chapterList.innerHTML = "";
+        allChaptersData.forEach((chapter, index) => {
+            const btn = document.createElement("button");
+            btn.className = "chapter-btn";
+            btn.innerText = chapter.title;
+            btn.onclick = () => startChapterQuiz(index);
+            chapterList.appendChild(btn);
+        });
+    }
+    function startChapterQuiz(index) {
+        selectedChapterIndex = index;
+        currentQuestionIndex = 0;
+        score = 0;
+        menuScreen.classList.remove("active");
+        quizScreen.classList.add("active");
+        quizContent.style.display = "block";
+        resultBox.style.display = "none";
+        currentChapterTitle.innerText = allChaptersData[selectedChapterIndex].title;
+        loadQuestion();
+    }
+    function loadQuestion() {
+        nextBtn.style.display = "none";
+        optionsBox.innerHTML = "";
+        const chapter = allChaptersData[selectedChapterIndex];
+        const currentQ = chapter.questions[currentQuestionIndex];
+        questionText.innerText = `प्रश्न (${currentQuestionIndex + 1}/${chapter.questions.length}): ${currentQ.q}`;
+        currentQ.options.forEach((option, i) => {
+            const optBtn = document.createElement("button");
+            optBtn.innerText = option;
+            optBtn.onclick = () => selectAnswer(i, optBtn);
+            optionsBox.appendChild(optBtn);
+        });
+    }
+    function selectAnswer(selectedIndex, btn) {
+        const chapter = allChaptersData[selectedChapterIndex];
+        const currentQ = chapter.questions[currentQuestionIndex];
+        const allBtns = optionsBox.getElementsByTagName("button");
+        if (selectedIndex === currentQ.ans) {
+            btn.classList.add("correct");
+            score++;
+        } else {
+            btn.classList.add("wrong");
+            allBtns[currentQ.ans].classList.add("correct");
+        }
+        for (let b of allBtns) {
+            b.disabled = true;
+        }
+        nextBtn.style.display = "block";
+    }
+    function nextQuestion() {
+        currentQuestionIndex++;
+        const chapter = allChaptersData[selectedChapterIndex];
+        if (currentQuestionIndex < chapter.questions.length) {
+            loadQuestion();
+        } else {
+            quizContent.style.display = "none";
+            resultBox.style.display = "block";
+            finalScoreText.innerHTML = `क्विज़ समाप्त! <br>आपका स्कोर: ${score} / ${chapter.questions.length}`;
+        }
+    }
+    function goBackToMenu() {
+        quizScreen.classList.remove("active");
+        menuScreen.classList.add("active");
+    }
+    initMenu();
+</script>
+</body>
+</html>
+
