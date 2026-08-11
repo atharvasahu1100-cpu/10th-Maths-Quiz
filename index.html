@@ -1,317 +1,330 @@
-08.12 3:27 AM
-index.html
 <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP Board 10th Math Quiz</title>
+    <title>MP Board 10th Math Study Portal</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
-            color: #333;
-            margin: 0;
-            padding: 15px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #7f8c8d;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-        .menu-screen, .quiz-screen {
-            display: none;
-        }
-        .menu-screen.active, .quiz-screen.active {
-            display: block;
-        }
-        .chapter-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            background-color: #f8f9fa;
-            border: 1px solid #dcdde1;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            text-align: left;
-            font-weight: 600;
-            color: #2c3e50;
-            transition: 0.2s;
-        }
-        .chapter-btn:hover {
-            background-color: #e3f2fd;
-            border-color: #2196f3;
-            color: #0d47a1;
-        }
-        .question {
+        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; font-size: 22px; }
+        .menu-item { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #3498db; color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; text-align: center; font-weight: bold; }
+        .section { display: none; }
+        .active { display: block; }
+        .back-btn { background: #95a5a6; }
+        .chapter-btn { display: block; width: 100%; padding: 12px; margin: 8px 0; background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; text-align: left; }
+        
+        #options-box button { 
+            display: block; 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            background: #ecf0f1; 
+            border: 1px solid #bdc3c7; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            text-align: left; 
             font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #2c3e50;
         }
-        .options button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background-color: #ecf0f1;
-            border: 2px solid #bdc3c7;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            text-align: left;
-            transition: 0.3s;
-        }
-        .options button.correct {
-            background-color: #2ecc71 !important;
-            color: white;
-            border-color: #27ae60;
-        }
-        .options button.wrong {
-            background-color: #e74c3c !important;
-            color: white;
-            border-color: #c0392b;
-        }
-        .action-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-        .back-btn {
-            background-color: #95a5a6;
-            margin-bottom: 15px;
-            margin-top: 0;
-        }
-        #result-box {
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            line-height: 1.6;
-        }
+
+        .correct { background: #2ecc71 !important; color: white; }
+        .wrong { background: #e74c3c !important; color: white; }
+        .formula-box { background: #f9f9f9; padding: 12px; margin: 10px 0; border-left: 4px solid #e67e22; border-radius: 4px; line-height: 1.6; }
+        
+        /* स्कोरकार्ड के लिए डिजाइन */
+        #score-card { text-align: center; padding: 20px; }
+        #score-card h2 { color: #27ae60; }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <h1>MP Board 10th Math Quiz</h1>
-    <div class="subtitle">कक्षा 10वीं गणित - निशुल्क अभ्यास ऐप</div>
-    <!-- अध्याय चयन मेनू -->
-    <div id="menu-screen" class="menu-screen active">
-        <h3 style="color: #e67e22; font-size: 16px; border-bottom: 2px solid #eee; padding-bottom: 8px;">सभी अध्याय चुनें:</h3>
+    <h1>📚 गणित स्टडी पोर्टल (MP Board)</h1>
+    
+    <div id="home" class="section active">
+        <button class="menu-item" onclick="showSection('quiz-menu')">📝 अध्यायवार क्विज़ (1 से 14)</button>
+        <button class="menu-item" style="background:#e67e22;" onclick="showSection('formulas')">📐 सभी महत्वपूर्ण सूत्र</button>
+        <button class="menu-item" style="background:#9b59b6;" onclick="window.open('https://wa.me/917771973123')">💬 डाउट पूछें (WhatsApp)</button>
+    </div>
+
+    <div id="quiz-menu" class="section">
+        <button class="menu-item back-btn" onclick="showSection('home')">← वापस</button>
         <div id="chapter-list"></div>
     </div>
-    <!-- क्विज़ स्क्रीन -->
-    <div id="quiz-screen" class="quiz-screen">
-        <button class="action-btn back-btn" onclick="goBackToMenu()">← अध्यायों की सूची पर वापस जाएं</button>
-        <h3 id="current-chapter-title" style="color: #e67e22; font-size: 16px; margin-top: 5px;"></h3>
+
+    <div id="quiz-screen" class="section">
+        <button class="menu-item back-btn" onclick="showSection('quiz-menu')">← अध्यायों पर वापस</button>
         <div id="quiz-content">
-            <div class="question" id="question-text"></div>
-            <div class="options" id="options-box"></div>
-            <button id="next-btn" class="action-btn" style="display:none;" onclick="nextQuestion()">अगला प्रश्न</button>
+            <div id="question-text" style="font-weight:bold; margin-bottom:15px; font-size: 18px;"></div>
+            <div id="options-box"></div>
+            <button class="menu-item" id="next-btn" style="display:none; background:#2c3e50; margin-top: 15px;" onclick="nextQuestion()">अगला प्रश्न</button>
         </div>
-        <div id="result-box" style="display:none;">
-            <p id="final-score-text"></p>
-            <button class="action-btn" onclick="goBackToMenu()">दूसरे अध्याय पर जाएँ</button>
+        <div id="score-card" style="display:none;">
+            <h2>🎉 क्विज़ समाप्त!</h2>
+            <p id="score-details" style="font-size: 18px; margin: 20px 0;"></p>
+            <button class="menu-item" onclick="showSection('quiz-menu')">दूसरे अध्याय पर जाएं</button>
         </div>
     </div>
+
+    <div id="formulas" class="section">
+        <button class="menu-item back-btn" onclick="showSection('home')">← वापस</button>
+        <h3 style="color: #2c3e50; text-align: center;">📐 कक्षा 10वीं गणित - सभी महत्वपूर्ण सूत्र</h3>
+        
+        <div class="formula-box"><b>• अध्याय 1 (वास्तविक संख्याएँ):</b><br>• LCM × HCF = दोनों संख्याओं का गुणनफल (a × b)</div>
+        <div class="formula-box"><b>• अध्याय 2 (बहुपद):</b><br>• द्विघात बहुपद: ax² + bx + c<br>• शून्यकों का योग = -b/a<br>• शून्यकों का गुणनफल = c/a</div>
+        <div class="formula-box"><b>• अध्याय 3 (दो चर वाले रैखिक समीकरण):</b><br>• अद्वितीय हल: a₁/a₂ ≠ b₁/b₂<br>• अनंत हल: a₁/a₂ = b₁/b₂ = c₁/c₂<br>• कोई हल नहीं: a₁/a₂ = b₁/b₂ ≠ c₁/c₂</div>
+        <div class="formula-box"><b>• अध्याय 4 (द्विघात समीकरण):</b><br>• विविक्तकर (D) = b² - 4ac<br>• द्विघात सूत्र: x = [-b ± √(b² - 4ac)] / 2a</div>
+        <div class="formula-box"><b>• अध्याय 5 (समान्तर श्रेढ़ियाँ):</b><br>• n-वाँ पद (aₙ) = a + (n-1)d<br>• n पदों का योग (Sₙ) = n/2 [2a + (n-1)d]</div>
+        <div class="formula-box"><b>• अध्याय 7 (निर्देशांक ज्यामिति):</b><br>• दूरी सूत्र = √[(x₂ - x₁)² + (y₂ - y₁)²]<br>• मध्य बिंदु सूत्र = [(x₁ + x₂)/2, (y₁ + y₂)/2]</div>
+        <div class="formula-box"><b>• अध्याय 8 (त्रिकोणमिति):</b><br>• sin²θ + cos²θ = 1<br>• 1 + tan²θ = sec²θ<br>• 1 + cot²θ = cosec²θ</div>
+        <div class="formula-box"><b>• अध्याय 11 (वृत्तों से संबंधित क्षेत्रफल):</b><br>• वृत्त का क्षेत्रफल = πr² | परिधि = 2πr<br>• त्रिज्यखंड क्षेत्रफल = (θ/360°) × πr²</div>
+        <div class="formula-box"><b>• अध्याय 12 (पृष्ठीय क्षेत्रफल और आयतन):</b><br>• बेलन का आयतन = πr²h | वक्र पृष्ठ = 2πrh<br>• शंकु का आयतन = 1/3 πr²h | वक्र पृष्ठ = πrl<br>• गोले का आयतन = 4/3 πr³ | पृष्ठीय क्षेत्रफल = 4πr²</div>
+        <div class="formula-box"><b>• अध्याय 13 (सांख्यिकी):</b><br>• माध्य (Mean) = Σfᵢxᵢ / Σfᵢ<br>• बहुलक = l + [(f₁ - f₀)/(2f₁ - f₀ - f₂)] × h</div>
+        <div class="formula-box"><b>• अध्याय 14 (प्रायिकता):</b><br>• P(E) = अनुकूल परिणाम / कुल परिणाम<br>• P(E) + P(not E) = 1</div>
+    </div>
 </div>
+
 <script>
     const allChaptersData = [
-        {
-            title: "अध्याय 1: वास्तविक संख्याएँ",
-            questions: [
-                { q: "संख्या 140 का अभाज्य गुणनखंडन क्या है?", options: ["2 × 2 × 5 × 7", "2 × 3 × 5 × 7", "2 × 2 × 3 × 7", "5 × 5 × 2 × 7"], ans: 0 },
-                { q: "संख्याओं 26 और 91 का HCF क्या होगा?", options: ["13", "7", "2", "26"], ans: 0 },
-                { q: "यदि HCF (306, 657) = 9 है, तो LCM ज्ञात कीजिए:", options: ["22338", "22328", "23338", "22238"], ans: 0 },
-                { q: "निम्नलिखित में से कौन सी एक अपरिमेय संख्या है?", options: ["√3", "√4", "9", "4/5"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 2: बहुपद",
-            questions: [
-                { q: "घात दो के बहुपद को क्या कहते हैं?", options: ["द्विघात बहुपद", "रैखिक बहुपद", "त्रिघात बहुपद", "इनमें से कोई नहीं"], ans: 0 },
-                { q: "द्विघात बहुपद ax² + bx + c के शून्यकों का योग होता है:", options: ["-b/a", "c/a", "a/b", "-c/a"], ans: 0 },
-                { q: "यदि किसी बहुपद का ग्राफ x-अक्ष को 3 बिंदुओं पर काटता है, तो शून्यकों की संख्या होगी:", options: ["3", "2", "1", "0"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 3: दो चर वाले रैखिक समीकरण युग्म",
-            questions: [
-                { q: "यदि a1/a2 = b1/b2 ≠ c1/c2 हो, तो रैखिक समीकरण युग्म का:", options: ["कोई हल नहीं होगा", "अद्वितीय हल होगा", "अनेक हल होंगे", "दो हल होंगे"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 4: द्विघात समीकरण",
-            questions: [
-                { q: "द्विघात समीकरण का मानक रूप क्या है?", options: ["ax² + bx + c = 0", "ax + b = 0", "ax³ + bx² = 0", "कोई नहीं"], ans: 0 },
-                { q: "द्विघात समीकरण ax² + bx + c = 0 के मूल वास्तविक नहीं होंगे यदि विविक्तकर (D):", options: ["D < 0", "D > 0", "D = 0", "D ≥ 0"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 5: समांतर श्रेढियाँ",
-            questions: [
-                { q: "AP: 10, 7, 4, ... का 10वाँ पद क्या है?", options: ["-17", "10", "24", "-35"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 6: त्रिभुज",
-            questions: [
-                { q: "सभी समबाहु त्रिभुज होते हैं:", options: ["समरूप", "सर्वांगसम", "समान नहीं", "इनमें से कोई नहीं"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 7: निर्देशांक ज्यामिति",
-            questions: [
-                { q: "मूलबिंदु के निर्देशांक होते हैं:", options: ["(0, 0)", "(1, 1)", "(0, 1)", "(1, 0)"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 8: त्रिकोणमिति का परिचय",
-            questions: [
-                { q: "9sec²A - 9tan²A बराबर है:", options: ["9", "1", "8", "0"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 9: त्रिकोणमिति के कुछ अनुप्रयोग",
-            questions: [
-                { q: "मीनार के पाद से 30 मीटर की दूरी पर स्थित बिंदु का उन्नयन कोण 30° है, ऊँचाई है:", options: ["10√3 मीटर", "30 मीटर", "15 मीटर", "30√3 मीटर"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 10: वृत्त",
-            questions: [
-                { q: "एक वृत्त की कितनी स्पर्श रेखाएँ हो सकती हैं?", options: ["अनेक (अनंत)", "एक", "दो", "शून्य"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 11: वृत्तों से संबंधित क्षेत्रफल",
-            questions: [
-                { q: "r त्रिज्या वाले वृत्त का क्षेत्रफल क्या होता है?", options: ["πr²", "2πr", "πr", "2πr²"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 12: पृष्ठीय क्षेत्रफल और आयतन",
-            questions: [
-                { q: "एक गोले का पृष्ठीय क्षेत्रफल होता है:", options: ["4πr²", "2πr²", "πr²", "4/3 πr³"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 13: सांख्यिकी",
-            questions: [
-                { q: "बहुलक, माध्यक और माध्य के बीच संबंध क्या है?", options: ["3 माध्यक = बहुलक + 2 माध्य", "मानक सूत्र", "माध्यक = बहुलक + माध्य", "इनमें से कोई नहीं"], ans: 0 }
-            ]
-        },
-        {
-            title: "अध्याय 14: प्रायिकता",
-            questions: [
-                { q: "किसी घटना की प्रायिकता का अधिकतम मान कितना होता है?", options: ["1", "0", "0.5", "2"], ans: 0 },
-                { q: "निश्चित घटना की प्रायिकता होती है:", options: ["1", "0", "-1", "इनमें से कोई नहीं"], ans: 0 }
-            ]
-        }
+        { title: "अध्याय 1: वास्तविक संख्याएँ", questions: [
+            { q: "140 का अभाज्य गुणनखंडन क्या है?", options: ["2×2×5×7", "2×3×5×7", "2×2×3×7", "5×5×2×7"], ans: 0 },
+            { q: "संख्याओं 26 और 91 का HCF क्या है?", options: ["7", "2", "13", "26"], ans: 2 },
+            { q: "HCF(306, 657) = 9 दिया है, LCM ज्ञात कीजिए:", options: ["22328", "22338", "23338", "22238"], ans: 1 },
+            { q: "निम्नलिखित में से कौन सी अपरिमेय संख्या है?", options: ["√4", "√3", "9", "4/5"], ans: 1 },
+            { q: "√2 किस प्रकार की संख्या है?", options: ["परिमेय", "अपरिमेय", "पूर्णांक", "प्राकृत"], ans: 1 },
+            { q: "दो संख्याओं का गुणनफल 32 और HCF 2 है, तो LCM क्या होगा?", options: ["16", "32", "64", "8"], ans: 0 },
+            { q: "सबसे छोटी अभाज्य संख्या कौन सी है?", options: ["1", "2", "3", "4"], ans: 1 },
+            { q: "4 और 7 का HCF कितना होगा?", options: ["1", "2", "4", "7"], ans: 0 },
+            { q: "12 और 15 का HCF क्या है?", options: ["3", "5", "12", "15"], ans: 0 },
+            { q: "संख्या 96 और 404 का HCF क्या होगा?", options: ["2", "4", "8", "16"], ans: 1 }
+        ]},
+        { title: "अध्याय 2: बहुपद", questions: [
+            { q: "घात 2 के बहुपद को क्या कहते हैं?", options: ["रैखिक", "त्रिघात", "द्विघात", "शून्य बहुपद"], ans: 2 },
+            { q: "द्विघात बहुपद ax² + bx + c के शून्यकों का योग होता है:", options: ["c/a", "-b/a", "a/b", "-c/a"], ans: 1 },
+            { q: "यदि किसी बहुपद का ग्राफ x-अक्ष को 3 बिंदुओं पर प्रतिच्छेद करता है, तो शून्यकों की संख्या होगी:", options: ["1", "2", "3", "0"], ans: 2 },
+            { q: "शून्यक -3 और 4 वाला द्विघात बहुपद है:", options: ["x² - x - 12", "x² + x - 12", "x² - x + 12", "x² + x + 12"], ans: 0 },
+            { q: "एक द्विघात बहुपद के अधिकतम कितने शून्यक हो सकते हैं?", options: ["1", "2", "3", "0"], ans: 1 },
+            { q: "रैखिक बहुपद का व्यापक रूप है:", options: ["ax + b", "ax² + bx + c", "ax³ + bx²", "कोई नहीं"], ans: 0 },
+            { q: "द्विघात बहुपद के शून्यकों का गुणनफल होता है:", options: ["-b/a", "c/a", "a/b", "-c/a"], ans: 1 },
+            { q: "त्रिघात बहुपद के अधिकतम शून्यक कितने होते हैं?", options: ["1", "2", "3", "4"], ans: 2 },
+            { q: "यदि p(x) = x - 2 है, तो इसका शून्यक क्या होगा?", options: ["0", "2", "-2", "1"], ans: 1 },
+            { q: "बहुपद x² - 3 के शून्यक हैं:", options: ["±√3", "±3", "√3", "3"], ans: 0 }
+        ]},
+        { title: "अध्याय 3: दो चर वाले रैखिक समीकरण युग्म", questions: [
+            { q: "रैखिक समीकरण युग्म में यदि a₁/a₂ ≠ b₁/b₂ हो, तो:", options: ["अद्वितीय हल होगा", "कोई हल नहीं होगा", "अनेक हल होंगे", "विरोधी समीकरण होगा"], ans: 0 },
+            { q: "यदि a₁/a₂ = b₁/b₂ = c₁/c₂ हो, तो रेखाएँ कैसी होंगी?", options: ["प्रतिच्छेदी", "समान्तर", "संपाती", "लंबवत"], ans: 2 },
+            { q: "समीकरण x + y = 14 और x - y = 4 का हल क्या होगा?", options: ["x=9, y=5", "x=8, y=6", "x=10, y=4", "x=7, y=7"], ans: 0 },
+            { q: "यदि a₁/a₂ = b₁/b₂ ≠ c₁/c₂ हो, तो समीकरण निकाय का:", options: ["अद्वितीय हल होगा", "कोई हल नहीं होगा", "अनंत हल होंगे", "दो हल होंगे"], ans: 1 },
+            { q: "रैखिक समीकरण y = 3x + 5 का:", options: ["एक अद्वितीय हल है", "केवल दो हल हैं", "अपारित रूप से अनेक हल हैं", "कोई हल नहीं है"], ans: 2 },
+            { q: "दो चरों वाले रैखिक समीकरण का मानक रूप क्या है?", options: ["ax + by + c = 0", "ax² + by + c = 0", "ax + by = c²", "कोई नहीं"], ans: 0 },
+            { q: "यदि समीकरण 2x + 3y = k में x = 1, y = 2 हो, तो k का मान क्या होगा?", options: ["6", "7", "8", "9"], ans: 2 },
+            { q: "दो संख्याओं का योग 25 और अंतर 5 है, संख्याएँ हैं:", options: ["15 और 10", "20 और 5", "12 और 13", "16 और 9"], ans: 0 },
+            { q: "किस स्थिति में समीकरण युग्म संगत होता है?", options: ["अद्वितीय या अनेक हल होने पर", "कोई हल न होने पर", "केवल समांतर होने पर", "कोई नहीं"], ans: 0 },
+            { q: "समीकरण 2x - y = 3 में यदि y = 3 हो, तो x का मान क्या होगा?", options: ["1", "2", "3", "0"], ans: 2 }
+        ]},
+        { title: "अध्याय 4: द्विघात समीकरण", questions: [
+            { q: "निम्नलिखित में कौन सा द्विघात समीकरण है?", options: ["x(x + 1) + 8 = (x + 2)(x - 2)", "x² + 3x + 1 = (x - 2)²", "(x + 2)³ = 2x(x² - 1)", "x² + 2x = 0"], ans: 3 },
+            { q: "द्विघात समीकरण ax² + bx + c = 0 के मूल वास्तविक नहीं होते यदि:", options: ["b² - 4ac > 0", "b² - 4ac = 0", "b² - 4ac < 0", "b² - 4ac ≥ 0"], ans: 2 },
+            { q: "द्विघात समीकरण 3x² - 5x + 2 = 0 का विविक्तकर क्या होगा?", options: ["1", "0", "-1", "4"], ans: 0 },
+            { q: "द्विघात सूत्र (श्रीधराचार्य सूत्र) क्या है?", options: ["x = [-b ± √(b²-4ac)] / 2a", "x = [b ± √(b²-4ac)] / 2a", "x = [-b ± √(b²+4ac)] / 2a", "x = [-b ± √(4ac-b²)] / 2a"], ans: 0 },
+            { q: "द्विघात समीकरण x² - 9 = 0 के मूल क्या हैं?", options: ["3, -3", "3, 3", "-3, -3", "कोई नहीं"], ans: 0 },
+            { q: "यदि द्विघात समीकरण का विविक्तकर शून्य से बड़ा है, तो मूल होंगे:", options: ["वास्तविक और भिन्न", "वास्तविक और समान", "अवास्तविक", "कोई नहीं"], ans: 0 },
+            { q: "समीकरण 2x² - 4x + 3 = 0 का विविक्तकर है:", options: ["-8", "8", "0", "4"], ans: 0 },
+            { q: "द्विघात समीकरण के अधिकतम कितने मूल होते हैं?", options: ["1", "2", "3", "4"], ans: 1 },
+            { q: "यदि द्विघात समीकरण x² + kx + 4 = 0 के मूल समान हों, तो k का मान है:", options: ["±4", "2", "4", "0"], ans: 0 },
+            { q: "द्विघात समीकरण 2x² - x + 1/8 = 0 के मूल हैं:", options: ["1/4, 1/4", "1/2, 1/2", "1/4, 1/2", "2, 2"], ans: 0 }
+        ]},
+        { title: "अध्याय 5: समान्तर श्रेढ़ियाँ", questions: [
+            { q: "AP: 10, 7, 4, ... का 30 वाँ पद है:", options: ["97", "77", "-77", "-87"], ans: 2 },
+            { q: "AP: -3, -1/2, 2, ... का 11 वाँ पद है:", options: ["28", "22", "-38", "-48"], ans: 0 },
+            { q: "दी गई AP का सार्व अंतर (d) क्या होगा यदि a₂ = 13 और a₄ = 3?", options: ["2", "-2", "5", "-5"], ans: 3 },
+            { q: "AP: 3, 8, 13, 18, ... का कौन सा पद 78 है?", options: ["12 वाँ", "15 वाँ", "10 वाँ", "11 वाँ"], ans: 0 },
+            { q: "प्रथम n धन पूर्णांकों का योग होता है:", options: ["n(n+1)/2", "n(n-1)/2", "n²", "2n(n+1)"], ans: 0 },
+            { q: "यदि किसी AP का प्रथम पद 2 और सार्व अंतर 3 हो, तो इसके पहले 10 पदों का योग होगा:", options: ["245", "165", "180", "155"], ans: 1 },
+            { q: "AP: 2, 7, 12, ... का 10 वाँ पद है:", options: ["45", "47", "50", "52"], ans: 1 },
+            { q: "किसी AP का n वाँ पद ज्ञात करने का सूत्र है:", options: ["a + (n-1)d", "a + nd", "a - (n-1)d", "2a + (n-1)d"], ans: 0 },
+            { q: "यदि किसी AP के लिए a = 3, d = 0 हो, तो a₄ का मान होगा:", options: ["3", "0", "12", "1"], ans: 0 },
+            { q: "संख्याओं की सूची जो एक AP बनाती है:", options: ["1, 2, 4, 8", "2, 4, 8, 16", "3, 6, 9, 12", "1, 3, 9, 27"], ans: 2 }
+        ]},
+        { title: "अध्याय 6: त्रिभुज", questions: [
+            { q: "सभी वृत्त होते हैं:", options: ["सर्वांगसम", "समरूप", "समान", "इनमें से कोई नहीं"], ans: 1 },
+            { q: "सभी वर्ग होते हैं:", options: ["समरूप", "सर्वांगसम", "असमान", "विषम"], ans: 0 },
+            { q: "थेल्स प्रमेय किससे संबंधित है?", options: ["त्रिभुज", "वृत्त", "चतुर्भुज", "बहुभुज"], ans: 0 },
+            { q: "यदि दो समरूप त्रिभुजों की भुजाओं का अनुपात 4:9 है, तो उनके क्षेत्रफलों का अनुपात होगा:", options: ["2:3", "4:9", "16:81", "81:16"], ans: 2 },
+            { q: "समबाहु त्रिभुज की भुजा 2a है, तो उसकी ऊंचाई होगी:", options: ["a√3", "2a√3", "3a", "a/2"], ans: 0 },
+            { q: "पाइथागोरस प्रमेय लागू होती है:", options: ["समकोण त्रिभुज में", "समबाहु त्रिभुज में", "विषमबाहु त्रिभुज में", "न्यूनकोण त्रिभुज में"], ans: 0 },
+            { q: "किसी त्रिभुज में यदि एक भुजा का वर्ग अन्य दो भुजाओं के वर्गों के योग के बराबर हो, तो पहली भुजा का सम्मुख कोण होता है:", options: ["90°", "60°", "45°", "30°"], ans: 0 },
+            { q: "दो समरूप त्रिभुजों के परिमाप का अनुपात 3:5 है, तो उनकी संगत भुजाओं का अनुपात होगा:", options: ["9:25", "3:5", "5:3", "25:9"], ans: 1 },
+            { q: "यदि किसी त्रिभुज की एक भुजा के समांतर अन्य दो भुजाओं को प्रतिच्छेद करने के लिए रेखा खींची जाए, तो वह अन्य दो भुजाओं को:", options: ["समान अनुपात में विभाजित करती है", "असमान अनुपात में", "द्विभाजित करती है", "कोई नहीं"], ans: 0 },
+            { q: "आधारभूत समानुपातिकता प्रमेय के प्रतिपादक कौन थे?", options: ["थेल्स", "पाइथागोरस", "यूक्लिड", "आर्किमिडीज"], ans: 0 }
+        ]},
+        { title: "अध्याय 7: निर्देशांक ज्यामिति", questions: [
+            { q: "बिंदुओं (2, 3) और (4, 1) के बीच की दूरी है:", options: ["2√2", "4", "√8", "दोनों A और C"], ans: 3 },
+            { q: "मूल बिंदु के निर्देशांक होते हैं:", options: ["(1, 1)", "(0, 0)", "(1, 0)", "(0, 1)"], ans: 1 },
+            { q: "बिंदु (-3, 5) किस चतुर्थांश में स्थित है?", options: ["प्रथम", "द्वितीय", "तृतीय", "चतुर्थ"], ans: 1 },
+            { q: "मध्य बिंदु के निर्देशांक का सूत्र है:", options: ["[(x₁+x₂)/2, (y₁+y₂)/2]", "[x₁-x₂, y₁-y₂]", "[(x₁-x₂)/2, (y₁-y₂)/2]", "कोई नहीं"], ans: 0 },
+            { q: "y-अक्ष पर स्थित किसी बिंदु का x-निर्देशांक होता है:", options: ["0", "1", "विशिष्ट संख्या", "-1"], ans: 0 },
+            { q: "बिंदु (3, 4) की मूल बिंदु से दूरी है:", options: ["3", "4", "5", "7"], ans: 2 },
+            { q: "रेखा y = 4 का ग्राफ किस अक्ष के समांतर होगा?", options: ["x-अक्ष", "y-अक्ष", "मूल बिंदु", "कोई नहीं"], ans: 0 },
+            { q: "दूरी सूत्र निम्नलिखित में से कौन सा है?", options: ["√((x₂-x₁)² + (y₂-y₁)₂)", "x₁+x₂ / 2", "y₂-y₁ / x₂-x₁", "कोई नहीं"], ans: 0 },
+            { q: "बिंदुओं (-5, 7) और (-1, 3) के बीच की दूरी है:", options: ["4√2", "2√2", "5", "6"], ans: 0 },
+            { q: "त्रिभुज के केंद्रक के निर्देशांक का सूत्र है:", options: ["[(x₁+x₂+x₃)/3, (y₁+y₂+y₃)/3]", "[x₁+x₂+x₃, y₁+y₂+y₃]", "[(x₁+x₂)/2, (y₁+y₂)/2]", "कोई नहीं"], ans: 0 }
+        ]},
+        { title: "अध्याय 8: त्रिकोणमिति का परिचय", questions: [
+            { q: "9sec²A - 9tan²A बराबर है:", options: ["1", "9", "8", "0"], ans: 1 },
+            { q: "sin 60° cos 30° + sin 30° cos 60° का मान है:", options: ["0", "1", "2", "1/2"], ans: 1 },
+            { q: "tan A बराबर होता है:", options: ["1/cot A", "sin A / cos A", "कोशिश करें", "दोनों A और B"], ans: 3 },
+            { q: "sin²A + cos²A का मान होता है:", options: ["0", "1", "-1", "2"], ans: 1 },
+            { q: "1 + tan²θ का मान है:", options: ["sec²θ", "cosec²θ", "cot²θ", "1"], ans: 0 },
+            { q: "tan 30° का मान क्या है?", options: ["1/√3", "√3", "1", "0"], ans: 0 },
+            { q: "यदि sin A = 3/4, तो cos A का मान होगा:", options: ["√7/4", "3/4", "4/3", "1"], ans: 0 },
+            { q: "cos 90° का मान होता है:", options: ["1", "0", "1/2", "परिभाषित नहीं"], ans: 1 },
+            { q: "1 - sin²A का मान है:", options: ["cos²A", "tan²A", "cosec²A", "1"], ans: 0 },
+            { q: "cot 90° का मान होता है:", options: ["0", "1", "परिभाषित नहीं", "√3"], ans: 0 }
+        ]},
+        { title: "अध्याय 9: त्रिकोणमिति के कुछ अनुप्रयोग", questions: [
+            { q: "मीनार की ऊंचाई और छाया की लंबाई बराबर होने पर सूर्य का उन्नयन कोण होता है:", options: ["30°", "45°", "60°", "90°"], ans: 1 },
+            { q: "क्षितिज से ऊपर देखने पर दृष्टि रेखा और क्षैतिज रेखा के बीच बना कोण कहलाता है:", options: ["उन्नयन कोण", "अवनमन कोण", "समकोण", "ऋजु कोण"], ans: 0 },
+            { q: "क्षितिज से नीचे देखने पर बना कोण कहलाता है:", options: ["उन्नयन कोण", "अवनमन कोण", "शीर्षाभिमुख कोण", "पूरक कोण"], ans: 1 },
+            { q: "खंभे की लंबाई और छाया की लंबाई का अनुपात 1:√3 हो, तो उन्नयन कोण है:", options: ["30°", "45°", "60°", "90°"], ans: 0 },
+            { q: "सीढ़ी दीवार के साथ 60° का कोण बनाती है, पाद की दूरी 2 मीटर है, सीढ़ी की लंबाई है:", options: ["4 मीटर", "2 मीटर", "3 मीटर", "1 मीटर"], ans: 0 },
+            { q: "छाया की लंबाई ऊंचाई की √3 गुनी हो, तो उन्नयन कोण है:", options: ["30°", "45°", "60°", "90°"], ans: 0 },
+            { q: "त्रिकोणमिति के अनुप्रयोग में मुख्य रूप से उपयोग होता है:", options: ["समकोण त्रिभुज", "समबाहु त्रिभुज", "वृत्त", "चतुर्भुज"], ans: 0 },
+            { q: "अवनमन कोण और उन्नयन कोण में संबंध होता है:", options: ["दोनों बराबर होते हैं", "एक बड़ा होता है", "कोई संबंध नहीं", "योग 90° होता है"], ans: 0 },
+            { q: "पेड़ की टूटी डाली जमीन को छूती है और 30° का कोण बनाती है, दूरी 8 मीटर है, पेड़ की ऊंचाई है:", options: ["8√3 मीटर", "4√3 मीटर", "8 मीटर", "16 मीटर"], ans: 0 },
+            { q: "उन्नयन कोण हमेशा बनता है:", options: ["क्षैतिज रेखा के ऊपर", "क्षैतिज रेखा के नीचे", "लंबवत", "कोई नहीं"], ans: 0 }
+        ]},
+        { title: "अध्याय 10: वृत्त", questions: [
+            { q: "एक वृत्त की कितनी स्पर्श रेखाएँ हो सकती हैं?", options: ["1", "2", "अनेक", "शून्य"], ans: 2 },
+            { q: "वृत्त की स्पर्श रेखा, स्पर्श बिंदु से जाने वाली त्रिज्या पर होती है:", options: ["लंब", "समांतर", "संपाती", "कोई नहीं"], ans: 0 },
+            { q: "बाह्य बिंदु से वृत्त पर खींची गई स्पर्श रेखाओं की लंबाईयाँ होती हैं:", options: ["अসমান", "बराबर", "आधी", "दुगुनी"], ans: 1 },
+            { q: "वृत्त को दो बिंदुओं पर प्रतिच्छेद करने वाली रेखा को कहते हैं:", options: ["स्पर्श रेखा", "छेदक रेखा", "त्रिज्या", "व्यास"], ans: 1 },
+            { q: "केंद्र से जीवा पर डाला गया लम्ब जीवा को करता है:", options: ["समद्विभाजित", "दुगुना", "त्रिगुना", "कोई नहीं"], ans: 0 },
+            { q: "बाह्य बिंदु से वृत्त पर कितनी स्पर्श रेखाएँ खींची जा सकती हैं?", options: ["1", "2", "3", "अनेक"], ans: 1 },
+            { q: "वृत्त की सबसे बड़ी जीवा होती है:", options: ["त्रिज्या", "व्यास", "चाप", "परिधि"], ans: 1 },
+            { q: "PA, PB स्पर्श रेखाएँ 80° के कोण पर झुकी हों, तो ∠POA बराबर है:", options: ["50°", "60°", "70°", "80°"], ans: 0 },
+            { q: "वृत्त के अंदर स्थित बिंदु से वृत्त पर कितनी स्पर्श रेखाएँ खींची जा सकती हैं?", options: ["0", "1", "2", "अनेक"], ans: 0 },
+            { q: "संगत त्रिज्या और स्पर्श रेखा के बीच का कोण होता है:", options: ["90°", "60°", "180°", "45°"], ans: 0 }
+        ]},
+        { title: "अध्याय 11: वृत्तों से संबंधित क्षेत्रफल", questions: [
+            { q: "त्रिज्या r वाले वृत्त का क्षेत्रफल होता है:", options: ["2πr", "πr²", "πr", "2πr²"], ans: 1 },
+            { q: "त्रिज्या r वाले वृत्त की परिधि होती है:", options: ["πr²", "2πr", "πr", "4πr²"], ans: 1 },
+            { q: "त्रिज्यखंड का क्षेत्रफल जिसका कोण p° है, होगा:", options: ["(p/180) × 2πr", "(p/360) × πr²", "(p/360) × 2πr", "(p/180) × πr²"], ans: 1 },
+            { q: "अर्धवृत्त का परिमाप होता है:", options: ["πr + 2r", "πr", "2πr + r", "πr + r"], ans: 0 },
+            { q: "परिधि और क्षेत्रफल का संख्यात्मक मान समान हो, तो त्रिज्या होगी:", options: ["2 मात्रक", "π मात्रक", "4 मात्रक", "1 मात्रक"], ans: 0 },
+            { q: "घड़ी की मिनट की सुई द्वारा 1 मिनट में रचित कोण होता है:", options: ["6°", "360°", "18°", "90°"], ans: 0 },
+            { q: "त्रिज्या 6 सेमी और कोण 60° वाले त्रिज्यखंड का क्षेत्रफल है:", options: ["13.2 सेमी²", "18.48 सेमी²", "22/7 सेमी²", "कोई नहीं"], ans: 1 },
+            { q: "वृत्त के चतुर्थांश का क्षेत्रफल होता है:", options: ["(1/4)πr²", "πr²/2", "2πr", "πr²"], ans: 0 },
+            { q: "त्रिज्याओं का अनुपात 2:3 हो, तो क्षेत्रफलों का अनुपात होगा:", options: ["2:3", "4:9", "8:27", "3:2"], ans: 1 },
+            { q: "वृत्त के चाप की लंबाई का सूत्र है:", options: ["(θ/360) × 2πr", "(θ/360) × πr²", "2πr", "πr²"], ans: 0 }
+        ]},
+        { title: "अध्याय 12: पृष्ठीय क्षेत्रफल और आयतन", questions: [
+            { q: "घनाभ का कुल पृष्ठीय क्षेत्रफल होता है:", options: ["2(lb + bh + hl)", "lbh", "2(l+b)h", "lbc"], ans: 0 },
+            { q: "गोले का आयतन होता है:", options: ["(4/3)πr³", "(2/3)πr³", "4πr²", "2πr²"], ans: 0 },
+            { q: "बेलन के वक्र पृष्ठीय क्षेत्रफल का सूत्र है:", options: ["2πrh", "πr²h", "2πr(r+h)", "πrl"], ans: 0 },
+            { q: "शंकु का कुल पृष्ठीय क्षेत्रफल होता है:", options: ["πrl", "πr(l + r)", "2πrh", "(1/3)πr²h"], ans: 1 },
+            { q: "अर्धगोले का कुल पृष्ठीय क्षेत्रफल होता है:", options: ["3πr²", "2πr²", "4πr²", "πr²"], ans: 0 },
+            { q: "घन का आयतन 125 घन सेमी है, भुजा होगी:", options: ["5 सेमी", "25 सेमी", "10 सेमी", "6 सेमी"], ans: 0 },
+            { q: "शंकु के आयतन का सूत्र है:", options: ["(1/3)πr²h", "πr²h", "(4/3)πr³", "2πrh"], ans: 0 },
+            { q: "गोले का पृष्ठीय क्षेत्रफल होता है:", options: ["4πr²", "(4/3)πr³", "2πr²", "πr²"], ans: 0 },
+            { q: "गोलों के आयतनों का अनुपात 8:27 है, त्रिज्याओं का अनुपात होगा:", options: ["2:3", "4:9", "8:27", "√2:√3"], ans: 0 },
+            { q: "बेलन का आयतन होता है:", options: ["πr²h", "(1/3)πr²h", "2πrh", "2πr(r+h)"], ans: 0 }
+        ]},
+        { title: "अध्याय 13: सांख्यिकी", questions: [
+            { q: "माध्य (Mean) ज्ञात करने का सूत्र है:", options: ["Σfixi / Σfi", "L + [(N/2 - cf)/f] × h", "l + [(f₁ - f₀)/(2f₁ - f₀ - f₂)] × h", "कोई नहीं"], ans: 0 },
+            { q: "बहुलक (Mode) ज्ञात करने का सूत्र है:", options: ["l + [(f₁ - f₀)/(2f₁ - f₀ - f₂)] × h", "Σfixi / Σfi", "L + [(N/2 - cf)/f] × h", "3Median - 2Mean"], ans: 0 },
+            { q: "माध्यक (Median) ज्ञात करने का सूत्र है:", options: ["L + [(N/2 - cf)/f] × h", "Σfixi / Σfi", "l + [(f₁ - f₀)/(2f₁ - f₀ - f₂)] × h", "कोई नहीं"], ans: 0 },
+            { q: "बहुलक, माध्य और माध्यक के बीच संबंध है:", options: ["3माध्यक = बहुलक + 2माध्य", "माध्यक = बहुलक + माध्य", "बहुलक = 3माध्य - 2माध्यक", "कोई नहीं"], ans: 0 },
+            { q: "संचयी बारंबारता वक्र (तोरण) का उपयोग किसके निर्धारण में होता है?", options: ["माध्यक", "माध्य", "बहुलक", "परिसीमा"], ans: 0 },
+            { q: "आँकड़ों 2, 3, 5, 7, 8, 5, 9, 5 का बहुलक है:", options: ["5", "3", "7", "2"], ans: 0 },
+            { q: "प्रथम 5 प्राकृत संख्याओं का माध्य है:", options: ["3", "2", "4", "5"], ans: 0 },
+            { q: "माध्य 24 और माध्यक 26 हो, तो बहुलक होगा:", options: ["30", "28", "32", "25"], ans: 0 },
+            { q: "वर्गीकृत आँकड़ों का माध्यक वर्ग वह वर्ग है जिसकी संचयी बारंबारता:", options: ["N/2 से अधिक और निकटतम है", "सबसे कम है", "N से कम है", "कोई नहीं"], ans: 0 },
+            { q: "वर्ग अंतराल 10-25 का वर्ग चिन्ह होगा:", options: ["17.5", "15", "20", "12.5"], ans: 0 }
+        ]},
+        { title: "अध्याय 14: प्रायिकता", questions: [
+            { q: "P(E) और P(not E) का योग होता है:", options: ["1", "0", "-1", "2"], ans: 0 },
+            { q: "कौन सी संख्या किसी घटना की प्रायिकता नहीं हो सकती?", options: ["-1.5", "2/3", "15%", "0.7"], ans: 0 },
+            { q: "एक असंभव घटना की प्रायिकता होती है:", options: ["0", "1", "0.5", "अनिश्चित"], ans: 0 },
+            { q: "एक निश्चित (संभव) घटना की प्रायिकता होती है:", options: ["1", "0", "10", "-1"], ans: 0 },
+            { q: "पासे को फेंकने पर 4 से बड़ी संख्या आने की प्रायिकता है:", options: ["1/3", "1/6", "1/2", "2/3"], ans: 0 },
+            { q: "52 पत्तों की गड्डी में से लाल रंग का बादशाह होने की प्रायिकता है:", options: ["2/52 (या 1/26)", "1/13", "4/52", "1/52"], ans: 0 },
+            { q: "दो सिक्कों को उछाला जाता है, कम से कम एक चित्त आने की प्रायिकता है:", options: ["3/4", "1/2", "1/4", "1"], ans: 0 },
+            { q: "प्रारंभिक घटनाओं की प्रायिकताओं का योग होता है:", options: ["1", "0", "2", "अनेक"], ans: 0 },
+            { q: "पासे को फेंकने पर सम संख्या आने की प्रायिकता है:", options: ["1/2", "1/3", "1/4", "3/4"], ans: 0 },
+            { q: "थैले में 3 लाल और 5 काली गेंदें हैं, लाल गेंद होने की प्रायिकता है:", options: ["3/8", "5/8", "3/5", "1/8"], ans: 0 }
+        ]}
     ];
-    let selectedChapterIndex = 0;
-    let currentQuestionIndex = 0;
-    let score = 0;
-    const menuScreen = document.getElementById("menu-screen");
-    const quizScreen = document.getElementById("quiz-screen");
-    const chapterList = document.getElementById("chapter-list");
-    const currentChapterTitle = document.getElementById("current-chapter-title");
-    const questionText = document.getElementById("question-text");
-    const optionsBox = document.getElementById("options-box");
-    const nextBtn = document.getElementById("next-btn");
-    const quizContent = document.getElementById("quiz-content");
-    const resultBox = document.getElementById("result-box");
-    const finalScoreText = document.getElementById("final-score-text");
-    function initMenu() {
-        chapterList.innerHTML = "";
-        allChaptersData.forEach((chapter, index) => {
-            const btn = document.createElement("button");
-            btn.className = "chapter-btn";
-            btn.innerText = chapter.title;
-            btn.onclick = () => startChapterQuiz(index);
-            chapterList.appendChild(btn);
-        });
+
+    let currentCh, currentQ, score, incorrect;
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'quiz-menu') initQuizMenu();
     }
-    function startChapterQuiz(index) {
-        selectedChapterIndex = index;
-        currentQuestionIndex = 0;
-        score = 0;
-        menuScreen.classList.remove("active");
-        quizScreen.classList.add("active");
-        quizContent.style.display = "block";
-        resultBox.style.display = "none";
-        currentChapterTitle.innerText = allChaptersData[selectedChapterIndex].title;
-        loadQuestion();
+    function initQuizMenu() {
+        const list = document.getElementById('chapter-list');
+        list.innerHTML = "";
+        allChaptersData.forEach((ch, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'chapter-btn';
+            btn.innerText = ch.title;
+            btn.onclick = () => { 
+                currentCh = i; 
+                currentQ = 0; 
+                score = 0; 
+                incorrect = 0;
+                showSection('quiz-screen'); 
+                document.getElementById('quiz-content').style.display = 'block';
+                document.getElementById('score-card').style.display = 'none';
+                loadQuestion(); 
+            };
+            list.appendChild(btn);
+        });
     }
     function loadQuestion() {
-        nextBtn.style.display = "none";
-        optionsBox.innerHTML = "";
-        const chapter = allChaptersData[selectedChapterIndex];
-        const currentQ = chapter.questions[currentQuestionIndex];
-        questionText.innerText = `प्रश्न (${currentQuestionIndex + 1}/${chapter.questions.length}): ${currentQ.q}`;
-        currentQ.options.forEach((option, i) => {
-            const optBtn = document.createElement("button");
-            optBtn.innerText = option;
-            optBtn.onclick = () => selectAnswer(i, optBtn);
-            optionsBox.appendChild(optBtn);
+        const q = allChaptersData[currentCh].questions[currentQ];
+        document.getElementById('question-text').innerText = `प्रश्न ${currentQ+1}/10: ${q.q}`;
+        const box = document.getElementById('options-box');
+        box.innerHTML = "";
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.innerText = opt;
+            btn.onclick = () => {
+                // Disable all buttons after click
+                const allBtns = box.getElementsByTagName('button');
+                for(let b of allBtns) b.disabled = true;
+
+                if(i === q.ans) {
+                    btn.className = 'correct';
+                    score++;
+                } else {
+                    btn.className = 'wrong';
+                    incorrect++;
+                    allBtns[q.ans].className = 'correct'; // Show correct answer
+                }
+                document.getElementById('next-btn').style.display = 'block';
+            };
+            box.appendChild(btn);
         });
     }
-    function selectAnswer(selectedIndex, btn) {
-        const chapter = allChaptersData[selectedChapterIndex];
-        const currentQ = chapter.questions[currentQuestionIndex];
-        const allBtns = optionsBox.getElementsByTagName("button");
-        if (selectedIndex === currentQ.ans) {
-            btn.classList.add("correct");
-            score++;
-        } else {
-            btn.classList.add("wrong");
-            allBtns[currentQ.ans].classList.add("correct");
-        }
-        for (let b of allBtns) {
-            b.disabled = true;
-        }
-        nextBtn.style.display = "block";
-    }
     function nextQuestion() {
-        currentQuestionIndex++;
-        const chapter = allChaptersData[selectedChapterIndex];
-        if (currentQuestionIndex < chapter.questions.length) {
+        currentQ++;
+        if(currentQ < allChaptersData[currentCh].questions.length) {
+            document.getElementById('next-btn').style.display = 'none';
             loadQuestion();
         } else {
-            quizContent.style.display = "none";
-            resultBox.style.display = "block";
-            finalScoreText.innerHTML = `क्विज़ समाप्त! <br>आपका स्कोर: ${score} / ${chapter.questions.length}`;
+            // Show Score Card
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('score-card').style.display = 'block';
+            document.getElementById('score-details').innerHTML = `
+                कुल प्रश्न: 10<br>
+                ✅ सही उत्तर: <b>${score}</b><br>
+                ❌ गलत उत्तर: <b>${incorrect}</b><br><br>
+                आपका कुल स्कोर: <b>${score} / 10</b>
+            `;
         }
     }
-    function goBackToMenu() {
-        quizScreen.classList.remove("active");
-        menuScreen.classList.add("active");
-    }
-    initMenu();
 </script>
 </body>
 </html>
-
