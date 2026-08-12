@@ -96,6 +96,7 @@
             font-weight: bold;
             cursor: pointer;
         }
+        .btn:hover { background: #074b83; }
         .report-box {
             background: #f1f2f6;
             padding: 15px;
@@ -126,7 +127,7 @@
         <div id="timer" style="display:none;">समय: <span id="time-left">10:00</span></div>
     </div>
 
-    <!-- 1. छात्र लॉगिन सेक्शन -->
+    <!-- 1. लॉगिन सेक्शन -->
     <div id="login-section">
         <div class="form-group">
             <label>छात्र का पूरा नाम:</label>
@@ -139,22 +140,17 @@
         <button class="btn" onclick="startTest()">टेस्ट शुरू करें</button>
     </div>
 
-    <!-- 2. टेस्ट प्रश्न सेक्शन -->
+    <!-- 2. क्विज़ सेक्शन (10 प्रश्न) -->
     <div id="quiz-section" style="display:none;">
-        <div class="question-box">प्रश्‍न 1: संख्याओं 26 और 91 का HCF क्या होगा?</div>
-        <label class="option-item"><input type="radio" name="q1" value="A"> (A) 13</label>
-        <label class="option-item"><input type="radio" name="q1" value="B"> (B) 26</label>
-        <label class="option-item"><input type="radio" name="q1" value="C"> (C) 7</label>
-        <label class="option-item"><input type="radio" name="q1" value="D"> (D) 91</label>
-
-        <button class="btn" onclick="submitTest()">टेस्ट सबमिट करें</button>
+        <div id="question-container"></div>
+        <button class="btn" id="next-btn" onclick="nextQuestion()">अगला प्रश्न</button>
     </div>
 
-    <!-- 3. रिपोर्ट सेक्शन (रिकॉर्ड देखने के लिए) -->
+    <!-- 3. रिपोर्ट सेक्शन -->
     <div id="report-section" style="display:none;">
         <div class="report-box">
             <p><b>📊 छात्रों के टेस्ट का रिकॉर्ड:</b></p>
-            <p>अभी तक किसी छात्र ने टेस्ट नहीं दिया है या डेटा लोड हो रहा है।</p>
+            <p>सफलतापूर्वक सभी रिकॉर्ड यहाँ अपडेट किए जाएंगे।</p>
         </div>
     </div>
 
@@ -162,7 +158,6 @@
 </div>
 
 <script>
-    // यह चेक करेगा कि पेज रिकॉर्ड देखने के लिए खुला है या टेस्ट देने के लिए
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.get('view') === 'report') {
         document.getElementById('login-section').style.display = 'none';
@@ -172,6 +167,21 @@
         document.getElementById('timer').style.display = 'none';
     }
 
+    // 10 महत्वपूर्ण प्रश्न
+    const questions = [
+        { q: "प्रश्न 1: संख्याओं 26 और 91 का HCF क्या होगा?", options: ["(A) 13", "(B) 26", "(C) 7", "(D) 91"], answer: 0 },
+        { q: "प्रश्न 2: द्विघात बहुपद $ax^2 + bx + c$ के शून्यांकों का योग होता है?", options: ["(A) c/a", "(B) -b/a", "(C) b/a", "(D) -a/b"], answer: 1 },
+        { q: "प्रश्न 3: रैखिक समीकरण युग्म $a_1x + b_1y + c_1 = 0$ और $a_2x + b_2y + c_2 = 0$ के अद्वितीय हल की शर्त है?", options: ["(A) a1/a2 = b1/b2 != c1/c2", "(B) a1/a2 != b1/b2", "(C) a1/a2 = b1/b2 = c1/c2", "(D) इनमें से कोई नहीं"], answer: 1 },
+        { q: "प्रश्न 4: द्विघात समीकरण $ax^2 + bx + c = 0$ का विविक्तकर (Discriminant) ज्ञात करने का सूत्र है?", options: ["(A) D = b^2 - 4ac", "(B) D = b^2 + 4ac", "(C) D = a^2 - 4bc", "(D) D = b - 4ac"], answer: 0 },
+        { q: "प्रश्न 5: A.P. 2, 7, 12, ... का 10वाँ पद क्या है?", options: ["(A) 45", "(B) 47", "(C) 50", "(D) 55"], answer: 1 },
+        { q: "प्रश्न 6: सभी वृत्त होते हैं?", options: ["(A) सर्वांगसम", "(B) समरूप", "(C) समान", "(D) असमान"], answer: 1 },
+        { q: "प्रश्न 7: बिंदु (3, 4) की मूल बिंदु से दूरी क्या होगी?", options: ["(A) 3", "(B) 4", "(C) 5", "(D) 7"], answer: 2 },
+        { q: "प्रश्न 8: sin(90° - A) किसके बराबर होता है?", options: ["(A) cos A", "(B) tan A", "(C) cot A", "(D) sin A"], answer: 0 },
+        { q: "प्रश्न 9: वृत्त की स्पर्श रेखा उसे कितने बिंदुओं पर प्रतिच्छेद करती है?", options: ["(A) 1", "(B) 2", "(C) 3", "(D) अनन्त"], answer: 0 },
+        { q: "प्रश्न 10: एक पासे को एक बार फेंका जाता है, एक सम संख्या आने की प्रायिकता क्या है?", options: ["(A) 1/2", "(B) 1/3", "(C) 1/6", "(D) 1"], answer: 0 }
+    ];
+
+    let currentQuestion = 0;
     let totalSeconds = 10 * 60;
     let timerInterval;
 
@@ -206,6 +216,37 @@
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('quiz-section').style.display = 'block';
         startTimer();
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        if (currentQuestion < questions.length) {
+            let q = questions[currentQuestion];
+            let html = `<div class="question-box">${q.q}</div>`;
+            q.options.forEach((opt, index) => {
+                html += `<label class="option-item"><input type="radio" name="quiz_opt" value="${index}"> ${opt}</label>`;
+            });
+            document.getElementById('question-container').innerHTML = html;
+            
+            if(currentQuestion === questions.length - 1) {
+                document.getElementById('next-btn').textContent = "टेस्ट सबमिट करें";
+            }
+        }
+    }
+
+    function nextQuestion() {
+        let selected = document.querySelector('input[name="quiz_opt"]:checked');
+        if (!selected) {
+            alert("कृपया किसी एक विकल्प का चयन करें!");
+            return;
+        }
+
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            submitTest();
+        }
     }
 
     function submitTest() {
