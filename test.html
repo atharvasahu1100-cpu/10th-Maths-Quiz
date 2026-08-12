@@ -42,7 +42,7 @@
             font-size: 14px;
         }
         .question-box { margin-bottom: 20px; }
-        .question-title { font-size: 16px; color: #2d3436; font-weight: bold; margin-bottom: 15px; }
+        .question-title { font-size: 16px; color: #2d3436; font-weight: bold; margin-bottom: 15px; line-height: 1.5; }
         .option-label {
             display: block;
             background: #f8f9fa;
@@ -81,7 +81,6 @@
         .hidden { display: none; }
         .success-msg { text-align: center; color: #27ae60; font-size: 20px; font-weight: bold; padding: 20px 0; }
         
-        /* रिपोर्ट टेबल के लिए स्टाइल */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { border: 1px solid #dfe6e9; padding: 10px; text-align: center; font-size: 14px; }
         th { background: #0984e3; color: white; }
@@ -144,7 +143,7 @@
 </div>
 
 <script>
-    // अध्याय 1 के सभी 10 महत्वपूर्ण प्रश्न
+    // आपके गूगल फॉर्म वाले बिल्कुल सटीक 10 प्रश्न और उनके विकल्प
     const questions = [
         {
             question: "प्रश्न 1: संख्याओं 26 और 91 का HCF क्या होगा?",
@@ -167,7 +166,7 @@
             answer: 0
         },
         {
-            question: "प्रश्न 5: जाँच कीजिए कि क्या किसी प्राकृत संख्या n के लिए संख्या 6^n अंक 0 पर समाप्त हो सकती है?",
+            question: "प्रश्न 5: जाँच कीजिए कि क्या किसी प्राकृत संख्या n के लिए संख्या 6<sup>n</sup> अंक 0 पर समाप्त हो सकती है?",
             options: ["(A) हाँ", "(B) नहीं", "(C) निश्चित नहीं", "(D) इनमें से कोई नहीं"],
             answer: 1
         },
@@ -192,8 +191,8 @@
             answer: 2
         },
         {
-            question: "प्रश्न 10: यदि दो धनात्मक पूर्णांक a और b को a = x³y² और b = xy³ के रूप में लिखा जाए, जहाँ x और y अभाज्य संख्याएँ हैं, तो HCF(a, b) होगा?",
-            options: ["(A) xy", "(B) xy²", "(C) x³y³", "(D) x²y²"],
+            question: "प्रश्न 10: यदि दो धनात्मक पूर्णांक a और b को a = x<sup>3</sup>y<sup>2</sup> और b = xy<sup>3</sup> के रूप में लिखा जाए, जहाँ x और y अभाज्य संख्याएँ हैं, तो HCF(a, b) होगा?",
+            options: ["(A) xy", "(B) xy<sup>2</sup>", "(C) x<sup>3</sup>y<sup>3</sup>", "(D) x<sup>2</sup>y<sup>2</sup>"],
             answer: 1
         }
     ];
@@ -202,7 +201,7 @@
     let score = 0;
     let studentData = { name: "", mobile: "" };
     let timerInterval;
-    let timeLeft = 600; // 10 मिनट
+    let timeLeft = 600;
 
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -233,7 +232,7 @@
     function loadQuestion() {
         const q = questions[currentQuestionIndex];
         document.getElementById("q-number").innerText = `प्रश्न ${currentQuestionIndex + 1} / ${questions.length}`;
-        document.getElementById("question-text").innerText = q.question;
+        document.getElementById("question-text").innerHTML = q.question;
 
         const optionsContainer = document.getElementById("options-container");
         optionsContainer.innerHTML = "";
