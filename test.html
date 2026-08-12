@@ -18,7 +18,7 @@
         }
         .container { 
             width: 100%; 
-            max-width: 500px; 
+            max-width: 600px; 
             background: #ffffff; 
             padding: 25px 20px; 
             border-radius: 20px; 
@@ -98,16 +98,31 @@
             cursor: pointer;
         }
         .btn:hover { background: #074b83; }
-        .record-card {
-            background: #f1f2f6;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            text-align: left;
-            border-left: 5px solid #0984e3;
-            font-size: 14px;
-            color: #2d3436;
+        
+        /* टेबल का डिज़ाइन */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: left;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #dfe6e9;
+        }
+        th {
+            background: #0984e3;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f1f2f6;
+        }
+
         .back-btn { 
             display: block;
             width: 100%;
@@ -149,9 +164,24 @@
         <button class="btn" id="next-btn" onclick="nextQuestion()">अगला प्रश्न</button>
     </div>
 
-    <!-- 3. रिकॉर्ड सेक्शन -->
+    <!-- 3. रिकॉर्ड टेबल सेक्शन -->
     <div id="report-section" style="display:none;">
-        <div id="records-list"></div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>क्र.</th>
+                        <th>नाम</th>
+                        <th>मोबाइल</th>
+                        <th>स्कोर</th>
+                        <th>दिनांक</th>
+                    </tr>
+                </thead>
+                <tbody id="records-table-body">
+                    <!-- डेटा यहाँ जावास्क्रिप्ट से लोड होगा -->
+                </tbody>
+            </table>
+        </div>
         <button class="btn" style="background:#d63031; margin-top:10px;" onclick="clearRecords()">सारा रिकॉर्ड डिलीट करें</button>
     </div>
 
@@ -159,7 +189,6 @@
 </div>
 
 <script>
-    // केवल अध्याय 1 (वास्तविक संख्याएँ) के 10 महत्वपूर्ण प्रश्न (सुपरस्क्रिप्ट ठीक किए गए)
     const questions = [
         { q: "प्रश्न 1: संख्याओं 26 और 91 का HCF क्या होगा?", options: ["(A) 13", "(B) 26", "(C) 7", "(D) 91"], answer: 0 },
         { q: "प्रश्न 2: संख्याओं 96 और 404 का HCF कितना होगा?", options: ["(A) 2", "(B) 3", "(C) 4", "(D) 8"], answer: 2 },
@@ -282,23 +311,24 @@
 
     function displayRecords() {
         let records = JSON.parse(localStorage.getItem('student_test_records') || '[]');
-        let container = document.getElementById('records-list');
+        let tbody = document.getElementById('records-table-body');
         
         if (records.length === 0) {
-            container.innerHTML = `<div class="record-card">अभी तक किसी भी छात्र ने टेस्ट नहीं दिया है।</div>`;
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">अभी तक किसी भी छात्र ने टेस्ट नहीं दिया है।</td></tr>`;
             return;
         }
 
         let html = "";
         records.forEach((rec, index) => {
-            html += `<div class="record-card">
-                <b>${index + 1}. नाम:</b> ${rec.name}<br>
-                <b>मोबाइल:</b> ${rec.phone}<br>
-                <b>स्कोर:</b> ${rec.score} / ${rec.total}<br>
-                <small style="color: #636e72;">दिनांक: ${rec.time}</small>
-            </div>`;
+            html += `<tr>
+                <td>${index + 1}</td>
+                <td>${rec.name}</td>
+                <td>${rec.phone}</td>
+                <td><b>${rec.score}/${rec.total}</b></td>
+                <td><small>${rec.time}</small></td>
+            </tr>`;
         });
-        container.innerHTML = html;
+        tbody.innerHTML = html;
     }
 
     function clearRecords() {
