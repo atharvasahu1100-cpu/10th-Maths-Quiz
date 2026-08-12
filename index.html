@@ -3,23 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>गणित पोर्टल</title>
+    <title>Rajesh Sir Maths Quiz</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; background: #f4f4f9; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #0984e3; color: white; text-decoration: none; border-radius: 10px; font-weight: bold; }
-        .btn-report { background: #00b894; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0984e3, #74b9ff);
+            margin: 0;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-container {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .logo-box {
+            background: #0984e3;
+            color: #fdcb6e;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 18px;
+            border: 2px solid #fdcb6e;
+        }
+        .title-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+        h2 {
+            font-size: 22px;
+            color: #2d3436;
+            margin: 10px 0 5px 0;
+        }
+        .subtitle {
+            color: #636e72;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin: 12px 0;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: 0.2s;
+            text-align: center;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-1 { background: linear-gradient(135deg, #0984e3, #74b9ff); }
+        .btn-2 { background: #636e72; }
+        .btn-3 { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+        .btn-4 { background: linear-gradient(135deg, #00b894, #55efc4); }
+        .btn-5 { background: linear-gradient(135deg, #ff7675, #fab1a0); }
+        .btn-6 { background: linear-gradient(135deg, #00cec9, #81ecec); color: #2d3436; }
     </style>
 </head>
 <body>
 
-    <h1>गणित पोर्टल</h1>
-    <p>अपने अध्याय का चयन करें:</p>
+<div class="main-container">
+    <div class="logo-area">
+        <div class="logo-box">RS</div>
+        <div class="title-text">Rajesh Sir Maths Quiz</div>
+    </div>
 
-    <!-- टेस्ट वाला लिंक -->
-    <a href="test.html" class="btn">अध्याय 1: गणित टेस्ट दें</a>
+    <h2>📚 गणित स्टडी पोर्टल</h2>
+    <div class="subtitle">MP Board Class 10th</div>
 
-    <!-- रिपोर्ट वाला नया लिंक -->
-    <a href="https://script.google.com/macros/s/AKfycbxBMFg2IftBpPPszj9jlISuZNxVEL0xbcPh8RDKOnFEL7AVsTQXGiDwcYlCZJ6uyuT9/exec" class="btn btn-report">छात्रों का रिजल्ट रिकॉर्ड देखें</a>
+    <!-- वीकली टाइमर टेस्ट -->
+    <a href="test.html" class="btn btn-1">⚡ वीकली टाइमर टेस्ट दें</a>
+
+    <!-- छात्रों का पूरा रिकॉर्ड (रिपोर्ट) -->
+    <a href="https://script.google.com/macros/s/AKfycbxBMFg2IftBpPPszj9jlISuZNxVEL0xbcPh8RDKOnFEL7AVsTQXGiDwcYlCZJ6uyuT9/exec" class="btn btn-2">📊 छात्रों का पूरा रिकॉर्ड (Report)</a>
+
+    <!-- अध्यायवार क्विज़ -->
+    <a href="#" class="btn btn-3">📝 अध्यायवार क्विज़ (1 से 14)</a>
+
+    <!-- गणित पाठ्यपुस्तक -->
+    <a href="#" class="btn btn-4">📖 गणित पाठ्यपुस्तक (अध्याय 1 से 14)</a>
+
+    <!-- महत्वपूर्ण सूत्र -->
+    <a href="#" class="btn btn-5">📐 सभी महत्वपूर्ण सूत्र</a>
+
+    <!-- डाउट पूछें -->
+    <a href="#" class="btn btn-6">💬 डाउट पूछें (WhatsApp)</a>
+</div>
 
 </body>
 </html>
