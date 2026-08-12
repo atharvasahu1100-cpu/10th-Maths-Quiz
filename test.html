@@ -88,7 +88,7 @@
             display: block;
             width: 100%;
             padding: 12px;
-            margin-top: 20px;
+            margin-top: 15px;
             background: #0984e3;
             color: white;
             border: none;
@@ -106,7 +106,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-size: 14px;
             text-align: left;
         }
@@ -181,7 +181,8 @@
                 </tbody>
             </table>
         </div>
-        <button class="btn" style="background:#d63031; margin-top:10px;" onclick="clearRecords()">सारा रिकॉर्ड डिलीट करें (केवल सर के लिए)</button>
+        <button class="btn" style="background: #00b894;" onclick="displayRecords()">🔄 रिकॉर्ड रिफ्रेश करें</button>
+        <button class="btn" style="background: #d63031; margin-top:8px;" onclick="clearRecords()">🗑️ सारा रिकॉर्ड डिलीट करें (पासवर्ड: 1122)</button>
     </div>
 
     <a href="index.html" class="back-btn">← होम पेज पर वापस जाएं</a>
@@ -215,7 +216,9 @@
         document.getElementById('report-section').style.display = 'block';
         document.getElementById('page-title').textContent = '📊 छात्रों का रिकॉर्ड';
         document.getElementById('timer').style.display = 'none';
-        displayRecords();
+        
+        // तुरंत और ऑटोमैटिक लोड करने के लिए
+        setTimeout(displayRecords, 50);
     }
 
     function startTimer() {
@@ -330,7 +333,6 @@
         tbody.innerHTML = html;
     }
 
-    // पासवर्ड 1122 सेट किया गया है
     function clearRecords() {
         let pwd = prompt("रिकॉर्ड डिलीट करने के लिए सर का पासवर्ड दर्ज करें:");
         if (pwd === "1122") {
