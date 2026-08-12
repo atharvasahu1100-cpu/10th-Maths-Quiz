@@ -96,6 +96,14 @@
             font-weight: bold;
             cursor: pointer;
         }
+        .report-box {
+            background: #f1f2f6;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 15px;
+            color: #2d3436;
+        }
         .back-btn { 
             display: block;
             width: 100%;
@@ -118,7 +126,7 @@
         <div id="timer" style="display:none;">समय: <span id="time-left">10:00</span></div>
     </div>
 
-    <!-- 1. छात्र का नाम और मोबाइल नंबर दर्ज करने का फॉर्म -->
+    <!-- 1. छात्र लॉगिन सेक्शन -->
     <div id="login-section">
         <div class="form-group">
             <label>छात्र का पूरा नाम:</label>
@@ -131,7 +139,7 @@
         <button class="btn" onclick="startTest()">टेस्ट शुरू करें</button>
     </div>
 
-    <!-- 2. टेस्ट के प्रश्न (शुरुआत में छिपे रहेंगे) -->
+    <!-- 2. टेस्ट प्रश्न सेक्शन -->
     <div id="quiz-section" style="display:none;">
         <div class="question-box">प्रश्‍न 1: संख्याओं 26 और 91 का HCF क्या होगा?</div>
         <label class="option-item"><input type="radio" name="q1" value="A"> (A) 13</label>
@@ -142,21 +150,26 @@
         <button class="btn" onclick="submitTest()">टेस्ट सबमिट करें</button>
     </div>
 
-    <!-- 3. रिपोर्ट सेक्शन (जब होम पेज से रिकॉर्ड देखना हो) -->
+    <!-- 3. रिपोर्ट सेक्शन (रिकॉर्ड देखने के लिए) -->
     <div id="report-section" style="display:none;">
-        <p>यहाँ सभी छात्रों का रिकॉर्ड दिखाई देगा।</p>
+        <div class="report-box">
+            <p><b>📊 छात्रों के टेस्ट का रिकॉर्ड:</b></p>
+            <p>अभी तक किसी छात्र ने टेस्ट नहीं दिया है या डेटा लोड हो रहा है।</p>
+        </div>
     </div>
 
     <a href="index.html" class="back-btn">← होम पेज पर वापस जाएं</a>
 </div>
 
 <script>
-    // चेक करें कि क्या यूजर ने रिपोर्ट देखने के लिए क्लिक किया है
+    // यह चेक करेगा कि पेज रिकॉर्ड देखने के लिए खुला है या टेस्ट देने के लिए
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.get('view') === 'report') {
         document.getElementById('login-section').style.display = 'none';
+        document.getElementById('quiz-section').style.display = 'none';
         document.getElementById('report-section').style.display = 'block';
         document.getElementById('page-title').textContent = '📊 छात्रों का रिकॉर्ड';
+        document.getElementById('timer').style.display = 'none';
     }
 
     let totalSeconds = 10 * 60;
@@ -190,7 +203,6 @@
             return;
         }
 
-        // नाम-नंबर छिपाकर टेस्ट और टाइमर शुरू करें
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('quiz-section').style.display = 'block';
         startTimer();
