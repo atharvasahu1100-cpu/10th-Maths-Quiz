@@ -5,25 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MP Board 10th Math Study Portal</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; font-size: 22px; }
-        .menu-item { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #3498db; color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; text-align: center; font-weight: bold; text-decoration: none; box-sizing: border-box; }
-        .btn-formula { background: #e67e22; }
-        .btn-whatsapp { background: #9b59b6; }
-        .btn-admin { background: #2c3e50; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #74b9ff, #0984e3); 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container { 
+            width: 100%; 
+            max-width: 450px; 
+            background: #ffffff; 
+            padding: 25px 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            text-align: center;
+        }
+        h1 { 
+            color: #2d3436; 
+            font-size: 22px; 
+            margin-bottom: 20px; 
+            border-bottom: 2px solid #f1f2f6; 
+            padding-bottom: 12px; 
+        }
+        .menu-item { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 100%; 
+            padding: 14px 20px; 
+            margin: 10px 0; 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-decoration: none; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* बटनों के शानदार रंग */
+        .btn-textbook { background: linear-gradient(135deg, #00b894, #00cec9); }
+        .btn-test { background: linear-gradient(135deg, #0984e3, #74b9ff); }
+        .btn-quiz { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+        .btn-formula { background: linear-gradient(135deg, #e17055, #fab1a0); }
+        .btn-report { background: linear-gradient(135deg, #2d3436, #636e72); }
+        .btn-whatsapp { background: linear-gradient(135deg, #00b894, #55efc4); }
+        
+        .icon { margin-right: 10px; font-size: 18px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📚 गणित स्टडी पोर्टल (MP Board)</h1>
+    <h1>📚 गणित स्टडी पोर्टल<br><span style="font-size: 13px; color: #636e72; font-weight: normal;">MP Board Class 10th</span></h1>
     
-    <a href="test.html" class="menu-item">⚡ अध्याय 1: टाइमर टेस्ट दें</a>
-    <a href="quiz.html" class="menu-item" style="background:#0096d6;">📝 अध्यायवार क्विज़ (1 से 14)</a>
-    <a href="formulas.html" class="menu-item btn-formula">📐 सभी महत्वपूर्ण सूत्र</a>
-    <a href="test.html?view=report" class="menu-item btn-admin">📊 छात्रों का पूरा रिकॉर्ड (Report)</a>
-    <a href="https://wa.me/917771973123" target="_blank" class="menu-item btn-whatsapp">💬 डाउट पूछें (WhatsApp)</a>
+    <a href="textbook.html" class="menu-item btn-textbook"><span class="icon">📖</span> गणित पाठ्यपुस्तक (अध्याय 1 से 14)</a>
+    <a href="test.html" class="menu-item btn-test"><span class="icon">⚡</span> अध्याय 1: टाइमर टेस्ट दें</a>
+    <a href="quiz.html" class="menu-item btn-quiz"><span class="icon">📝</span> अध्यायवार क्विज़ (1 से 14)</a>
+    <a href="formulas.html" class="menu-item btn-formula"><span class="icon">📐</span> सभी महत्वपूर्ण सूत्र</a>
+    <a href="test.html?view=report" class="menu-item btn-report"><span class="icon">📊</span> छात्रों का पूरा रिकॉर्ड (Report)</a>
+    <a href="https://wa.me/917771973123" target="_blank" class="menu-item btn-whatsapp"><span class="icon">💬</span> डाउट पूछें (WhatsApp)</a>
 </div>
 
 </body>
