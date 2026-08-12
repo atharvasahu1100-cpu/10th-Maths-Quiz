@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>वीकली टाइमर टेस्ट - गणित</title>
+    <title>वीकली टाइमर टेस्ट - अध्याय 1: वास्तविक संख्याएँ</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -36,7 +36,7 @@
         }
         h1 { 
             color: #2d3436; 
-            font-size: 20px; 
+            font-size: 18px; 
             margin: 0; 
         }
         #timer {
@@ -70,6 +70,7 @@
             margin-bottom: 15px;
             font-weight: bold;
             text-align: left;
+            line-height: 1.5;
         }
         .option-item {
             display: block;
@@ -97,12 +98,14 @@
             cursor: pointer;
         }
         .btn:hover { background: #074b83; }
-        .report-box {
+        .record-card {
             background: #f1f2f6;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
             text-align: left;
-            margin-bottom: 15px;
+            border-left: 5px solid #0984e3;
+            font-size: 14px;
             color: #2d3436;
         }
         .back-btn { 
@@ -123,7 +126,7 @@
 
 <div class="container" id="app">
     <div class="header-flex">
-        <h1 id="page-title">⚡ वीकली टेस्ट</h1>
+        <h1 id="page-title">⚡ अध्याय 1 टेस्ट</h1>
         <div id="timer" style="display:none;">समय: <span id="time-left">10:00</span></div>
     </div>
 
@@ -140,24 +143,43 @@
         <button class="btn" onclick="startTest()">टेस्ट शुरू करें</button>
     </div>
 
-    <!-- 2. क्विज़ सेक्शन (10 प्रश्न) -->
+    <!-- 2. क्विज़ सेक्शन -->
     <div id="quiz-section" style="display:none;">
         <div id="question-container"></div>
         <button class="btn" id="next-btn" onclick="nextQuestion()">अगला प्रश्न</button>
     </div>
 
-    <!-- 3. रिपोर्ट सेक्शन -->
+    <!-- 3. रिकॉर्ड सेक्शन -->
     <div id="report-section" style="display:none;">
-        <div class="report-box">
-            <p><b>📊 छात्रों के टेस्ट का रिकॉर्ड:</b></p>
-            <p>सफलतापूर्वक सभी रिकॉर्ड यहाँ अपडेट किए जाएंगे।</p>
-        </div>
+        <div id="records-list"></div>
+        <button class="btn" style="background:#d63031; margin-top:10px;" onclick="clearRecords()">सारा रिकॉर्ड डिलीट करें</button>
     </div>
 
     <a href="index.html" class="back-btn">← होम पेज पर वापस जाएं</a>
 </div>
 
 <script>
+    // केवल अध्याय 1 (वास्तविक संख्याएँ) के 10 महत्वपूर्ण प्रश्न (सुपरस्क्रिप्ट ठीक किए गए)
+    const questions = [
+        { q: "प्रश्न 1: संख्याओं 26 और 91 का HCF क्या होगा?", options: ["(A) 13", "(B) 26", "(C) 7", "(D) 91"], answer: 0 },
+        { q: "प्रश्न 2: संख्याओं 96 और 404 का HCF कितना होगा?", options: ["(A) 2", "(B) 3", "(C) 4", "(D) 8"], answer: 2 },
+        { q: "प्रश्न 3: किसी पूर्णांक q के लिए, प्रत्येक विषम पूर्णांक का रूप होता है?", options: ["(A) 2q", "(B) 2q + 1", "(C) q", "(D) q + 1"], answer: 1 },
+        { q: "प्रश्न 4: किसी पूर्णांक m के लिए, प्रत्येक सम पूर्णांक का रूप होता है?", options: ["(A) m", "(B) m + 1", "(C) 2m", "(D) 2m + 1"], answer: 2 },
+        { q: "प्रश्न 5: संख्या 140 को अभाज्य गुणनखंडों के गुणनफल के रूप में लिखा जा सकता है?", options: ["(A) 2 × 2 × 5 × 7", "(B) 2 × 5 × 5 × 7", "(C) 2 × 2 × 2 × 7", "(D) 5 × 5 × 7 × 7"], answer: 0 },
+        { q: "प्रश्न 6: 6 और 20 का HCF और LCM का गुणनफल क्या होगा?", options: ["(A) 120", "(B) 26", "(C) 14", "(D) 240"], answer: 0 },
+        { q: "प्रश्न 7: यदि HCF (306, 657) = 9 दिया है, तो LCM (306, 657) ज्ञात कीजिए?", options: ["(A) 22338", "(B) 22328", "(C) 22358", "(D) 22438"], answer: 0 },
+        { q: "प्रश्न 8: निम्नलिखित में से कौन सी एक अभाज्य संख्या है?", options: ["(A) 8", "(B) 9", "(C) 11", "(D) 15"], answer: 2 },
+        { q: "प्रश्न 9: 3.1416 एक संख्या है?", options: ["(A) एक परिमेय संख्या", "(B) एक अपरिमेय संख्या", "(C) एक पूर्णांक", "(D) इनमें से कोई नहीं"], answer: 0 },
+        { q: "प्रश्न 10: यदि दो धनात्मक पूर्णांक a और b को a = x<sup>3</sup>y<sup>2</sup> और b = xy<sup>3</sup> के रूप में लिखा जाए, जहाँ x और y अभाज्य संख्याएँ हैं, तो HCF(a, b) होगा?", options: ["(A) xy", "(B) xy<sup>2</sup>", "(C) x<sup>3</sup>y<sup>3</sup>", "(D) x<sup>2</sup>y<sup>2</sup>"], answer: 1 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let studentName = "";
+    let studentPhone = "";
+    let totalSeconds = 10 * 60;
+    let timerInterval;
+
     const urlParams = new URLSearchParams(window.location.search);
     if(urlParams.get('view') === 'report') {
         document.getElementById('login-section').style.display = 'none';
@@ -165,25 +187,8 @@
         document.getElementById('report-section').style.display = 'block';
         document.getElementById('page-title').textContent = '📊 छात्रों का रिकॉर्ड';
         document.getElementById('timer').style.display = 'none';
+        displayRecords();
     }
-
-    // 10 महत्वपूर्ण प्रश्न
-    const questions = [
-        { q: "प्रश्न 1: संख्याओं 26 और 91 का HCF क्या होगा?", options: ["(A) 13", "(B) 26", "(C) 7", "(D) 91"], answer: 0 },
-        { q: "प्रश्न 2: द्विघात बहुपद $ax^2 + bx + c$ के शून्यांकों का योग होता है?", options: ["(A) c/a", "(B) -b/a", "(C) b/a", "(D) -a/b"], answer: 1 },
-        { q: "प्रश्न 3: रैखिक समीकरण युग्म $a_1x + b_1y + c_1 = 0$ और $a_2x + b_2y + c_2 = 0$ के अद्वितीय हल की शर्त है?", options: ["(A) a1/a2 = b1/b2 != c1/c2", "(B) a1/a2 != b1/b2", "(C) a1/a2 = b1/b2 = c1/c2", "(D) इनमें से कोई नहीं"], answer: 1 },
-        { q: "प्रश्न 4: द्विघात समीकरण $ax^2 + bx + c = 0$ का विविक्तकर (Discriminant) ज्ञात करने का सूत्र है?", options: ["(A) D = b^2 - 4ac", "(B) D = b^2 + 4ac", "(C) D = a^2 - 4bc", "(D) D = b - 4ac"], answer: 0 },
-        { q: "प्रश्न 5: A.P. 2, 7, 12, ... का 10वाँ पद क्या है?", options: ["(A) 45", "(B) 47", "(C) 50", "(D) 55"], answer: 1 },
-        { q: "प्रश्न 6: सभी वृत्त होते हैं?", options: ["(A) सर्वांगसम", "(B) समरूप", "(C) समान", "(D) असमान"], answer: 1 },
-        { q: "प्रश्न 7: बिंदु (3, 4) की मूल बिंदु से दूरी क्या होगी?", options: ["(A) 3", "(B) 4", "(C) 5", "(D) 7"], answer: 2 },
-        { q: "प्रश्न 8: sin(90° - A) किसके बराबर होता है?", options: ["(A) cos A", "(B) tan A", "(C) cot A", "(D) sin A"], answer: 0 },
-        { q: "प्रश्न 9: वृत्त की स्पर्श रेखा उसे कितने बिंदुओं पर प्रतिच्छेद करती है?", options: ["(A) 1", "(B) 2", "(C) 3", "(D) अनन्त"], answer: 0 },
-        { q: "प्रश्न 10: एक पासे को एक बार फेंका जाता है, एक सम संख्या आने की प्रायिकता क्या है?", options: ["(A) 1/2", "(B) 1/3", "(C) 1/6", "(D) 1"], answer: 0 }
-    ];
-
-    let currentQuestion = 0;
-    let totalSeconds = 10 * 60;
-    let timerInterval;
 
     function startTimer() {
         document.getElementById('timer').style.display = 'block';
@@ -205,10 +210,10 @@
     }
 
     function startTest() {
-        let name = document.getElementById('student-name').value.trim();
-        let phone = document.getElementById('student-phone').value.trim();
+        studentName = document.getElementById('student-name').value.trim();
+        studentPhone = document.getElementById('student-phone').value.trim();
 
-        if(name === '' || phone === '') {
+        if(studentName === '' || studentPhone === '') {
             alert('कृपया अपना नाम और मोबाइल नंबर दोनों दर्ज करें!');
             return;
         }
@@ -241,6 +246,11 @@
             return;
         }
 
+        let answer = parseInt(selected.value);
+        if (answer === questions[currentQuestion].answer) {
+            score++;
+        }
+
         currentQuestion++;
         if (currentQuestion < questions.length) {
             loadQuestion();
@@ -251,8 +261,51 @@
 
     function submitTest() {
         clearInterval(timerInterval);
-        alert("आपका टेस्ट सफलतापूर्वक सबमिट हो गया है!");
+        
+        let records = JSON.parse(localStorage.getItem('student_test_records') || '[]');
+        let dateObj = new Date();
+        let dateTime = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString();
+        
+        records.push({
+            name: studentName,
+            phone: studentPhone,
+            score: score,
+            total: questions.length,
+            time: dateTime
+        });
+        
+        localStorage.setItem('student_test_records', JSON.stringify(records));
+
+        alert(`टेस्ट समाप्त! आपके ${score}/${questions.length} अंक आए हैं।`);
         window.location.href = "index.html";
+    }
+
+    function displayRecords() {
+        let records = JSON.parse(localStorage.getItem('student_test_records') || '[]');
+        let container = document.getElementById('records-list');
+        
+        if (records.length === 0) {
+            container.innerHTML = `<div class="record-card">अभी तक किसी भी छात्र ने टेस्ट नहीं दिया है।</div>`;
+            return;
+        }
+
+        let html = "";
+        records.forEach((rec, index) => {
+            html += `<div class="record-card">
+                <b>${index + 1}. नाम:</b> ${rec.name}<br>
+                <b>मोबाइल:</b> ${rec.phone}<br>
+                <b>स्कोर:</b> ${rec.score} / ${rec.total}<br>
+                <small style="color: #636e72;">दिनांक: ${rec.time}</small>
+            </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function clearRecords() {
+        if(confirm("क्या आप सारे रिकॉर्ड डिलीट करना चाहते हैं?")) {
+            localStorage.removeItem('student_test_records');
+            displayRecords();
+        }
     }
 </script>
 
