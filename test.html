@@ -47,11 +47,29 @@
             font-size: 15px;
             font-weight: bold;
         }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2d3436;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 15px;
+        }
         .question-box {
             font-size: 16px;
             color: #2d3436;
             margin-bottom: 15px;
             font-weight: bold;
+            text-align: left;
         }
         .option-item {
             display: block;
@@ -64,10 +82,6 @@
             cursor: pointer;
             font-size: 15px;
             text-align: left;
-            transition: 0.2s;
-        }
-        .option-item:hover {
-            background: #dfe6e9;
         }
         .btn {
             display: block;
@@ -81,9 +95,6 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-        }
-        .btn:hover {
-            background: #074b83;
         }
         .back-btn { 
             display: block;
@@ -103,12 +114,25 @@
 
 <div class="container" id="app">
     <div class="header-flex">
-        <h1>⚡ वीकली टेस्ट</h1>
-        <div id="timer">समय: <span id="time-left">10:00</span></div>
+        <h1 id="page-title">⚡ वीकली टेस्ट</h1>
+        <div id="timer" style="display:none;">समय: <span id="time-left">10:00</span></div>
     </div>
 
-    <!-- टेस्ट के प्रश्न -->
-    <div id="test-content">
+    <!-- 1. छात्र का नाम और मोबाइल नंबर दर्ज करने का फॉर्म -->
+    <div id="login-section">
+        <div class="form-group">
+            <label>छात्र का पूरा नाम:</label>
+            <input type="text" id="student-name" placeholder="अपना नाम लिखें">
+        </div>
+        <div class="form-group">
+            <label>मोबाइल नंबर:</label>
+            <input type="tel" id="student-phone" placeholder="अपना मोबाइल नंबर लिखें">
+        </div>
+        <button class="btn" onclick="startTest()">टेस्ट शुरू करें</button>
+    </div>
+
+    <!-- 2. टेस्ट के प्रश्न (शुरुआत में छिपे रहेंगे) -->
+    <div id="quiz-section" style="display:none;">
         <div class="question-box">प्रश्‍न 1: संख्याओं 26 और 91 का HCF क्या होगा?</div>
         <label class="option-item"><input type="radio" name="q1" value="A"> (A) 13</label>
         <label class="option-item"><input type="radio" name="q1" value="B"> (B) 26</label>
@@ -118,36 +142,62 @@
         <button class="btn" onclick="submitTest()">टेस्ट सबमिट करें</button>
     </div>
 
+    <!-- 3. रिपोर्ट सेक्शन (जब होम पेज से रिकॉर्ड देखना हो) -->
+    <div id="report-section" style="display:none;">
+        <p>यहाँ सभी छात्रों का रिकॉर्ड दिखाई देगा।</p>
+    </div>
+
     <a href="index.html" class="back-btn">← होम पेज पर वापस जाएं</a>
 </div>
 
 <script>
-    // 10 मिनट का टाइमर
+    // चेक करें कि क्या यूजर ने रिपोर्ट देखने के लिए क्लिक किया है
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.get('view') === 'report') {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('report-section').style.display = 'block';
+        document.getElementById('page-title').textContent = '📊 छात्रों का रिकॉर्ड';
+    }
+
     let totalSeconds = 10 * 60;
-    const timerDisplay = document.getElementById('time-left');
+    let timerInterval;
 
     function startTimer() {
-        const interval = setInterval(() => {
+        document.getElementById('timer').style.display = 'block';
+        timerInterval = setInterval(() => {
             let minutes = Math.floor(totalSeconds / 60);
             let seconds = totalSeconds % 60;
-
             minutes = minutes < 10 ? '0' + minutes : minutes;
             seconds = seconds < 10 ? '0' + seconds : seconds;
-
-            timerDisplay.textContent = `${minutes}:${seconds}`;
+            document.getElementById('time-left').textContent = `${minutes}:${seconds}`;
 
             if (totalSeconds > 0) {
                 totalSeconds--;
             } else {
-                clearInterval(interval);
+                clearInterval(timerInterval);
                 alert("समय समाप्त हो गया है!");
+                submitTest();
             }
         }, 1000);
     }
 
-    startTimer();
+    function startTest() {
+        let name = document.getElementById('student-name').value.trim();
+        let phone = document.getElementById('student-phone').value.trim();
+
+        if(name === '' || phone === '') {
+            alert('कृपया अपना नाम और मोबाइल नंबर दोनों दर्ज करें!');
+            return;
+        }
+
+        // नाम-नंबर छिपाकर टेस्ट और टाइमर शुरू करें
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('quiz-section').style.display = 'block';
+        startTimer();
+    }
 
     function submitTest() {
+        clearInterval(timerInterval);
         alert("आपका टेस्ट सफलतापूर्वक सबमिट हो गया है!");
         window.location.href = "index.html";
     }
