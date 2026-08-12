@@ -182,7 +182,7 @@
             </table>
         </div>
         <button class="btn" style="background: #00b894;" onclick="displayRecords()">🔄 रिकॉर्ड रिफ्रेश करें</button>
-        <button class="btn" style="background: #d63031; margin-top:8px;" onclick="clearRecords()">🗑️ सारा रिकॉर्ड डिलीट करें (पासवर्ड: 1122)</button>
+        <button class="btn" style="background: #d63031; margin-top:8px;" onclick="clearRecords()">🗑️ सारा रिकॉर्ड डिलीट करें</button>
     </div>
 
     <a href="index.html" class="back-btn">← होम पेज पर वापस जाएं</a>
@@ -217,7 +217,6 @@
         document.getElementById('page-title').textContent = '📊 छात्रों का रिकॉर्ड';
         document.getElementById('timer').style.display = 'none';
         
-        // तुरंत और ऑटोमैटिक लोड करने के लिए
         setTimeout(displayRecords, 50);
     }
 
@@ -333,9 +332,10 @@
         tbody.innerHTML = html;
     }
 
+    // नया पासवर्ड 1986 सेट किया गया है
     function clearRecords() {
         let pwd = prompt("रिकॉर्ड डिलीट करने के लिए सर का पासवर्ड दर्ज करें:");
-        if (pwd === "1122") {
+        if (pwd === "1986") {
             if(confirm("क्या आप वाकई सारे रिकॉर्ड डिलीट करना चाहते हैं?")) {
                 localStorage.removeItem('student_test_records');
                 displayRecords();
