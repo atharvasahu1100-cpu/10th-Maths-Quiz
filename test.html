@@ -99,7 +99,6 @@
         }
         .btn:hover { background: #074b83; }
         
-        /* टेबल का डिज़ाइन */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -178,11 +177,11 @@
                     </tr>
                 </thead>
                 <tbody id="records-table-body">
-                    <!-- डेटा यहाँ जावास्क्रिप्ट से लोड होगा -->
+                    <!-- डेटा यहाँ लोड होगा -->
                 </tbody>
             </table>
         </div>
-        <button class="btn" style="background:#d63031; margin-top:10px;" onclick="clearRecords()">सारा रिकॉर्ड डिलीट करें</button>
+        <button class="btn" style="background:#d63031; margin-top:10px;" onclick="clearRecords()">सारा रिकॉर्ड डिलीट करें (केवल सर के लिए)</button>
     </div>
 
     <a href="index.html" class="back-btn">← होम पेज पर वापस जाएं</a>
@@ -331,10 +330,17 @@
         tbody.innerHTML = html;
     }
 
+    // पासवर्ड 1122 सेट किया गया है
     function clearRecords() {
-        if(confirm("क्या आप सारे रिकॉर्ड डिलीट करना चाहते हैं?")) {
-            localStorage.removeItem('student_test_records');
-            displayRecords();
+        let pwd = prompt("रिकॉर्ड डिलीट करने के लिए सर का पासवर्ड दर्ज करें:");
+        if (pwd === "1122") {
+            if(confirm("क्या आप वाकई सारे रिकॉर्ड डिलीट करना चाहते हैं?")) {
+                localStorage.removeItem('student_test_records');
+                displayRecords();
+                alert("सारे रिकॉर्ड सफलतापूर्वक डिलीट कर दिए गए हैं।");
+            }
+        } else if (pwd !== null) {
+            alert("गलत पासवर्ड! आप रिकॉर्ड डिलीट नहीं कर सकते।");
         }
     }
 </script>
