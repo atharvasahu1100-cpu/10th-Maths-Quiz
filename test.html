@@ -78,12 +78,10 @@
         document.getElementById("quiz-screen").classList.add("hidden");
         document.getElementById("success-screen").classList.remove("hidden");
         
-        // तारीख और समय प्राप्त करें
         let now = new Date();
         let dateStr = now.toLocaleDateString('hi-IN'); 
         let timeStr = now.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
         
-        // ऐप स्क्रीन पर स्कोर ऊपर और डेट/टाइम नीचे दिखाने के लिए सही फॉर्मेट
         document.getElementById("score-display").innerHTML = `
             <div style="font-size: 18px; font-weight: bold; color: #0984e3;">आपका स्कोर: ${score}/10</div>
             <div style="font-size: 14px; color: #636e72; margin-top: 6px;">सबमिट समय: ${dateStr} | ${timeStr}</div>
