@@ -1,149 +1,209 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>दैनिक टेस्ट - गणित</title>
+    <title>अध्याय 1 - ऑनलाइन टेस्ट और रिपोर्ट</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 15px; color: #333; }
-        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2, h3 { text-align: center; color: #007bff; }
-        .timer-container { position: sticky; top: 0; background: #fff; z-index: 1000; padding: 10px 0; border-bottom: 2px solid #ddd; margin-bottom: 15px; }
-        .timer-box { font-size: 18px; font-weight: bold; color: #d9534f; text-align: right; }
-        .question { margin-bottom: 15px; font-size: 16px; font-weight: bold; }
-        .options label { display: block; background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; }
-        .options input { margin-right: 10px; }
-        .submit-btn { background: #28a745; color: white; border: none; padding: 12px 20px; font-size: 16px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 15px; text-decoration: none; text-align: center; display: block; box-sizing: border-box; }
-        .back-btn { background: #6c757d; color: white; border: none; padding: 12px 20px; font-size: 16px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 10px; text-decoration: none; display: block; text-align: center; box-sizing: border-box; }
-        .hidden { display: none; }
-        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; font-size: 22px; }
+        .menu-item { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #3498db; color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; text-align: center; font-weight: bold; text-decoration: none; box-sizing: border-box; }
+        .section { display: none; }
+        .active { display: block; }
+        .back-btn { background: #95a5a6; }
+        
+        #options-box button { 
+            display: block; 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            background: #ecf0f1; 
+            border: 1px solid #bdc3c7; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            text-align: left; 
+            font-size: 16px;
+        }
+
+        .correct { background: #2ecc71 !important; color: white; }
+        .wrong { background: #e74c3c !important; color: white; }
+        .input-box { width: 100%; padding: 12px; margin: 10px 0; font-size: 16px; border: 1px solid #bdc3c7; border-radius: 8px; box-sizing: border-box; }
+        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; overflow-x: auto; display: block; }
         .leaderboard-table th, .leaderboard-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        .leaderboard-table th { background: #007bff; color: white; }
+        .leaderboard-table th { background-color: #3498db; color: white; }
     </style>
 </head>
 <body>
 
-<!-- नाम दर्ज करने की स्क्रीन -->
-<div class="container" id="login-screen">
-    <h2>कक्षा 10 - गणित दैनिक टेस्ट</h2>
-    <p>कृपया टेस्ट शुरू करने से पहले अपना पूरा नाम दर्ज करें:</p>
-    <input type="text" id="student-name" placeholder="अपना नाम लिखें..." style="width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-    <button class="submit-btn" onclick="startTest()">टेस्ट शुरू करें</button>
-    <a href="index.html" class="back-btn">होम पेज पर वापस जाएं</a>
-</div>
-
-<!-- क्विज़ और स्टिकी टाइमर स्क्रीन -->
-<div class="container hidden" id="quiz-screen">
-    <div class="timer-container">
-        <div class="timer-box">⏳ समय शेष: <span id="time">10:00</span></div>
-    </div>
-    <div id="quiz-container"></div>
-    <button class="submit-btn" onclick="submitTest()">टेस्ट जमा करें (Submit)</button>
-</div>
-
-<!-- रिजल्ट और लीडरबोर्ड स्क्रीन -->
-<div class="container hidden" id="result-screen">
-    <h2>टेस्ट समाप्त!</h2>
-    <p id="score-text" style="text-align: center; font-size: 18px; font-weight: bold;"></p>
+<div class="container">
+    <h1>📝 अध्याय 1: वास्तविक संख्याएँ</h1>
     
-    <h3>🏆 इस हफ्ते का लीडरबोर्ड (Top Scorers)</h3>
-    <table class="leaderboard-table">
-        <thead>
-            <tr>
-                <th>रैंक</th>
-                <th>छात्र का नाम</th>
-                <th>स्कोर</th>
-            </tr>
-        </thead>
-        <tbody id="leaderboard-list"></tbody>
-    </table>
-    <a href="index.html" class="submit-btn" style="background: #007bff; margin-top: 20px;">होम पेज पर जाएं</a>
+    <!-- 1. नाम और मोबाइल नंबर दर्ज करने का स्क्रीन -->
+    <div id="login-screen" class="section active">
+        <p style="font-weight: bold; text-align: center;">टेस्ट शुरू करने के लिए विवरण भरें:</p>
+        <input type="text" id="student-name" class="input-box" placeholder="विद्यार्थी का पूरा नाम...">
+        <input type="tel" id="student-mobile" class="input-box" placeholder="मोबाइल नंबर (10 अंक)..." maxlength="10">
+        <button class="menu-item" onclick="startTest()">टेस्ट शुरू करें</button>
+        <a href="index.html" class="menu-item back-btn" style="text-align:center;">← होम पेज पर वापस</a>
+    </div>
+
+    <!-- 2. क्विज़ / टेस्ट स्क्रीन -->
+    <div id="quiz-screen" class="section">
+        <div id="question-text" style="font-weight:bold; margin-bottom:15px; font-size: 18px;"></div>
+        <div id="options-box"></div>
+        <button class="menu-item" id="next-btn" style="display:none; background:#2c3e50; margin-top: 15px;" onclick="nextQuestion()">अगला प्रश्न</button>
+    </div>
+
+    <!-- 3. रिजल्ट और मास्टर रिपोर्ट स्क्रीन -->
+    <div id="result-screen" class="section">
+        <h3 id="result-msg" style="text-align: center; color: #27ae60;"></h3>
+        <div id="leaderboard-container"></div>
+        <a href="index.html" class="menu-item" style="text-align:center; background:#27ae60; margin-top:20px;">होम पेज पर जाएं</a>
+    </div>
 </div>
 
 <script>
     const questions = [
-        { q: "संख्या 140 के अभाज्य गुणनखंड क्या हैं?", options: ["2 x 2 x 5 x 7", "2 x 5 x 5 x 7", "2 x 2 x 2 x 7", "4 x 5 x 7"], answer: 0 },
-        { q: "संख्याओं 26 और 91 का HCF क्या होगा?", options: ["7", "13", "26", "91"], answer: 1 },
-        { q: "संख्याओं 6 और 20 का LCM कितना होगा?", options: ["60", "120", "10", "2"], answer: 0 },
-        { q: "यदि दो संख्याओं का गुणनफल 32 है और HCF 4 है, तो LCM क्या होगा?", options: ["8", "128", "16", "4"], answer: 0 },
-        { q: "निम्नलिखित में से कौन सी अपरिमेय संख्या है?", options: ["√4", "√9", "√2", "25/5"], answer: 2 },
-        { q: "प्रत्येक धनात्मक विषम पूर्णांक किस रूप का होता है?", options: ["2m", "2m + 1", "4m", "इनमें से कोई नहीं"], answer: 1 },
-        { q: "संख्या 96 और 404 का HCF क्या होगा?", options: ["2", "4", "8", "16"], answer: 1 },
-        { q: "सबसे छोटी अभाज्य संख्या कौन सी है?", options: ["0", "1", "2", "3"], answer: 2 },
-        { q: "सबसे छोटी भाज्य संख्या कौन सी है?", options: ["1", "2", "3", "4"], answer: 3 },
-        { q: "निम्नलिखित में से कौन सी संख्या अभाज्य है?", options: ["15", "21", "17", "27"], answer: 2 }
+        { q: "140 का अभाज्य गुणनखंडन क्या है?", options: ["2×2×5×7", "2×3×5×7", "2×2×3×7", "5×5×2×7"], ans: 0 },
+        { q: "संख्याओं 26 और 91 का HCF क्या है?", options: ["7", "2", "13", "26"], ans: 2 },
+        { q: "HCF(306, 657) = 9 दिया है, LCM ज्ञात कीजिए:", options: ["22328", "22338", "23338", "22238"], ans: 1 },
+        { q: "निम्नलिखित में से कौन सी अपरिमेय संख्या है?", options: ["√4", "√3", "9", "4/5"], ans: 1 },
+        { q: "√2 किस प्रकार की संख्या है?", options: ["परिमेय", "अपरिमेय", "पूर्णांक", "प्राकृत"], ans: 1 }
     ];
 
-    let timerInterval;
-    let timeLeft = 600;
-    let currentStudent = "";
+    let currentQ = 0;
+    let score = 0;
+    let studentName = "";
+    let studentMobile = "";
+
+    // पेज लोड होते ही चेक करें कि क्या एडमिन रिपोर्ट देखने के लिए बटन दबाया गया है
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.get('view') === 'report') {
+            showFullReport();
+        }
+    };
 
     function startTest() {
-        currentStudent = document.getElementById("student-name").value.trim();
-        if(currentStudent === "") {
-            alert("कृपया पहले अपना नाम दर्ज करें!");
+        studentName = document.getElementById('student-name').value.trim();
+        studentMobile = document.getElementById('student-mobile').value.trim();
+        
+        if(studentName === "" || studentMobile.length !== 10) {
+            alert("कृपया सही नाम और 10 अंकों का वैध मोबाइल नंबर दर्ज करें!");
             return;
         }
-        document.getElementById("login-screen").classList.add("hidden");
-        document.getElementById("quiz-screen").classList.remove("hidden");
-        loadQuiz();
-        startTimer();
+
+        // चेक करें कि क्या इस मोबाइल नंबर से पहले टेस्ट दिया जा चुका है
+        let submittedStudents = JSON.parse(localStorage.getItem('submittedMobile_ch1')) || [];
+        
+        if(submittedStudents.includes(studentMobile)) {
+            alert("इस मोबाइल नंबर से पहले ही टेस्ट दिया जा चुका है! आप दोबारा टेस्ट नहीं दे सकते।");
+            showFullReport("आपने यह टेस्ट पहले ही दे दिया है। नीचे सभी छात्रों का रिकॉर्ड देखें:");
+            return;
+        }
+
+        currentQ = 0;
+        score = 0;
+        showSection('quiz-screen');
+        loadQuestion();
     }
 
-    function loadQuiz() {
-        const container = document.getElementById("quiz-container");
-        let html = "";
-        questions.forEach((item, index) => {
-            html += `<div class="question">प्रश्‍न ${index + 1}: ${item.q}</div><div class="options">`;
-            item.options.forEach((opt, optIndex) => {
-                html += `<label><input type="radio" name="q${index}" value="${optIndex}"> ${opt}</label>`;
-            });
-            html += `</div><hr>`;
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function loadQuestion() {
+        const q = questions[currentQ];
+        document.getElementById('question-text').innerText = `प्रश्न ${currentQ+1}/${questions.length}: ${q.q}`;
+        const box = document.getElementById('options-box');
+        box.innerHTML = "";
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.innerText = opt;
+            btn.onclick = () => {
+                if(i === q.ans) {
+                    btn.className = 'correct';
+                    score++;
+                } else {
+                    btn.className = 'wrong';
+                    box.children[q.ans].className = 'correct';
+                }
+                Array.from(box.children).forEach(b => b.onclick = null);
+                document.getElementById('next-btn').style.display = 'block';
+            };
+            box.appendChild(btn);
         });
-        container.innerHTML = html;
     }
 
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            document.getElementById("time").textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                alert("समय समाप्त हो गया है!");
-                submitTest();
-            }
-            timeLeft--;
-        }, 1000);
+    function nextQuestion() {
+        currentQ++;
+        if(currentQ < questions.length) {
+            document.getElementById('next-btn').style.display = 'none';
+            loadQuestion();
+        } else {
+            finishTest();
+        }
     }
 
-    function submitTest() {
-        clearInterval(timerInterval);
-        let score = 0;
-        questions.forEach((item, index) => {
-            let selected = document.querySelector(`input[name="q${index}"]:checked`);
-            if (selected && parseInt(selected.value) === item.answer) {
-                score++;
-            }
+    function finishTest() {
+        let submittedStudents = JSON.parse(localStorage.getItem('submittedMobile_ch1')) || [];
+        submittedStudents.push(studentMobile);
+        localStorage.setItem('submittedMobile_ch1', JSON.stringify(submittedStudents));
+
+        let percentage = ((score / questions.length) * 100).toFixed(1);
+
+        let leaderboard = JSON.parse(localStorage.getItem('leaderboard_ch1')) || [];
+        leaderboard.push({ 
+            name: studentName, 
+            mobile: studentMobile, 
+            score: score, 
+            total: questions.length, 
+            percentage: percentage + "%", 
+            date: new Date().toLocaleDateString() 
         });
-
-        let leaderboard = JSON.parse(localStorage.getItem("mathLeaderboard")) || [];
-        leaderboard.push({ name: currentStudent, score: score });
         leaderboard.sort((a, b) => b.score - a.score);
-        localStorage.setItem("mathLeaderboard", JSON.stringify(leaderboard));
+        localStorage.setItem('leaderboard_ch1', JSON.stringify(leaderboard));
 
-        document.getElementById("quiz-screen").classList.add("hidden");
-        document.getElementById("result-screen").classList.remove("hidden");
-        document.getElementById("score-text").textContent = `${currentStudent}, आपका स्कोर: ${score} / 10`;
+        showFullReport(`बधाई हो ${studentName}! आपका टेस्ट सफलतापૂર્વक जमा हो गया है।`);
+    }
 
-        let listHtml = "";
-        leaderboard.forEach((item, i) => {
-            listHtml += `<tr><td>${i + 1}</td><td>${item.name}</td><td>${item.score} / 10</td></tr>`;
+    function showFullReport(customMsg = "📊 विद्यार्थियों का मास्टर रिकॉर्ड (लीडरबोर्ड)") {
+        showSection('result-screen');
+        document.getElementById('result-msg').innerText = customMsg;
+
+        let leaderboard = JSON.parse(localStorage.getItem('leaderboard_ch1')) || [];
+        
+        if(leaderboard.length === 0) {
+            document.getElementById('leaderboard-container').innerHTML = "<p style='text-align:center; color:red; margin-top:20px;'>अभी तक किसी भी छात्र ने टेस्ट नहीं दिया है।</p>";
+            return;
+        }
+
+        let html = `<table class="leaderboard-table">
+            <tr>
+                <th>क्र.</th>
+                <th>नाम</th>
+                <th>मोबाइल नंबर</th>
+                <th>अंक</th>
+                <th>प्रतिशत</th>
+                <th>तारीख</th>
+            </tr>`;
+        
+        leaderboard.forEach((item, index) => {
+            html += `<tr>
+                <td>#${index+1}</td>
+                <td><b>${item.name}</b></td>
+                <td>${item.mobile}</td>
+                <td>${item.score}/${item.total}</td>
+                <td>${item.percentage}</td>
+                <td>${item.date}</td>
+            </tr>`;
         });
-        document.getElementById("leaderboard-list").innerHTML = listHtml;
+        
+        html += `</table>`;
+        document.getElementById('leaderboard-container').innerHTML = html;
     }
 </script>
-
 </body>
 </html>
