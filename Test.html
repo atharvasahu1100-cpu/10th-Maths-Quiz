@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>दैनिक टेस्ट - गणित</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 15px; color: #333; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2, h3 { text-align: center; color: #007bff; }
+        .timer-container { position: sticky; top: 0; background: #fff; z-index: 1000; padding: 10px 0; border-bottom: 2px solid #ddd; margin-bottom: 15px; }
+        .timer-box { font-size: 18px; font-weight: bold; color: #d9534f; text-align: right; }
+        .question { margin-bottom: 15px; font-size: 16px; font-weight: bold; }
+        .options label { display: block; background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 5px; cursor: pointer; border: 1px solid #ddd; }
+        .options input { margin-right: 10px; }
+        .submit-btn { background: #28a745; color: white; border: none; padding: 12px 20px; font-size: 16px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 15px; text-decoration: none; text-align: center; display: block; box-sizing: border-box; }
+        .back-btn { background: #6c757d; color: white; border: none; padding: 12px 20px; font-size: 16px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 10px; text-decoration: none; display: block; text-align: center; box-sizing: border-box; }
+        .hidden { display: none; }
+        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .leaderboard-table th, .leaderboard-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        .leaderboard-table th { background: #007bff; color: white; }
+    </style>
+</head>
+<body>
+
+<!-- नाम दर्ज करने की स्क्रीन -->
+<div class="container" id="login-screen">
+    <h2>कक्षा 10 - गणित दैनिक टेस्ट</h2>
+    <p>कृपया टेस्ट शुरू करने से पहले अपना पूरा नाम दर्ज करें:</p>
+    <input type="text" id="student-name" placeholder="अपना नाम लिखें..." style="width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+    <button class="submit-btn" onclick="startTest()">टेस्ट शुरू करें</button>
+    <a href="index.html" class="back-btn">होम पेज पर वापस जाएं</a>
+</div>
+
+<!-- क्विज़ और स्टिकी टाइमर स्क्रीन -->
+<div class="container hidden" id="quiz-screen">
+    <div class="timer-container">
+        <div class="timer-box">⏳ समय शेष: <span id="time">10:00</span></div>
+    </div>
+    <div id="quiz-container"></div>
+    <button class="submit-btn" onclick="submitTest()">टेस्ट जमा करें (Submit)</button>
+</div>
+
+<!-- रिजल्ट और लीडरबोर्ड स्क्रीन -->
+<div class="container hidden" id="result-screen">
+    <h2>टेस्ट समाप्त!</h2>
+    <p id="score-text" style="text-align: center; font-size: 18px; font-weight: bold;"></p>
+    
+    <h3>🏆 इस हफ्ते का लीडरबोर्ड (Top Scorers)</h3>
+    <table class="leaderboard-table">
+        <thead>
+            <tr>
+                <th>रैंक</th>
+                <th>छात्र का नाम</th>
+                <th>स्कोर</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard-list"></tbody>
+    </table>
+    <a href="index.html" class="submit-btn" style="background: #007bff; margin-top: 20px;">होम पेज पर जाएं</a>
+</div>
+
+<script>
+    const questions = [
+        { q: "संख्या 140 के अभाज्य गुणनखंड क्या हैं?", options: ["2 x 2 x 5 x 7", "2 x 5 x 5 x 7", "2 x 2 x 2 x 7", "4 x 5 x 7"], answer: 0 },
+        { q: "संख्याओं 26 और 91 का HCF क्या होगा?", options: ["7", "13", "26", "91"], answer: 1 },
+        { q: "संख्याओं 6 और 20 का LCM कितना होगा?", options: ["60", "120", "10", "2"], answer: 0 },
+        { q: "यदि दो संख्याओं का गुणनफल 32 है और HCF 4 है, तो LCM क्या होगा?", options: ["8", "128", "16", "4"], answer: 0 },
+        { q: "निम्नलिखित में से कौन सी अपरिमेय संख्या है?", options: ["√4", "√9", "√2", "25/5"], answer: 2 },
+        { q: "प्रत्येक धनात्मक विषम पूर्णांक किस रूप का होता है?", options: ["2m", "2m + 1", "4m", "इनमें से कोई नहीं"], answer: 1 },
+        { q: "संख्या 96 और 404 का HCF क्या होगा?", options: ["2", "4", "8", "16"], answer: 1 },
+        { q: "सबसे छोटी अभाज्य संख्या कौन सी है?", options: ["0", "1", "2", "3"], answer: 2 },
+        { q: "सबसे छोटी भाज्य संख्या कौन सी है?", options: ["1", "2", "3", "4"], answer: 3 },
+        { q: "निम्नलिखित में से कौन सी संख्या अभाज्य है?", options: ["15", "21", "17", "27"], answer: 2 }
+    ];
+
+    let timerInterval;
+    let timeLeft = 600;
+    let currentStudent = "";
+
+    function startTest() {
+        currentStudent = document.getElementById("student-name").value.trim();
+        if(currentStudent === "") {
+            alert("कृपया पहले अपना नाम दर्ज करें!");
+            return;
+        }
+        document.getElementById("login-screen").classList.add("hidden");
+        document.getElementById("quiz-screen").classList.remove("hidden");
+        loadQuiz();
+        startTimer();
+    }
+
+    function loadQuiz() {
+        const container = document.getElementById("quiz-container");
+        let html = "";
+        questions.forEach((item, index) => {
+            html += `<div class="question">प्रश्‍न ${index + 1}: ${item.q}</div><div class="options">`;
+            item.options.forEach((opt, optIndex) => {
+                html += `<label><input type="radio" name="q${index}" value="${optIndex}"> ${opt}</label>`;
+            });
+            html += `</div><hr>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById("time").textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("समय समाप्त हो गया है!");
+                submitTest();
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    function submitTest() {
+        clearInterval(timerInterval);
+        let score = 0;
+        questions.forEach((item, index) => {
+            let selected = document.querySelector(`input[name="q${index}"]:checked`);
+            if (selected && parseInt(selected.value) === item.answer) {
+                score++;
+            }
+        });
+
+        let leaderboard = JSON.parse(localStorage.getItem("mathLeaderboard")) || [];
+        leaderboard.push({ name: currentStudent, score: score });
+        leaderboard.sort((a, b) => b.score - a.score);
+        localStorage.setItem("mathLeaderboard", JSON.stringify(leaderboard));
+
+        document.getElementById("quiz-screen").classList.add("hidden");
+        document.getElementById("result-screen").classList.remove("hidden");
+        document.getElementById("score-text").textContent = `${currentStudent}, आपका स्कोर: ${score} / 10`;
+
+        let listHtml = "";
+        leaderboard.forEach((item, i) => {
+            listHtml += `<tr><td>${i + 1}</td><td>${item.name}</td><td>${item.score} / 10</td></tr>`;
+        });
+        document.getElementById("leaderboard-list").innerHTML = listHtml;
+    }
+</script>
+
+</body>
+</html>
