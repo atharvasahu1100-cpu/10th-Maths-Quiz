@@ -78,8 +78,15 @@
         document.getElementById("quiz-screen").classList.add("hidden");
         document.getElementById("success-screen").classList.remove("hidden");
         document.getElementById("score-display").innerText = `आपका स्कोर: ${score}/10`;
-        fetch("https://script.google.com/macros/s/AKfycbzat7J3WhIZzQ3KW04Ts4ghUvEogisk3F2uRvKg68iooDTq3aDTvNTwmFeblOFWZNFP5w/exec", {
-            method: "POST", mode: "no-cors", body: new URLSearchParams({name: sName, mobile: sMob, score: score + "/10"})
+        
+        fetch("https://script.google.com/macros/s/AKfycbyM6xnzjjpQLVP-mS-j1KdVVEHf6Rv8EV-MClYHi8NCjmKqADqBk64OPTxZ6JSN7DkTBA/exec", {
+            method: "POST", 
+            mode: "no-cors", 
+            body: new URLSearchParams({
+                name: sName, 
+                mobile: sMob, 
+                score: score + "/10"
+            })
         });
     }
 </script>
