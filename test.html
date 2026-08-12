@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>गणित वीकली टेस्ट और रिपोर्ट</title>
+    <title>गणित वीकली टेस्ट</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -80,10 +80,6 @@
         .btn-back { background: #636e72; }
         .hidden { display: none; }
         .success-msg { text-align: center; color: #27ae60; font-size: 20px; font-weight: bold; padding: 20px 0; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #dfe6e9; padding: 10px; text-align: center; font-size: 14px; }
-        th { background: #0984e3; color: white; }
     </style>
 </head>
 <body>
@@ -125,25 +121,10 @@
         <p style="text-align: center; color: #636e72;" id="score-display"></p>
         <button class="btn" onclick="goHome()">होम पेज पर वापस जाएं</button>
     </div>
-
-    <!-- स्टेप 4: रिपोर्ट स्क्रीन -->
-    <div id="report-screen" class="hidden">
-        <h2>📊 छात्रों का पूरा रिकॉर्ड</h2>
-        <div style="max-height: 300px; overflow-y: auto;">
-            <table id="report-table">
-                <tr>
-                    <th>नाम</th>
-                    <th>मोबाइल</th>
-                    <th>प्राप्त अंक</th>
-                </tr>
-            </table>
-        </div>
-        <button class="btn" onclick="goHome()" style="margin-top: 20px;">← होम पेज पर वापस जाएं</button>
-    </div>
 </div>
 
 <script>
-    // आपके गूगल फॉर्म वाले बिल्कुल सटीक 10 प्रश्न और उनके विकल्प
+    // आपके 10 महत्वपूर्ण प्रश्न
     const questions = [
         {
             question: "प्रश्न 1: संख्याओं 26 और 91 का HCF क्या होगा?",
@@ -202,13 +183,6 @@
     let studentData = { name: "", mobile: "" };
     let timerInterval;
     let timeLeft = 600;
-
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('view') === 'report') {
-            showReport();
-        }
-    };
 
     function startQuiz() {
         const name = document.getElementById("studentName").value.trim();
@@ -288,36 +262,21 @@
     function submitQuiz() {
         clearInterval(timerInterval);
         
-        let results = JSON.parse(localStorage.getItem("quizResults")) || [];
-        results.push({ name: studentData.name, mobile: studentData.mobile, score: `${score} / ${questions.length}` });
-        localStorage.setItem("quizResults", JSON.stringify(results));
-
         document.getElementById("quiz-screen").classList.add("hidden");
         document.getElementById("success-screen").classList.remove("hidden");
         document.getElementById("score-display").innerText = `आपने ${questions.length} में से ${score} अंक प्राप्त किए हैं।`;
-    }
 
-    function showReport() {
-        document.getElementById("info-screen").classList.add("hidden");
-        document.getElementById("report-screen").classList.remove("hidden");
+        // डेटा सीधा आपकी Google Sheet में भेजने के लिए
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzMSd69T9hGBdKsWDhLucmI7meYJk5vyjnXHxaS6de1u0KcZJKIA0b703Jma7dzKtCY/exec";
+        
+        const formData = new URLSearchParams();
+        formData.append("name", studentData.name);
+        formData.append("mobile", studentData.mobile);
+        formData.append("score", `${score} / ${questions.length}`);
 
-        let results = JSON.parse(localStorage.getItem("quizResults")) || [];
-        let table = document.getElementById("report-table");
-
-        if (results.length === 0) {
-            table.innerHTML += `<tr><td colspan="3" style="color: #636e72;">अभी तक किसी छात्र ने टेस्ट नहीं दिया है।</td></tr>`;
-            return;
-        }
-
-        results.forEach(res => {
-            table.innerHTML += `
-                <tr>
-                    <td>${res.name}</td>
-                    <td>${res.mobile}</td>
-                    <td><b>${res.score}</b></td>
-                </tr>
-            `;
-        });
+        fetch(scriptURL, { method: "POST", mode: "no-cors", body: formData })
+        .then(() => console.log("Data sent to Google Sheet successfully!"))
+        .catch(error => console.error("Error!", error.message));
     }
 
     function goHome() {
