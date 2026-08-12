@@ -127,7 +127,7 @@
         <button class="btn" onclick="goHome()">होम पेज पर वापस जाएं</button>
     </div>
 
-    <!-- स्टेप 4: रिपोर्ट स्क्रीन (जब रिकॉर्ड बटन दबाएंगे) -->
+    <!-- स्टेप 4: रिपोर्ट स्क्रीन -->
     <div id="report-screen" class="hidden">
         <h2>📊 छात्रों का पूरा रिकॉर्ड</h2>
         <div style="max-height: 300px; overflow-y: auto;">
@@ -144,16 +144,57 @@
 </div>
 
 <script>
+    // अध्याय 1 के सभी 10 महत्वपूर्ण प्रश्न
     const questions = [
         {
-            question: "संख्याओं 26 और 91 का HCF क्या होगा?",
+            question: "प्रश्न 1: संख्याओं 26 और 91 का HCF क्या होगा?",
             options: ["(A) 13", "(B) 26", "(C) 7", "(D) 91"],
             answer: 0
         },
         {
-            question: "संख्याओं 96 और 404 का HCF कितना होगा?",
+            question: "प्रश्न 2: संख्याओं 96 और 404 का HCF कितना होगा?",
             options: ["(A) 2", "(B) 3", "(C) 4", "(D) 8"],
             answer: 2
+        },
+        {
+            question: "प्रश्न 3: अभाज्य गुणनखंड विधि द्वारा 6, 72 और 120 का HCF और LCM ज्ञात कीजिए, HCF क्या होगा?",
+            options: ["(A) 3", "(B) 6", "(C) 12", "(D) 2"],
+            answer: 1
+        },
+        {
+            question: "प्रश्न 4: यदि HCF (306, 657) = 9 दिया है, तो LCM (306, 657) क्या होगा?",
+            options: ["(A) 22338", "(B) 23338", "(C) 21338", "(D) 24338"],
+            answer: 0
+        },
+        {
+            question: "प्रश्न 5: जाँच कीजिए कि क्या किसी प्राकृत संख्या n के लिए संख्या 6^n अंक 0 पर समाप्त हो सकती है?",
+            options: ["(A) हाँ", "(B) नहीं", "(C) निश्चित नहीं", "(D) इनमें से कोई नहीं"],
+            answer: 1
+        },
+        {
+            question: "प्रश्न 6: व्याख्या कीजिए कि 7 × 11 × 13 + 13 एक भाज्य संख्या क्यों है?",
+            options: ["(A) भाज्य संख्या है", "(B) अभाज्य संख्या है", "(C) विषम संख्या है", "(D) सम संख्या है"],
+            answer: 0
+        },
+        {
+            question: "प्रश्न 7: किसी खेल के मैदान के चारों ओर एक वृत्ताकार पथ है। इस मैदान का एक चक्कर लगाने में सोनिया को 18 मिनट लगते हैं, जबकि इसी मैदान का एक चक्कर लगाने में रवि को 12 मिनट लगते हैं। वे दोनों एक ही समय पर चलना प्रारम्भ करके एक ही दिशा में चलते हैं। कितने समय बाद वे पुनः प्रारम्भिक स्थान पर मिलेंगे?",
+            options: ["(A) 24 मिनट", "(B) 30 मिनट", "(C) 36 मिनट", "(D) 42 मिनट"],
+            answer: 2
+        },
+        {
+            question: "प्रश्न 8: सिद्ध कीजिए कि √5 एक अपरिमेय संख्या है। दी गई संख्या √5 किस प्रकार की संख्या है?",
+            options: ["(A) परिमेय संख्या", "(B) अपरिमेय संख्या", "(C) पूर्णांक", "(D) प्राकृत संख्या"],
+            answer: 1
+        },
+        {
+            question: "प्रश्न 9: निम्नलिखित में से कौन सी एक परिमेय संख्या है?",
+            options: ["(A) √2", "(B) √3", "(C) 2", "(D) √5"],
+            answer: 2
+        },
+        {
+            question: "प्रश्न 10: यदि दो धनात्मक पूर्णांक a और b को a = x³y² और b = xy³ के रूप में लिखा जाए, जहाँ x और y अभाज्य संख्याएँ हैं, तो HCF(a, b) होगा?",
+            options: ["(A) xy", "(B) xy²", "(C) x³y³", "(D) x²y²"],
+            answer: 1
         }
     ];
 
@@ -161,9 +202,8 @@
     let score = 0;
     let studentData = { name: "", mobile: "" };
     let timerInterval;
-    let timeLeft = 600;
+    let timeLeft = 600; // 10 मिनट
 
-    // पेज खुलते ही चेक करें कि क्या रिपोर्ट देखनी है या टेस्ट देना है
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('view') === 'report') {
@@ -249,7 +289,6 @@
     function submitQuiz() {
         clearInterval(timerInterval);
         
-        // रिजल्ट को ब्राउज़र की लोकल स्टोरेज में सेव करें ताकि रिपोर्ट में दिखे
         let results = JSON.parse(localStorage.getItem("quizResults")) || [];
         results.push({ name: studentData.name, mobile: studentData.mobile, score: `${score} / ${questions.length}` });
         localStorage.setItem("quizResults", JSON.stringify(results));
