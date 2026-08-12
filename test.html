@@ -78,7 +78,6 @@
         document.getElementById("quiz-screen").classList.add("hidden");
         document.getElementById("success-screen").classList.remove("hidden");
         
-        // समय और तारीख को एकदम सही और साफ दिखाने का कोड
         let now = new Date();
         let day = String(now.getDate()).padStart(2, '0');
         let month = String(now.getMonth() + 1).padStart(2, '0');
@@ -107,6 +106,14 @@
                 score: score + "/10"
             })
         });
+
+        // यहाँ पुरानी मेमोरी को पूरी तरह साफ (Reset) कर दिया गया है ताकि पहले छात्र का डेटा भी बिल्कुल सही जाए
+        score = 0;
+        currentQ = 0;
+        sName = "";
+        sMob = "";
+        document.getElementById("studentName").value = "";
+        document.getElementById("studentMobile").value = "";
     }
 </script>
 </body>
