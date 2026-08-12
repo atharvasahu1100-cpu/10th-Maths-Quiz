@@ -23,6 +23,8 @@
             padding: 25px 20px; 
             border-radius: 20px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .header-flex {
             display: flex;
@@ -37,7 +39,6 @@
             font-size: 20px; 
             margin: 0; 
         }
-        /* टाइमर बॉक्स का डिज़ाइन */
         #timer {
             background: #d63031;
             color: white;
@@ -106,16 +107,22 @@
         <div id="timer">समय: <span id="time-left">10:00</span></div>
     </div>
 
-    <!-- टेस्ट का कंटेंट यहाँ लोड होगा -->
+    <!-- टेस्ट के प्रश्न -->
     <div id="test-content">
-        <div class="question-box">प्रश्नों को लोड किया जा रहा है...</div>
+        <div class="question-box">प्रश्‍न 1: संख्याओं 26 और 91 का HCF क्या होगा?</div>
+        <label class="option-item"><input type="radio" name="q1" value="A"> (A) 13</label>
+        <label class="option-item"><input type="radio" name="q1" value="B"> (B) 26</label>
+        <label class="option-item"><input type="radio" name="q1" value="C"> (C) 7</label>
+        <label class="option-item"><input type="radio" name="q1" value="D"> (D) 91</label>
+
+        <button class="btn" onclick="submitTest()">टेस्ट सबमिट करें</button>
     </div>
 
     <a href="index.html" class="back-btn">← होम पेज पर वापस जाएं</a>
 </div>
 
 <script>
-    // टाइमर चालू करने का कोड (10 मिनट का टेस्ट)
+    // 10 मिनट का टाइमर
     let totalSeconds = 10 * 60;
     const timerDisplay = document.getElementById('time-left');
 
@@ -134,13 +141,16 @@
             } else {
                 clearInterval(interval);
                 alert("समय समाप्त हो गया है!");
-                // चाहें तो यहाँ ऑटो-सबमिट का कोड लिख सकते हैं
             }
         }, 1000);
     }
 
-    // पेज खुलते ही टाइमर शुरू हो जाएगा
     startTimer();
+
+    function submitTest() {
+        alert("आपका टेस्ट सफलतापूर्वक सबमिट हो गया है!");
+        window.location.href = "index.html";
+    }
 </script>
 
 </body>
