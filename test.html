@@ -78,13 +78,24 @@
         document.getElementById("quiz-screen").classList.add("hidden");
         document.getElementById("success-screen").classList.remove("hidden");
         
+        // समय और तारीख को एकदम सही और साफ दिखाने का कोड
         let now = new Date();
-        let dateStr = now.toLocaleDateString('hi-IN'); 
-        let timeStr = now.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
+        let day = String(now.getDate()).padStart(2, '0');
+        let month = String(now.getMonth() + 1).padStart(2, '0');
+        let year = now.getFullYear();
+        let dateStr = `${day}/${month}/${year}`;
+        
+        let hours = now.getHours();
+        let minutes = String(now.getMinutes()).padStart(2, '0');
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        let timeStr = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
         
         document.getElementById("score-display").innerHTML = `
-            <div style="font-size: 18px; font-weight: bold; color: #0984e3;">आपका स्कोर: ${score}/10</div>
-            <div style="font-size: 14px; color: #636e72; margin-top: 6px;">सबमिट समय: ${dateStr} | ${timeStr}</div>
+            <div style="font-size: 20px; font-weight: bold; color: #0984e3; margin-bottom: 8px;">आपका स्कोर: ${score}/10</div>
+            <div style="font-size: 15px; color: #2d3436;">तारीख: ${dateStr}</div>
+            <div style="font-size: 15px; color: #2d3436; margin-top: 4px;">समय: ${timeStr}</div>
         `;
         
         fetch("https://script.google.com/macros/s/AKfycbyM6xnzjjpQLVP-mS-j1KdVVEHf6Rv8EV-MClYHi8NCjmKqADqBk64OPTxZ6JSN7DkTBA/exec", {
