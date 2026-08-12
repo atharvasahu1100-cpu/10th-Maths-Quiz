@@ -3,37 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rajesh Sir Maths Quiz</title>
+    <title>MP Board 10th Math Study Portal</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 15px; color: #333; }
-        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h3 { text-align: center; color: #007bff; }
-        .home-card { text-align: center; }
-        .menu-btn { display: block; width: 100%; padding: 14px; margin: 12px 0; font-size: 16px; font-weight: bold; color: white; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; text-align: center; box-sizing: border-box; }
-        .btn-daily { background: #28a745; }
-        .btn-quiz { background: #0096d6; }
-        .btn-formula { background: #f39c12; }
+        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; font-size: 22px; }
+        .menu-item { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #3498db; color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; text-align: center; font-weight: bold; text-decoration: none; box-sizing: border-box; }
+        .btn-formula { background: #e67e22; }
         .btn-whatsapp { background: #9b59b6; }
+        .btn-admin { background: #2c3e50; }
     </style>
 </head>
 <body>
 
-<div class="container" id="home-screen">
-    <div class="home-card">
-        <h3>📚 गणित स्टडी पोर्टल (MP Board)</h3>
-        
-        <!-- दैनिक टेस्ट पेज का लिंक -->
-        <a href="test.html" class="menu-btn btn-daily">⚡ आज का टाइमर टेस्ट (अध्याय 1)</a>
-        
-        <!-- अध्यायवार क्विज़ पेज का लिंक -->
-        <a href="quiz.html" class="menu-btn btn-quiz">📝 अध्यायवार क्विज़ (1 से 14)</a>
-        
-        <!-- महत्वपूर्ण सूत्र पेज का लिंक -->
-        <a href="formulas.html" class="menu-btn btn-formula">📐 सभी महत्वपूर्ण सूत्र</a>
-        
-        <!-- व्हाट्सएप डाउट पूछने का लिंक -->
-        <a href="https://whatsapp.com" target="_blank" class="menu-btn btn-whatsapp">💬 डाउट पूछें (WhatsApp)</a>
-    </div>
+<div class="container">
+    <h1>📚 गणित स्टडी पोर्टल (MP Board)</h1>
+    
+    <a href="test.html" class="menu-item">⚡ अध्याय 1: टाइमर टेस्ट दें</a>
+    <a href="quiz.html" class="menu-item" style="background:#0096d6;">📝 अध्यायवार क्विज़ (1 से 14)</a>
+    <a href="formulas.html" class="menu-item btn-formula">📐 सभी महत्वपूर्ण सूत्र</a>
+    <a href="test.html?view=report" class="menu-item btn-admin">📊 छात्रों का पूरा रिकॉर्ड (Report)</a>
+    <a href="https://wa.me/917771973123" target="_blank" class="menu-item btn-whatsapp">💬 डाउट पूछें (WhatsApp)</a>
 </div>
 
 </body>
