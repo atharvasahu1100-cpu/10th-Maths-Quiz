@@ -81,23 +81,29 @@
         document.getElementById("quiz-screen").classList.add("hidden");
         document.getElementById("success-screen").classList.remove("hidden");
         
-        let now = new Date();
-        let dateStr = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
-        let hours = now.getHours();
-        let minutes = String(now.getMinutes()).padStart(2, '0');
-        let ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = (hours % 12) || 12;
-        let timeStr = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+        // स्क्रीन पर सिर्फ स्कोर दिखाने के लिए
+        document.getElementById("score-display").innerHTML = `
+            <div style="font-size: 22px; font-weight: bold; color: #0984e3; margin: 15px 0;">
+                आपका स्कोर: ${score}/10
+            </div>
+        `;
         
-        document.getElementById("score-display").innerHTML = `<div style="font-size:20px; font-weight:bold; color:#0984e3;">आपका स्कोर: ${score}/10</div><div style="margin-top:10px;">तारीख: ${dateStr} | समय: ${timeStr}</div>`;
-        
+        // गूगल शीट को डेटा भेजने का सही कोड
         fetch("https://script.google.com/macros/s/AKfycbyM6xnzjjpQLVP-mS-j1KdVVEHf6Rv8EV-MClYHi8NCjmKqADqBk64OPTxZ6JSN7DkTBA/exec", {
-            method: "POST", mode: "no-cors", 
-            body: new URLSearchParams({ name: sName, mobile: sMob, score: score + "/10" })
+            method: "POST", 
+            mode: "no-cors", 
+            body: new URLSearchParams({
+                name: sName, 
+                mobile: sMob, 
+                score: score + "/10"
+            })
         });
 
-        // रिसेट करें
-        score = 0; currentQ = 0;
+        // अगली एंट्री के लिए रिसेट करना
+        score = 0; 
+        currentQ = 0;
+        sName = "";
+        sMob = "";
         document.getElementById("studentName").value = "";
         document.getElementById("studentMobile").value = "";
     }
