@@ -62,6 +62,13 @@
         if(!sName) return alert("कृपया अपना नाम लिखें!");
         if(sMob.length !== 10) return alert("कृपया अपना 10 अंकों का सही मोबाइल नंबर लिखें!");
         
+        // एक बार टेस्ट दे चुके छात्र को दोबारा रोकने के लिए चेकिंग
+        let givenTests = JSON.parse(localStorage.getItem("submitted_tests") || "[]");
+        if(givenTests.includes(sMob)) {
+            alert("❌ आप इस मोबाइल नंबर से पहले ही टेस्ट दे चुके हैं! दोबारा टेस्ट देना संभव नहीं है।");
+            return;
+        }
+
         document.getElementById("info-screen").classList.add("hidden");
         document.getElementById("quiz-screen").classList.remove("hidden");
         startTimer();
@@ -105,14 +112,19 @@
         document.getElementById("quiz-screen").classList.add("hidden");
         document.getElementById("success-screen").classList.remove("hidden");
         
-        // स्कोर के आगे शब्द जोड़ने से गूगल शीट इसे तारीख नहीं समझेगी
+        // मोबाइल नंबर को सेव करना ताकि वह दोबारा टेस्ट न दे सके
+        let givenTests = JSON.parse(localStorage.getItem("submitted_tests") || "[]");
+        if(!givenTests.includes(sMob)) {
+            givenTests.push(sMob);
+            localStorage.setItem("submitted_tests", JSON.stringify(givenTests));
+        }
+        
         let finalScoreText = score + " अंक (10 में से)";
         
         document.getElementById("score-display").innerHTML = `
             <div style="font-size: 22px; font-weight: bold; color: #0984e3;">आपका स्कोर: ${score} / 10</div>
         `;
         
-        // गूगल शीट पर डेटा भेजना
         fetch("https://script.google.com/macros/s/AKfycbwxU7hh3icw5_wY0WWI3n3gL_BhgcPG1e9vhpBoOrp1JbpLfsTf6tk51BXOQH4uoUciFA/exec", {
             method: "POST", 
             mode: "no-cors", 
