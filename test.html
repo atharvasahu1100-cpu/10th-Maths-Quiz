@@ -33,8 +33,6 @@
     <div id="success-screen" class="hidden">
         <div style="text-align:center; font-size: 18px; font-weight: bold;">🎉 टेस्ट सबमिट हो गया!</div>
         <div id="score-display" style="text-align:center; margin: 15px 0;"></div>
-        
-        <!-- सीधा होम पेज पर जाने वाला बटन (बिना किसी लॉक के) -->
         <button class="btn" onclick="window.location.href='index.html'">होम पेज पर जाएं</button>
     </div>
 </div>
@@ -113,7 +111,8 @@
             <div style="font-size: 22px; font-weight: bold; color: #0984e3;">आपका स्कोर: ${finalScoreText}</div>
         `;
         
-        fetch("https://script.google.com/macros/s/AKfycbyM6xnzjjpQLVP-mS-j1KdVVEHf6Rv8EV-MClYHi8NCjmKqADqBk64OPTxZ6JSN7DkTBA/exec", {
+        // नया और सही अपडेटेड लिंक
+        fetch("https://script.google.com/macros/s/AKfycbwxU7hh3icw5_wY0WWI3n3gL_BhgcPG1e9vhpBoOrp1JbpLfsTf6tk51BXOQH4uoUciFA/exec", {
             method: "POST", 
             mode: "no-cors", 
             body: new URLSearchParams({
