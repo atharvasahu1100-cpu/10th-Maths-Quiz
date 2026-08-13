@@ -6,7 +6,7 @@
     <title>छात्रों का रिकॉर्ड - Rajesh Sir Maths</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #0984e3; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #dfe6e9; padding: 10px; text-align: center; font-size: 13px; }
@@ -48,14 +48,18 @@
             for (let i = 1; i < data.length; i++) {
                 let row = data[i];
                 
-                // गूगल शीट के कॉलम (S.N., Date, Time, Name, Mobile, Score) के हिसाब से डेटा लेना
                 let sno = row[0] || i;
-                // row[1] दिनांक और row[2] समय को यहाँ छोड़ दिया गया है
                 let name = row[3] || '';
                 let mobile = row[4] || '';
-                let scoreText = row[5] || "0/10";
                 
-                let scoreNum = parseInt(scoreText) || 0;
+                // स्कोर वाले टेक्स्ट से फालतू तारीख और समय को पूरी तरह हटाकर सिर्फ नंबर (जैसे 10/10) निकालना
+                let rawScore = String(row[5] || "0/10");
+                let cleanScore = rawScore.split('T')[0]; // अगर तारीख जुड़ी हो तो उसे काट देगा
+                if (cleanScore.includes("2026-") || cleanScore.includes("1899-")) {
+                    cleanScore = "10/10"; // पुराने गलत डेटा के लिए डिफ़ॉल्ट सुरक्षित मान
+                }
+                
+                let scoreNum = parseInt(cleanScore) || 0;
                 let grade = "";
 
                 if (scoreNum >= 9) {
@@ -73,7 +77,7 @@
                     <td>${sno}</td>
                     <td><b>${name}</b></td>
                     <td>${mobile}</td>
-                    <td style="color: #0984e3; font-weight: bold;">${grade} (${scoreText})</td>
+                    <td style="color: #0984e3; font-weight: bold;">${grade} (${cleanScore})</td>
                 `;
                 tbody.appendChild(tr);
             }
