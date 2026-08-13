@@ -9,7 +9,7 @@
         .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #0984e3; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #dfe6e9; padding: 10px; text-align: center; font-size: 13px; }
+        th, td { border: 1px solid #dfe6e9; padding: 12px; text-align: center; font-size: 14px; }
         th { background: #0984e3; color: white; }
         tr:nth-child(even) { background: #f1f2f6; }
         .back-btn { display: inline-block; padding: 10px 15px; background: #636e72; color: white; text-decoration: none; border-radius: 6px; margin-bottom: 15px; font-weight: bold; }
@@ -27,7 +27,6 @@
             <tr>
                 <th>क्र.सं.</th>
                 <th>दिनांक</th>
-                <th>समय</th>
                 <th>छात्र का नाम</th>
                 <th>मोबाइल</th>
                 <th>प्रदर्शन (ग्रेड)</th>
@@ -38,8 +37,8 @@
 </div>
 
 <script>
-    // नया और सही वेब ऐप यूआरएल
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbyAq9fxA-Y_KaoXvn8gu-8klNGLrloDv1iu_54dkTSLjUj7qMG_i7pCzCI7A5HlOO3Ixg/exec";
+    // आपका नया और सही वेब ऐप यूआरएल यहाँ जुड़ा हुआ है
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbxyrLcXha9W9BL3gxhIqDy7GehKC131aer-TIkkDIUbpdomVAZ8aT4K4CAfWxIu9yI8Yw/exec";
 
     fetch(webAppUrl)
         .then(response => response.json())
@@ -53,11 +52,10 @@
                 
                 let sno = row[0] || i;
                 let date = row[1] || '';
-                let time = row[2] || '';
-                let name = row[3] || '';
-                let mobile = row[4] || '';
+                let name = row[2] || '';
+                let mobile = row[3] || '';
+                let scoreText = row[4] || "0/10";
                 
-                let scoreText = row[5] || "0/10";
                 let score = parseInt(scoreText) || 0;
                 let grade = "";
 
@@ -75,7 +73,6 @@
                 tr.innerHTML = `
                     <td>${sno}</td>
                     <td>${date}</td>
-                    <td>${time}</td>
                     <td><b>${name}</b></td>
                     <td>${mobile}</td>
                     <td style="color: #0984e3; font-weight: bold;">${grade} (${scoreText})</td>
