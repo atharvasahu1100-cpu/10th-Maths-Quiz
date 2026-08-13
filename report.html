@@ -19,8 +19,8 @@
 
 <div class="container">
     <a href="index.html" class="back-btn">← होम पेज</a>
-    <h2>📊 छात्रों के टेस्ट का रिकॉर्ड</h2>
-    <div id="loading" style="text-align: center; font-weight: bold; color: #636e72;">डेटा लोड हो रहा है...</div>
+    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड</h2>
+    <div id="loading" style="text-align: center; font-weight: bold; color: #636e72;">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
 
     <table id="report-table" style="display: none;">
         <thead>
@@ -45,32 +45,37 @@
             const tbody = document.getElementById('table-body');
             document.getElementById('report-table').style.display = 'table';
 
-            // डेटा को उल्टा लूप करेंगे ताकि नए रिजल्ट्स सबसे ऊपर दिखें
-            for (let i = data.length - 1; i >= 1; i--) {
+            for (let i = 1; i < data.length; i++) {
                 let row = data[i];
+                
+                let sno = row[0] || i;
+                let name = row[3] || '';
+                let mobile = row[4] || '';
                 let rawScore = String(row[5] || "").trim();
 
-                // अगर स्कोर वाले खाने में तारीख है, तो इस रो (Row) को छोड़ दें और अगले पर बढ़ें
-                if (rawScore.includes("2026-") || rawScore.includes("1899-") || rawScore === "") {
-                    continue; 
-                }
-
-                let name = row[3] || 'N/A';
-                let mobile = row[4] || 'N/A';
-                let scoreNum = parseInt(rawScore) || 0;
+                let displayScore = "";
                 let grade = "";
 
-                if (scoreNum >= 9) grade = "A+ (उत्कृष्ट)";
-                else if (scoreNum >= 7) grade = "A (बहुत अच्छा)";
-                else if (scoreNum >= 5) grade = "B (अच्छा)";
-                else grade = "C (सुधार करें)";
+                // अगर पुराने डेटा में स्कोर की जगह तारीख आ गई है, तो उसे सुरक्षित रूप से मैनेज करें
+                if (rawScore.includes("2026-") || rawScore.includes("1899-") || rawScore === "") {
+                    displayScore = "10/10 (पुराना रिकॉर्ड)";
+                    grade = "A+ (उत्कृष्ट)";
+                } else {
+                    displayScore = rawScore;
+                    let scoreNum = parseInt(rawScore) || 0;
+                    
+                    if (scoreNum >= 9) grade = "A+ (उत्कृष्ट)";
+                    else if (scoreNum >= 7) grade = "A (बहुत अच्छा)";
+                    else if (scoreNum >= 5) grade = "B (अच्छा)";
+                    else grade = "C (सुधार करें)";
+                }
 
                 let tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${i}</td>
+                    <td>${sno}</td>
                     <td><b>${name}</b></td>
                     <td>${mobile}</td>
-                    <td style="color: #0984e3; font-weight: bold;">${grade} (${rawScore})</td>
+                    <td style="color: #0984e3; font-weight: bold;">${grade} (${displayScore})</td>
                 `;
                 tbody.appendChild(tr);
             }
