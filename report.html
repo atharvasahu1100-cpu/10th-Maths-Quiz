@@ -52,18 +52,24 @@
                 let name = row[3] || '';
                 let mobile = row[4] || '';
                 
-                // यहाँ 'T' से पहले वाले हिस्से को अलग किया जा रहा है ताकि फालतू तारीख हट जाए
-                let rawScore = String(row[5] || "10/10");
-                let cleanScore = rawScore.split('T')[0]; 
-                // यदि डेटा में सिर्फ तारीख आ रही है तो उसे 10/10 मान लें
-                if (cleanScore.includes("-") && cleanScore.length > 5) {
-                    cleanScore = "10/10";
-                }
-                
-                let scoreNum = parseInt(cleanScore) || 10;
-                let grade = "";
+                let rawScore = String(row[5] || "").trim();
+                let cleanScore = "0/10";
+                let scoreNum = 0;
 
-                if (scoreNum >= 9) {
+                // अगर स्कोर वाले खाने में तारीख/समय (जैसे 2026-...) आ गया है, तो उसे पकड़कर सही स्कोर पहचानें
+                if (rawScore.includes("2026-") || rawScore.includes("1899-") || rawScore === "") {
+                    // चूँकि पुराने डेटा में सही नंबर छिप गया है, हम इसे सुरक्षित रूप से जाँचेंगे या जिनका कम स्कोर है उनके लिए:
+                    // (यदि आपके पास नए छात्र टेस्ट देंगे तो उनका स्कोर सीधे सही आएगा)
+                    cleanScore = "नवीन डेटा प्रतीक्षित"; 
+                } else {
+                    cleanScore = rawScore; // जैसे "1/10" या "8/10"
+                    scoreNum = parseInt(rawScore) || 0;
+                }
+
+                let grade = "";
+                if (rawScore.includes("2026-") || rawScore.includes("1899-")) {
+                    grade = "पुराना रिकॉर्ड (सुधारा जा रहा है)";
+                } else if (scoreNum >= 9) {
                     grade = "A+ (उत्कृष्ट)";
                 } else if (scoreNum >= 7) {
                     grade = "A (बहुत अच्छा)";
