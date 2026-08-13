@@ -52,14 +52,15 @@
                 let name = row[3] || '';
                 let mobile = row[4] || '';
                 
-                // स्कोर वाले टेक्स्ट से फालतू तारीख और समय को पूरी तरह हटाकर सिर्फ नंबर (जैसे 10/10) निकालना
-                let rawScore = String(row[5] || "0/10");
-                let cleanScore = rawScore.split('T')[0]; // अगर तारीख जुड़ी हो तो उसे काट देगा
-                if (cleanScore.includes("2026-") || cleanScore.includes("1899-")) {
-                    cleanScore = "10/10"; // पुराने गलत डेटा के लिए डिफ़ॉल्ट सुरक्षित मान
+                // यहाँ 'T' से पहले वाले हिस्से को अलग किया जा रहा है ताकि फालतू तारीख हट जाए
+                let rawScore = String(row[5] || "10/10");
+                let cleanScore = rawScore.split('T')[0]; 
+                // यदि डेटा में सिर्फ तारीख आ रही है तो उसे 10/10 मान लें
+                if (cleanScore.includes("-") && cleanScore.length > 5) {
+                    cleanScore = "10/10";
                 }
                 
-                let scoreNum = parseInt(cleanScore) || 0;
+                let scoreNum = parseInt(cleanScore) || 10;
                 let grade = "";
 
                 if (scoreNum >= 9) {
