@@ -37,8 +37,8 @@
 </div>
 
 <script>
-    // अपना नया डिप्लॉय किया हुआ Web App URL यहाँ डालें
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbwTstmVlqAkdRSRUM9xSNT0Irk9BhbegYMADme5FkOMVGtyaVzQeoyNyteHczLgyXzPvg/exec";
+    // आपका नवीनतम और सही Web App URL यहाँ जुड़ा हुआ है
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbxaxuBqb6M9Ikpch2_6peN7UF5ehnJkLxuZPp0B4rJEKE_801BdyWjx8hKfpi7u_IQLmw/exec";
 
     fetch(webAppUrl)
         .then(response => response.json())
@@ -50,23 +50,23 @@
             for (let i = 1; i < data.length; i++) {
                 let row = data[i];
                 
-                // नए 5 कॉलम के क्रम के अनुसार डेटा सेट किया गया है:
                 let sno = row[0] || i;
                 let date = row[1] || '';
                 let name = row[2] || '';
                 let mobile = row[3] || '';
-                let rawScore = String(row[4] || "10/10").trim();
+                let rawScore = String(row[4] || "पुराना रिकॉर्ड").trim();
 
-                // स्कोर से फालतू तारीख हटाकर केवल नंबर (जैसे 1/10, 8/10) निकालना
                 let cleanScore = rawScore.split('T')[0];
                 if (cleanScore.includes("2026-") || cleanScore.includes("1899-") || cleanScore.length > 6) {
-                    cleanScore = "10/10";
+                    cleanScore = "पुराना रिकॉर्ड";
                 }
 
-                let scoreNum = parseInt(cleanScore) || 10;
+                let scoreNum = parseInt(cleanScore) || 0;
                 let grade = "";
 
-                if (scoreNum >= 9) {
+                if (cleanScore === "पुराना रिकॉर्ड") {
+                    grade = "उपलब्ध रिकॉर्ड";
+                } else if (scoreNum >= 9) {
                     grade = "A+ (उत्कृष्ट)";
                 } else if (scoreNum >= 7) {
                     grade = "A (बहुत अच्छा)";
