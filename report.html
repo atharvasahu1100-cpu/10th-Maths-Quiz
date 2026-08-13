@@ -3,81 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>छात्रों का रिकॉर्ड - Rajesh Sir Maths</title>
+    <title>टेस्ट रिपोर्ट - गणित वीकली टेस्ट</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #0984e3; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #dfe6e9; padding: 12px; text-align: center; font-size: 14px; }
-        th { background: #0984e3; color: white; }
-        tr:nth-child(even) { background: #f1f2f6; }
-        .back-btn { display: inline-block; padding: 10px 15px; background: #636e72; color: white; text-decoration: none; border-radius: 6px; margin-bottom: 15px; font-weight: bold; }
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; }
+        .container { width: 100%; max-width: 650px; background: #ffffff; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-top: 20px; }
+        h2 { text-align: center; color: #2d3436; margin-bottom: 20px; }
+        .table-responsive { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #fff; }
+        th, td { padding: 12px 10px; text-align: center; border-bottom: 1px solid #dfe6e9; font-size: 14px; }
+        th { background-color: #0984e3; color: white; font-weight: bold; }
+        tr:hover { background-color: #f1f2f6; }
+        .loading { text-align: center; padding: 30px; font-size: 16px; color: #636e72; }
+        .btn-home { display: block; width: 100%; background: #00b894; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <a href="index.html" class="back-btn">← होम पेज</a>
-    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड (ग्रेड सिस्टम)</h2>
-    <div id="loading" style="text-align: center; font-weight: bold; color: #636e72;">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
+    <h2>📊 छात्रों की टेस्ट रिपोर्ट</h2>
+    
+    <div id="loading" class="loading">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
+    
+    <div class="table-responsive">
+        <table id="report-table" style="display: none;">
+            <thead>
+                <tr>
+                    <th>क्र.सं.</th>
+                    <th>तारीख</th>
+                    <th>समय</th>
+                    <th>छात्र का नाम</th>
+                    <th>मोबाइल</th>
+                    <th>स्कोर</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- डेटा यहाँ अपने आप भर जाएगा -->
+            </tbody>
+        </table>
+    </div>
 
-    <table id="report-table" style="display: none;">
-        <thead>
-            <tr>
-                <th>दिनांक</th>
-                <th>समय</th>
-                <th>छात्र का नाम</th>
-                <th>मोबाइल</th>
-                <th>प्रदर्शन (ग्रेड)</th>
-            </tr>
-        </thead>
-        <tbody id="table-body"></tbody>
-    </table>
+    <a href="index.html" class="btn-home">होम पेज पर जाएं</a>
 </div>
 
 <script>
-    // आपका नवीनतम Google Apps Script Web App URL
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbwTstmVlqAkdRSRUM9xSNT0Irk9BhbegYMADme5FkOMVGtyaVzQeoyNyteHczLgyXzPvg/exec";
+    // नोट: यहाँ अपने Google Apps Script का 'GET' वाला वेब ऐप यूआरएल डालना है (जो डेटा फेच कर सके)
+    // यदि आपने अभी तक doGet नहीं बनाया है, तो आप इसे बाद में जोड़ सकते हैं।
+    const sheetAPI = "यहाँ_अपना_गेट_एपीआई_लिंक_डाले";
 
-    fetch(webAppUrl)
+    fetch(sheetAPI)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('loading').style.display = 'none';
-            const tbody = document.getElementById('table-body');
-            document.getElementById('report-table').style.display = 'table';
-
-            // i = 1 से शुरू किया है ताकि हेडिंग छूट जाए
-            for (let i = 1; i < data.length; i++) {
-                let row = data[i];
-                let score = parseInt(row[4]) || 0;
-                let grade = "";
-
-                // यहाँ नंबर को अल्फाबेट ग्रेड में बदला जा रहा है
-                if (score >= 9) {
-                    grade = "A+ (उत्कृष्ट)";
-                } else if (score >= 7) {
-                    grade = "A (बहुत अच्छा)";
-                } else if (score >= 5) {
-                    grade = "B (अच्छा)";
-                } else {
-                    grade = "C (सुधार करें)";
-                }
-
-                let tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${row[0] || ''}</td>
-                    <td>${row[1] || ''}</td>
-                    <td><b>${row[2] || ''}</b></td>
-                    <td>${row[3] || ''}</td>
-                    <td style="color: #0984e3; font-weight: bold;">${grade} (${score}/10)</td>
-                `;
-                tbody.appendChild(tr);
+            let tbody = document.getElementById("table-body");
+            tbody.innerHTML = "";
+            
+            if(data.length > 0) {
+                data.forEach((row, index) => {
+                    let tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${row[0] || ''}</td>
+                        <td>${row[1] || ''}</td>
+                        <td style="text-align: left; font-weight: bold;">${row[2] || ''}</td>
+                        <td>${row[3] || ''}</td>
+                        <td style="color: #0984e3; font-weight: bold;">${row[4] || ''}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("report-table").style.display = "table";
+            } else {
+                document.getElementById("loading").innerText = "कोई डेटा उपलब्ध नहीं है।";
             }
         })
         .catch(error => {
-            document.getElementById('loading').innerText = "डेटा लोड करने में त्रुटि हुई!";
-            console.error('Error:', error);
+            document.getElementById("loading").innerText = "डेटा लोड करने में विफल। कृपया लिंक जांचें।";
         });
 </script>
 
