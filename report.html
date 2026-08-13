@@ -38,7 +38,8 @@
 </div>
 
 <script>
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbwTstmVlqAkdRSRUM9xSNT0Irk9BhbegYMADme5FkOMVGtyaVzQeoyNyteHczLgyXzPvg/exec";
+    // नया और सही वेब ऐप यूआरएल
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbyAq9fxA-Y_KaoXvn8gu-8klNGLrloDv1iu_54dkTSLjUj7qMG_i7pCzCI7A5HlOO3Ixg/exec";
 
     fetch(webAppUrl)
         .then(response => response.json())
@@ -50,14 +51,12 @@
             for (let i = 1; i < data.length; i++) {
                 let row = data[i];
                 
-                // सही कॉलम इंडেক্স सेट किया गया है ताकि डेटा अपनी सही जगह पर आए
                 let sno = row[0] || i;
                 let date = row[1] || '';
                 let time = row[2] || '';
                 let name = row[3] || '';
                 let mobile = row[4] || '';
                 
-                // स्कोर को निकालकर ग्रेड तय करना
                 let scoreText = row[5] || "0/10";
                 let score = parseInt(scoreText) || 0;
                 let grade = "";
