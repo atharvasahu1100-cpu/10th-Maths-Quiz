@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>छात्रों का रिकॉर्ड - Rajesh Sir Maths</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #0984e3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #dfe6e9; padding: 12px; text-align: center; font-size: 14px; }
+        th { background: #0984e3; color: white; }
+        tr:nth-child(even) { background: #f1f2f6; }
+        .back-btn { display: inline-block; padding: 10px 15px; background: #636e72; color: white; text-decoration: none; border-radius: 6px; margin-bottom: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">← होम पेज</a>
+    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड</h2>
+    <div id="loading" style="text-align: center; font-weight: bold; color: #636e72;">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
+
+    <table id="report-table" style="display: none;">
+        <thead>
+            <tr>
+                <th>दिनांक</th>
+                <th>समय</th>
+                <th>छात्र का नाम</th>
+                <th>मोबाइल</th>
+                <th>स्कोर</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div>
+
+<script>
+    // आपका नवीनतम Google Apps Script Web App URL
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbwTstmVlqAkdRSRUM9xSNT0Irk9BhbegYMADme5FkOMVGtyaVzQeoyNyteHczLgyXzPvg/exec";
+
+    fetch(webAppUrl)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('loading').style.display = 'none';
+            const tbody = document.getElementById('table-body');
+            document.getElementById('report-table').style.display = 'table';
+
+            // i = 1 से शुरू किया है ताकि हेडिंग (Date, Name आदि) छूट जाए और केवल छात्रों का डेटा दिखे
+            for (let i = 1; i < data.length; i++) {
+                let row = data[i];
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row[0] || ''}</td>
+                    <td>${row[1] || ''}</td>
+                    <td><b>${row[2] || ''}</b></td>
+                    <td>${row[3] || ''}</td>
+                    <td style="color: #27ae60; font-weight: bold;">${row[4] || ''}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        })
+        .catch(error => {
+            document.getElementById('loading').innerText = "डेटा लोड करने में त्रुटि हुई!";
+            console.error('Error:', error);
+        });
+</script>
+
+</body>
+</html>
