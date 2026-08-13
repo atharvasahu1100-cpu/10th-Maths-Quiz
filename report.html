@@ -6,7 +6,7 @@
     <title>छात्रों का रिकॉर्ड - Rajesh Sir Maths</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #0984e3; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #dfe6e9; padding: 10px; text-align: center; font-size: 13px; }
@@ -26,7 +26,6 @@
         <thead>
             <tr>
                 <th>क्र.सं.</th>
-                <th>दिनांक</th>
                 <th>छात्र का नाम</th>
                 <th>मोबाइल</th>
                 <th>प्रदर्शन (ग्रेड)</th>
@@ -49,10 +48,9 @@
             for (let i = 1; i < data.length; i++) {
                 let row = data[i];
                 
-                // गूगल शीट के कॉलम (S.N., Date, Time, Name, Mobile, Score) के हिसाब से डेटा मैपिंग
+                // गूगल शीट के कॉलम (S.N., Date, Time, Name, Mobile, Score) के हिसाब से डेटा लेना
                 let sno = row[0] || i;
-                let date = row[1] || '';
-                // row[2] समय (Time) था, जिसे यहाँ छोड़ दिया गया है ताकि यह टेबल में न दिखे
+                // row[1] दिनांक और row[2] समय को यहाँ छोड़ दिया गया है
                 let name = row[3] || '';
                 let mobile = row[4] || '';
                 let scoreText = row[5] || "0/10";
@@ -73,7 +71,6 @@
                 let tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${sno}</td>
-                    <td>${date}</td>
                     <td><b>${name}</b></td>
                     <td>${mobile}</td>
                     <td style="color: #0984e3; font-weight: bold;">${grade} (${scoreText})</td>
