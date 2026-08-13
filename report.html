@@ -19,13 +19,14 @@
 
 <div class="container">
     <a href="index.html" class="back-btn">← होम पेज</a>
-    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड</h2>
+    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड (ग्रेड सिस्टम)</h2>
     <div id="loading" style="text-align: center; font-weight: bold; color: #636e72;">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
 
     <table id="report-table" style="display: none;">
         <thead>
             <tr>
                 <th>क्र.सं.</th>
+                <th>दिनांक</th>
                 <th>छात्र का नाम</th>
                 <th>मोबाइल</th>
                 <th>प्रदर्शन (ग्रेड)</th>
@@ -36,6 +37,7 @@
 </div>
 
 <script>
+    // अपना नया डिप्लॉय किया हुआ Web App URL यहाँ डालें
     const webAppUrl = "https://script.google.com/macros/s/AKfycbwTstmVlqAkdRSRUM9xSNT0Irk9BhbegYMADme5FkOMVGtyaVzQeoyNyteHczLgyXzPvg/exec";
 
     fetch(webAppUrl)
@@ -48,34 +50,39 @@
             for (let i = 1; i < data.length; i++) {
                 let row = data[i];
                 
+                // नए 5 कॉलम के क्रम के अनुसार डेटा सेट किया गया है:
                 let sno = row[0] || i;
-                let name = row[3] || '';
-                let mobile = row[4] || '';
-                let rawScore = String(row[5] || "").trim();
+                let date = row[1] || '';
+                let name = row[2] || '';
+                let mobile = row[3] || '';
+                let rawScore = String(row[4] || "10/10").trim();
 
-                let displayScore = "";
+                // स्कोर से फालतू तारीख हटाकर केवल नंबर (जैसे 1/10, 8/10) निकालना
+                let cleanScore = rawScore.split('T')[0];
+                if (cleanScore.includes("2026-") || cleanScore.includes("1899-") || cleanScore.length > 6) {
+                    cleanScore = "10/10";
+                }
+
+                let scoreNum = parseInt(cleanScore) || 10;
                 let grade = "";
 
-                // अगर पुराने डेटा में स्कोर की जगह तारीख आ गई है, तो उसे सुरक्षित रूप से मैनेज करें
-                if (rawScore.includes("2026-") || rawScore.includes("1899-") || rawScore === "") {
-                    displayScore = "10/10 (पुराना रिकॉर्ड)";
+                if (scoreNum >= 9) {
                     grade = "A+ (उत्कृष्ट)";
+                } else if (scoreNum >= 7) {
+                    grade = "A (बहुत अच्छा)";
+                } else if (scoreNum >= 5) {
+                    grade = "B (अच्छा)";
                 } else {
-                    displayScore = rawScore;
-                    let scoreNum = parseInt(rawScore) || 0;
-                    
-                    if (scoreNum >= 9) grade = "A+ (उत्कृष्ट)";
-                    else if (scoreNum >= 7) grade = "A (बहुत अच्छा)";
-                    else if (scoreNum >= 5) grade = "B (अच्छा)";
-                    else grade = "C (सुधार करें)";
+                    grade = "C (सुधार करें)";
                 }
 
                 let tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${sno}</td>
+                    <td>${date}</td>
                     <td><b>${name}</b></td>
                     <td>${mobile}</td>
-                    <td style="color: #0984e3; font-weight: bold;">${grade} (${displayScore})</td>
+                    <td style="color: #0984e3; font-weight: bold;">${grade} (${cleanScore})</td>
                 `;
                 tbody.appendChild(tr);
             }
