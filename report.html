@@ -3,80 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>राजेश सर मैथ्स - छात्र रिकॉर्ड</title>
+    <title>छात्रों का रिकॉर्ड - Rajesh Sir Maths</title>
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; margin: 0; padding: 15px; }
-        .container { max-width: 600px; margin: auto; }
-        .header { text-align: center; color: #0984e3; margin-bottom: 20px; }
-        .back-btn { display: inline-block; padding: 8px 16px; background: #636e72; color: white; text-decoration: none; border-radius: 8px; margin-bottom: 15px; font-size: 14px; }
-        
-        .record-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #0984e3; }
-        .record-card b { font-size: 16px; color: #2d3436; }
-        .record-card .score { float: right; font-weight: bold; color: #0984e3; background: #e1f5fe; padding: 4px 8px; border-radius: 5px; font-size: 13px; }
-        .record-card .details { font-size: 13px; color: #636e72; margin-top: 5px; }
-        
-        #loading { text-align: center; color: #636e72; font-weight: bold; margin-top: 50px; font-size: 16px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #0984e3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #dfe6e9; padding: 10px; text-align: center; font-size: 13px; }
+        th { background: #0984e3; color: white; }
+        tr:nth-child(even) { background: #f1f2f6; }
+        .back-btn { display: inline-block; padding: 10px 15px; background: #636e72; color: white; text-decoration: none; border-radius: 6px; margin-bottom: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <a href="index.html" class="back-btn">← होम पेज</a>
-    <h2 class="header">📊 छात्र टेस्ट रिकॉर्ड</h2>
-    <div id="loading">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
-    <div id="record-list"></div>
+    <h2>📊 छात्रों के टेस्ट का रिकॉर्ड</h2>
+    <div id="loading" style="text-align: center; font-weight: bold; color: #636e72;">डेटा लोड हो रहा है...</div>
+
+    <table id="report-table" style="display: none;">
+        <thead>
+            <tr>
+                <th>क्र.सं.</th>
+                <th>छात्र का नाम</th>
+                <th>मोबाइल</th>
+                <th>प्रदर्शन (ग्रेड)</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
 </div>
 
 <script>
-    // पुरानी टेबल वाला वर्किंग तरीका जो बिना एरर के तुरंत डेटा उठाएगा
     const webAppUrl = "https://script.google.com/macros/s/AKfycbwxU7hh3icw5_wY0WWI3n3gL_BhgcPG1e9vhpBoOrp1JbpLfsTf6tk51BXOQH4uoUciFA/exec";
 
     fetch(webAppUrl)
         .then(response => response.json())
         .then(data => {
             document.getElementById('loading').style.display = 'none';
-            const list = document.getElementById('record-list');
-            list.innerHTML = "";
+            const tbody = document.getElementById('table-body');
+            document.getElementById('report-table').style.display = 'table';
+            tbody.innerHTML = "";
 
-            if (!data || data.length <= 1) {
-                list.innerHTML = "<div style='text-align:center; color:#636e72;'>कोई रिकॉर्ड उपलब्ध नहीं है।</div>";
-                return;
-            }
-
-            // सबसे नए रिकॉर्ड को ऊपर दिखाने के लिए 'reverse' लूप
-            for (let i = data.length - 1; i >= 1; i--) {
+            let count = 1;
+            for (let i = 1; i < data.length; i++) {
                 let row = data[i];
-                let name = row[3] || 'अज्ञात छात्र';
-                let mobile = row[4] || '---';
                 let rawScore = String(row[5] || "").trim();
-                
-                let grade = "C (सुधार करें)";
-                let displayScore = rawScore;
 
+                // अगर पुराने डेटा में तारीख (2026- या 1899-) है, तो उसे पूरी तरह छोड़ दें (छपा हुआ नहीं दिखेगा)
                 if (rawScore.includes("2026-") || rawScore.includes("1899-") || rawScore === "") {
-                    grade = "पुराना रिकॉर्ड";
-                    displayScore = "सुरक्षित डेटा";
-                } else {
-                    if (rawScore.includes("10") || rawScore.includes("9")) grade = "A+ (उत्कृष्ट)";
-                    else if (rawScore.includes("7") || rawScore.includes("8")) grade = "A (बहुत अच्छा)";
-                    else if (rawScore.includes("5") || rawScore.includes("6")) grade = "B (अच्छा)";
+                    continue; 
                 }
 
-                let card = document.createElement('div');
-                card.className = 'record-card';
-                card.innerHTML = `
-                    <div class="score">${grade}</div>
-                    <b>${name}</b>
-                    <div class="details">मोबाइल: ${mobile} | स्कोर: ${displayScore}</div>
+                let name = row[3] || 'N/A';
+                let mobile = row[4] || 'N/A';
+                
+                // ग्रेड निकालना
+                let grade = "C (सुधार करें)";
+                if (rawScore.includes("10") || rawScore.includes("9")) grade = "A+ (उत्कृष्ट)";
+                else if (rawScore.includes("7") || rawScore.includes("8")) grade = "A (बहुत अच्छा)";
+                else if (rawScore.includes("5") || rawScore.includes("6")) grade = "B (अच्छा)";
+
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${count++}</td>
+                    <td><b>${name}</b></td>
+                    <td>${mobile}</td>
+                    <td style="color: #0984e3; font-weight: bold;">${grade} (${rawScore})</td>
                 `;
-                list.appendChild(card);
+                tbody.appendChild(tr);
             }
         })
         .catch(error => {
+            document.getElementById('loading').innerText = "डेटा लोड करने में त्रुटि हुई!";
             console.error('Error:', error);
-            // यदि फिर भी सुरक्षा नियम रोके, तो हम सीधे सादे तरीके से पिछले काम करने वाले टेबल लेआउट पर फॉールबैक कर लेंगे
-            document.getElementById('loading').innerHTML = "<div style='color:#e74c3c; text-align:center;'>कनेक्शन में बाधा! कृपया सुनिश्चित करें कि गूगल स्क्रिप्ट लिंक पब्लिश है।</div>";
         });
 </script>
+
 </body>
 </html>
