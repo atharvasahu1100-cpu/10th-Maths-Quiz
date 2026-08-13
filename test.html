@@ -105,13 +105,14 @@
         document.getElementById("quiz-screen").classList.add("hidden");
         document.getElementById("success-screen").classList.remove("hidden");
         
-        let finalScoreText = score + "/10";
+        // स्कोर के आगे शब्द जोड़ने से गूगल शीट इसे तारीख नहीं समझेगी
+        let finalScoreText = score + " अंक (10 में से)";
         
         document.getElementById("score-display").innerHTML = `
-            <div style="font-size: 22px; font-weight: bold; color: #0984e3;">आपका स्कोर: ${finalScoreText}</div>
+            <div style="font-size: 22px; font-weight: bold; color: #0984e3;">आपका स्कोर: ${score} / 10</div>
         `;
         
-        // नया और सही अपडेटेड लिंक
+        // गूगल शीट पर डेटा भेजना
         fetch("https://script.google.com/macros/s/AKfycbwxU7hh3icw5_wY0WWI3n3gL_BhgcPG1e9vhpBoOrp1JbpLfsTf6tk51BXOQH4uoUciFA/exec", {
             method: "POST", 
             mode: "no-cors", 
