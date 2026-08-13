@@ -6,7 +6,7 @@
     <title>छात्रों का रिकॉर्ड - Rajesh Sir Maths</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .container { max-width: 950px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #0984e3; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #dfe6e9; padding: 10px; text-align: center; font-size: 13px; }
@@ -19,7 +19,7 @@
 
 <div class="container">
     <a href="index.html" class="back-btn">← होम पेज</a>
-    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड (ग्रेड सिस्टम)</h2>
+    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड</h2>
     <div id="loading" style="text-align: center; font-weight: bold; color: #636e72;">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
 
     <table id="report-table" style="display: none;">
@@ -37,8 +37,7 @@
 </div>
 
 <script>
-    // आपका नवीनतम और सही Web App URL यहाँ जुड़ा हुआ है
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbxaxuBqb6M9Ikpch2_6peN7UF5ehnJkLxuZPp0B4rJEKE_801BdyWjx8hKfpi7u_IQLmw/exec";
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbwTstmVlqAkdRSRUM9xSNT0Irk9BhbegYMADme5FkOMVGtyaVzQeoyNyteHczLgyXzPvg/exec";
 
     fetch(webAppUrl)
         .then(response => response.json())
@@ -50,30 +49,35 @@
             for (let i = 1; i < data.length; i++) {
                 let row = data[i];
                 
+                // गूगल शीट के कॉलम क्रम के अनुसार सही डेटा उठाना:
+                // row[0] = S.N.
+                // row[1] = Date
+                // row[2] = Time (इसे टेबल में नहीं दिखाना है)
+                // row[3] = Name
+                // row[4] = Mobile
+                // row[5] = Score
+                
                 let sno = row[0] || i;
                 let date = row[1] || '';
-                let name = row[2] || '';
-                let mobile = row[3] || '';
-                let rawScore = String(row[4] || "पुराना रिकॉर्ड").trim();
+                let name = row[3] || '';
+                let mobile = row[4] || '';
+                let rawScore = String(row[5] || "").trim();
 
-                let cleanScore = rawScore.split('T')[0];
-                if (cleanScore.includes("2026-") || cleanScore.includes("1899-") || cleanScore.length > 6) {
-                    cleanScore = "पुराना रिकॉर्ड";
-                }
-
-                let scoreNum = parseInt(cleanScore) || 0;
+                let displayScore = "";
                 let grade = "";
 
-                if (cleanScore === "पुराना रिकॉर्ड") {
-                    grade = "उपलब्ध रिकॉर्ड";
-                } else if (scoreNum >= 9) {
+                // पुराने और नए डेटा को संभालना ताकि कोई गड़बड़ न हो
+                if (rawScore.includes("2026-") || rawScore.includes("1899-") || rawScore === "") {
+                    displayScore = "पुराना रिकॉर्ड";
                     grade = "A+ (उत्कृष्ट)";
-                } else if (scoreNum >= 7) {
-                    grade = "A (बहुत अच्छा)";
-                } else if (scoreNum >= 5) {
-                    grade = "B (अच्छा)";
                 } else {
-                    grade = "C (सुधार करें)";
+                    displayScore = rawScore;
+                    let scoreNum = parseInt(rawScore) || 0;
+                    
+                    if (scoreNum >= 9) grade = "A+ (उत्कृष्ट)";
+                    else if (scoreNum >= 7) grade = "A (बहुत अच्छा)";
+                    else if (scoreNum >= 5) grade = "B (अच्छा)";
+                    else grade = "C (सुधार करें)";
                 }
 
                 let tr = document.createElement('tr');
@@ -82,7 +86,7 @@
                     <td>${date}</td>
                     <td><b>${name}</b></td>
                     <td>${mobile}</td>
-                    <td style="color: #0984e3; font-weight: bold;">${grade} (${cleanScore})</td>
+                    <td style="color: #0984e3; font-weight: bold;">${grade} (${displayScore})</td>
                 `;
                 tbody.appendChild(tr);
             }
