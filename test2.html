@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>गणित वीकली टेस्ट - अध्याय 1</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .container { width: 100%; max-width: 500px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .btn { width: 100%; background: #0984e3; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .hidden { display: none; }
+        input[type="text"], input[type="tel"] { width: 100%; padding: 12px; margin: 8px 0 15px 0; border: 2px solid #dfe6e9; border-radius: 10px; }
+        .option-label { display: block; background: #f8f9fa; border: 2px solid #e9ecef; padding: 12px; margin: 8px 0; border-radius: 10px; cursor: pointer; }
+        #timer { font-size: 16px; font-weight: bold; color: #e74c3c; text-align: right; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div id="info-screen">
+        <h2>⚡ गणित साप्ताहिक टेस्ट - अध्याय 1</h2>
+        <label><b>नाम:</b></label> <input type="text" id="studentName">
+        <label><b>मोबाइल:</b></label> <input type="tel" id="studentMobile" maxlength="10">
+        <button class="btn" onclick="startQuiz()">टेस्ट शुरू करें</button>
+    </div>
+    <div id="quiz-screen" class="hidden">
+        <div id="timer">समय शेष: 10:00</div>
+        <h2 id="q-number">प्रश्न 1</h2>
+        <div id="question-text"></div>
+        <div id="options-container"></div>
+        <button class="btn" onclick="nextQuestion()" id="next-btn">अगला प्रश्न</button>
+    </div>
+    <div id="success-screen" class="hidden">
+        <div style="text-align:center; font-size: 18px; font-weight: bold;">🎉 टेस्ट सबमिट हो गया!</div>
+        <div id="score-display" style="text-align:center; margin: 15px 0;"></div>
+        <button class="btn" onclick="checkMondayAndRedirect()">होम पेज पर जाएं</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "संख्याओं 26 और 91 का HCF क्या होगा?", o: ["13", "26", "7", "91"], a: 0 },
+        { q: "संख्याओं 96 और 404 का HCF कितना होगा?", o: ["2", "3", "4", "8"], a: 2 },
+        { q: "6, 72 और 120 का HCF क्या होगा?", o: ["3", "6", "12", "2"], a: 1 },
+        { q: "यदि HCF(306, 657) = 9 है, तो LCM क्या होगा?", o: ["22338", "23338", "21338", "24338"], a: 0 },
+        { q: "क्या 6<sup>n</sup> अंक 0 पर समाप्त हो सकता है?", o: ["हाँ", "नहीं", "निश्चित नहीं", "इनमें से कोई नहीं"], a: 1 },
+        { q: "7 × 11 × 13 + 13 एक कैसी संख्या है?", o: ["भाज्य", "अभाज्य", "विषम", "सम"], a: 0 },
+        { q: "सोनिया(18 मिनट) और रवि(12 मिनट) पुनः कब मिलेंगे?", o: ["24 मिनट", "30 मिनट", "36 मिनट", "42 मिनट"], a: 2 },
+        { q: "√5 किस प्रकार की संख्या है?", o: ["परिमेय", "अपरिमेय", "पूर्णांक", "प्राकृत"], a: 1 },
+        { q: "निम्नलिखित में से कौन सी एक परिमेय संख्या है?", o: ["√2", "√3", "2", "√5"], a: 2 },
+        { q: "HCF(a, b) होगा यदि a = x<sup>3</sup>y<sup>2</sup> और b = xy<sup>3</sup>?", o: ["xy", "xy<sup>2</sup>", "x<sup>3</sup>y<sup>3</sup>", "x<sup>2</sup>y<sup>2</sup>"], a: 1 }
+    ];
+
+    let currentQ = 0, score = 0, sName = "", sMob = "";
+    let timerInterval;
+    let timeLeft = 600; 
+    
+    function startQuiz() {
+        sName = document.getElementById("studentName").value.trim();
+        sMob = document.getElementById("studentMobile").value.trim();
+        
+        if(!sName) return alert("कृपया अपना नाम लिखें!");
+        if(sMob.length !== 10) return alert("कृपया अपना 10 अंकों का सही मोबाइल नंबर लिखें!");
+        
+        document.getElementById("info-screen").classList.add("hidden");
+        document.getElementById("quiz-screen").classList.remove("hidden");
+        startTimer();
+        loadQ();
+    }
+    
+    function startTimer() {
+        timeLeft = 600;
+        timerInterval = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById("timer").innerText = `समय शेष: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            if (timeLeft <= 0) { 
+                clearInterval(timerInterval); 
+                alert("समय समाप्त हो गया है!");
+                submitQuiz(); 
+            }
+            timeLeft--;
+        }, 1000);
+    }
+    
+    function loadQ() {
+        let q = questions[currentQ];
+        document.getElementById("q-number").innerText = `प्रश्न ${currentQ + 1}`;
+        document.getElementById("question-text").innerHTML = q.q;
+        let html = "";
+        q.o.forEach((opt, i) => html += `<label class="option-label"><input type="radio" name="r" value="${i}"> ${opt}</label>`);
+        document.getElementById("options-container").innerHTML = html;
+    }
+    
+    function nextQuestion() {
+        let val = document.querySelector('input[name="r"]:checked');
+        if(!val) return alert("विकल्प चुनें!");
+        if(parseInt(val.value) === questions[currentQ].a) score++;
+        currentQ++;
+        if(currentQ < questions.length) loadQ(); else submitQuiz();
+    }
+    
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        document.getElementById("quiz-screen").classList.add("hidden");
+        document.getElementById("success-screen").classList.remove("hidden");
+        
+        let finalScoreText = score + "/10";
+        
+        document.getElementById("score-display").innerHTML = `
+            <div style="font-size: 22px; font-weight: bold; color: #0984e3;">आपका स्कोर: ${finalScoreText}</div>
+        `;
+        
+        fetch("https://script.google.com/macros/s/AKfycbyM6xnzjjpQLVP-mS-j1KdVVEHf6Rv8EV-MClYHi8NCjmKqADqBk64OPTxZ6JSN7DkTBA/exec", {
+            method: "POST", 
+            mode: "no-cors", 
+            body: new URLSearchParams({
+                name: sName, 
+                mobile: sMob, 
+                score: finalScoreText
+            })
+        });
+    }
+
+    function checkMondayAndRedirect() {
+        let today = new Date().getDay(); // 1 = सोमवार
+        if (today !== 1) {
+            alert("🔒 होम पेज और रिजल्ट लॉक है!\nछात्रों का रिकॉर्ड केवल सोमवार के दिन ही देखा जा सकता है।");
+        } else {
+            window.location.href = 'index.html';
+        }
+    }
+</script>
+</body>
+</html>
