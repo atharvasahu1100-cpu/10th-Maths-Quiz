@@ -12,10 +12,10 @@
         
         .record-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #0984e3; }
         .record-card b { font-size: 16px; color: #2d3436; }
-        .record-card .score { float: right; font-weight: bold; color: #0984e3; background: #e1f5fe; padding: 4px 8px; border-radius: 5px; }
+        .record-card .score { float: right; font-weight: bold; color: #0984e3; background: #e1f5fe; padding: 4px 8px; border-radius: 5px; font-size: 13px; }
         .record-card .details { font-size: 13px; color: #636e72; margin-top: 5px; }
         
-        #loading { text-align: center; color: #636e72; font-weight: bold; margin-top: 50px; }
+        #loading { text-align: center; color: #636e72; font-weight: bold; margin-top: 50px; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -23,7 +23,7 @@
 <div class="container">
     <a href="index.html" class="back-btn">← होम पेज</a>
     <h2 class="header">📊 छात्र टेस्ट रिकॉर्ड</h2>
-    <div id="loading">लोड हो रहा है...</div>
+    <div id="loading">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
     <div id="record-list"></div>
 </div>
 
@@ -37,17 +37,21 @@
             const list = document.getElementById('record-list');
             list.innerHTML = "";
 
+            if (!data || data.length <= 1) {
+                list.innerHTML = "<div style='text-align:center; color:#636e72;'>कोई रिकॉर्ड उपलब्ध नहीं है।</div>";
+                return;
+            }
+
             // सबसे नए रिकॉर्ड को ऊपर दिखाने के लिए 'reverse' लूप
             for (let i = data.length - 1; i >= 1; i--) {
                 let row = data[i];
-                let name = row[3] || 'अज्ञात';
+                let name = row[3] || 'अज्ञात छात्र';
                 let mobile = row[4] || '---';
                 let rawScore = String(row[5] || "").trim();
                 
                 let grade = "C (सुधार करें)";
                 let displayScore = rawScore;
 
-                // अगर पुराना डेटा है, तो उसे सुरक्षित रूप से "पुराना रिकॉर्ड" दिखाएँगे
                 if (rawScore.includes("2026-") || rawScore.includes("1899-") || rawScore === "") {
                     grade = "पुराना रिकॉर्ड";
                     displayScore = "सुरक्षित डेटा";
@@ -66,6 +70,10 @@
                 `;
                 list.appendChild(card);
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('loadinginnerHTML = "<div style='color:red; text-align:center;'>डेटा लोड करने में त्रुटि हुई! कृपया पेज रिफ्रेश करें।</div>";
         });
 </script>
 </body>
