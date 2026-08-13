@@ -33,7 +33,9 @@
     <div id="success-screen" class="hidden">
         <div style="text-align:center; font-size: 18px; font-weight: bold;">🎉 टेस्ट सबमिट हो गया!</div>
         <div id="score-display" style="text-align:center; margin: 15px 0;"></div>
-        <button class="btn" onclick="window.location.href='index.html'">होम पेज पर जाएं</button>
+        
+        <!-- सोमवार लॉक वाला होम पेज बटन -->
+        <button class="btn" onclick="checkMondayAndRedirect()">होम पेज पर जाएं</button>
     </div>
 </div>
 
@@ -111,7 +113,7 @@
             <div style="font-size: 22px; font-weight: bold; color: #0984e3;">आपका स्कोर: ${finalScoreText}</div>
         `;
         
-        // नया और सही वेब ऐप लिंक यहाँ अपडेट कर दिया गया है
+        // डेटा गूगल शीट पर भेजने का सही लिंक
         fetch("https://script.google.com/macros/s/AKfycbyM6xnzjjpQLVP-mS-j1KdVVEHf6Rv8EV-MClYHi8NCjmKqADqBk64OPTxZ6JSN7DkTBA/exec", {
             method: "POST", 
             mode: "no-cors", 
@@ -121,6 +123,17 @@
                 score: finalScoreText
             })
         });
+    }
+
+    // केवल सोमवार को होम पेज/रिपोर्ट खोलने का फंक्शन
+    function checkMondayAndRedirect() {
+        let today = new Date().getDay(); // 1 का मतलब सोमवार (Monday) होता है
+        
+        if (today !== 1) {
+            alert("🔒 रिजल्ट और होम पेज लॉक है!\nछात्रों का रिकॉर्ड केवल सोमवार के दिन ही देखा जा सकता है।");
+        } else {
+            window.location.href = 'index.html';
+        }
     }
 </script>
 </body>
