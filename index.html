@@ -16,7 +16,6 @@
         .btn { display: block; width: 100%; padding: 14px; margin: 10px 0; border-radius: 14px; font-size: 15px; font-weight: bold; text-decoration: none; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; border: none; cursor: pointer; transition: 0.2s; }
         .btn:active { transform: scale(0.98); }
         
-        /* वीकली टेस्ट बटन हाइलाइट और चमकता हुआ इफ़ेक्ट */
         .btn-highlight { 
             background: linear-gradient(135deg, #e74c3c, #ff7675) !important; 
             border: 2px dashed #ffffff;
@@ -60,7 +59,6 @@
 <body>
 <div class="main-container">
 
-    <!-- होम स्क्रीन -->
     <div id="home-screen" class="section active">
         <div class="logo-area">
             <div class="logo-box">RS</div>
@@ -69,14 +67,13 @@
         <h2>📚 गणित स्टडी पोर्टल</h2>
         <div class="subtitle">MP Board Class 10th</div>
         
-        <!-- हाइलाइटेड वीकली टेस्ट बटन और दिनांक -->
         <a href="test.html" class="btn btn-highlight">
             ⚡ वीकली टाइमर टेस्ट दें<br>
             <span style="font-size: 12px; font-weight: normal; background: rgba(0,0,0,0.25); padding: 3px 10px; border-radius: 6px; display: inline-block; margin-top: 5px;">📅 दिनांक: 10/08/2026 से 16/08/2026</span>
         </a>
 
-        <!-- 🔒 यहाँ सिर्फ सोमवार को खुलने वाला रिपोर्ट बटन है -->
-        <a href="#" onclick="openReport(event)" class="btn btn-2">📊 छात्रों का पूरा रिकॉर्ड (Report)</a>
+        <!-- बिना लॉक वाला सीधा रिपोर्ट बटन -->
+        <a href="https://script.google.com/macros/s/AKfycbyM6xnzjjpQLVP-mS-j1KdVVEHf6Rv8EV-MClYHi8NCjmKqADqBk64OPTxZ6JSN7DkTBA/exec" target="_blank" class="btn btn-2">📊 छात्रों का पूरा रिकॉर्ड (Report)</a>
 
         <button type="button" class="btn btn-3" onclick="showSection('quiz-menu')">📝 अध्यायवार क्विज़ (1 से 14)</button>
         <a href="textbook.html" class="btn btn-4">📖 गणित पाठ्यपुस्तक (अध्याय 1 से 14)</a>
@@ -84,14 +81,12 @@
         <a href="https://wa.me/917771973123" target="_blank" class="btn btn-6">💬 डाउट पूछें (WhatsApp)</a>
     </div>
 
-    <!-- अध्याय चयन मेनू -->
     <div id="quiz-menu" class="section">
         <button type="button" class="btn btn-2" style="margin-top:0; padding:10px; font-size:14px;" onclick="showSection('home-screen')">← होम पेज पर वापस जाएं</button>
         <h3 style="color: #e67e22; font-size: 16px; border-bottom: 2px solid #eee; padding-bottom: 8px; margin: 10px 0;">सभी अध्याय चुनें:</h3>
         <div id="chapter-list" style="max-height: 380px; overflow-y: auto;"></div>
     </div>
 
-    <!-- क्विज़ स्क्रीन -->
     <div id="quiz-screen" class="section">
         <button type="button" class="btn btn-2" style="margin-top:0; padding:10px; font-size:14px;" onclick="showSection('quiz-menu')">← अध्यायों की सूची पर वापस जाएँ</button>
         <div id="quiz-content" style="margin-top: 10px;">
@@ -328,18 +323,6 @@
         } else {
             alert('शाबाश! आपने इस अध्याय का क्विज़ पूरा कर लिया है।');
             showSection('quiz-menu');
-        }
-    }
-
-    // 🔒 सोमवार लॉक फंक्शन (यह केवल होम पेज के रिपोर्ट बटन को कंट्रोल करेगा)
-    function openReport(event) {
-        event.preventDefault();
-        let today = new Date().getDay(); // 1 मतलब सोमवार (Monday) होता है
-        
-        if (today !== 1) {
-            alert("🔒 यह रिपोर्ट लॉक है!\nछात्रों का रिजल्ट रिकॉर्ड केवल सोमवार के दिन ही देखा जा सकता है।");
-        } else {
-            window.open("https://script.google.com/macros/s/AKfycbyM6xnzjjpQLVP-mS-j1KdVVEHf6Rv8EV-MClYHi8NCjmKqADqBk64OPTxZ6JSN7DkTBA/exec", "_blank");
         }
     }
 
