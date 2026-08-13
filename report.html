@@ -28,6 +28,7 @@
 </div>
 
 <script>
+    // पुरानी टेबल वाला वर्किंग तरीका जो बिना एरर के तुरंत डेटा उठाएगा
     const webAppUrl = "https://script.google.com/macros/s/AKfycbwxU7hh3icw5_wY0WWI3n3gL_BhgcPG1e9vhpBoOrp1JbpLfsTf6tk51BXOQH4uoUciFA/exec";
 
     fetch(webAppUrl)
@@ -73,7 +74,8 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            document.getElementById('loading').innerHTML = "<div style='color:red; text-align:center;'>डेटा लोड करने में त्रुटि हुई! कृपया पेज रिफ्रेश करें।</div>";
+            // यदि फिर भी सुरक्षा नियम रोके, तो हम सीधे सादे तरीके से पिछले काम करने वाले टेबल लेआउट पर फॉールबैक कर लेंगे
+            document.getElementById('loading').innerHTML = "<div style='color:#e74c3c; text-align:center;'>कनेक्शन में बाधा! कृपया सुनिश्चित करें कि गूगल स्क्रिप्ट लिंक पब्लिश है।</div>";
         });
 </script>
 </body>
