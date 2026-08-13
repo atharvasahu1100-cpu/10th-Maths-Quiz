@@ -106,9 +106,10 @@
         document.getElementById("quiz-screen").classList.add("hidden");
         document.getElementById("success-screen").classList.remove("hidden");
         
-        // अब यहाँ सिर्फ स्कोर दिखेगा
+        // केवल स्कोर दिखने वाला शुद्ध कोड
+        let finalScoreText = score + "/10";
         document.getElementById("score-display").innerHTML = `
-            <div style="font-size: 22px; font-weight: bold; color: #0984e3; margin: 20px 0;">आपका स्कोर: ${score}/10</div>
+            <div style="font-size: 22px; font-weight: bold; color: #0984e3; margin: 20px 0;">आपका स्कोर: ${finalScoreText}</div>
         `;
         
         fetch("https://script.google.com/macros/s/AKfycbyM6xnzjjpQLVP-mS-j1KdVVEHf6Rv8EV-MClYHi8NCjmKqADqBk64OPTxZ6JSN7DkTBA/exec", {
@@ -117,7 +118,7 @@
             body: new URLSearchParams({
                 name: sName, 
                 mobile: sMob, 
-                score: score + "/10"
+                score: finalScoreText
             })
         });
     }
