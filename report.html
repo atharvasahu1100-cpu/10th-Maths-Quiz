@@ -19,7 +19,7 @@
 
 <div class="container">
     <a href="index.html" class="back-btn">← होम पेज</a>
-    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड</h2>
+    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड (ग्रेड सिस्टम)</h2>
     <div id="loading" style="text-align: center; font-weight: bold; color: #636e72;">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
 
     <table id="report-table" style="display: none;">
@@ -29,7 +29,7 @@
                 <th>समय</th>
                 <th>छात्र का नाम</th>
                 <th>मोबाइल</th>
-                <th>स्कोर</th>
+                <th>प्रदर्शन (ग्रेड)</th>
             </tr>
         </thead>
         <tbody id="table-body"></tbody>
@@ -47,16 +47,30 @@
             const tbody = document.getElementById('table-body');
             document.getElementById('report-table').style.display = 'table';
 
-            // i = 1 से शुरू किया है ताकि हेडिंग (Date, Name आदि) छूट जाए और केवल छात्रों का डेटा दिखे
+            // i = 1 से शुरू किया है ताकि हेडिंग छूट जाए
             for (let i = 1; i < data.length; i++) {
                 let row = data[i];
+                let score = parseInt(row[4]) || 0;
+                let grade = "";
+
+                // यहाँ नंबर को अल्फाबेट ग्रेड में बदला जा रहा है
+                if (score >= 9) {
+                    grade = "A+ (उत्कृष्ट)";
+                } else if (score >= 7) {
+                    grade = "A (बहुत अच्छा)";
+                } else if (score >= 5) {
+                    grade = "B (अच्छा)";
+                } else {
+                    grade = "C (सुधार करें)";
+                }
+
                 let tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${row[0] || ''}</td>
                     <td>${row[1] || ''}</td>
                     <td><b>${row[2] || ''}</b></td>
                     <td>${row[3] || ''}</td>
-                    <td style="color: #27ae60; font-weight: bold;">${row[4] || ''}</td>
+                    <td style="color: #0984e3; font-weight: bold;">${grade} (${score}/10)</td>
                 `;
                 tbody.appendChild(tr);
             }
