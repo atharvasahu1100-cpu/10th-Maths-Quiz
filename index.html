@@ -381,7 +381,7 @@ body{
           <span class="menu-icon">📝</span>Chapter Quiz
         </button>
 
-        <button class="menu-btn" onclick="openFeature('weekly')">
+        <button class="menu-btn" onclick="openWeeklyTest()">
           <span class="menu-icon">⚡</span>Weekly Challenge
         </button>
 
@@ -438,6 +438,10 @@ function selectClass(cls){
   showSection('feature-screen');
 }
 
+function openWeeklyTest(){
+  window.location.href = "weekly.html";
+}
+
 function openFeature(type){
   const map={
     daily:['आज का गणित','Daily concept और practice यहाँ connect होगा।'],
@@ -455,4 +459,3 @@ function openFeature(type){
 </script>
 </body>
 </html>
-
