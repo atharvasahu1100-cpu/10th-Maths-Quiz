@@ -385,7 +385,7 @@ body{
           <span class="menu-icon">⚡</span>Weekly Challenge
         </button>
 
-        <button class="menu-btn" onclick="openResult()">
+        <button class="menu-btn" onclick="openFeature('result')">
           <span class="menu-icon">📊</span>मेरा Result
         </button>
 
@@ -453,9 +453,14 @@ function openFeature(type){
   showSection('feature-screen');
 }
 
-function openResult(){
-  window.location.href = "result.html";
+function openWeeklyTest(){
+  window.location.href = 'weekly.html';
 }
+
+function openResult(){
+  window.location.href = 'report.html';
+}
+
 </script>
 </body>
 </html>
