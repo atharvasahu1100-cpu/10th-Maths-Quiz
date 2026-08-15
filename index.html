@@ -381,11 +381,11 @@ body{
           <span class="menu-icon">📝</span>Chapter Quiz
         </button>
 
-        <button class="menu-btn" onclick="openFeature('weekly')">
+        <button class="menu-btn" onclick="window.location.href='weekly.html'">
           <span class="menu-icon">⚡</span>Weekly Challenge
         </button>
 
-        <button class="menu-btn" onclick="openFeature('result')">
+        <button class="menu-btn" onclick="window.location.href='report.html'">
           <span class="menu-icon">📊</span>मेरा Result
         </button>
 
@@ -452,15 +452,6 @@ function openFeature(type){
   document.getElementById('feature-text').innerText=map[type][1];
   showSection('feature-screen');
 }
-
-function openWeeklyTest(){
-  window.location.href = 'weekly.html';
-}
-
-function openResult(){
-  window.location.href = 'report.html';
-}
-
 </script>
 </body>
 </html>
