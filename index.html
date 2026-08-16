@@ -407,18 +407,27 @@ body{
 
 <main class="content">
 
-
+<style>
+.sliding-winners-container{width:100%;max-width:450px;margin:0 auto 20px;background:linear-gradient(135deg,#1a237e 0%,#3f51b5 100%);border-radius:14px;padding:10px 12px;box-shadow:0 6px 20px rgba(0,0,0,.15);cursor:pointer;overflow:hidden;border:2px solid #FFD700;box-sizing:border-box}.banner-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px}.trophy-badge{background:#FFD700;color:#000;font-weight:700;padding:2px 8px;border-radius:6px}.tap-hint{color:#ffeb3b;font-weight:500}.marquee-wrapper{display:flex;width:100%;overflow:hidden;position:relative}.marquee-track{display:flex;gap:15px;width:max-content;animation:slideMarquee 15s linear infinite}.winner-item{background:rgba(255,255,255,.95);display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:30px;white-space:nowrap;box-shadow:0 2px 5px rgba(0,0,0,.1)}.winner-img{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #FF8C00}.winner-info{display:flex;flex-direction:column}.w-name{font-size:13px;font-weight:700;color:#333}.w-rank{font-size:10px;font-weight:600;color:#e65100}@keyframes slideMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}</style>
+<div class="sliding-winners-container" onclick="window.location.href='YOUR_RESULT_PAGE_URL'">
+<div class="banner-header"><span class="trophy-badge">🏆 Weekly Champions</span><span class="tap-hint">Tap to view all →</span></div>
+<div class="marquee-wrapper"><div class="marquee-track">
+<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Rahul Sahu</span><span class="w-rank">🥇 1st Rank</span></div></div>
+<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Priya Verma</span><span class="w-rank">🥈 2nd Rank</span></div></div>
+<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Amit Kumar</span><span class="w-rank">🥉 3rd Rank</span></div></div>
+<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Sneha Gupta</span><span class="w-rank">⭐ Top 10</span></div></div>
+<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Rahul Sahu</span><span class="w-rank">🥇 1st Rank</span></div></div>
+</div></div></div>
 <h2 class="section-title">
+  अपनी कक्षा चुनें
+</h2>
+<div class="class-select-box">
+
   अपनी कक्षा चुनें
 </h2>
 
 
 <div class="class-select-box">
-
-<label class="class-select-label" for="class-select">
-  अपनी कक्षा चुनें
-</label>
-
 
 <select
   id="class-select"
@@ -908,4 +917,5 @@ function openFeature(type){
 
 </body>
 </html>
+
 
