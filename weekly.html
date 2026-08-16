@@ -1,140 +1,423 @@
+08.17 1:04 AM
 <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>गणित वीकली टेस्ट - अध्याय 1</title>
+    <title>MathsIQ - Class 10th Weekly Timer Test (Lesson 1 to 4)</title>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: sans-serif; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .container { width: 100%; max-width: 500px; background: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .btn { width: 100%; background: #0984e3; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .hidden { display: none; }
-        input[type="text"], input[type="tel"] { width: 100%; padding: 12px; margin: 8px 0 15px 0; border: 2px solid #dfe6e9; border-radius: 10px; }
-        .option-label { display: block; background: #f8f9fa; border: 2px solid #e9ecef; padding: 12px; margin: 8px 0; border-radius: 10px; cursor: pointer; }
-        #timer { font-size: 16px; font-weight: bold; color: #e74c3c; text-align: right; margin-bottom: 10px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .timer-box {
+            background: #ff416c;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .question-text {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 18px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+            box-sizing: border-box;
+        }
+        .option-btn:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+        .option-btn.correct {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .option-btn.wrong {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24;
+        }
+        .explanation {
+            background: #e2e8f0;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #334155;
+            display: none;
+        }
+        .next-btn {
+            display: none;
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .result-box {
+            text-align: center;
+            display: none;
+        }
+        .badge {
+            font-size: 18px;
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-<div class="container" id="app">
-    <div id="info-screen">
-        <h2>⚡ गणित साप्ताहिक टेस्ट - अध्याय 1</h2>
-        <label><b>नाम:</b></label> <input type="text" id="studentName">
-        <label><b>मोबाइल:</b></label> <input type="tel" id="studentMobile" maxlength="10">
-        <button class="btn" onclick="startQuiz()">टेस्ट शुरू करें</button>
+    <div class="quiz-container">
+        <!-- Quiz Screen -->
+        <div id="quiz-screen">
+            <div class="quiz-header">
+                <span id="question-count" style="font-weight: bold; color: #666;">प्रश्न 1 / 15</span>
+                <div class="timer-box">⏳ <span id="time-left">30</span>सेकंड</div>
+            </div>
+            <div class="question-text" id="question">प्रश्न लोड हो रहा है...</div>
+            <div id="options-container">
+                <!-- Options dynamically aayenge -->
+            </div>
+            <div class="explanation" id="explanation-box">
+                <strong>स्पष्टीकरण (हल):</strong> <span id="explanation-text"></span>
+            </div>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">अगला प्रश्न ➡️</button>
+        </div>
+        <!-- Result Screen -->
+        <div class="result-box" id="result-screen">
+            <h2> बधाई हो! टेस्ट समाप्त हुआ</h2>
+            <p style="font-size: 16px; color: #444;">आपका कुल प्राप्तांक:</p>
+            <h1 id="final-score" style="color: #2563eb; font-size: 36px; margin: 10px 0;">0 / 15</h1>
+            <div class="badge" id="performance-badge"> गणित जीनियस</div>
+            <button class="next-btn" style="background: linear-gradient(135deg, #f2994a, #f2c94c); display: block;" onclick="showAllSolutions()"> सभी 15 प्रश्नों के विस्तृत हल देखें</button>
+            <button class="next-btn" style="background: linear-gradient(135deg, #4facfe, #00f2fe); display: block; margin-top: 10px;" onclick="location.reload()"> टेस्ट दोबारा दें</button>
+        </div>
+        <!-- Solutions Screen -->
+        <div id="solutions-screen" style="display: none; text-align: left; max-height: 420px; overflow-y: auto; padding: 5px;">
+            <h3 style="color: #333; text-align: center;"> पाठ 1 से 4: संपूर्ण हल</h3>
+            <div id="solutions-list"></div>
+            <button class="next-btn" style="background: #2563eb; display: block; margin-top: 15px;" onclick="location.reload()"> टेस्ट दोबारा शुरू करें</button>
+        </div>
     </div>
-    <div id="quiz-screen" class="hidden">
-        <div id="timer">समय शेष: 10:00</div>
-        <h2 id="q-number">प्रश्न 1</h2>
-        <div id="question-text"></div>
-        <div id="options-container"></div>
-        <button class="btn" onclick="nextQuestion()" id="next-btn">अगला प्रश्न</button>
-    </div>
-    <div id="success-screen" class="hidden">
-        <div style="text-align:center; font-size: 18px; font-weight: bold;">🎉 टेस्ट सबमिट हो गया!</div>
-        <div id="score-display" style="text-align:center; margin: 15px 0;"></div>
-        <button class="btn" onclick="window.location.href='index.html'">होम पेज पर जाएं</button>
-    </div>
-</div>
-
-<script>
-    const questions = [
-        { q: "संख्याओं 26 और 91 का HCF क्या होगा?", o: ["13", "26", "7", "91"], a: 0 },
-        { q: "संख्याओं 96 और 404 का HCF कितना होगा?", o: ["2", "3", "4", "8"], a: 2 },
-        { q: "6, 72 और 120 का HCF क्या होगा?", o: ["3", "6", "12", "2"], a: 1 },
-        { q: "यदि HCF(306, 657) = 9 है, तो LCM क्या होगा?", o: ["22338", "23338", "21338", "24338"], a: 0 },
-        { q: "क्या 6<sup>n</sup> अंक 0 पर समाप्त हो सकता है?", o: ["हाँ", "नहीं", "निश्चित नहीं", "इनमें से कोई नहीं"], a: 1 },
-        { q: "7 × 11 × 13 + 13 एक कैसी संख्या है?", o: ["भाज्य", "अभाज्य", "विषम", "सम"], a: 0 },
-        { q: "सोनिया(18 मिनट) और रवि(12 मिनट) पुनः कब मिलेंगे?", o: ["24 मिनट", "30 मिनट", "36 मिनट", "42 मिनट"], a: 2 },
-        { q: "√5 किस प्रकार की संख्या है?", o: ["परिमेय", "अपरिमेय", "पूर्णांक", "प्राकृत"], a: 1 },
-        { q: "निम्नलिखित में से कौन सी एक परिमेय संख्या है?", o: ["√2", "√3", "2", "√5"], a: 2 },
-        { q: "HCF(a, b) होगा यदि a = x<sup>3</sup>y<sup>2</sup> और b = xy<sup>3</sup>?", o: ["xy", "xy<sup>2</sup>", "x<sup>3</sup>y<sup>3</sup>", "x<sup>2</sup>y<sup>2</sup>"], a: 1 }
-    ];
-
-    let currentQ = 0, score = 0, sName = "", sMob = "";
-    let timerInterval;
-    let timeLeft = 600; 
-    
-    function startQuiz() {
-        sName = document.getElementById("studentName").value.trim();
-        sMob = document.getElementById("studentMobile").value.trim();
-        
-        if(!sName) return alert("कृपया अपना नाम लिखें!");
-        if(sMob.length !== 10) return alert("कृपया अपना 10 अंकों का सही मोबाइल नंबर लिखें!");
-        
-        // एक बार टेस्ट दे चुके छात्र को दोबारा रोकने के लिए चेकिंग
-        let givenTests = JSON.parse(localStorage.getItem("submitted_tests") || "[]");
-        if(givenTests.includes(sMob)) {
-            alert("❌ आप इस मोबाइल नंबर से पहले ही टेस्ट दे चुके हैं! दोबारा टेस्ट देना संभव नहीं है।");
-            return;
-        }
-
-        document.getElementById("info-screen").classList.add("hidden");
-        document.getElementById("quiz-screen").classList.remove("hidden");
-        startTimer();
-        loadQ();
-    }
-    
-    function startTimer() {
-        timeLeft = 600;
-        timerInterval = setInterval(() => {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            document.getElementById("timer").innerText = `समय शेष: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            if (timeLeft <= 0) { 
-                clearInterval(timerInterval); 
-                alert("समय समाप्त हो गया है!");
-                submitQuiz(); 
+    <!-- Original First-given Excitement Win Sound Element -->
+    <audio id="win-sound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3" preload="auto"></audio>
+    <script>
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
-            timeLeft--;
-        }, 1000);
-    }
-    
-    function loadQ() {
-        let q = questions[currentQ];
-        document.getElementById("q-number").innerText = `प्रश्न ${currentQ + 1}`;
-        document.getElementById("question-text").innerHTML = q.q;
-        let html = "";
-        q.o.forEach((opt, i) => html += `<label class="option-label"><input type="radio" name="r" value="${i}"> ${opt}</label>`);
-        document.getElementById("options-container").innerHTML = html;
-    }
-    
-    function nextQuestion() {
-        let val = document.querySelector('input[name="r"]:checked');
-        if(!val) return alert("विकल्प चुनें!");
-        if(parseInt(val.value) === questions[currentQ].a) score++;
-        currentQ++;
-        if(currentQ < questions.length) loadQ(); else submitQuiz();
-    }
-    
-    function submitQuiz() {
-        clearInterval(timerInterval);
-        document.getElementById("quiz-screen").classList.add("hidden");
-        document.getElementById("success-screen").classList.remove("hidden");
-        
-        // मोबाइल नंबर को सेव करना ताकि वह दोबारा टेस्ट न दे सके
-        let givenTests = JSON.parse(localStorage.getItem("submitted_tests") || "[]");
-        if(!givenTests.includes(sMob)) {
-            givenTests.push(sMob);
-            localStorage.setItem("submitted_tests", JSON.stringify(givenTests));
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
         }
-        
-        let finalScoreText = score + " अंक (10 में से)";
-        
-        document.getElementById("score-display").innerHTML = `
-            <div style="font-size: 22px; font-weight: bold; color: #0984e3;">आपका स्कोर: ${score} / 10</div>
-        `;
-        
-        fetch("https://script.google.com/macros/s/AKfycbwxU7hh3icw5_wY0WWI3n3gL_BhgcPG1e9vhpBoOrp1JbpLfsTf6tk51BXOQH4uoUciFA/exec", {
-            method: "POST", 
-            mode: "no-cors", 
-            body: new URLSearchParams({
-                name: sName, 
-                mobile: sMob, 
-                score: finalScoreText
-            })
-        });
-    }
-</script>
+        function playCorrectSound() {
+            initAudio();
+            let now = audioCtx.currentTime;
+            for (let i = 0; i < 5; i++) {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400 + (i * 120), now + (i * 0.05));
+                gain.gain.setValueAtTime(0.2, now + (i * 0.05));
+                gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.05) + 0.12);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + (i * 0.05));
+                osc.stop(now + (i * 0.05) + 0.12);
+            }
+            let osc2 = audioCtx.createOscillator();
+            let gain2 = audioCtx.createGain();
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(659.25, now + 0.2); 
+            osc2.frequency.setValueAtTime(880, now + 0.3);    
+            gain2.gain.setValueAtTime(0.25, now + 0.2);
+            gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+            osc2.start(now + 0.2);
+            osc2.stop(now + 0.5);
+        }
+        function playWrongSound() {
+            initAudio();
+            let now = audioCtx.currentTime;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(160, now);
+            osc.frequency.setValueAtTime(90, now + 0.15);
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.35);
+        }
+        window.onload = function() {
+            loadQuestion();
+        };
+        const quizData = [
+            {
+                question: "1. √5 किस प्रकार की संख्या है?",
+                options: ["(A) परिमेय", "(B) अपरिमेय", "(C) पूर्णांक", "(D) प्राकृतिक संख्या"],
+                correct: 1,
+                explanation: "√5 को p/q के रूप में नहीं लिखा जा सकता, इसलिए यह अपरिमेय संख्या है."
+            },
+            {
+                question: "2. दो धनात्मक पूर्णांकों a,b के लिए HCF(a,b) × LCM(a,b) बराबर होता है—",
+                options: ["(A) a+b", "(B) a-b", "(C) a×b", "(D) a/b"],
+                correct: 2,
+                explanation: "नियम के अनुसार: HCF × LCM = पहली संख्या × दूसरी संख्या (अर्थात a×b)."
+            },
+            {
+                question: "3. निम्न में से कौन-सी संख्या परिमेय है?",
+                options: ["(A) √2", "(B) √3", "(C) √5", "(D) √16"],
+                correct: 3,
+                explanation: "√16 = 4 होता है, और 4 को 4/1 के रूप में लिखा जा सकता है, इसलिए यह परिमेय संख्या है."
+            },
+            {
+                question: "4. द्विघात बहुपद ax²+bx+c में शून्यकों का योग होता है—",
+                options: ["(A) c/a", "(B) -b/a", "(C) b/a", "(D) -c/a"],
+                correct: 1,
+                explanation: "द्विघात बहुपद के शून्यकों का योग α + β = -b/a होता है."
+            },
+            {
+                question: "5. द्विघात बहुपद ax²+bx+c में शून्यकों का गुणनफल होता है—",
+                options: ["(A) c/a", "(B) -b/a", "(C) b/a", "(D) -c/a"],
+                correct: 0,
+                explanation: "द्विघात बहुपद के शून्यकों का गुणनफल αβ = c/a होता है."
+            },
+            {
+                question: "6. दो चर वाले रैखिक समीकरण का सामान्य रूप है—",
+                options: ["(A) ax+b=0", "(B) ax²+bx+c=0", "(C) ax+by+c=0", "(D) ax³+b=0"],
+                correct: 2,
+                explanation: "दो चर वाले रैखिक समीकरण का मानक रूप ax+by+c=0 होता है."
+            },
+            {
+                question: "7. दो चर वाले रैखिक समीकरण का ग्राफ होता है—",
+                options: ["(A) सरल रेखा", "(B) वृत्त", "(C) परवलय", "(D) दीर्घवृत्त"],
+                correct: 0,
+                explanation: "दो चर वाले रैखिक समीकरण का आलेख (ग्राफ) हमेशा एक सरल रेखा होता है."
+            },
+            {
+                question: "8. दो रेखाएँ एक-दूसरे को केवल एक बिंदु पर काटती हैं, तो समीकरण युग्म का—",
+                options: ["(A) कोई हल नहीं", "(B) एक अद्वितीय हल", "(C) अनंत हल", "(D) दो हल"],
+                correct: 1,
+                explanation: "जब दो रेखाएँ एक बिंदु पर प्रतिच्छेद करती हैं, तो उस बिंदु के निर्देशांक ही समीकरण युग्म का एकमात्र (अद्वितीय) हल होते हैं."
+            },
+            {
+                question: "9. यदि दो रेखाएँ समानांतर हों, तो रैखिक समीकरण युग्म का—",
+                options: ["(A) एक हल", "(B) दो हल", "(C) कोई हल नहीं", "(D) अनंत हल"],
+                correct: 2,
+                explanation: "दो समानांतर रेखाएँ कभी एक-दूसरे को नहीं काटतीं, इसलिए उनका कोई उभयनिष्ठ हल नहीं होता."
+            },
+            {
+                question: "10. यदि दो रैखिक समीकरणों की रेखाएँ संपाती हों, तो उनके—",
+                options: ["(A) कोई हल नहीं", "(B) केवल एक हल", "(C) अनंत अनेक हल", "(D) केवल दो हल"],
+                correct: 2,
+                explanation: "जब दोनों रेखाएँ संपाती होती हैं (एक ही रेखा पर दोनों स्थित हों), तब अनंत अनेक हल होते हैं."
+            },
+            {
+                question: "11. द्विघात समीकरण का सामान्य रूप है—",
+                options: ["(A) ax+b=0", "(B) ax²+bx+c=0, a≠0", "(C) ax³+bx+c=0", "(D) ax+b+c=0"],
+                correct: 1,
+                explanation: "द्विघात समीकरण का सामान्य रूप ax²+bx+c=0 है, जहाँ a का मान शून्य नहीं हो सकता."
+            },
+            {
+                question: "12. द्विघात समीकरण ax²+bx+c=0 का विविक्तकर है—",
+                options: ["(A) b²+4ac", "(B) b²-4ac", "(C) 4ac-b²", "(D) a²-4bc"],
+                correct: 1,
+                explanation: "विविक्तकर (Discriminant) ज्ञात करने का सूत्र D = b²-4ac होता है."
+            },
+            {
+                question: "13. यदि D>0 हो, तो द्विघात समीकरण के मूल होते हैं—",
+                options: ["(A) वास्तविक एवं असमान", "(B) वास्तविक एवं समान", "(C) कोई वास्तविक मूल नहीं", "(D) केवल एक मूल"],
+                correct: 0,
+                explanation: "यदि विविक्तकर D का मान शून्य से बड़ा हो, तो दो वास्तविक एवं भिन्न (असमान) मूल होते हैं."
+            },
+            {
+                question: "14. यदि D=0 हो, तो द्विघात समीकरण के मूल होते हैं—",
+                options: ["(A) वास्तविक एवं असमान", "(B) वास्तविक एवं समान", "(C) काल्पनिक", "(D) कोई मूल नहीं"],
+                correct: 1,
+                explanation: "यदि D का मान शून्य के बराबर हो, तो दोनों मूल वास्तविक एवं समान होते हैं."
+            },
+            {
+                question: "15. यदि D<0 हो, तो द्विघात समीकरण के—",
+                options: ["(A) दो समान वास्तविक मूल होते हैं", "(B) दो असमान वास्तविक मूल होते हैं", "(C) कोई वास्तविक मूल नहीं होता", "(D) एक वास्तविक मूल होता है"],
+                correct: 2,
+                explanation: "यदि D का मान शून्य से कम (ऋणात्मक) हो, तो समीकरण का कोई वास्तविक मूल नहीं होता."
+            }
+        ];
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timer;
+        const questionEl = document.getElementById("question");
+        const optionsEl = document.getElementById("options-container");
+        const countEl = document.getElementById("question-count");
+        const timeEl = document.getElementById("time-left");
+        const nextBtn = document.getElementById("next-btn");
+        const expBox = document.getElementById("explanation-box");
+        const expText = document.getElementById("explanation-text");
+        const quizScreen = document.getElementById("quiz-screen");
+        const resultScreen = document.getElementById("result-screen");
+        const solutionsScreen = document.getElementById("solutions-screen");
+        const finalScoreEl = document.getElementById("final-score");
+        const badgeEl = document.getElementById("performance-badge");
+        function startTimer() {
+            timeLeft = 30;
+            timeEl.innerText = timeLeft;
+            timer = setInterval(() => {
+                timeLeft--;
+                timeEl.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    autoSelectWrong();
+                }
+            }, 1000);
+        }
+        function loadQuestion() {
+            clearInterval(timer);
+            startTimer();
+            expBox.style.display = "none";
+            nextBtn.style.display = "none";
+            let q = quizData[currentQuestion];
+            countEl.innerText = `प्रश्न ${currentQuestion + 1} / ${quizData.length}`;
+            questionEl.innerText = q.question;
+            optionsEl.innerHTML = "";
+            q.options.forEach((opt, index) => {
+                let btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(index);
+                optionsEl.appendChild(btn);
+            });
+        }
+        function selectOption(selected) {
+            clearInterval(timer);
+            let q = quizData[currentQuestion];
+            let buttons = optionsEl.children;
+            if (selected === q.correct) {
+                buttons[selected].classList.add("correct");
+                score++;
+                playCorrectSound();
+            } else {
+                buttons[selected].classList.add("wrong");
+                buttons[q.correct].classList.add("correct");
+                playWrongSound();
+            }
+            for (let btn of buttons) {
+                btn.disabled = true;
+            }
+            expText.innerText = q.explanation;
+            expBox.style.display = "block";
+            nextBtn.style.display = "block";
+        }
+        function autoSelectWrong() {
+            let q = quizData[currentQuestion];
+            let buttons = optionsEl.children;
+            buttons[q.correct].classList.add("correct");
+            for (let btn of buttons) {
+                btn.disabled = true;
+            }
+            playWrongSound();
+            expText.innerText = "समय समाप्त! सही उत्तर था: " + q.options[q.correct] + ". " + q.explanation;
+            expBox.style.display = "block";
+            nextBtn.style.display = "block";
+        }
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                finishTest();
+            }
+        }
+        function finishTest() {
+            quizScreen.style.display = "none";
+            resultScreen.style.display = "block";
+            finalScoreEl.innerText = `${score} / ${quizData.length}`;
+            let winAudio = document.getElementById("win-sound");
+            if (winAudio) {
+                winAudio.currentTime = 0;
+                winAudio.play().catch(e => {});
+            }
+            if (score >= 13) {
+                badgeEl.innerText = " प्रथम श्रेणी - गणित जीनियस";
+            } else if (score >= 8) {
+                badgeEl.innerText = "⭐ बहुत बढ़िया प्रदर्शन!";
+            } else {
+                badgeEl.innerText = " और अधिक अभ्यास की आवश्यकता है!";
+            }
+        }
+        function showAllSolutions() {
+            resultScreen.style.display = "none";
+            solutionsScreen.style.display = "block";
+            let solList = document.getElementById("solutions-list");
+            solList.innerHTML = "";
+            quizData.forEach((q) => {
+                let div = document.createElement("div");
+                div.style.background = "#f8f9fa";
+                div.style.padding = "10px";
+                div.style.margin = "8px 0";
+                div.style.borderRadius = "8px";
+                div.style.borderLeft = "4px solid #2563eb";
+                div.innerHTML = `<strong>${q.question}</strong><br>
+                                 <span style="color: #28a745; font-size: 14px;">✅ सही उत्तर: ${q.options[q.correct]}</span><br>
+                                 <span style="color: #555; font-size: 13px;"> <b>समाधान:</b> ${q.explanation}</span>`;
+                solList.appendChild(div);
+            });
+        }
+    </script>
 </body>
 </html>
+
+
