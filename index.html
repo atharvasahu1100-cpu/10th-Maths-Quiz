@@ -373,6 +373,21 @@ body{
 
 }
 
+
+/* ===== Winners Top 10 - added only ===== */
+.sliding-winners-container{width:100%;max-width:450px;margin:0 auto 14px;background:linear-gradient(135deg,#1a237e 0%,#3f51b5 100%);border-radius:14px;padding:10px 12px;box-shadow:0 6px 20px rgba(0,0,0,.15);overflow:hidden;border:2px solid #FFD700;box-sizing:border-box}
+.winners-banner-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px}
+.winners-trophy-badge{background:#FFD700;color:#000;font-weight:700;padding:2px 8px;border-radius:6px}
+.winners-tap-hint{color:#ffeb3b;font-weight:500}
+.winners-marquee-wrapper{display:flex;width:100%;overflow:hidden;position:relative}
+.winners-marquee-track{display:flex;gap:15px;width:max-content;animation:winnersSlideMarquee 18s linear infinite}
+.winners-item{background:rgba(255,255,255,.95);display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:30px;white-space:nowrap;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+.winners-info{display:flex;flex-direction:column}
+.winners-name{font-size:13px;font-weight:700;color:#333}
+.winners-rank{font-size:10px;font-weight:600;color:#e65100}
+@keyframes winnersSlideMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.winners-marquee-wrapper:hover .winners-marquee-track{animation-play-state:paused}
+
 </style>
 </head>
 
@@ -407,21 +422,31 @@ body{
 
 <main class="content">
 
-<style>
-.sliding-winners-container{width:100%;max-width:450px;margin:0 auto 20px;background:linear-gradient(135deg,#1a237e 0%,#3f51b5 100%);border-radius:14px;padding:10px 12px;box-shadow:0 6px 20px rgba(0,0,0,.15);cursor:pointer;overflow:hidden;border:2px solid #FFD700;box-sizing:border-box}.banner-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px}.trophy-badge{background:#FFD700;color:#000;font-weight:700;padding:2px 8px;border-radius:6px}.tap-hint{color:#ffeb3b;font-weight:500}.marquee-wrapper{display:flex;width:100%;overflow:hidden;position:relative}.marquee-track{display:flex;gap:15px;width:max-content;animation:slideMarquee 15s linear infinite}.winner-item{background:rgba(255,255,255,.95);display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:30px;white-space:nowrap;box-shadow:0 2px 5px rgba(0,0,0,.1)}.winner-img{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #FF8C00}.winner-info{display:flex;flex-direction:column}.w-name{font-size:13px;font-weight:700;color:#333}.w-rank{font-size:10px;font-weight:600;color:#e65100}@keyframes slideMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}</style>
-<div class="sliding-winners-container" onclick="window.location.href='YOUR_RESULT_PAGE_URL'">
-<div class="banner-header"><span class="trophy-badge">🏆 Weekly Champions</span><span class="tap-hint">Tap to view all →</span></div>
-<div class="marquee-wrapper"><div class="marquee-track">
-<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Rahul Sahu</span><span class="w-rank">🥇 1st Rank</span></div></div>
-<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Priya Verma</span><span class="w-rank">🥈 2nd Rank</span></div></div>
-<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Amit Kumar</span><span class="w-rank">🥉 3rd Rank</span></div></div>
-<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Sneha Gupta</span><span class="w-rank">⭐ Top 10</span></div></div>
-<div class="winner-item"><img src="https://via.placeholder.com/40" alt="Winner" class="winner-img"><div class="winner-info"><span class="w-name">Rahul Sahu</span><span class="w-rank">🥇 1st Rank</span></div></div>
-</div></div></div>
+
+<!-- ===== Winners Top 10: added without changing existing Home content ===== -->
+<div class="sliding-winners-container" id="winnersBanner">
+  <div class="winners-banner-header">
+    <span class="winners-trophy-badge">🏆 Weekly Champions</span>
+    <span class="winners-tap-hint">Top 10 →</span>
+  </div>
+  <div class="winners-marquee-wrapper">
+    <div class="winners-marquee-track" id="winnersTrack">
+      <div class="winners-item"><div class="winners-info"><span class="winners-name">Result loading...</span><span class="winners-rank">Please wait</span></div></div>
+    </div>
+  </div>
+</div>
+
 <h2 class="section-title">
   अपनी कक्षा चुनें
 </h2>
+
+
 <div class="class-select-box">
+
+<label class="class-select-label" for="class-select">
+  अपनी कक्षा चुनें
+</label>
+
 
 <select
   id="class-select"
@@ -907,6 +932,52 @@ function openFeature(type){
 
 }
 
+</script>
+
+
+
+<script>
+/* ===== Winners Top 10: added only ===== */
+(function(){
+  const WINNERS_API_URL='https://script.google.com/macros/s/AKfycbxaxuBqb6M9Ikpch2_6peN7UF5ehnJkLxuZPp0B4rJEKE_801BdyWjx8hKfpi7u_IQLmw/exec';
+  const track=document.getElementById('winnersTrack');
+  if(!track) return;
+
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
+  function num(v){
+    const m=String(v==null?'':v).replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
+    return m?Number(m[0]):NaN;
+  }
+  function rankText(r){
+    if(r===1)return '🥇 1st Rank';
+    if(r===2)return '🥈 2nd Rank';
+    if(r===3)return '🥉 3rd Rank';
+    return '⭐ '+r+'th Rank';
+  }
+  function render(rows){
+    if(!Array.isArray(rows)||rows.length<2) throw new Error('No result rows');
+    const header=rows[0].map(function(x){return String(x).trim().toLowerCase();});
+    let nameIndex=header.findIndex(x=>/^(name|student name|student|नाम|विद्यार्थी)$/.test(x));
+    let scoreIndex=header.findIndex(x=>/^(score|marks|mark|अंक|प्राप्तांक)$/.test(x));
+    if(nameIndex<0) nameIndex=3;
+    if(scoreIndex<0) scoreIndex=5;
+
+    const students=rows.slice(1).map(function(r){return {name:r[nameIndex],score:num(r[scoreIndex])};})
+      .filter(function(s){return String(s.name||'').trim()&&Number.isFinite(s.score);})
+      .sort(function(a,b){return b.score-a.score;});
+
+    const winners=[]; let previous=null; let rank=0;
+    students.forEach(function(s,i){
+      if(previous===null||s.score!==previous) rank=i+1;
+      previous=s.score;
+      if(winners.length<10) winners.push({name:s.name,score:s.score,rank:rank});
+    });
+    if(!winners.length){track.innerHTML='<div class="winners-item"><div class="winners-info"><span class="winners-name">No results found</span><span class="winners-rank">Top 10 unavailable</span></div></div>';return;}
+    const cards=winners.concat(winners);
+    track.innerHTML=cards.map(function(s){return '<div class="winners-item"><div class="winners-info"><span class="winners-name">'+esc(s.name)+'</span><span class="winners-rank">'+rankText(s.rank)+' • '+esc(s.score)+' अंक</span></div></div>';}).join('');
+  }
+  fetch(WINNERS_API_URL,{method:'GET',cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(render).catch(function(e){console.error('Winners list:',e);track.innerHTML='<div class="winners-item"><div class="winners-info"><span class="winners-name">Winners list unavailable</span><span class="winners-rank">Please try again</span></div></div>';});
+})();
 </script>
 
 </body>
