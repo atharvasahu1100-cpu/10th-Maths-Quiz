@@ -423,11 +423,40 @@ body{
 </div>
 
 <script>
-function showSection(id){
+// Browser/Android Back button navigation
+let currentSection = 'home-screen';
+let handlingPopState = false;
+
+// Keep one history state for the Home screen so Back from an inner screen
+// returns to Home instead of immediately exiting the app/webview.
+history.replaceState({section:'home-screen'}, '', location.href);
+
+function showSection(id, fromBack = false){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const section = document.getElementById(id);
+  if(section) section.classList.add('active');
+
+  currentSection = id;
   window.scrollTo(0,0);
+
+  // Create a history entry only when the user opens a new section.
+  // When Android/browser Back is pressed, popstate will take us to Home.
+  if(!fromBack && !handlingPopState && id !== 'home-screen'){
+    history.pushState({section:id}, '', location.href);
+  }
 }
+
+// Android/browser physical Back button
+window.addEventListener('popstate', function(){
+  handlingPopState = true;
+
+  // Any inner/empty section goes back to Home.
+  if(currentSection !== 'home-screen'){
+    showSection('home-screen', true);
+  }
+
+  handlingPopState = false;
+});
 
 function selectClass(cls){
   // अगले चरण में 9वीं और 10वीं के वास्तविक pages/menus यहाँ connect किए जाएंगे।
@@ -455,3 +484,4 @@ function openFeature(type){
 </script>
 </body>
 </html>
+
