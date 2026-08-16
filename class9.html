@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>गणित सेतु</title>
+  <style>
+    body { font-family:'Noto Sans Devanagari','Poppins',sans-serif; margin:0; background:#F7F4F7; }
+    header { background:#0041A1; color:white; display:flex; justify-content:space-between; align-items:center; padding:1rem; }
+    header h1 { margin:0; font-size:1.5rem; }
+    header select { background:white; color:#0041A1; font-weight:bold; padding:0.3rem; border-radius:5px; }
+
+    /* Target Tracker */
+    .target { background:white; margin:1rem; padding:1rem; border-radius:8px; }
+    .progress-bar { background:#E3F2FD; border-radius:8px; overflow:hidden; }
+    .progress-fill { background:#43AD47; height:20px; width:50%; }
+
+    /* Section Cards */
+    .section { margin:1rem; }
+    .section h2 { margin-bottom:0.5rem; }
+    .cards { display:flex; gap:1rem; }
+    .card { flex:1; background:#F16000; color:white; padding:1rem; border-radius:8px; text-align:center; font-weight:bold; }
+    .card img { height:40px; display:block; margin:0 auto 5px; }
+
+    /* Bottom Navigation */
+    .nav { position:fixed; bottom:0; left:0; right:0; background:#0041A1; display:flex; justify-content:space-around; padding:0.5rem; }
+    .nav a { color:white; text-decoration:none; font-size:0.9rem; text-align:center; }
+    .nav img { height:20px; display:block; margin:0 auto 5px; }
+  </style>
+</head>
+<body>
+  <!-- Header with dropdown -->
+  <header>
+    <h1>गणित सेतु</h1>
+    <select onchange="location.href=this.value;">
+      <option value="class9.html" selected>कक्षा 9वीं</option>
+      <option value="class10.html">कक्षा 10वीं</option>
+    </select>
+  </header>
+
+  <!-- आज का लक्ष्य -->
+  <div class="target">
+    <h3>आज का लक्ष्य: 5 / 10 अभ्यास पूरे करें</h3>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- अध्ययन Section -->
+  <div class="section">
+    <h2>अध्ययन</h2>
+    <div class="cards">
+      <div class="card"><img src="icons/chapter.png" alt="अध्याय">अध्याय</div>
+      <div class="card"><img src="icons/notes.png" alt="नोट्स">नोट्स</div>
+      <div class="card"><img src="icons/video.png" alt="वीडियो">वीडियो</div>
+    </div>
+  </div>
+
+  <!-- अभ्यास Section -->
+  <div class="section">
+    <h2>अभ्यास</h2>
+    <div class="cards">
+      <div class="card"><img src="icons/practice.png" alt="प्रश्न अभ्यास">प्रश्न अभ्यास</div>
+      <div class="card"><img src="icons/subject.png" alt="विषय">विषय</div>
+      <div class="card"><img src="icons/test.png" alt="टेस्ट पेपर">टेस्ट पेपर</div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="nav">
+    <a href="index.html"><img src="icons/home.png" alt="होम">होम</a>
+    <a href="progress.html"><img src="icons/progress.png" alt="मेरी प्रगति">मेरी प्रगति</a>
+    <a href="doubt.html"><img src="icons/doubt.png" alt="डाउट">डाउट</a>
+    <a href="exam.html"><img src="icons/exam.png" alt="परीक्षा">परीक्षा</a>
+    <a href="more.html"><img src="icons/more.png" alt="अधिक">अधिक</a>
+  </div>
+</body>
+</html>
