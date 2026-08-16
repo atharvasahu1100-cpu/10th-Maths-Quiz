@@ -340,8 +340,8 @@ body{
         <label class="class-select-label" for="class-select">अपनी कक्षा चुनें</label>
         <select id="class-select" class="class-select" onchange="selectClass(this.value)">
           <option value="" selected>कक्षा चुनें</option>
-          <option value="9">कक्षा 9वीं</option>
-          <option value="10">कक्षा 10वीं</option>
+          <option value="class9.html">कक्षा 9वीं</option>
+          <option value="class10.html">कक्षा 10वीं</option>
         </select>
       </div>
 
@@ -445,13 +445,13 @@ window.addEventListener('popstate', function(){
   handlingPopState = false;
 });
 
-function selectClass(cls){
-  // अगले चरण में 9वीं और 10वीं के वास्तविक pages/menus यहाँ connect किए जाएंगे।
+function selectClass(page){
+  if(!page) return;
+
+  // चुनी गई कक्षा का page खोलें।
+  const cls = page === 'class9.html' ? 9 : 10;
   localStorage.setItem('ganitSetuClass', cls);
-  document.getElementById('feature-title').innerText = cls + 'वीं गणित';
-  document.getElementById('feature-text').innerText =
-    'कक्षा ' + cls + 'वीं का पूरा गणित section यहाँ आपके मौजूदा pages और Google Apps Script से connect किया जाएगा।';
-  showSection('feature-screen');
+  window.location.href = page;
 }
 
 function openFeature(type){
