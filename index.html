@@ -140,52 +140,43 @@ body{
   margin:0 0 13px 2px;
 }
 
-.class-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:13px;
-}
-
-.class-card{
-  border:0;
+ .class-select-box{
+  width:100%;
+  background:white;
+  border:1px solid var(--border);
   border-radius:22px;
-  min-height:148px;
-  color:white;
-  text-align:left;
-  padding:20px;
-  cursor:pointer;
+  padding:14px;
   box-shadow:var(--shadow);
-  transition:.2s ease;
-  position:relative;
-  overflow:hidden;
 }
 
-.class-card:active{transform:scale(.98)}
-
-.class-card:after{
-  content:"";
-  position:absolute;
-  width:100px;
-  height:100px;
-  border-radius:50%;
-  right:-35px;
-  bottom:-35px;
-  background:rgba(255,255,255,.13);
+.class-select-label{
+  display:block;
+  margin:0 0 8px 2px;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:600;
 }
 
-.class9{background:linear-gradient(145deg,#5945D8,#806BEF)}
-.class10{background:linear-gradient(145deg,#008B7B,#16B89E)}
-
-.class-number{
-  font-size:38px;
-  line-height:1;
+.class-select{
+  width:100%;
+  min-height:58px;
+  border:0;
+  border-radius:16px;
+  padding:0 16px;
+  background:linear-gradient(145deg,#082B59,#0B63CE);
+  color:white;
+  font-family:inherit;
+  font-size:17px;
   font-weight:800;
+  cursor:pointer;
+  outline:none;
+  box-shadow:0 8px 18px rgba(8,43,89,.12);
 }
 
-.class-label{
-  margin-top:9px;
-  font-size:14px;
-  opacity:.94;
+.class-select option{
+  background:white;
+  color:var(--text);
+  font-weight:700;
 }
 
 .daily{
@@ -318,7 +309,6 @@ body{
 @media(max-width:380px){
   .brand-name{font-size:25px}
   .greeting{font-size:23px}
-  .class-number{font-size:34px}
 }
 </style>
 </head>
@@ -346,16 +336,13 @@ body{
 
       <h2 class="section-title">अपनी कक्षा चुनें</h2>
 
-      <div class="class-grid">
-        <button class="class-card class9" onclick="selectClass(9)">
-          <div class="class-number">9वीं</div>
-          <div class="class-label">कक्षा 9वीं • गणित</div>
-        </button>
-
-        <button class="class-card class10" onclick="selectClass(10)">
-          <div class="class-number">10वीं</div>
-          <div class="class-label">कक्षा 10वीं • गणित</div>
-        </button>
+      <div class="class-select-box">
+        <label class="class-select-label" for="class-select">अपनी कक्षा चुनें</label>
+        <select id="class-select" class="class-select" onchange="selectClass(this.value)">
+          <option value="" selected>कक्षा चुनें</option>
+          <option value="9">कक्षा 9वीं</option>
+          <option value="10">कक्षा 10वीं</option>
+        </select>
       </div>
 
       <div class="daily">
@@ -484,4 +471,3 @@ function openFeature(type){
 </script>
 </body>
 </html>
-
