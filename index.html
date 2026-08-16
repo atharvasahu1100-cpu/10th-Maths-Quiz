@@ -248,6 +248,14 @@ body{
   margin-bottom:4px;
 }
 
+.menu-icon-img{
+  display:block;
+  width:34px;
+  height:34px;
+  margin:0 auto 6px;
+  object-fit:contain;
+}
+
 .footer{
   text-align:center;
   color:#7A899A;
@@ -357,35 +365,43 @@ body{
 
       <div class="menu-grid">
         <button class="menu-btn" onclick="openFeature('daily')">
-          <span class="menu-icon">🧠</span>आज का गणित
+          <img class="menu-icon-img" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2228%22%20fill%3D%22%23EAF5FF%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22%230B63CE%22%20stroke-width%3D%225%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%229%22%20fill%3D%22%23F4B942%22%2F%3E%3Cpath%20d%3D%22M32%2032L49%2016%22%20stroke%3D%22%230B63CE%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M46%2016h7v7%22%20fill%3D%22none%22%20stroke%3D%22%230B63CE%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E" alt="आज का गणित">
+          आज का गणित
         </button>
 
         <button class="menu-btn" onclick="openFeature('study')">
-          <span class="menu-icon">📚</span>अध्ययन सामग्री
+          <img class="menu-icon-img" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20x%3D%2210%22%20y%3D%2213%22%20width%3D%2244%22%20height%3D%2240%22%20rx%3D%226%22%20fill%3D%22%23EAF5FF%22%2F%3E%3Cpath%20d%3D%22M32%2018v31%22%20stroke%3D%22%230B63CE%22%20stroke-width%3D%224%22%2F%3E%3Cpath%20d%3D%22M14%2019c7-4%2013-2%2018%203v27c-5-5-11-7-18-3z%22%20fill%3D%22%231688E8%22%2F%3E%3Cpath%20d%3D%22M50%2019c-7-4-13-2-18%203v27c5-5%2011-7%2018-3z%22%20fill%3D%22%230B63CE%22%2F%3E%3C%2Fsvg%3E" alt="अध्ययन सामग्री">
+          अध्ययन सामग्री
         </button>
 
         <button class="menu-btn" onclick="openFeature('quiz')">
-          <span class="menu-icon">📝</span>Chapter Quiz
+          <img class="menu-icon-img" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2229%22%20r%3D%2220%22%20fill%3D%22none%22%20stroke%3D%22%236D5CE7%22%20stroke-width%3D%227%22%2F%3E%3Cpath%20d%3D%22M45%2044l10%2010%22%20stroke%3D%22%236D5CE7%22%20stroke-width%3D%227%22%20stroke-linecap%3D%22round%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%2236%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%22%20font-size%3D%2227%22%20font-weight%3D%22700%22%20fill%3D%22%236D5CE7%22%3E%3F%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Chapter Quiz">
+          Chapter Quiz
         </button>
 
         <button class="menu-btn" onclick="window.location.href='weekly.html'">
-  <span class="menu-icon">⚡</span>Weekly Challenge
-</button>
+          <img class="menu-icon-img" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cpath%20d%3D%22M32%206l6%2014%2015%202-11%2010%203%2015-13-8-13%208%203-15L11%2022l15-2z%22%20fill%3D%22%23FFF1CB%22%2F%3E%3Cpath%20d%3D%22M32%2013l4%2010%2011%201-8%207%202%2011-9-6-9%206%202-11-8-7%2011-1z%22%20fill%3D%22%23F4B942%22%2F%3E%3Cpath%20d%3D%22M32%2018v18M23%2027h18%22%20stroke%3D%22%230B63CE%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E" alt="Weekly Challenge">
+          Weekly Challenge
+        </button>
 
-<button class="menu-btn" onclick="window.location.href='report.html'">
-  <span class="menu-icon">📊</span>मेरा Result
-</button>
+        <button class="menu-btn" onclick="window.location.href='report.html'">
+          <img class="menu-icon-img" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20x%3D%2210%22%20y%3D%229%22%20width%3D%2244%22%20height%3D%2246%22%20rx%3D%226%22%20fill%3D%22%23EAF5FF%22%2F%3E%3Cpath%20d%3D%22M18%2045V32M28%2045V25M38%2045V18M48%2045V29%22%20stroke%3D%22%230B63CE%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M17%2049h32%22%20stroke%3D%22%2314243A%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E" alt="मेरा Result">
+          मेरा Result
+        </button>
 
         <button class="menu-btn" onclick="window.location.href='formulas.html'">
-          <span class="menu-icon">📐</span>महत्वपूर्ण सूत्र
+          <img class="menu-icon-img" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20x%3D%229%22%20y%3D%228%22%20width%3D%2246%22%20height%3D%2248%22%20rx%3D%227%22%20fill%3D%22%23EAF5FF%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2243%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%2235%22%20font-weight%3D%22700%22%20fill%3D%22%230B63CE%22%3E%CE%A3%3C%2Ftext%3E%3Cpath%20d%3D%22M17%2016h30%22%20stroke%3D%22%23F4B942%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E" alt="महत्वपूर्ण सूत्र">
+          महत्वपूर्ण सूत्र
         </button>
 
         <button class="menu-btn" onclick="window.location.href='textbook.html'">
-          <span class="menu-icon">📖</span>गणित पुस्तक
+          <img class="menu-icon-img" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cpath%20d%3D%22M12%2012h18c6%200%2010%203%2010%209v34c-3-4-7-5-12-5H12z%22%20fill%3D%22%23EAF5FF%22%20stroke%3D%22%230B63CE%22%20stroke-width%3D%224%22%2F%3E%3Cpath%20d%3D%22M52%2012H34c-6%200-10%203-10%209v34c3-4%207-5%2012-5h16z%22%20fill%3D%22%231688E8%22%20stroke%3D%22%230B63CE%22%20stroke-width%3D%224%22%2F%3E%3C%2Fsvg%3E" alt="गणित पुस्तक">
+          गणित पुस्तक
         </button>
 
         <button class="menu-btn" onclick="window.open('https://wa.me/917771973123','_blank')">
-          <span class="menu-icon">💬</span>Doubt पूछें
+          <img class="menu-icon-img" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cpath%20d%3D%22M11%2014h42v30H30L18%2054v-10h-7z%22%20fill%3D%22%23EAF5FF%22%20stroke%3D%22%230B63CE%22%20stroke-width%3D%224%22%20stroke-linejoin%3D%22round%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2237%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%22%20font-size%3D%2225%22%20font-weight%3D%22700%22%20fill%3D%22%230B63CE%22%3E%3F%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Doubt पूछें">
+          Doubt पूछें
         </button>
       </div>
 
