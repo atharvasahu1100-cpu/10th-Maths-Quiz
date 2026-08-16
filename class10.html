@@ -5,74 +5,249 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>गणित सेतु - कक्षा 10वीं</title>
   <style>
-    body { font-family:'Noto Sans Devanagari','Poppins',sans-serif; margin:0; background:#F7F4F7; }
-    header { background:#0041A1; color:white; display:flex; justify-content:space-between; align-items:center; padding:1rem; }
-    header h1 { margin:0; font-size:1.5rem; }
-    header select { background:white; color:#0041A1; font-weight:bold; padding:0.3rem; border-radius:5px; }
+    body {
+      font-family:'Noto Sans Devanagari','Poppins',sans-serif;
+      margin:0;
+      background:#F7F4F7;
+    }
+
+    header {
+      background:#0041A1;
+      color:white;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:1rem;
+    }
+
+    header h1 {
+      margin:0;
+      font-size:1.5rem;
+    }
+
+    header select {
+      background:white;
+      color:#0041A1;
+      font-weight:bold;
+      padding:0.3rem;
+      border-radius:5px;
+    }
 
     /* Target Tracker */
-    .target { background:white; margin:1rem; padding:1rem; border-radius:8px; }
-    .progress-bar { background:#E3F2FD; border-radius:8px; overflow:hidden; }
-    .progress-fill { background:#43AD47; height:20px; width:30%; }
+    .target {
+      background:white;
+      margin:1rem;
+      padding:1rem;
+      border-radius:8px;
+    }
+
+    .progress-bar {
+      background:#E3F2FD;
+      border-radius:8px;
+      overflow:hidden;
+    }
+
+    .progress-fill {
+      background:#43AD47;
+      height:20px;
+      width:30%;
+    }
 
     /* Section Cards */
-    .section { margin:1rem; }
-    .section h2 { margin-bottom:0.5rem; }
-    .cards { display:flex; gap:1rem; }
-    .card { flex:1; background:#F16000; color:white; padding:1rem; border-radius:8px; text-align:center; font-weight:bold; }
-    .card img { height:40px; display:block; margin:0 auto 5px; }
+    .section {
+      margin:1rem;
+    }
+
+    .section h2 {
+      margin-bottom:0.5rem;
+    }
+
+    .cards {
+      display:flex;
+      gap:1rem;
+    }
+
+    .card {
+      flex:1;
+      background:#F16000;
+      color:white;
+      padding:1rem;
+      border-radius:8px;
+      text-align:center;
+      font-weight:bold;
+    }
+
+    .card img {
+      height:40px;
+      width:40px;
+      object-fit:contain;
+      display:block;
+      margin:0 auto 5px;
+    }
 
     /* Bottom Navigation */
-    .nav { position:fixed; bottom:0; left:0; right:0; background:#0041A1; display:flex; justify-content:space-around; padding:0.5rem; }
-    .nav a { color:white; text-decoration:none; font-size:0.9rem; text-align:center; }
-    .nav img { height:20px; display:block; margin:0 auto 5px; }
+    .nav {
+      position:fixed;
+      bottom:0;
+      left:0;
+      right:0;
+      background:#0041A1;
+      display:flex;
+      justify-content:space-around;
+      padding:0.5rem;
+    }
+
+    .nav a {
+      color:white;
+      text-decoration:none;
+      font-size:0.9rem;
+      text-align:center;
+    }
+
+    .nav img {
+      height:20px;
+      width:20px;
+      object-fit:contain;
+      display:block;
+      margin:0 auto 5px;
+    }
   </style>
 </head>
+
 <body>
+
   <!-- Header -->
   <header>
     <h1>गणित सेतु - कक्षा 10वीं</h1>
+
     <select onchange="location.href=this.value;">
       <option value="class9.html">कक्षा 9वीं</option>
       <option value="class10.html" selected>कक्षा 10वीं</option>
     </select>
   </header>
 
+
   <!-- आज का लक्ष्य -->
   <div class="target">
     <h3>आज का लक्ष्य: 3 / 10 अभ्यास पूरे करें</h3>
+
     <div class="progress-bar">
       <div class="progress-fill"></div>
     </div>
   </div>
 
+
   <!-- अध्ययन Section -->
   <div class="section">
+
     <h2>अध्ययन</h2>
+
     <div class="cards">
-      <div class="card"><img src="icons/chapter.png" alt="अध्याय">अध्याय</div>
-      <div class="card"><img src="icons/notes.png" alt="नोट्स">नोट्स</div>
-      <div class="card"><img src="icons/video.png" alt="वीडियो">वीडियो</div>
+
+      <div class="card">
+        <img
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='12' y='8' width='40' height='48' rx='5' fill='white'/><path d='M20 18h24M20 28h24M20 38h15M20 48h20' stroke='%23F16000' stroke-width='5' stroke-linecap='round'/></svg>"
+          alt="अध्याय">
+        अध्याय
+      </div>
+
+
+      <div class="card">
+        <img
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M14 10h30l8 8v36H14z' fill='white'/><path d='M44 10v10h10M22 30h22M22 40h18M22 50h14' fill='none' stroke='%230041A1' stroke-width='4'/></svg>"
+          alt="नोट्स">
+        नोट्स
+      </div>
+
+
+      <div class="card">
+        <img
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='8' y='14' width='48' height='36' rx='7' fill='white'/><path d='M28 24l14 8-14 8z' fill='%23F16000'/></svg>"
+          alt="वीडियो">
+        वीडियो
+      </div>
+
     </div>
   </div>
+
 
   <!-- अभ्यास Section -->
   <div class="section">
+
     <h2>अभ्यास</h2>
+
     <div class="cards">
-      <div class="card"><img src="icons/practice.png" alt="प्रश्न अभ्यास">प्रश्न अभ्यास</div>
-      <div class="card"><img src="icons/subject.png" alt="विषय">विषय</div>
-      <div class="card"><img src="icons/test.png" alt="टेस्ट पेपर">टेस्ट पेपर</div>
+
+      <div class="card">
+        <img
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='10' y='8' width='44' height='48' rx='6' fill='white'/><path d='M20 21l4 4 8-9M20 36l4 4 8-9M20 49l4 4 8-9' fill='none' stroke='%230041A1' stroke-width='4'/></svg>"
+          alt="प्रश्न अभ्यास">
+        प्रश्न अभ्यास
+      </div>
+
+
+      <div class="card">
+        <img
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='24' fill='white'/><text x='32' y='43' text-anchor='middle' font-family='Arial' font-size='35' font-weight='700' fill='%230041A1'>Σ</text></svg>"
+          alt="विषय">
+        विषय
+      </div>
+
+
+      <div class="card">
+        <img
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='12' y='8' width='40' height='48' rx='5' fill='white'/><path d='M21 22h22M21 32h22M21 42h12' stroke='%230041A1' stroke-width='4' stroke-linecap='round'/><circle cx='45' cy='45' r='7' fill='%23F16000'/></svg>"
+          alt="टेस्ट पेपर">
+        टेस्ट पेपर
+      </div>
+
     </div>
   </div>
 
+
   <!-- Bottom Navigation -->
   <div class="nav">
-    <a href="index.html"><img src="icons/home.png" alt="होम">होम</a>
-    <a href="progress.html"><img src="icons/progress.png" alt="मेरी प्रगति">मेरी प्रगति</a>
-    <a href="doubt.html"><img src="icons/doubt.png" alt="डाउट">डाउट</a>
-    <a href="exam.html"><img src="icons/exam.png" alt="परीक्षा">परीक्षा</a>
-    <a href="more.html"><img src="icons/more.png" alt="अधिक">अधिक</a>
+
+    <a href="index.html">
+      <img
+        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M8 30L32 10l24 20v25H40V40H24v15H8z' fill='white'/></svg>"
+        alt="होम">
+      होम
+    </a>
+
+
+    <a href="progress.html">
+      <img
+        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M10 50V34M25 50V25M40 50V15M55 50V30' stroke='white' stroke-width='7' stroke-linecap='round'/></svg>"
+        alt="मेरी प्रगति">
+      मेरी प्रगति
+    </a>
+
+
+    <a href="doubt.html">
+      <img
+        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M9 12h46v34H29L17 56V46H9z' fill='white'/><text x='32' y='38' text-anchor='middle' font-family='Arial' font-size='28' font-weight='700' fill='%230041A1'>?</text></svg>"
+        alt="डाउट">
+      डाउट
+    </a>
+
+
+    <a href="exam.html">
+      <img
+        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='12' y='9' width='40' height='46' rx='5' fill='white'/><path d='M21 22h22M21 33h22M21 44h13' stroke='%230041A1' stroke-width='4' stroke-linecap='round'/></svg>"
+        alt="परीक्षा">
+      परीक्षा
+    </a>
+
+
+    <a href="more.html">
+      <img
+        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='16' cy='32' r='5' fill='white'/><circle cx='32' cy='32' r='5' fill='white'/><circle cx='48' cy='32' r='5' fill='white'/></svg>"
+        alt="अधिक">
+      अधिक
+    </a>
+
   </div>
+
 </body>
 </html>
