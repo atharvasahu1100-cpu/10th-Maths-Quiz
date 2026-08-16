@@ -9,7 +9,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #062957 0%, #0B63CE 48%, #EAF5FF 100%);
             margin: 0;
-            padding: 10px;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,86 +18,109 @@
         }
         .quiz-container {
             width: 100%;
+            height: 100vh;
             max-width: 100%;
             background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
-            padding: 18px;
+            border-radius: 0;
+            box-shadow: none;
+            overflow-y: auto;
+            padding: 20px 16px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        @media(min-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            .quiz-container {
+                height: auto;
+                max-width: 520px;
+                min-height: 90vh;
+                border-radius: 24px;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            }
         }
         .login-box {
             text-align: center;
+            margin-top: 20px;
         }
         .login-box h2 {
             color: #082B59;
             margin-bottom: 8px;
-            font-size: 22px;
+            font-size: 26px;
         }
         .login-box p {
             color: #607086;
-            font-size: 14px;
-            margin-bottom: 20px;
+            font-size: 15px;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             text-align: left;
         }
         .input-group label {
             display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #14243A;
+            margin-bottom: 6px;
         }
         .input-field {
             width: 100%;
-            padding: 12px 15px;
+            padding: 14px 16px;
             border: 2px solid #DCE7F2;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 14px;
+            font-size: 17px;
             box-sizing: border-box;
             outline: none;
             font-family: inherit;
+            background: #F7FAFE;
         }
         .input-field:focus {
             border-color: #0B63CE;
+            background: #fff;
         }
         .quiz-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
         }
         .timer-box {
             background: #ff416c;
             color: white;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 14px;
         }
         .question-text {
-            font-size: 17px;
+            font-size: 19px;
             color: #14243A;
             font-weight: bold;
-            margin-bottom: 15px;
-            line-height: 1.5;
+            margin-bottom: 18px;
+            line-height: 1.6;
         }
         .option-btn {
             display: block;
             width: 100%;
-            padding: 13px 15px;
-            margin: 8px 0;
+            padding: 15px 18px;
+            margin: 10px 0;
             background: #f8f9fa;
             border: 2px solid #e9ecef;
-            border-radius: 12px;
-            font-size: 15px;
+            border-radius: 14px;
+            font-size: 16px;
             text-align: left;
             cursor: pointer;
             box-sizing: border-box;
+            font-family: inherit;
+            font-weight: 600;
+            color: #333;
         }
         .option-btn.correct {
             background: #d4edda !important;
@@ -112,37 +135,40 @@
         }
         .explanation {
             background: #e2e8f0;
-            padding: 10px;
-            border-radius: 10px;
-            margin-top: 12px;
-            font-size: 13px;
+            padding: 14px;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 14px;
             color: #334155;
+            line-height: 1.5;
             display: none;
         }
         .next-btn {
             display: none;
             width: 100%;
-            padding: 13px;
-            margin-top: 15px;
+            padding: 15px;
+            margin-top: 18px;
             background: linear-gradient(135deg, #11998e, #38ef7d);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 14px;
+            font-size: 17px;
             font-weight: bold;
             cursor: pointer;
+            font-family: inherit;
         }
         .result-box {
             text-align: center;
             display: none;
+            margin-top: 20px;
         }
         .badge {
-            font-size: 16px;
+            font-size: 17px;
             background: #fff3cd;
             color: #856404;
-            padding: 8px;
-            border-radius: 10px;
-            margin: 12px 0;
+            padding: 10px;
+            border-radius: 12px;
+            margin: 15px 0;
             font-weight: bold;
         }
     </style>
@@ -154,7 +180,7 @@
         <!-- Login Screen -->
         <div id="login-screen" class="login-box">
             <h2>📐 गणित सेतु</h2>
-            <p>Weekly Timer Test mein bhag lene ke liye apna naam aur mobile number darj karein.</p>
+            <p>Weekly Timer Test में भाग लेने के लिए अपना नाम और मोबाइल नंबर दर्ज करें।</p>
             
             <div class="input-group">
                 <label for="student-name">विद्यार्थी का पूरा नाम</label>
@@ -166,13 +192,13 @@
                 <input type="tel" id="student-mobile" class="input-field" placeholder="10 अंकों का मोबाइल नंबर" maxlength="10" autocomplete="off">
             </div>
 
-            <button class="next-btn" style="display: block; background: linear-gradient(135deg, #082B59, #0B63CE);" onclick="startTest()">टेस्ट शुरू करें 🚀</button>
+            <button class="next-btn" style="display: block; background: linear-gradient(135deg, #082B59, #0B63CE); margin-top: 25px;" onclick="startTest()">टेस्ट शुरू करें 🚀</button>
         </div>
 
         <!-- Quiz Screen -->
         <div id="quiz-screen" style="display: none;">
             <div class="quiz-header">
-                <span id="question-count" style="font-weight: bold; color: #666; font-size: 14px;">प्रश्न 1 / 15</span>
+                <span id="question-count" style="font-weight: bold; color: #666; font-size: 15px;">प्रश्न 1 / 15</span>
                 <div class="timer-box">⏳ <span id="time-left">30</span>सेकंड</div>
             </div>
 
@@ -190,29 +216,28 @@
         <!-- Result Screen -->
         <div class="result-box" id="result-screen">
             <h2>🎉 बधाई हो! टेस्ट समाप्त हुआ</h2>
-            <p style="font-size: 15px; color: #444;" id="result-student-info"></p>
-            <p style="font-size: 14px; color: #444; margin: 5px 0;">आपका कुल प्राप्तांक:</p>
-            <h1 id="final-score" style="color: #2563eb; font-size: 32px; margin: 5px 0;">0 / 15</h1>
+            <p style="font-size: 16px; color: #444;" id="result-student-info"></p>
+            <p style="font-size: 15px; color: #444; margin: 8px 0;">आपका कुल प्राप्तांक:</p>
+            <h1 id="final-score" style="color: #2563eb; font-size: 38px; margin: 8px 0;">0 / 15</h1>
             <div class="badge" id="performance-badge">🏆 गणित जीनियस</div>
             
-            <p id="submitting-msg" style="font-size: 13px; color: #e65100; font-weight: 600;">Result Google Sheet mein save ho raha hai...</p>
+            <p id="submitting-msg" style="font-size: 14px; color: #e65100; font-weight: 600;">Result Google Sheet mein save ho raha hai...</p>
 
             <button class="next-btn" style="background: linear-gradient(135deg, #f2994a, #f2c94c); display: block;" onclick="showAllSolutions()">📖 सभी 15 प्रश्नों के विस्तृत हल देखें</button>
-            <button class="next-btn" style="background: linear-gradient(135deg, #4facfe, #00f2fe); display: block; margin-top: 10px;" onclick="location.reload()">🔄 होम पेज पर जाएं</button>
+            <button class="next-btn" style="background: linear-gradient(135deg, #4facfe, #00f2fe); display: block; margin-top: 12px;" onclick="window.location.href='index.html'">🔄 होम पेज पर जाएं</button>
         </div>
 
         <!-- Solutions Screen -->
-        <div id="solutions-screen" style="display: none; text-align: left; max-height: 450px; overflow-y: auto; padding: 2px;">
+        <div id="solutions-screen" style="display: none; text-align: left; padding: 5px;">
             <h3 style="color: #333; text-align: center; margin-top: 0;">📝 पाठ 1 से 4: संपूर्ण हल</h3>
             <div id="solutions-list"></div>
-            <button class="next-btn" style="background: #2563eb; display: block; margin-top: 15px;" onclick="location.reload()">🔄 समाप्त करें</button>
+            <button class="next-btn" style="background: #2563eb; display: block; margin-top: 20px;" onclick="window.location.href='index.html'">🔄 समाप्त करें</button>
         </div>
     </div>
 
     <audio id="win-sound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3" preload="auto"></audio>
 
     <script>
-        // Google Sheet Apps Script Web App URL (Yahan aapka sheet ka URL connect rahega)
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxaxuBqb6M9Ikpch2_6peN7UF5ehnJkLxuZPp0B4rJEKE_801BdyWjx8hKfpi7u_IQLmw/exec";
 
         let studentName = "";
@@ -492,7 +517,6 @@
                 badgeEl.innerText = "💪 और अधिक अभ्यास की आवश्यकता है!";
             }
 
-            // Google Sheet par result bhejne ki process
             sendDataToSheet(studentName, studentMobile, score);
         }
 
@@ -528,14 +552,14 @@
             quizData.forEach((q) => {
                 let div = document.createElement("div");
                 div.style.background = "#f8f9fa";
-                div.style.padding = "10px";
-                div.style.margin = "8px 0";
-                div.style.borderRadius = "8px";
+                div.style.padding = "12px";
+                div.style.margin = "10px 0";
+                div.style.borderRadius = "10px";
                 div.style.borderLeft = "4px solid #2563eb";
                 
-                div.innerHTML = `<strong>${q.question}</strong><br>
-                                 <span style="color: #28a745; font-size: 14px;">✅ सही उत्तर: ${q.options[q.correct]}</span><br>
-                                 <span style="color: #555; font-size: 13px;">💡 <b>समाधान:</b> ${q.explanation}</span>`;
+                div.innerHTML = `<strong>${q.question}</strong><br><br>
+                                 <span style="color: #28a745; font-size: 15px;">✅ सही उत्तर: ${q.options[q.correct]}</span><br><br>
+                                 <span style="color: #444; font-size: 14px; line-height: 1.5;">💡 <b>समाधान:</b> ${q.explanation}</span>`;
                 solList.appendChild(div);
             });
         }
