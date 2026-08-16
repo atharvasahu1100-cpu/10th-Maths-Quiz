@@ -968,7 +968,7 @@ function openFeature(type){
 
     const winners=[]; let previous=null; let rank=0;
     students.forEach(function(s,i){
-      if(previous===null||s.score!==previous) rank=i+1;
+      if(previous===null||s.score!==previous) rank=rank+1;
       previous=s.score;
       if(winners.length<10) winners.push({name:s.name,score:s.score,rank:rank});
     });
