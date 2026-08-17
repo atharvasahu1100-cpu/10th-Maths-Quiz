@@ -1041,7 +1041,55 @@ function openFeature(type){
     const cards=winners.concat(winners);
     track.innerHTML=cards.map(function(s){return '<div class="winners-item"><div class="winners-info"><span class="winners-name">'+esc(s.name)+'</span><span class="winners-rank">'+rankText(s.rank)+' • '+esc(s.score)+' अंक</span></div></div>';}).join('');
   }
-  fetch(WINNERS_API_URL,{method:'GET',cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(render).catch(function(e){console.error('Winners list:',e);track.innerHTML='<div class="winners-item"><div class="winners-info"><span class="winners-name">Winners list unavailable</span><span class="winners-rank">Please try again</span></div></div>';});
+  /*
+  Fast loading:
+  1) Show the last successful Winners data immediately from localStorage.
+  2) Fetch fresh data in the background.
+  This keeps the existing Google Sheet/API as the source of truth.
+*/
+const WINNERS_CACHE_KEY='ganit_setu_weekly_winners_v1';
+
+try{
+  const cached=localStorage.getItem(WINNERS_CACHE_KEY);
+  if(cached){
+    render(JSON.parse(cached));
+  }
+}catch(e){
+  console.warn('Winners cache:',e);
+}
+
+fetch(WINNERS_API_URL,{
+  method:'GET',
+  cache:'default'
+})
+.then(function(r){
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+})
+.then(function(data){
+  try{
+    localStorage.setItem(
+      WINNERS_CACHE_KEY,
+      JSON.stringify(data)
+    );
+  }catch(e){
+    console.warn('Winners cache save:',e);
+  }
+
+  render(data);
+})
+.catch(function(e){
+  console.error('Winners list:',e);
+
+  /* Keep cached/visible winners if available. */
+  if(!track.querySelector('.winners-item')){
+    track.innerHTML=
+      '<div class="winners-item"><div class="winners-info">'+
+      '<span class="winners-name">Winners list unavailable</span>'+
+      '<span class="winners-rank">Please try again</span>'+
+      '</div></div>';
+  }
+});
 })();
 </script>
 
