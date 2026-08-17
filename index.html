@@ -388,49 +388,6 @@ body{
 @keyframes winnersSlideMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .winners-marquee-wrapper:hover .winners-marquee-track{animation-play-state:paused}
 
-
-/* ================= TEACHER ZONE ================= */
-.teacher-zone{
-  position:relative;
-  margin:18px 0 2px;
-  padding:14px;
-  border-radius:22px;
-  overflow:hidden;
-  background:linear-gradient(135deg,#fffdf1 0%,#fff8d1 55%,#ffef9f 100%);
-  border:1.5px solid #e3bd25;
-  box-shadow:0 9px 24px rgba(166,121,0,.15),inset 0 1px 0 rgba(255,255,255,.9);
-}
-.teacher-zone:before{
-  content:"";
-  position:absolute;
-  width:170px;height:170px;
-  right:-80px;top:-105px;
-  border-radius:50%;
-  background:rgba(255,255,255,.42);
-}
-.teacher-zone-top{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
-.teacher-zone-label{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:20px;background:#155eef;color:#fff;font-size:9px;font-weight:900;letter-spacing:.3px;box-shadow:0 4px 10px rgba(21,94,239,.18)}
-.teacher-zone-shine{color:#d3a600;font-size:18px;line-height:1}
-.teacher-zone-main{display:flex;align-items:center;gap:12px;margin-top:10px;position:relative;z-index:1}
-.teacher-zone-icon{width:48px;height:48px;flex:0 0 48px;border-radius:15px;background:#ffd43b;display:grid;place-items:center;font-size:25px;border:2px solid rgba(255,255,255,.8);box-shadow:0 5px 12px rgba(173,125,0,.2)}
-.teacher-zone-text{min-width:0}
-.teacher-zone-text h2{margin:0;font-size:16px;line-height:1.25;font-weight:900;color:#493900}
-.teacher-zone-text p{margin:4px 0 0;font-size:10.5px;line-height:1.45;color:#76621d}
-.teacher-zone-btn{position:relative;z-index:1;width:100%;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:12px;padding:10px 12px;background:linear-gradient(135deg,#155eef,#0d47c9);color:#fff;font-family:inherit;font-size:12px;line-height:1.2;font-weight:900;cursor:pointer;box-shadow:0 6px 14px rgba(21,94,239,.24)}
-.teacher-zone-btn strong{font-size:17px;line-height:1}
-.teacher-zone-btn:active{transform:scale(.98)}
-
-/* ================= TEACHER POPUP ================= */
-.teacher-popup{display:none;position:fixed;inset:0;z-index:9999;background:rgba(6,35,78,.52);align-items:center;justify-content:center;padding:18px}
-.teacher-popup.show{display:flex}
-.teacher-popup-box{width:100%;max-width:390px;background:#fff;border-radius:24px;padding:24px 20px 20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative}
-.teacher-close{position:absolute;top:10px;right:12px;width:32px;height:32px;border:0;border-radius:50%;background:#f1f4f9;color:#555;font-size:16px;cursor:pointer}
-.teacher-popup-icon{width:60px;height:60px;margin:0 auto 10px;border-radius:17px;background:#ffd43b;display:grid;place-items:center;font-size:30px}
-.teacher-popup-box h2{margin:5px 0 4px;font-size:19px;color:#173d80}
-.teacher-popup-box p{margin:0 0 17px;font-size:11px;color:#777}
-.teacher-popup-box select{width:100%;padding:12px;border-radius:11px;border:1px solid #d9c86d;background:#fff;color:#493900;font-family:inherit;font-size:12px;font-weight:700;outline:none}
-.teacher-start{width:100%;margin-top:10px;padding:12px;border:0;border-radius:11px;background:#155eef;color:#fff;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer}
-
 </style>
 </head>
 
@@ -486,6 +443,11 @@ body{
 
 <div class="class-select-box">
 
+<label class="class-select-label" for="class-select">
+  अपनी कक्षा चुनें
+</label>
+
+
 <select
   id="class-select"
   class="class-select"
@@ -508,8 +470,6 @@ body{
 </select>
 
 </div>
-
-
 
 
 <div class="daily">
@@ -676,34 +636,27 @@ Doubt पूछें
 </div>
 
 
-<!-- ================= TEACHER ZONE ================= -->
-<section class="teacher-zone">
-  <div class="teacher-zone-top">
-    <span class="teacher-zone-label">🎓 TEACHERS ONLY</span>
-    <span class="teacher-zone-shine">✦</span>
-  </div>
-
-  <div class="teacher-zone-main">
-    <div class="teacher-zone-icon">👨‍🏫</div>
-    <div class="teacher-zone-text">
-      <h2>क्या आप शिक्षक हैं?</h2>
-      <p>शिक्षक पात्रता परीक्षा की तैयारी के लिए<br>GANIT SETU से जुड़ें।</p>
+<!-- ===== TEACHER ZONE ===== -->
+<div style="margin-top:16px;padding:12px;border-radius:18px;background:linear-gradient(135deg,#fffdf3,#fff8d8);border:1.5px solid #f0ca3d;box-shadow:0 6px 18px rgba(180,130,0,.12)">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:40px;height:40px;border-radius:12px;background:#ffd43b;display:grid;place-items:center;font-size:21px">🎓</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:14px;font-weight:900;color:#493900">शिक्षक पात्रता परीक्षा</div>
+      <div style="font-size:10px;color:#76621d;margin-top:2px">शिक्षकों के लिए विशेष परीक्षा तैयारी</div>
     </div>
+    <div style="font-size:17px;color:#927300">›</div>
   </div>
-
-  <button class="teacher-zone-btn" onclick="openTeacherCorner()">
-    <span>शिक्षकों के लिए प्रवेश करें</span>
-    <strong>→</strong>
-  </button>
-</section>
+  <select id="teacherExam" style="width:100%;margin-top:9px;padding:10px;border-radius:10px;border:1px solid #d9c86d;background:#fff;color:#493900;font-family:inherit;font-size:12px;font-weight:800;outline:none">
+    <option value="">▼ परीक्षा चुनें</option>
+    <option value="primary">🟦 प्राथमिक शिक्षक पात्रता परीक्षा</option>
+    <option value="secondary">🟩 माध्यमिक शिक्षक पात्रता परीक्षा</option>
+  </select>
+  <button type="button" onclick="startTeacherTest()" style="display:block;width:100%;margin-top:8px;padding:9px;border:0;border-radius:10px;background:#155eef;color:#fff;font-family:inherit;font-size:11px;font-weight:900;cursor:pointer">🚀 परीक्षा की तैयारी शुरू करें</button>
+</div>
 
 <div class="footer">
 GANIT SETU • Mathematics Learning Platform
 </div>
-
-
-
-
 
 
 </main>
@@ -997,6 +950,21 @@ function openFeature(type){
 
 }
 
+function startTeacherTest(){
+  const exam=document.getElementById('teacherExam').value;
+  if(!exam){
+    alert('कृपया पहले परीक्षा चुनें।');
+    return;
+  }
+  if(exam==='primary'){
+    window.location.href='primary-test.html';
+    return;
+  }
+  if(exam==='secondary'){
+    alert('माध्यमिक शिक्षक पात्रता परीक्षा का Test Module जल्द उपलब्ध होगा।');
+  }
+}
+
 </script>
 
 
@@ -1041,99 +1009,8 @@ function openFeature(type){
     const cards=winners.concat(winners);
     track.innerHTML=cards.map(function(s){return '<div class="winners-item"><div class="winners-info"><span class="winners-name">'+esc(s.name)+'</span><span class="winners-rank">'+rankText(s.rank)+' • '+esc(s.score)+' अंक</span></div></div>';}).join('');
   }
-  /*
-  Fast loading:
-  1) Show the last successful Winners data immediately from localStorage.
-  2) Fetch fresh data in the background.
-  This keeps the existing Google Sheet/API as the source of truth.
-*/
-const WINNERS_CACHE_KEY='ganit_setu_weekly_winners_v1';
-
-try{
-  const cached=localStorage.getItem(WINNERS_CACHE_KEY);
-  if(cached){
-    render(JSON.parse(cached));
-  }
-}catch(e){
-  console.warn('Winners cache:',e);
-}
-
-fetch(WINNERS_API_URL,{
-  method:'GET',
-  cache:'default'
-})
-.then(function(r){
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  return r.json();
-})
-.then(function(data){
-  try{
-    localStorage.setItem(
-      WINNERS_CACHE_KEY,
-      JSON.stringify(data)
-    );
-  }catch(e){
-    console.warn('Winners cache save:',e);
-  }
-
-  render(data);
-})
-.catch(function(e){
-  console.error('Winners list:',e);
-
-  /* Keep cached/visible winners if available. */
-  if(!track.querySelector('.winners-item')){
-    track.innerHTML=
-      '<div class="winners-item"><div class="winners-info">'+
-      '<span class="winners-name">Winners list unavailable</span>'+
-      '<span class="winners-rank">Please try again</span>'+
-      '</div></div>';
-  }
-});
+  fetch(WINNERS_API_URL,{method:'GET',cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(render).catch(function(e){console.error('Winners list:',e);track.innerHTML='<div class="winners-item"><div class="winners-info"><span class="winners-name">Winners list unavailable</span><span class="winners-rank">Please try again</span></div></div>';});
 })();
-</script>
-
-
-<!-- ================= TEACHER POPUP ================= -->
-<div id="teacherPopup" class="teacher-popup" aria-hidden="true">
-  <div class="teacher-popup-box">
-    <button class="teacher-close" onclick="closeTeacherCorner()" aria-label="Close">✕</button>
-    <div class="teacher-popup-icon">🎓</div>
-    <h2>शिक्षक पात्रता परीक्षा</h2>
-    <p>केवल शिक्षकों के लिए विशेष परीक्षा तैयारी</p>
-    <select id="teacherExam">
-      <option value="">▼ परीक्षा चुनें</option>
-      <option value="primary">🟦 प्राथमिक शिक्षक पात्रता परीक्षा</option>
-      <option value="secondary">🟩 माध्यमिक शिक्षक पात्रता परीक्षा</option>
-    </select>
-    <button class="teacher-start" onclick="startTeacherTest()">🚀 परीक्षा की तैयारी शुरू करें</button>
-  </div>
-</div>
-
-<script>
-function openTeacherCorner(){
-  const popup=document.getElementById('teacherPopup');
-  if(popup){ popup.classList.add('show'); popup.setAttribute('aria-hidden','false'); }
-}
-function closeTeacherCorner(){
-  const popup=document.getElementById('teacherPopup');
-  if(popup){ popup.classList.remove('show'); popup.setAttribute('aria-hidden','true'); }
-}
-function startTeacherTest(){
-  const exam=document.getElementById('teacherExam').value;
-  if(!exam){ alert('कृपया पहले परीक्षा चुनें।'); return; }
-  if(exam==='primary'){
-    window.location.href='MP_TET_2026_CDP_50_Questions_CBT_Practice_Green_Red_Feedback.html';
-    return;
-  }
-  if(exam==='secondary'){
-    alert('माध्यमिक शिक्षक पात्रता परीक्षा का Test Module जल्द उपलब्ध होगा।');
-  }
-}
-document.addEventListener('click',function(event){
-  const popup=document.getElementById('teacherPopup');
-  if(popup && event.target===popup) closeTeacherCorner();
-});
 </script>
 
 </body>
