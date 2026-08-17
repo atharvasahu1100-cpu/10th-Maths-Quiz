@@ -364,7 +364,7 @@ body{
 @media(max-width:380px){
 
   .brand-name{
-    font-size:23px;
+    font-size:25px;
   }
 
   .greeting{
@@ -389,327 +389,47 @@ body{
 .winners-marquee-wrapper:hover .winners-marquee-track{animation-play-state:paused}
 
 
-
-/* ================= TEACHER ZONE HIGHLIGHT ================= */
-
+/* ================= TEACHER ZONE ================= */
 .teacher-zone{
   position:relative;
-  margin:18px 0 5px;
+  margin:18px 0 2px;
   padding:14px;
   border-radius:22px;
   overflow:hidden;
-
-  background:
-    linear-gradient(135deg,#fffdf2 0%,#fff8cf 52%,#fff2a8 100%);
-
+  background:linear-gradient(135deg,#fffdf1 0%,#fff8d1 55%,#ffef9f 100%);
   border:1.5px solid #e3bd25;
-
-  box-shadow:
-    0 9px 24px rgba(166,121,0,.16),
-    inset 0 1px 0 rgba(255,255,255,.85);
+  box-shadow:0 9px 24px rgba(166,121,0,.15),inset 0 1px 0 rgba(255,255,255,.9);
 }
-
 .teacher-zone:before{
   content:"";
   position:absolute;
-  width:170px;
-  height:170px;
-  right:-80px;
-  top:-100px;
+  width:170px;height:170px;
+  right:-80px;top:-105px;
   border-radius:50%;
-  background:rgba(255,255,255,.38);
+  background:rgba(255,255,255,.42);
 }
-
-.teacher-zone:after{
-  content:"";
-  position:absolute;
-  width:90px;
-  height:90px;
-  left:-45px;
-  bottom:-55px;
-  border-radius:50%;
-  background:rgba(255,212,59,.18);
-}
-
-.teacher-zone-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  position:relative;
-  z-index:1;
-}
-
-.teacher-zone-label{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-
-  padding:5px 9px;
-  border-radius:20px;
-
-  background:#155eef;
-  color:#fff;
-
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.35px;
-
-  box-shadow:0 4px 10px rgba(21,94,239,.18);
-}
-
-.teacher-zone-shine{
-  color:#d3a600;
-  font-size:18px;
-  line-height:1;
-}
-
-.teacher-zone-main{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-top:10px;
-
-  position:relative;
-  z-index:1;
-}
-
-.teacher-zone-icon{
-  width:48px;
-  height:48px;
-  flex-shrink:0;
-
-  border-radius:15px;
-
-  background:#ffd43b;
-
-  display:grid;
-  place-items:center;
-
-  font-size:25px;
-
-  border:2px solid rgba(255,255,255,.75);
-
-  box-shadow:
-    0 5px 12px rgba(173,125,0,.20);
-}
-
-.teacher-zone-text{
-  min-width:0;
-}
-
-.teacher-zone-text h2{
-  margin:0;
-  font-size:16px;
-  line-height:1.25;
-  font-weight:900;
-  color:#493900;
-}
-
-.teacher-zone-text p{
-  margin:4px 0 0;
-  font-size:10.5px;
-  line-height:1.45;
-  color:#76621d;
-}
-
-.teacher-zone-btn{
-  position:relative;
-  z-index:1;
-
-  width:100%;
-  margin-top:12px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:9px;
-
-  border:0;
-  border-radius:12px;
-
-  padding:11px 13px;
-
-  background:linear-gradient(135deg,#155eef,#0d47c9);
-  color:#fff;
-
-  font-size:12px;
-  line-height:1.2;
-  font-weight:900;
-
-  cursor:pointer;
-
-  box-shadow:
-    0 6px 14px rgba(21,94,239,.24);
-}
-
-.teacher-zone-btn strong{
-  font-size:17px;
-  line-height:1;
-  transition:.2s;
-}
-
-.teacher-zone-btn:active{
-  transform:scale(.98);
-}
-
-.teacher-zone-btn:hover strong{
-  transform:translateX(3px);
-}
+.teacher-zone-top{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.teacher-zone-label{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:20px;background:#155eef;color:#fff;font-size:9px;font-weight:900;letter-spacing:.3px;box-shadow:0 4px 10px rgba(21,94,239,.18)}
+.teacher-zone-shine{color:#d3a600;font-size:18px;line-height:1}
+.teacher-zone-main{display:flex;align-items:center;gap:12px;margin-top:10px;position:relative;z-index:1}
+.teacher-zone-icon{width:48px;height:48px;flex:0 0 48px;border-radius:15px;background:#ffd43b;display:grid;place-items:center;font-size:25px;border:2px solid rgba(255,255,255,.8);box-shadow:0 5px 12px rgba(173,125,0,.2)}
+.teacher-zone-text{min-width:0}
+.teacher-zone-text h2{margin:0;font-size:16px;line-height:1.25;font-weight:900;color:#493900}
+.teacher-zone-text p{margin:4px 0 0;font-size:10.5px;line-height:1.45;color:#76621d}
+.teacher-zone-btn{position:relative;z-index:1;width:100%;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:12px;padding:10px 12px;background:linear-gradient(135deg,#155eef,#0d47c9);color:#fff;font-family:inherit;font-size:12px;line-height:1.2;font-weight:900;cursor:pointer;box-shadow:0 6px 14px rgba(21,94,239,.24)}
+.teacher-zone-btn strong{font-size:17px;line-height:1}
+.teacher-zone-btn:active{transform:scale(.98)}
 
 /* ================= TEACHER POPUP ================= */
-
-.teacher-popup{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:9999;
-
-  background:rgba(10,30,70,.48);
-
-  align-items:center;
-  justify-content:center;
-
-  padding:20px;
-}
-
-.teacher-popup.show{
-  display:flex;
-}
-
-.teacher-popup-box{
-  width:100%;
-  max-width:390px;
-
-  background:#fff;
-
-  border-radius:24px;
-
-  padding:25px 20px 22px;
-
-  text-align:center;
-
-  box-shadow:0 20px 60px rgba(0,0,0,.25);
-
-  position:relative;
-}
-
-.teacher-close{
-  position:absolute;
-  top:10px;
-  right:12px;
-
-  width:32px;
-  height:32px;
-
-  border:0;
-  border-radius:50%;
-
-  background:#f1f4f9;
-  color:#555;
-
-  font-size:16px;
-}
-
-.teacher-popup-icon{
-  width:60px;
-  height:60px;
-
-  margin:0 auto 10px;
-
-  border-radius:17px;
-
-  background:#ffd43b;
-
-  display:grid;
-  place-items:center;
-
-  font-size:30px;
-}
-
-.teacher-popup-box h2{
-  margin:5px 0 4px;
-
-  font-size:19px;
-  color:#173d80;
-}
-
-.teacher-popup-box p{
-  margin:0 0 17px;
-
-  font-size:11px;
-  color:#777;
-}
-
-.teacher-popup-box select{
-  width:100%;
-
-  padding:12px;
-
-  border-radius:11px;
-
-  border:1px solid #d9c86d;
-
-  background:#fff;
-
-  color:#493900;
-
-  font-size:12px;
-  font-weight:700;
-
-  outline:none;
-}
-
-.teacher-start{
-  width:100%;
-
-  margin-top:10px;
-
-  padding:12px;
-
-  border:0;
-  border-radius:11px;
-
-  background:#155eef;
-  color:#fff;
-
-  font-size:12px;
-  font-weight:900;
-}
-
-
-/* ================= CLASS SELECT FIX ================= */
-
-.class-select{
-  width:100% !important;
-  min-height:58px !important;
-  border:0 !important;
-  border-radius:16px !important;
-  padding:0 16px !important;
-
-  background:#155eef !important;
-  color:#ffffff !important;
-
-  font-size:15px !important;
-  font-weight:800 !important;
-
-  box-shadow:0 8px 18px rgba(8,43,89,.12);
-  outline:none !important;
-  appearance:auto;
-  -webkit-appearance:auto;
-}
-
-.class-select option{
-  background:#ffffff !important;
-  color:#172033 !important;
-  font-size:14px;
-  font-weight:700;
-}
-
-.class-select:focus{
-  outline:none !important;
-  box-shadow:0 0 0 3px rgba(21,94,239,.15),
-             0 8px 18px rgba(8,43,89,.12);
-}
+.teacher-popup{display:none;position:fixed;inset:0;z-index:9999;background:rgba(6,35,78,.52);align-items:center;justify-content:center;padding:18px}
+.teacher-popup.show{display:flex}
+.teacher-popup-box{width:100%;max-width:390px;background:#fff;border-radius:24px;padding:24px 20px 20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative}
+.teacher-close{position:absolute;top:10px;right:12px;width:32px;height:32px;border:0;border-radius:50%;background:#f1f4f9;color:#555;font-size:16px;cursor:pointer}
+.teacher-popup-icon{width:60px;height:60px;margin:0 auto 10px;border-radius:17px;background:#ffd43b;display:grid;place-items:center;font-size:30px}
+.teacher-popup-box h2{margin:5px 0 4px;font-size:19px;color:#173d80}
+.teacher-popup-box p{margin:0 0 17px;font-size:11px;color:#777}
+.teacher-popup-box select{width:100%;padding:12px;border-radius:11px;border:1px solid #d9c86d;background:#fff;color:#493900;font-family:inherit;font-size:12px;font-weight:700;outline:none}
+.teacher-start{width:100%;margin-top:10px;padding:12px;border:0;border-radius:11px;background:#155eef;color:#fff;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer}
 
 </style>
 </head>
@@ -766,23 +486,30 @@ body{
 
 <div class="class-select-box">
 
-<label class="class-select-label" for="class-select">
-   
-</label>
-
-
 <select
   id="class-select"
   class="class-select"
   autocomplete="off"
   onchange="selectClass(this.value)"
 >
-<option value="" selected>कक्षा चुनें</option>
-<option value="class9.html">कक्षा 9वीं</option>
-<option value="class10.html">कक्षा 10वीं</option>
+
+  <option value="" selected>
+    कक्षा चुनें
+  </option>
+
+  <option value="class9.html">
+    कक्षा 9वीं
+  </option>
+
+  <option value="class10.html">
+    कक्षा 10वीं
+  </option>
+
 </select>
 
 </div>
+
+
 
 
 <div class="daily">
@@ -801,7 +528,7 @@ body{
 
 
 <div class="daily-text">
-  आज का Concept पढ़ें, प्रश्न हल करें और  तैयारी को मजबूत बनाएं।
+  आज का Concept पढ़ें, प्रश्न हल करें और अपनी तैयारी को मजबूत बनाएं।
 </div>
 
 </div>
@@ -929,7 +656,6 @@ Weekly Challenge
 </button>
 
 
-
 <!-- Doubt पूछें -->
 
 <button
@@ -949,183 +675,190 @@ Doubt पूछें
 
 </div>
 
+
 <!-- ================= TEACHER ZONE ================= -->
-
 <section class="teacher-zone">
-
   <div class="teacher-zone-top">
     <span class="teacher-zone-label">🎓 TEACHERS ONLY</span>
     <span class="teacher-zone-shine">✦</span>
   </div>
 
   <div class="teacher-zone-main">
-
-    <div class="teacher-zone-icon">
-      👨‍🏫
-    </div>
-
+    <div class="teacher-zone-icon">👨‍🏫</div>
     <div class="teacher-zone-text">
       <h2>क्या आप शिक्षक हैं?</h2>
       <p>शिक्षक पात्रता परीक्षा की तैयारी के लिए<br>GANIT SETU से जुड़ें।</p>
     </div>
-
   </div>
 
-  <button
-    class="teacher-zone-btn"
-    onclick="openTeacherCorner()"
-  >
+  <button class="teacher-zone-btn" onclick="openTeacherCorner()">
     <span>शिक्षकों के लिए प्रवेश करें</span>
     <strong>→</strong>
   </button>
-
 </section>
 
-<!-- ================= TEACHER POPUP ================= -->
+<div class="footer">
+GANIT SETU • Mathematics Learning Platform
+</div>
 
-<div id="teacherPopup" class="teacher-popup" aria-hidden="true">
 
-  <div class="teacher-popup-box">
 
-    <button
-      class="teacher-close"
-      onclick="closeTeacherCorner()"
-      aria-label="Close"
-    >
-      ✕
-    </button>
 
-    <div class="teacher-popup-icon">
-      🎓
-    </div>
 
-    <h2>शिक्षक पात्रता परीक्षा</h2>
 
-    <p>
-      केवल शिक्षकों के लिए विशेष परीक्षा तैयारी
-    </p>
-
-    <select id="teacherExam">
-
-      <option value="">
-        ▼ परीक्षा चुनें
-      </option>
-
-      <option value="primary">
-        🟦 प्राथमिक शिक्षक पात्रता परीक्षा
-      </option>
-
-      <option value="secondary">
-        🟩 माध्यमिक शिक्षक पात्रता परीक्षा
-      </option>
-
-    </select>
-
-    <button
-      class="teacher-start"
-      onclick="startTeacherTest()"
-    >
-      🚀 परीक्षा की तैयारी शुरू करें
-    </button>
-
-  </div>
+</main>
 
 </div>
 
+
+<!-- FEATURE SCREEN -->
+
+<div id="feature-screen" class="section">
+
+<div class="content">
+
+<button
+  class="back"
+  onclick="showSection('home-screen')"
+>
+← होम पेज पर वापस जाएँ
+</button>
+
+
+<div style="text-align:center;padding:45px 10px">
+
+<div style="font-size:42px">
+🚧
+</div>
+
+<h2 id="feature-title">
+जल्द उपलब्ध
+</h2>
+
+<p
+  id="feature-text"
+  style="color:var(--muted);line-height:1.7"
+>
+इस बटन को आपके मौजूदा page/link से connect किया जाएगा।
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
 <script>
 
-function openTeacherCorner(){
 
-  const popup =
-    document.getElementById("teacherPopup");
+/* =========================================
+   Browser / Android Back button navigation
+========================================= */
 
-  popup.classList.add("show");
+let currentSection = 'home-screen';
 
-  popup.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-
-}
+let handlingPopState = false;
 
 
-function closeTeacherCorner(){
-
-  const popup =
-    document.getElementById("teacherPopup");
-
-  popup.classList.remove("show");
-
-  popup.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
-}
-
-
-function startTeacherTest(){
-
-  const exam =
-    document.getElementById("teacherExam").value;
-
-
-  if(!exam){
-
-    alert(
-      "कृपया पहले परीक्षा चुनें।"
-    );
-
-    return;
-
-  }
-
-
-  if(exam === "primary"){
-
-    window.location.href =
-      "MP_TET_2026_CDP_50_Questions_CBT_Practice_Green_Red_Feedback.html";
-
-    return;
-
-  }
-
-
-  if(exam === "secondary"){
-
-    alert(
-      "माध्यमिक शिक्षक पात्रता परीक्षा का Test Module जल्द उपलब्ध होगा।"
-    );
-
-  }
-
-}
-
-
-document.addEventListener(
-  "click",
-  function(event){
-
-    const popup =
-      document.getElementById("teacherPopup");
-
-    if(
-      popup &&
-      event.target === popup
-    ){
-
-      closeTeacherCorner();
-
-    }
-
-  }
+/*
+  Home screen के लिए history state
+*/
+history.replaceState(
+  {section:'home-screen'},
+  '',
+  location.href
 );
 
-</script>
 
 
-<script>
-/* ================= CLASS SELECTION ================= */
+/* =========================================
+   Section बदलना
+========================================= */
+
+function showSection(id, fromBack = false){
+
+  document
+    .querySelectorAll('.section')
+    .forEach(s => s.classList.remove('active'));
+
+  const section = document.getElementById(id);
+
+  if(section){
+    section.classList.add('active');
+  }
+
+  currentSection = id;
+
+  window.scrollTo(0,0);
+
+
+  /*
+    नया history entry केवल तब बनेगा
+    जब user नया section खोलता है
+  */
+
+  if(
+    !fromBack &&
+    !handlingPopState &&
+    id !== 'home-screen'
+  ){
+
+    history.pushState(
+      {section:id},
+      '',
+      location.href
+    );
+
+  }
+
+}
+
+
+
+/* =========================================
+   Android / Browser Back button
+========================================= */
+
+window.addEventListener('popstate', function(){
+
+  handlingPopState = true;
+
+
+  /*
+    यदि किसी अंदर वाले section में हैं,
+    तो Home पर वापस जाएँ
+  */
+
+  if(currentSection !== 'home-screen'){
+
+    showSection(
+      'home-screen',
+      true
+    );
+
+  }
+
+
+  /*
+    Home पर आने के बाद dropdown reset
+  */
+
+  resetClassDropdown();
+
+
+  handlingPopState = false;
+
+});
+
+
+
+/* =========================================
+   Class Dropdown
+========================================= */
 
 function selectClass(page){
 
@@ -1133,8 +866,226 @@ function selectClass(page){
     return;
   }
 
+
+  /*
+    चुनी गई कक्षा का page खोलें।
+    localStorage में class save नहीं कर रहे,
+    ताकि Home पर वापस आने पर dropdown
+    पुरानी class को याद न रखे।
+  */
+
   window.location.href = page;
+
 }
+
+
+
+/* =========================================
+   Dropdown Reset Function
+========================================= */
+
+function resetClassDropdown(){
+
+  const classSelect =
+    document.getElementById('class-select');
+
+
+  if(classSelect){
+
+    /*
+      हमेशा पहला option:
+      "कक्षा चुनें"
+    */
+
+    classSelect.value = "";
+
+    classSelect.selectedIndex = 0;
+
+  }
+
+}
+
+
+
+/* =========================================
+   Page Load
+========================================= */
+
+window.addEventListener('load', function(){
+
+  resetClassDropdown();
+
+});
+
+
+
+/* =========================================
+   Browser Back / Forward Cache
+========================================= */
+
+window.addEventListener('pageshow', function(){
+
+  resetClassDropdown();
+
+  setTimeout(function(){
+    resetClassDropdown();
+  }, 100);
+
+  setTimeout(function(){
+    resetClassDropdown();
+  }, 500);
+
+});
+
+
+
+/* =========================================
+   Feature Pages
+========================================= */
+
+function openFeature(type){
+
+  const map = {
+
+    daily:[
+      'आज का गणित',
+      'Daily concept और practice यहाँ connect होगा।'
+    ],
+
+    study:[
+      'अध्ययन सामग्री',
+      'आपकी मौजूदा study material page यहाँ connect होगी।'
+    ],
+
+    quiz:[
+      'Chapter Quiz',
+      'अध्यायवार quiz यहाँ connect होगा।'
+    ],
+
+    weekly:[
+      'Weekly Challenge',
+      'आपका weekly timer test यहाँ connect होगा।'
+    ],
+
+    result:[
+      'मेरा Result',
+      'Google Sheet / Apps Script से result यहाँ connect होगा।'
+    ],
+
+    formula:[
+      'महत्वपूर्ण सूत्र',
+      'Formula page यहाँ connect होगा।'
+    ],
+
+    book:[
+      'गणित पुस्तक',
+      'Textbook page यहाँ connect होगा।'
+    ]
+
+  };
+
+
+  document.getElementById('feature-title').innerText =
+    map[type][0];
+
+
+  document.getElementById('feature-text').innerText =
+    map[type][1];
+
+
+  showSection('feature-screen');
+
+}
+
+</script>
+
+
+
+<script>
+/* ===== Winners Top 10: added only ===== */
+(function(){
+  const WINNERS_API_URL='https://script.google.com/macros/s/AKfycbxaxuBqb6M9Ikpch2_6peN7UF5ehnJkLxuZPp0B4rJEKE_801BdyWjx8hKfpi7u_IQLmw/exec';
+  const track=document.getElementById('winnersTrack');
+  if(!track) return;
+
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
+  function num(v){
+    const m=String(v==null?'':v).replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
+    return m?Number(m[0]):NaN;
+  }
+  function rankText(r){
+    if(r===1)return '🥇 1st Rank';
+    if(r===2)return '🥈 2nd Rank';
+    if(r===3)return '🥉 3rd Rank';
+    return '⭐ '+r+'th Rank';
+  }
+  function render(rows){
+    if(!Array.isArray(rows)||rows.length<2) throw new Error('No result rows');
+    const header=rows[0].map(function(x){return String(x).trim().toLowerCase();});
+    let nameIndex=header.findIndex(x=>/^(name|student name|student|नाम|विद्यार्थी)$/.test(x));
+    let scoreIndex=header.findIndex(x=>/^(score|marks|mark|अंक|प्राप्तांक)$/.test(x));
+    if(nameIndex<0) nameIndex=3;
+    if(scoreIndex<0) scoreIndex=5;
+
+    const students=rows.slice(1).map(function(r){return {name:r[nameIndex],score:num(r[scoreIndex])};})
+      .filter(function(s){return String(s.name||'').trim()&&Number.isFinite(s.score);})
+      .sort(function(a,b){return b.score-a.score;});
+
+    const winners=[]; let previous=null; let rank=0;
+    students.forEach(function(s,i){
+      if(previous===null||s.score!==previous) rank=rank+1;
+      previous=s.score;
+      if(winners.length<10) winners.push({name:s.name,score:s.score,rank:rank});
+    });
+    if(!winners.length){track.innerHTML='<div class="winners-item"><div class="winners-info"><span class="winners-name">No results found</span><span class="winners-rank">Top 10 unavailable</span></div></div>';return;}
+    const cards=winners.concat(winners);
+    track.innerHTML=cards.map(function(s){return '<div class="winners-item"><div class="winners-info"><span class="winners-name">'+esc(s.name)+'</span><span class="winners-rank">'+rankText(s.rank)+' • '+esc(s.score)+' अंक</span></div></div>';}).join('');
+  }
+  fetch(WINNERS_API_URL,{method:'GET',cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(render).catch(function(e){console.error('Winners list:',e);track.innerHTML='<div class="winners-item"><div class="winners-info"><span class="winners-name">Winners list unavailable</span><span class="winners-rank">Please try again</span></div></div>';});
+})();
+</script>
+
+
+<!-- ================= TEACHER POPUP ================= -->
+<div id="teacherPopup" class="teacher-popup" aria-hidden="true">
+  <div class="teacher-popup-box">
+    <button class="teacher-close" onclick="closeTeacherCorner()" aria-label="Close">✕</button>
+    <div class="teacher-popup-icon">🎓</div>
+    <h2>शिक्षक पात्रता परीक्षा</h2>
+    <p>केवल शिक्षकों के लिए विशेष परीक्षा तैयारी</p>
+    <select id="teacherExam">
+      <option value="">▼ परीक्षा चुनें</option>
+      <option value="primary">🟦 प्राथमिक शिक्षक पात्रता परीक्षा</option>
+      <option value="secondary">🟩 माध्यमिक शिक्षक पात्रता परीक्षा</option>
+    </select>
+    <button class="teacher-start" onclick="startTeacherTest()">🚀 परीक्षा की तैयारी शुरू करें</button>
+  </div>
+</div>
+
+<script>
+function openTeacherCorner(){
+  const popup=document.getElementById('teacherPopup');
+  if(popup){ popup.classList.add('show'); popup.setAttribute('aria-hidden','false'); }
+}
+function closeTeacherCorner(){
+  const popup=document.getElementById('teacherPopup');
+  if(popup){ popup.classList.remove('show'); popup.setAttribute('aria-hidden','true'); }
+}
+function startTeacherTest(){
+  const exam=document.getElementById('teacherExam').value;
+  if(!exam){ alert('कृपया पहले परीक्षा चुनें।'); return; }
+  if(exam==='primary'){
+    window.location.href='MP_TET_2026_CDP_50_Questions_CBT_Practice_Green_Red_Feedback.html';
+    return;
+  }
+  if(exam==='secondary'){
+    alert('माध्यमिक शिक्षक पात्रता परीक्षा का Test Module जल्द उपलब्ध होगा।');
+  }
+}
+document.addEventListener('click',function(event){
+  const popup=document.getElementById('teacherPopup');
+  if(popup && event.target===popup) closeTeacherCorner();
+});
 </script>
 
 </body>
