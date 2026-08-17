@@ -951,16 +951,19 @@ function openFeature(type){
 }
 
 function startTeacherTest(){
-  const exam=document.getElementById('teacherExam').value;
+  const exam = document.getElementById('teacherExam').value;
+
   if(!exam){
     alert('कृपया पहले परीक्षा चुनें।');
     return;
   }
-  if(exam==='primary'){
-    window.location.href='https://atharvasahu1100-cpu.github.io/10th-Maths-Quiz/primary-test.html';
+
+  if(exam === 'primary'){
+    window.location.href = './primary-test.html';
     return;
   }
-  if(exam==='secondary'){
+
+  if(exam === 'secondary'){
     alert('माध्यमिक शिक्षक पात्रता परीक्षा का Test Module जल्द उपलब्ध होगा।');
   }
 }
@@ -1015,6 +1018,7 @@ function startTeacherTest(){
 
 </body>
 </html>
+
 
 
 
