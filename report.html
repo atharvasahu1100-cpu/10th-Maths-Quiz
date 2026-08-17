@@ -1,6 +1,50 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>छात्रों का रिकॉर्ड - Rajesh Sir Maths</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 15px; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        h2 { text-align: center; color: #0984e3; font-size: 20px; margin-top: 10px; }
+        
+        /* मोबाइल फ्रेंडली टेबल डिज़ाइन */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+        th, td { border: 1px solid #dfe6e9; padding: 10px 8px; text-align: center; font-size: 13px; }
+        th { background: #0984e3; color: white; font-weight: 600; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        
+        .back-btn { display: inline-block; padding: 8px 14px; background: #636e72; color: white; text-decoration: none; border-radius: 8px; margin-bottom: 5px; font-size: 13px; font-weight: bold; }
+        #loading { text-align: center; font-weight: bold; color: #636e72; padding: 20px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">← होम पेज</a>
+    <h2>📊 छात्रों के टेस्ट का पूरा रिकॉर्ड</h2>
+    <div id="loading">डेटा लोड हो रहा है, कृपया प्रतीक्षा करें...</div>
+
+    <div class="table-responsive">
+        <table id="report-table" style="display: none;">
+            <thead>
+                <tr>
+                    <th>क्र.सं.</th>
+                    <th>दिनांक</th>
+                    <th>छात्र का नाम</th>
+                    <th>मोबाइल</th>
+                    <th>प्रदर्शन (ग्रेड)</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+</div>
+
 <script>
-    // नया URL जिसमें function parameter जोड़ा गया है
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbwTstmVlqAkdRSRUM9xSNT0Irk9BhbegYMADme5FkOMVGtyaVzQeoyNyteHczLgyXzPvg/exec?function=getCurrentWeekReport";
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbwTstmVlqAkdRSRUM9xSNT0Irk9BhbegYMADme5FkOMVGtyaVzQeoyNyteHczLgyXzPvg/exec";
 
     fetch(webAppUrl)
         .then(response => response.json())
@@ -11,10 +55,10 @@
             tbody.innerHTML = "";
 
             // क्रमानुसार दिखाने के लिए सीधा लूप (1 से शुरू होकर आख़िर तक)
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 1; i < data.length; i++) {
                 let row = data[i];
                 
-                let sno = i + 1; // सही क्रम में सीरियल नंबर
+                let sno = i; // सही क्रम में सीरियल नंबर
                 let date = row[1] || '';
                 let name = row[3] || '';
                 let mobile = row[4] || '';
@@ -52,3 +96,6 @@
             console.error('Error:', error);
         });
 </script>
+
+</body>
+</html>
