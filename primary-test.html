@@ -1,4 +1,3 @@
-08.18 6:24 PM
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -401,11 +400,9 @@ function updateTimer() {
 }
 function selectOption(idx) {
   if (submitted) return;
-  var firstTime = (answers[current] === null);
+  if (answers[current] !== null) return; // Answer locked: changes prevented
   answers[current] = idx;
-  if (firstTime) {
-    playBeep(idx === questions[current].answer);
-  }
+  playBeep(idx === questions[current].answer);
   renderQuestion();
 }
 function renderQuestion() {
@@ -422,10 +419,12 @@ function renderQuestion() {
     var lab = document.createElement('label');
     lab.className = 'option';
     if (answered) {
+      lab.style.pointerEvents = 'none'; // Disable clicking other options
+      lab.style.cursor = 'default';
       if (i === q.answer) lab.className += ' correct-opt';
       else if (i === userAns) lab.className += ' wrong-opt';
     }
-    lab.innerHTML = '<input type="radio" name="opt" ' + (userAns === i ? 'checked' : '') + '> <span><b>' + String.fromCharCode(65 + i) + '.</b> ' + q.options[i] + '</span>';
+    lab.innerHTML = '<input type="radio" name="opt" ' + (userAns === i ? 'checked' : '') + (answered ? ' disabled' : '') + '> <span><b>' + String.fromCharCode(65 + i) + '.</b> ' + q.options[i] + '</span>';
     (function(optionIndex) {
       lab.onclick = function() { selectOption(optionIndex); };
     })(i);
@@ -500,5 +499,3 @@ loadDayTest(1);
 </script>
 </body>
 </html>
-
-
