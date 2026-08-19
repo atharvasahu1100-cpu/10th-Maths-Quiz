@@ -2,41 +2,82 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<!-- Edge-to-Edge Mobile App Viewport Settings -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#102a56">
 <title>MP TET 2026 | 90 Days CBT Portal</title>
 <style>
 :root{--blue:#155eef;--dark:#102a56;--green:#12a150;--red:#d92d20;--border:#dce3ee}
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#eef3f9;color:#172033}
-.top{background:linear-gradient(135deg,#102a56,#1d5fd1);color:#fff;padding:12px 18px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(0,0,0,0.15)}
+
+/* Zero Margin Edge-to-Edge Body */
+html, body{
+  margin:0 !important;
+  padding:0 !important;
+  width:100vw;
+  min-height:100vh;
+  min-height:-webkit-fill-available;
+  background:#eef3f9;
+  color:#172033;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.top{
+  background:linear-gradient(135deg,#102a56,#1d5fd1);
+  color:#fff;
+  padding:calc(12px + env(safe-area-inset-top)) 16px 12px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 4px 16px rgba(0,0,0,0.15);
+  width:100%;
+}
 .topin{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .brand{font-weight:900;font-size:16px}
 .timer{background:#fff;color:#c62828;padding:6px 12px;border-radius:8px;font-weight:900;font-size:13px}
 .btn-top{background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);border-radius:8px;padding:6px 10px;font-weight:bold;cursor:pointer;font-size:12px}
-.wrap{max-width:1150px;margin:14px auto;padding:0 10px}
-.date-bar{background:#fff;border-radius:12px;padding:12px 16px;box-shadow:0 3px 12px rgba(0,0,0,0.05);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+.wrap{
+  max-width:1150px;
+  margin:10px auto;
+  padding:0 10px calc(14px + env(safe-area-inset-bottom));
+  width:100%;
+}
+.date-bar{background:#fff;border-radius:12px;padding:12px 16px;box-shadow:0 3px 12px rgba(0,0,0,0.05);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .date-bar select{padding:8px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:bold;color:#1e293b;outline:none;background:#fff;cursor:pointer}
 .day-tag{background:#edf4ff;color:#155eef;padding:6px 12px;border-radius:15px;font-size:12px;font-weight:bold}
-.sec-tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px}
+
+.sec-tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;padding-bottom:4px}
 .sec-tab{background:#fff;border:1.5px solid #cbd5e1;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:bold;cursor:pointer;white-space:nowrap;transition:0.2s}
 .sec-tab.active{background:#155eef;color:#fff;border-color:#155eef}
-.lang-selector-box{background:#f0f9ff;border:1px solid #b9e6fe;padding:8px 12px;border-radius:8px;display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:13px;font-weight:bold;color:#026aa2}
+
+.lang-selector-box{background:#f0f9ff;border:1px solid #b9e6fe;padding:8px 12px;border-radius:8px;display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:13px;font-weight:bold;color:#026aa2}
 .lang-selector-box select{padding:5px 10px;border-radius:6px;border:1px solid #7cd4fd;font-weight:bold;color:#026aa2;background:#fff;cursor:pointer}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:12px}
-.paper,.palette{background:#fff;border-radius:12px;box-shadow:0 3px 12px rgba(0,0,0,0.05);padding:18px}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:10px}
+.paper,.palette{background:#fff;border-radius:12px;box-shadow:0 3px 12px rgba(0,0,0,0.05);padding:16px}
 .qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .qno{font-weight:900;color:#155eef;font-size:14px}
 .mark{border:1px solid #d0d5dd;background:#fff;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:bold;cursor:pointer}
 .sub-indicator{background:#eef4ff;color:#155eef;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;margin-bottom:8px;display:inline-block}
 .question{font-size:16px;line-height:1.5;font-weight:700;margin:10px 0 14px}
+
 .option{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--border);padding:11px;border-radius:8px;margin:7px 0;cursor:pointer;background:#fff;transition:0.15s}
 .option:hover{border-color:#8bb3ff;background:#f8fbff}
 .option.correct-opt{border-color:var(--green) !important;background:#e9f8ef !important;color:#0e7a3d !important;font-weight:bold}
 .option.wrong-opt{border-color:var(--red) !important;background:#fef3f2 !important;color:#b42318 !important;font-weight:bold}
+
 .instant-exp{margin-top:12px;padding:12px;border-radius:8px;background:#f0f9ff;border-left:4px solid #155eef;font-size:12.5px;line-height:1.45;color:#1e40af}
+
 .nav{display:flex;justify-content:space-between;gap:8px;margin-top:16px;border-top:1px solid #edf0f5;padding-top:12px}
 .btn{border:0;border-radius:8px;padding:9px 14px;font-weight:bold;cursor:pointer;font-size:13px}
 .prev{background:#eef2f7}.next{background:#155eef;color:#fff}.submit{background:#12a150;color:#fff}
+
 .palette{padding:14px;height:max-content}
 .palette h3{margin:0 0 8px;font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-height:340px;overflow-y:auto;padding-right:2px}
@@ -44,12 +85,17 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;backgrou
 .num.current{border:2px solid #155eef;color:#155eef}
 .num.answered{background:#e9f8ef;border-color:#7bd3a0}
 .num.review{background:#fff4d6;border-color:#f3b93f}
+
 .lock-screen{display:none;background:#fff;border-radius:12px;padding:45px 20px;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,0.05)}
 .result{display:none;background:#fff;border-radius:12px;padding:20px;box-shadow:0 3px 12px rgba(0,0,0,0.05)}
 .score{font-size:30px;font-weight:950;color:#155eef}
 .reviewcard{border:1px solid #e3e8f0;border-radius:8px;padding:10px;margin:8px 0;font-size:13px}
 .correct{border-left:4px solid var(--green)}.wrong{border-left:4px solid var(--red)}
-@media(max-width:768px){.layout{grid-template-columns:1fr}}
+
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr}
+  .wrap{padding:0 6px calc(14px + env(safe-area-inset-bottom))}
+}
 </style>
 </head>
 <body>
@@ -65,14 +111,15 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;backgrou
 <main class="wrap">
   <section class="date-bar">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <label style="font-weight:bold;font-size:13px"> दिनांक चुनें (DD/MM/YYYY):</label>
+      <label style="font-weight:bold;font-size:13px">📅 दिनांक चुनें (DD/MM/YYYY):</label>
       <select id="daySelect" onchange="onSelectChange()"></select>
-      <button class="btn prev" onclick="loadToday()" style="padding:6px 10px;font-size:12px">⚡ आज का टेस्ट (Day 1)</button>
+      <button class="btn prev" onclick="loadLatestActiveDay()" style="padding:6px 10px;font-size:12px">⚡ आज का टेस्ट</button>
     </div>
     <div>
       <span class="day-tag" id="dayDisplay">Day 1</span>
     </div>
   </section>
+
   <!-- Section Quick Switch Tabs -->
   <div class="sec-tabs">
     <button class="sec-tab active" id="tab0" onclick="jumpToQuestion(0)">भाग 1: CDP (1-30)</button>
@@ -81,18 +128,20 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;backgrou
     <button class="sec-tab" id="tab3" onclick="jumpToQuestion(90)">भाग 4: गणित (91-120)</button>
     <button class="sec-tab" id="tab4" onclick="jumpToQuestion(120)">भाग 5: EVS (121-150)</button>
   </div>
+
   <section id="lockScreen" class="lock-screen">
-    <div style="font-size:48px"></div>
+    <div style="font-size:48px">🔒</div>
     <h2 id="lockTitle" style="color:#d92d20;margin:10px 0 6px">यह टेस्ट अभी लॉक है!</h2>
     <p id="lockMsg" style="color:#64748b;font-size:13.5px;max-width:500px;margin:auto;line-height:1.5">
       यह आगामी तिथि का टेस्ट है और निर्धारित दिनांक आने पर ही खुलेगा।
     </p>
-    <button class="btn next" style="margin-top:14px" onclick="loadToday()">⚡ आज के सक्रिय टेस्ट पर जाएँ</button>
+    <button class="btn next" style="margin-top:14px" onclick="loadLatestActiveDay()">⚡ उपलब्ध टेस्ट पर जाएँ</button>
   </section>
+
   <section id="testArea" class="layout">
     <div class="paper">
       <div class="lang-selector-box" id="lang2SelectBox" style="display:none">
-        <span> द्वितीय भाषा (Language-II) बदलें:</span>
+        <span>🌐 द्वितीय भाषा (Language-II) बदलें:</span>
         <select id="lang2Choice" onchange="changeLanguage2()">
           <option value="english">English (अंग्रेजी)</option>
           <option value="sanskrit">संस्कृत (Sanskrit)</option>
@@ -118,14 +167,16 @@ body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;backgrou
       <button class="btn submit" style="width:100%;margin-top:12px" onclick="submitTest()">✓ Test Submit करें</button>
     </aside>
   </section>
+
   <section id="result" class="result">
-    <h1> परीक्षा परिणाम</h1>
+    <h1>🎯 परीक्षा परिणाम</h1>
     <p><span class="score" id="score">0/150</span></p>
     <p id="percent"></p><p id="summary"></p>
     <div id="review"></div>
     <button class="btn next" style="width:100%;margin-top:12px" onclick="location.reload()">↻ फिर से टेस्ट दें</button>
   </section>
 </main>
+
 <script>
 var soundEnabled = true;
 function playBeep(isGood) {
@@ -147,29 +198,58 @@ function playBeep(isGood) {
 }
 function toggleSound() {
   soundEnabled = !soundEnabled;
-  document.getElementById('soundBtn').textContent = soundEnabled ? ' Sound: ON' : ' Sound: OFF';
+  document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
 }
+
+// Fixed Start Date: 18 August 2026
+var startDate = new Date(2026, 7, 18); // Month is 0-indexed (7 = August)
+var currentDate = new Date();
+currentDate.setHours(0,0,0,0);
+
 var schedule = [];
-var baseDate = new Date();
+
 function getFormattedDate(d) {
   var day = String(d.getDate()).padStart(2, '0');
   var mon = String(d.getMonth() + 1).padStart(2, '0');
   var yr = d.getFullYear();
   return day + '/' + mon + '/' + yr;
 }
+
+var latestAvailableDay = 1;
+
 for (var i = 0; i < 90; i++) {
-  var temp = new Date();
-  temp.setDate(baseDate.getDate() + i);
+  var testDate = new Date(startDate);
+  testDate.setDate(startDate.getDate() + i);
+  testDate.setHours(0,0,0,0);
+
   var dayNum = i + 1;
-  var dateString = getFormattedDate(temp);
-  var isToday = (i === 0);
+  var dateString = getFormattedDate(testDate);
+  
+  // Jo date aa chuki hai ya guzar chuki hai, wo sabhi UNLOCKED rahengi
+  var isUnlocked = (testDate <= currentDate);
+  var isToday = (testDate.getTime() === currentDate.getTime());
+
+  if (isUnlocked) {
+    latestAvailableDay = dayNum;
+  }
+
+  var labelText = 'Day ' + dayNum + ' • ' + dateString;
+  if (isToday) {
+    labelText += ' (⚡ आज का टेस्ट)';
+  } else if (!isUnlocked) {
+    labelText += ' 🔒 [Lock]';
+  } else {
+    labelText += ' ✅ [खुला है]';
+  }
+
   schedule.push({
     day: dayNum,
     date: dateString,
-    unlocked: isToday,
-    label: 'Day ' + dayNum + ' • ' + dateString + (isToday ? ' (⚡ आज का टेस्ट)' : '  [Lock]')
+    unlocked: isUnlocked,
+    label: labelText
   });
 }
+
 var selectBox = document.getElementById('daySelect');
 selectBox.innerHTML = '';
 schedule.forEach(function(item) {
@@ -178,6 +258,7 @@ schedule.forEach(function(item) {
   opt.textContent = item.label;
   selectBox.appendChild(opt);
 });
+
 var cdpList = [
   "पियाजे के अनुसार संज्ञानात्मक विकास की मूर्त संक्रियात्मक अवस्था की आयु क्या है?",
   "वायगोत्स्की के अनुसार बच्चे किसके माध्यम से सबसे बेहतर सीखते हैं?",
@@ -232,6 +313,7 @@ var evsList = [
   "पर्यावरण अध्ययन में क्षेत्र भ्रमण (Field Trip) का प्राथमिक उद्देश्य क्या है?",
   "ओजोन परत वायुमंडल के किस मंडल में पाई जाती है?"
 ];
+
 var questions = [];
 var current = 0;
 var answers = [];
@@ -241,6 +323,7 @@ var timerSeconds = 150 * 60;
 var timerInterval = null;
 var activeDay = 1;
 var selectedLang2 = 'english';
+
 function buildQuestions(day, lang2) {
   var seed = day * 7;
   var qArr = [];
@@ -320,22 +403,27 @@ function buildQuestions(day, lang2) {
   }
   return qArr;
 }
+
 function loadDayTest(day) {
   activeDay = day;
   var item = schedule[day - 1] || schedule[0];
+  document.getElementById('daySelect').value = item.day;
+  
   if (!item.unlocked) {
     document.getElementById('lockScreen').style.display = 'block';
     document.getElementById('testArea').style.display = 'none';
     document.getElementById('result').style.display = 'none';
     document.getElementById('lockTitle').textContent = 'Day ' + item.day + ' (' + item.date + ') का टेस्ट लॉक है!';
     document.getElementById('lockMsg').textContent = 'यह टेस्ट निर्धारित दिनांक (' + item.date + ') आने पर ही खुलेगा।';
-    document.getElementById('dayDisplay').textContent = ' Day ' + item.day + ' (Locked)';
+    document.getElementById('dayDisplay').textContent = '🔒 Day ' + item.day + ' (Locked)';
     return;
   }
+
   document.getElementById('lockScreen').style.display = 'none';
   document.getElementById('testArea').style.display = 'grid';
   document.getElementById('result').style.display = 'none';
   document.getElementById('dayDisplay').textContent = 'Day ' + item.day + ' • ' + item.date;
+
   questions = buildQuestions(item.day, selectedLang2);
   current = 0;
   answers = [];
@@ -345,11 +433,14 @@ function loadDayTest(day) {
     review.push(false);
   }
   submitted = false;
+
   clearInterval(timerInterval);
   timerSeconds = 150 * 60;
   timerInterval = setInterval(updateTimer, 1000);
+
   renderQuestion();
 }
+
 function changeLanguage2() {
   selectedLang2 = document.getElementById('lang2Choice').value;
   var savedCurrent = current;
@@ -357,10 +448,12 @@ function changeLanguage2() {
   current = savedCurrent;
   renderQuestion();
 }
+
 function jumpToQuestion(qIdx) {
   current = qIdx;
   renderQuestion();
 }
+
 function updateActiveTab() {
   var tabIdx = Math.floor(current / 30);
   for (var i = 0; i < 5; i++) {
@@ -375,14 +468,16 @@ function updateActiveTab() {
     lang2Box.style.display = (tabIdx === 2) ? 'flex' : 'none';
   }
 }
+
 function onSelectChange() {
   var selectedDay = parseInt(document.getElementById('daySelect').value);
   loadDayTest(selectedDay);
 }
-function loadToday() {
-  document.getElementById('daySelect').value = 1;
-  loadDayTest(1);
+
+function loadLatestActiveDay() {
+  loadDayTest(latestAvailableDay);
 }
+
 function updateTimer() {
   if (submitted) return;
   timerSeconds--;
@@ -398,13 +493,15 @@ function updateTimer() {
     (m < 10 ? '0' + m : m) + ':' + 
     (s < 10 ? '0' + s : s);
 }
+
 function selectOption(idx) {
   if (submitted) return;
-  if (answers[current] !== null) return; // Answer locked: changes prevented
+  if (answers[current] !== null) return;
   answers[current] = idx;
   playBeep(idx === questions[current].answer);
   renderQuestion();
 }
+
 function renderQuestion() {
   if (!questions || questions.length === 0) return;
   var q = questions[current];
@@ -419,7 +516,7 @@ function renderQuestion() {
     var lab = document.createElement('label');
     lab.className = 'option';
     if (answered) {
-      lab.style.pointerEvents = 'none'; // Disable clicking other options
+      lab.style.pointerEvents = 'none';
       lab.style.cursor = 'default';
       if (i === q.answer) lab.className += ' correct-opt';
       else if (i === userAns) lab.className += ' wrong-opt';
@@ -440,6 +537,7 @@ function renderQuestion() {
   updateActiveTab();
   drawPalette();
 }
+
 function drawPalette() {
   var p = document.getElementById('palette');
   p.innerHTML = '';
@@ -453,22 +551,26 @@ function drawPalette() {
     p.appendChild(b);
   }
 }
+
 function nextQ() {
   if (current < questions.length - 1) {
     current++;
     renderQuestion();
   }
 }
+
 function prevQ() {
   if (current > 0) {
     current--;
     renderQuestion();
   }
 }
+
 function toggleReview() {
   review[current] = !review[current];
   renderQuestion();
 }
+
 function submitTest() {
   if (submitted) return;
   if (!confirm('क्या आप सचमुच टेस्ट Submit करना चाहते हैं?')) return;
@@ -495,7 +597,9 @@ function submitTest() {
     r.appendChild(div);
   }
 }
-loadDayTest(1);
+
+// Auto-load latest available test
+loadDayTest(latestAvailableDay);
 </script>
 </body>
 </html>
