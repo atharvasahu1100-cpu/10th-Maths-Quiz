@@ -37,10 +37,10 @@ html, body{
   box-shadow:0 4px 16px rgba(0,0,0,0.15);
   width:100%;
 }
-.topin{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.brand{font-weight:900;font-size:16px}
-.timer{background:#fff;color:#c62828;padding:6px 12px;border-radius:8px;font-weight:900;font-size:13px}
-.btn-top{background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);border-radius:8px;padding:6px 10px;font-weight:bold;cursor:pointer;font-size:12px}
+.topin{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.brand{font-weight:900;font-size:15px}
+.timer{background:#fff;color:#c62828;padding:5px 10px;border-radius:8px;font-weight:900;font-size:12.5px}
+.btn-top{background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);border-radius:8px;padding:5px 9px;font-weight:bold;cursor:pointer;font-size:11.5px}
 
 .wrap{
   max-width:1150px;
@@ -92,6 +92,13 @@ html, body{
 .reviewcard{border:1px solid #e3e8f0;border-radius:8px;padding:10px;margin:8px 0;font-size:13px}
 .correct{border-left:4px solid var(--green)}.wrong{border-left:4px solid var(--red)}
 
+/* Modal for Score History */
+.modal{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:200;padding:16px;overflow-y:auto}
+.modal-content{background:#fff;border-radius:14px;max-width:600px;margin:30px auto;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+.history-item{border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;background:#f8fafc}
+.badge-pass{background:#dcfce7;color:#15803d;padding:3px 8px;border-radius:12px;font-weight:bold;font-size:11px}
+.badge-fail{background:#fee2e2;color:#b91c1c;padding:3px 8px;border-radius:12px;font-weight:bold;font-size:11px}
+
 @media(max-width:768px){
   .layout{grid-template-columns:1fr}
   .wrap{padding:0 6px calc(14px + env(safe-area-inset-bottom))}
@@ -102,8 +109,9 @@ html, body{
 <header class="top">
   <div class="topin">
     <div class="brand">MP TET 2026 • 90 Days Daily Portal</div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <button class="btn-top" id="soundBtn" onclick="toggleSound()"> Sound: ON</button>
+    <div style="display:flex;align-items:center;gap:6px">
+      <button class="btn-top" onclick="openHistoryModal()">📊 मेरा रिकॉर्ड</button>
+      <button class="btn-top" id="soundBtn" onclick="toggleSound()">🔊 Sound</button>
       <div class="timer" id="timer">150:00</div>
     </div>
   </div>
@@ -172,37 +180,88 @@ html, body{
     <h1>🎯 परीक्षा परिणाम</h1>
     <p><span class="score" id="score">0/150</span></p>
     <p id="percent"></p><p id="summary"></p>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button class="btn next" style="flex:1" onclick="openHistoryModal()">📊 सभी टेस्टों का स्कोर रिकॉर्ड देखें</button>
+      <button class="btn prev" style="flex:1" onclick="location.reload()">↻ फिर से टेस्ट दें</button>
+    </div>
     <div id="review"></div>
-    <button class="btn next" style="width:100%;margin-top:12px" onclick="location.reload()">↻ फिर से टेस्ट दें</button>
   </section>
 </main>
 
+<!-- Modal for Student History -->
+<div class="modal" id="historyModal">
+  <div class="modal-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #edf2f7;padding-bottom:10px;margin-bottom:12px">
+      <h2 style="margin:0;font-size:17px;color:#102a56">📊 विद्यार्थी का संपूर्ण स्कोर रिकॉर्ड</h2>
+      <button onclick="closeHistoryModal()" style="border:none;background:#e2e8f0;padding:5px 10px;border-radius:6px;font-weight:bold;cursor:pointer">✕ बंद करें</button>
+    </div>
+    <div id="historyList"></div>
+  </div>
+</div>
+
 <script>
+// --- Rock Solid Persistent Web Audio Engine ---
 var soundEnabled = true;
+var audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    var AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass) {
+      audioCtx = new AudioContextClass();
+    }
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
 function playBeep(isGood) {
   if (!soundEnabled) return;
   try {
-    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var ctx = getAudioContext();
+    if (!ctx) return;
+    
     var osc = ctx.createOscillator();
     var gain = ctx.createGain();
-    osc.type = isGood ? 'sine' : 'sawtooth';
-    osc.frequency.setValueAtTime(isGood ? 650 : 140, ctx.currentTime);
-    if (isGood) osc.frequency.setValueAtTime(880, ctx.currentTime + 0.08);
-    gain.gain.setValueAtTime(0.2, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    
+    var now = ctx.currentTime;
+    osc.type = isGood ? 'sine' : 'triangle';
+    
+    if (isGood) {
+      // Pleasant double chime for Correct Answer
+      osc.frequency.setValueAtTime(587.33, now); // D5
+      osc.frequency.setValueAtTime(880.00, now + 0.08); // A5
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+    } else {
+      // Low buzz for Wrong Answer
+      osc.frequency.setValueAtTime(160, now);
+      osc.frequency.setValueAtTime(110, now + 0.09);
+      gain.gain.setValueAtTime(0.28, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+    }
+    
     osc.connect(gain);
     gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.3);
+    osc.start(now);
+    osc.stop(now + 0.35);
   } catch(e) {}
 }
+
 function toggleSound() {
   soundEnabled = !soundEnabled;
-  document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+  document.getElementById('soundBtn').textContent = soundEnabled ? '🔊 Sound' : '🔇 Mute';
+  if (soundEnabled) getAudioContext();
 }
 
+// User interaction unlocks audio on mobile browsers
+document.addEventListener('click', function() { getAudioContext(); }, { once: true });
+document.addEventListener('touchstart', function() { getAudioContext(); }, { once: true });
+
 // Fixed Start Date: 18 August 2026
-var startDate = new Date(2026, 7, 18); // Month is 0-indexed (7 = August)
+var startDate = new Date(2026, 7, 18);
 var currentDate = new Date();
 currentDate.setHours(0,0,0,0);
 
@@ -225,7 +284,6 @@ for (var i = 0; i < 90; i++) {
   var dayNum = i + 1;
   var dateString = getFormattedDate(testDate);
   
-  // Jo date aa chuki hai ya guzar chuki hai, wo sabhi UNLOCKED rahengi
   var isUnlocked = (testDate <= currentDate);
   var isToday = (testDate.getTime() === currentDate.getTime());
 
@@ -498,7 +556,10 @@ function selectOption(idx) {
   if (submitted) return;
   if (answers[current] !== null) return;
   answers[current] = idx;
+  
+  // Trigger Robust Audio
   playBeep(idx === questions[current].answer);
+  
   renderQuestion();
 }
 
@@ -571,6 +632,60 @@ function toggleReview() {
   renderQuestion();
 }
 
+// Student Score Saving System
+function saveScoreRecord(dayNum, testDate, score, total, pct) {
+  try {
+    var history = JSON.parse(localStorage.getItem('mptet_score_history') || '[]');
+    var now = new Date();
+    var attemptTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    var attemptDate = getFormattedDate(now);
+
+    var record = {
+      day: dayNum,
+      testDate: testDate,
+      attemptDate: attemptDate,
+      attemptTime: attemptTime,
+      score: score,
+      total: total,
+      pct: pct,
+      passed: score >= 90
+    };
+
+    history.unshift(record);
+    localStorage.setItem('mptet_score_history', JSON.stringify(history));
+  } catch(e) {}
+}
+
+function openHistoryModal() {
+  var list = document.getElementById('historyList');
+  list.innerHTML = '';
+  var history = JSON.parse(localStorage.getItem('mptet_score_history') || '[]');
+
+  if (history.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:25px;color:#64748b">अभी तक कोई टेस्ट रिकॉर्ड नहीं है। टेस्ट सबमिट करने पर यहाँ आपका स्कोर सुरक्षित रहेगा।</div>';
+  } else {
+    history.forEach(function(item, idx) {
+      var div = document.createElement('div');
+      div.className = 'history-item';
+      div.innerHTML = 
+        '<div>' +
+          '<div style="font-weight:900;color:#155eef;font-size:13.5px">Day ' + item.day + ' (' + item.testDate + ')</div>' +
+          '<div style="font-size:11px;color:#64748b">अटेम्प्ट: ' + item.attemptDate + ' • ' + item.attemptTime + '</div>' +
+        '</div>' +
+        '<div style="text-align:right">' +
+          '<div style="font-weight:900;font-size:14px;color:#1e293b">' + item.score + '/' + item.total + ' (' + item.pct + '%)</div>' +
+          '<div><span class="' + (item.passed ? 'badge-pass' : 'badge-fail') + '">' + (item.passed ? '✓ Qualified' : '✗ Needs Practice') + '</span></div>' +
+        '</div>';
+      list.appendChild(div);
+    });
+  }
+  document.getElementById('historyModal').style.display = 'block';
+}
+
+function closeHistoryModal() {
+  document.getElementById('historyModal').style.display = 'none';
+}
+
 function submitTest() {
   if (submitted) return;
   if (!confirm('क्या आप सचमुच टेस्ट Submit करना चाहते हैं?')) return;
@@ -587,8 +702,12 @@ function submitTest() {
   var pct = ((score / questions.length) * 100).toFixed(2);
   document.getElementById('percent').textContent = 'प्राप्तांक: ' + pct + '%';
   document.getElementById('summary').textContent = score >= 90 ? 'उत्कृष्ट प्रदर्शन! आप पात्रता परीक्षा के स्तर के अनुसार उत्तीर्ण हैं।' : 'अभ्यास जारी रखें और कमजोर विषयों की व्याख्या का अध्ययन करें।';
+
+  var item = schedule[activeDay - 1] || schedule[0];
+  saveScoreRecord(item.day, item.date, score, questions.length, pct);
+
   var r = document.getElementById('review');
-  r.innerHTML = '<h2> संपूर्ण 150 प्रश्नों का उत्तर व व्याख्या</h2>';
+  r.innerHTML = '<h2>📚 संपूर्ण 150 प्रश्नों का उत्तर व व्याख्या</h2>';
   for (var j = 0; j < questions.length; j++) {
     var isOk = (answers[j] === questions[j].answer);
     var div = document.createElement('div');
