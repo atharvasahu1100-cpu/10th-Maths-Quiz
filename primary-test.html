@@ -148,6 +148,7 @@ html, body{
 
   <section id="testArea" class="layout">
     <div class="paper">
+      <!-- Language 2 Selector -->
       <div class="lang-selector-box" id="lang2SelectBox" style="display:none">
         <span>🌐 द्वितीय भाषा (Language-II) बदलें:</span>
         <select id="lang2Choice" onchange="changeLanguage2()">
@@ -200,20 +201,16 @@ html, body{
 </div>
 
 <script>
-// --- High-Performance Mobile Audio Engine ---
+// --- Audio Engine ---
 var soundEnabled = true;
 var audioCtx = null;
 
 function getAudioContext() {
   if (!audioCtx) {
     var AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) {
-      audioCtx = new AudioContextClass();
-    }
+    if (AudioContextClass) audioCtx = new AudioContextClass();
   }
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   return audioCtx;
 }
 
@@ -222,40 +219,26 @@ function playBeep(isGood) {
   try {
     var ctx = getAudioContext();
     if (!ctx) return;
-
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    var now = ctx.currentTime;
     if (isGood) {
-      var osc1 = ctx.createOscillator();
-      var gain1 = ctx.createGain();
-      var now = ctx.currentTime;
-
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(587.33, now);
-      osc1.frequency.setValueAtTime(880.00, now + 0.08);
-
-      gain1.gain.setValueAtTime(0.3, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-
-      osc1.connect(gain1);
-      gain1.connect(ctx.destination);
-      osc1.start(now);
-      osc1.stop(now + 0.3);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, now);
+      osc.frequency.setValueAtTime(880.00, now + 0.08);
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
     } else {
-      var osc2 = ctx.createOscillator();
-      var gain2 = ctx.createGain();
-      var now2 = ctx.currentTime;
-
-      osc2.type = 'sawtooth';
-      osc2.frequency.setValueAtTime(380, now2);
-      osc2.frequency.setValueAtTime(220, now2 + 0.1);
-
-      gain2.gain.setValueAtTime(0.35, now2);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now2 + 0.32);
-
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.start(now2);
-      osc2.stop(now2 + 0.34);
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(380, now);
+      osc.frequency.setValueAtTime(220, now + 0.1);
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
     }
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.34);
   } catch(e) {}
 }
 
@@ -268,7 +251,9 @@ function toggleSound() {
 document.addEventListener('click', function() { getAudioContext(); }, { once: true });
 document.addEventListener('touchstart', function() { getAudioContext(); }, { once: true });
 
-// Fixed Start Date: 18 August 2026
+// ==========================================
+// 📅 90 DAYS DYNAMIC DATE CALENDAR ENGINE
+// ==========================================
 var startDate = new Date(2026, 7, 18);
 var currentDate = new Date();
 currentDate.setHours(0,0,0,0);
@@ -292,8 +277,8 @@ for (var i = 0; i < 90; i++) {
   var dayNum = i + 1;
   var dateString = getFormattedDate(testDate);
   
-  var isUnlocked = (testDate <= currentDate);
-  var isToday = (testDate.getTime() === currentDate.getTime());
+  var isUnlocked = (i === 0) || (testDate <= currentDate);
+  var isToday = (testDate.getTime() === currentDate.getTime()) || (i === 0 && testDate > currentDate);
 
   if (isUnlocked) {
     latestAvailableDay = dayNum;
@@ -316,278 +301,77 @@ for (var i = 0; i < 90; i++) {
   });
 }
 
-var selectBox = document.getElementById('daySelect');
-selectBox.innerHTML = '';
-schedule.forEach(function(item) {
-  var opt = document.createElement('option');
-  opt.value = item.day;
-  opt.textContent = item.label;
-  selectBox.appendChild(opt);
-});
+function populateDaySelect() {
+  var selectBox = document.getElementById('daySelect');
+  if (!selectBox) return;
+  selectBox.innerHTML = '';
+  schedule.forEach(function(item) {
+    var opt = document.createElement('option');
+    opt.value = item.day;
+    opt.textContent = item.label;
+    selectBox.appendChild(opt);
+  });
+}
 
 // ==========================================
-// 100% SPECIFIC QUESTION BANKS WITH EXCLUSIVE OPTIONS
+// 🌟 100% UPDATED SYLLABUS QUESTION BANKS
 // ==========================================
 
 var cdpBank = [
-  {
-    q: "पियाजे के अनुसार संज्ञानात्मक विकास की 'मूर्त संक्रियात्मक अवस्था' (Concrete Operational Stage) की आयु सीमा क्या है?",
-    options: ["जन्म से 2 वर्ष", "2 से 7 वर्ष", "7 से 11 वर्ष", "11 वर्ष से वयस्कता"],
-    answer: 2,
-    explanation: "जीन पियाजे के सिद्धांत में 7 से 11 वर्ष की अवस्था को 'मूर्त संक्रियात्मक अवस्था' कहा जाता है, जिसमें बच्चा मूर्त रूप से तार्किक चिंतन और संरक्षण (Conservation) करने लगता है।"
-  },
-  {
-    q: "लेव वायगोत्स्की के अनुसार बच्चों के संज्ञानात्मक विकास में सबसे महत्वपूर्ण कारक कौन-सा है?",
-    options: ["सामाजिक अंतःक्रिया और संवाद", "आनुवंशिक परिपक्वता", "भौतिक पुरस्कार एवं दंड", "निष्क्रिय अनुकरण"],
-    answer: 0,
-    explanation: "वायगोत्स्की के सामाजिक-सांस्कृतिक सिद्धांत (Socio-Cultural Theory) के अनुसार बच्चे ज्ञान का निर्माण समाज और वयस्कों के साथ सक्रिय संवाद से करते हैं।"
-  },
-  {
-    q: "कोहलबर्ग के नैतिक विकास सिद्धांत में 'अच्छा लड़का/अच्छी लड़की' अभिविन्यास किस स्तर के अंतर्गत आता है?",
-    options: ["पूर्व-पारंपरिक स्तर", "पारंपरिक स्तर", "उत्तर-पारंपरिक स्तर", "स्वायत्त नैतिक स्तर"],
-    answer: 1,
-    explanation: "पारंपरिक स्तर (Conventional Level) के चरण 3 में बच्चा दूसरों की स्वीकृति और प्रशंसा पाने के लिए 'अच्छा लड़का-अच्छी लड़की' अभिविन्यास प्रदर्शित करता है।"
-  },
-  {
-    q: "समावेशी शिक्षा (Inclusive Education) का मूल सिद्धांत क्या है?",
-    options: ["विशिष्ट बच्चों को अलग विद्यालय भेजना", "सभी बच्चों को बिना किसी भेदभाव के नियमित विद्यालय में समान अवसर देना", "केवल मेधावी बच्चों पर ध्यान देना", "पाठ्यक्रम को कठिन बनाना"],
-    answer: 1,
-    explanation: "समावेशी शिक्षा में प्रत्येक बालक (चाहे वह सामान्य हो या दिव्यांग/विशिष्ट) को एक ही छत के नीचे समान रूप से गुणवत्तापूर्ण शिक्षा प्रदान की जाती है।"
-  },
-  {
-    q: "डिस्लेक्सिया (Dyslexia) मुख्य रूप से किस अधिगम विकार (Learning Disability) से संबंधित है?",
-    options: ["गणितीय गणना विकार", "पठन एवं वर्तनी विकार", "शारीरिक गति समन्वय विकार", "स्थानिक समझ विकार"],
-    answer: 1,
-    explanation: "डिस्लेक्सिया एक पठन विकार (Reading Disability) है, जिसमें विद्यार्थी को शब्दों को पढ़ने, वर्तनी पहचानने और अक्षरों के सही क्रम को समझने में कठिनाई होती है।"
-  },
-  {
-    q: "बाल-केंद्रित शिक्षा (Child-Centered Education) में शिक्षक की प्राथमिक भूमिका क्या होती है?",
-    options: ["कठोर अनुशासन बनाए रखना", "एक सुगमकर्ता (Facilitator) और मार्गदर्शक के रूप में कार्य करना", "केवल पाठ्यपुस्तक से व्याख्यान देना", "छात्रों को निष्क्रिय श्रोता बनाना"],
-    answer: 1,
-    explanation: "N財F-2005 के अनुसार बाल-केंद्रित कक्षा में शिक्षक ज्ञान का दाता नहीं, बल्कि अधिगम का सुगमकर्ता (Facilitator) होता है।"
-  },
-  {
-    q: "थॉर्नडाइक के सीखने के 'प्रभाव के नियम' (Law of Effect) का मुख्य आशय क्या है?",
-    options: ["अभ्यास करने से ज्ञान पक्का होता है", "जिस अनुक्रिया से संतोष मिलता है, वह संबंध दृढ़ होता है", "सीखने के लिए तत्पर रहना अनिवार्य है", "अनुकरण से सीखना सहज होता है"],
-    answer: 1,
-    explanation: "प्रभाव के नियम के अनुसार, यदि किसी अनुक्रिया के बाद सुखद या संतोषजनक परिणाम मिलता है तो उद्दीपक और अनुक्रिया का संबंध मजबूत होता है।"
-  },
-  {
-    q: "हावर्ड गार्डनर के बहु-बुद्धि सिद्धांत के अनुसार दूसरों के मनोभावों, स्वभाव व प्रेरणाओं को समझने की क्षमता क्या कहलाती है?",
-    options: ["अंतःवैयक्तिक बुद्धि (Intrapersonal)", "अंतर-वैयक्तिक बुद्धि (Interpersonal)", "तार्किक-गणितीय बुद्धि", "स्थानिक बुद्धि"],
-    answer: 1,
-    explanation: "दूसरों की भावनाओं और विचारों को समझने की क्षमता 'अंतर-वैयक्तिक' (Interpersonal) कहलाती है, जबकि स्वयं की भावनाओं को समझना 'अंतःवैयक्तिक' (Intrapersonal) कहलाता है।"
-  },
-  {
-    q: "सतत एवं समग्र मूल्यांकन (CCE) में 'समग्र' (Comprehensive) शब्द का वास्तविक अर्थ क्या है?",
-    options: ["केवल वार्षिक लिखित परीक्षा लेना", "संज्ञानात्मक, भावात्मक एवं मनोगत्यात्मक सभी पक्षों का निरंतर मूल्यांकन", "केवल खेलकूद की गतिविधियों को मापना", "छात्रों को ग्रेड में बाँटना"],
-    answer: 1,
-    explanation: "समग्र मूल्यांकन का अर्थ बालक के सर्वांगीण विकास (शैक्षिक और सह-शैक्षिक दोनों पक्षों) का व्यापक स्तर पर आकलन करना है।"
-  },
-  {
-    q: "वायगोत्स्की के सिद्धांत में 'पाड़' (Scaffolding) से क्या तात्पर्य है?",
-    options: ["बच्चे को स्थायी रूप से सहारा देना", "अधिगम की प्रक्रिया में वयस्कों द्वारा दी जाने वाली अस्थायी सहायता", "बच्चे की गलतियों पर दंड देना", "कक्षा में शांति बनाए रखना"],
-    answer: 1,
-    explanation: "स्कैफोल्डिंग (Scaffolding) वह अस्थायी ढांचा या सहायता है जो किसी कुशल व्यक्ति द्वारा बच्चे को तब तक दी जाती है जब तक वह स्वयं उस कार्य को न कर ले।"
-  }
+  { q: "पियाजे के अनुसार 7 से 11 वर्ष के बालक में किस संज्ञानात्मक क्षमता का विकास मुख्य रूप से हो जाता है?", options: ["अमूर्त चिंतन", "संरक्षण (Conservation) एवं उत्क्रमणीयता", "वस्तु स्थायित्व", "केवल इंद्रियजनित अनुक्रियाएँ"], answer: 1, explanation: "मूर्त संक्रियात्मक अवस्था (7-11 वर्ष) में बालक संरक्षण और विचारों के उत्क्रमण को समझने लगता है।" },
+  { q: "लेव वायगोत्स्की के सामाजिक-सांस्कृतिक सिद्धांत में 'ZPD' क्या दर्शाता है?", options: ["बच्चे द्वारा अकेले किया जाने वाला कार्य", "स्वतंत्र रूप से और सहायता से किए जाने वाले कार्य के बीच का अंतर", "कक्षा में स्थायी सहायता", "जन्मजात आनुवंशिक क्षमता"], answer: 1, explanation: "ZPD वास्तविक विकास स्तर और संभावित विकास स्तर के बीच का अंतर है।" },
+  { q: "निपुण भारत मिशन (मिशन अंकुर MP) के अंतर्गत 'बालवाटिका' किस आयु वर्ग के लिए है?", options: ["3 से 4 वर्ष", "5 से 6 वर्ष (कक्षा 1 से पूर्व)", "6 से 8 वर्ष", "8 से 10 वर्ष"], answer: 1, explanation: "बालवाटिका 5-6 वर्ष की आयु के बच्चों के लिए 1 वर्षीय प्री-स्कूल प्रोग्राम है।" },
+  { q: "कोहलबर्ग के अनुसार 'अच्छा लड़का-अच्छी लड़की' अभिविन्यास किस स्तर पर आता है?", options: ["पूर्व-पारंपरिक", "पारंपरिक स्तर", "उत्तर-पारंपरिक", "स्वायत्त स्तर"], answer: 1, explanation: "पारंपरिक स्तर के चरण 3 में बच्चा सामाजिक प्रशंसा पाने के लिए कार्य करता है।" },
+  { q: "डिस्लेक्सिया (Dyslexia) मुख्य रूप से किससे संबंधित है?", options: ["गणना विकार", "पठन एवं वर्तनी विकार", "गति समन्वय विकार", "स्थानिक समझ"], answer: 1, explanation: "डिस्लेक्सिया एक पठन विकार है जिसमें पढ़ने व वर्तनी पहचानने में कठिनाई होती है।" }
 ];
 
 var hindi1Bank = [
-  {
-    q: "भाषा अर्जन की क्षमता जन्मजात होती है (LAD) - यह प्रसिद्ध कथन किस भाषाविद् का है?",
-    options: ["बी.एफ. स्किनर", "जीन पियाजे", "नोम चॉम्स्की", "वायगोत्स्की"],
-    answer: 2,
-    explanation: "नोम चॉम्स्की का मानना है कि बच्चों में भाषा सीखने की जन्मजात क्षमता (Language Acquisition Device - LAD) होती है।"
-  },
-  {
-    q: "प्राथमिक स्तर पर हिन्दी भाषा शिक्षण का सर्वोपरि उद्देश्य क्या है?",
-    options: ["कठिन व्याकरणिक नियमों को रटना", "बच्चों को अपनी भाषा में सहज और अर्थपूर्ण अभिव्यक्ति की क्षमता देना", "सुंदर सुलेख लिखवाना", "कविताओं का सस्वर पाठ करवाना"],
-    answer: 1,
-    explanation: "प्राथमिक स्तर पर भाषा शिक्षण का मूल उद्देश्य बच्चे को अपने अनुभवों को सहजता और निर्भीकता से अभिव्यक्त करने योग्य बनाना है।"
-  },
-  {
-    q: "व्याकरण शिक्षण की 'आगमन विधि' (Inductive Method) का सही क्रम क्या है?",
-    options: ["नियम से उदाहरण की ओर", "उदाहरण से नियम की ओर", "परिभाषा से प्रश्न की ओर", "कंठस्थीकरण से अभ्यास की ओर"],
-    answer: 1,
-    explanation: "आगमन विधि में पहले छात्रों के सामने अनेक मूर्त उदाहरण प्रस्तुत किए जाते हैं, फिर उनके विश्लेषण से सामान्य नियम निकाले जाते हैं।"
-  },
-  {
-    q: "पठन कौशल (Reading Skill) के विकास में सबसे अधिक महत्वपूर्ण कारक कौन-सा है?",
-    options: ["केवल वर्णमाला की पहचान", "पढ़े गए पाठ का अर्थ ग्रहण करना और समझ विकसित करना", "तेज गति से बिना रुके पढ़ना", "विराम चिह्नों का ही ध्यान रखना"],
-    answer: 1,
-    explanation: "पठन का वास्तविक अर्थ केवल अक्षरों का उच्चारण करना नहीं, बल्कि पढ़े गए संदर्भ का 'अर्थ ग्रहण' करना होता है।"
-  },
-  {
-    q: "भाषा शिक्षण में 'उपचारात्मक शिक्षण' (Remedial Teaching) का मुख्य कार्य क्या है?",
-    options: ["प्रतिभाशाली बच्चों को अतिरिक्त गृहकार्य देना", "विद्यार्थियों की अधिगम संबंधी कठिनाइयों और कमियों का निवारण करना", "कक्षा में नया पाठ पढ़ाना", "वार्षिक परीक्षा आयोजित करना"],
-    answer: 1,
-    explanation: "निदानात्मक परीक्षण द्वारा पहचानी गई छात्र की कमजोरियों और सीखने की रिक्तियों को दूर करने के लिए उपचारात्मक शिक्षण दिया जाता है।"
-  }
+  { q: "भाषा अर्जन की क्षमता जन्मजात होती है (LAD) - यह कथन किसका है?", options: ["बी.एफ. स्किनर", "जीन पियाजे", "नोम चॉम्स्की", "वायगोत्स्की"], answer: 2, explanation: "नोम चॉम्स्की का मानना है कि बच्चों में भाषा सीखने की जन्मजात क्षमता (LAD) होती है।" },
+  { q: "प्राथमिक स्तर पर हिन्दी भाषा शिक्षण का मुख्य उद्देश्य क्या है?", options: ["कठिन व्याकरण रटना", "सहज और अर्थपूर्ण अभिव्यक्ति की क्षमता देना", "सुलेख लिखवाना", "कविता पाठ"], answer: 1, explanation: "प्राथमिक स्तर पर भाषा शिक्षण का उद्देश्य सहज अभिव्यक्ति का विकास है।" },
+  { q: "व्याकरण शिक्षण की 'आगमन विधि' का सही क्रम क्या है?", options: ["नियम से उदाहरण", "उदाहरण से नियम की ओर", "परिभाषा से प्रश्न", "रटना"], answer: 1, explanation: "आगमन विधि में पहले उदाहरण दिए जाते हैं, फिर नियम निकाले जाते हैं।" },
+  { q: "पठन कौशल का मुख्य उद्देश्य क्या है?", options: ["अक्षर पहचानना", "पाठ का अर्थ और भाव ग्रहण करना", "तेज़ पढ़ना", "विराम चिह्न देखना"], answer: 1, explanation: "पठन का वास्तविक अर्थ अर्थग्रहण करना होता है।" },
+  { q: "'पवन' शब्द का सही संधि विच्छेद क्या होगा?", options: ["पौ + अन", "पो + अन", "प + वन", "पा + अन"], answer: 1, explanation: "अयादि स्वर संधि: पो + अन = पवन।" }
 ];
 
+// --- 🌟 Language-2 Banks ---
 var englishBank = [
-  {
-    q: "Which pedagogical approach emphasizes language learning through meaningful communicative tasks?",
-    options: ["Grammar-Translation Method", "Communicative Language Teaching (CLT)", "Audio-Lingual Drill Method", "Direct Structural Method"],
-    answer: 1,
-    explanation: "CLT (Communicative Language Teaching) focuses on developing communicative competence through authentic, real-life conversational tasks."
-  },
-  {
-    q: "What is the primary role of 'Formative Assessment' in an English classroom?",
-    options: ["To assign final ranks and grades", "To provide ongoing diagnostic feedback to improve learning", "To conduct end-of-year term exams", "To compare student performance with toppers"],
-    answer: 1,
-    explanation: "Formative assessment is an ongoing diagnostic tool designed to identify learning gaps and provide immediate constructive feedback."
-  },
-  {
-    q: "What does 'Phonological Awareness' refer to in early language acquisition?",
-    options: ["The ability to write complex essays", "The ability to recognize and manipulate sounds in spoken words", "The memorization of grammatical definitions", "The knowledge of dictionary definitions"],
-    answer: 1,
-    explanation: "Phonological awareness is the foundational auditory ability to hear, identify, and manipulate phonemes, syllables, and rhymes in spoken language."
-  },
-  {
-    q: "In primary English language learning, 'Error Analysis' primarily helps the teacher to:",
-    options: ["Punish students for recurring mistakes", "Understand the child's cognitive learning process and gaps", "Demote struggling learners to lower grades", "Avoid teaching complex topics"],
-    answer: 1,
-    explanation: "Errors are natural windows into a learner's cognitive development, helping teachers tailor remedial instruction effectively."
-  },
-  {
-    q: "Which two language skills are categorized as 'Receptive Skills'?",
-    options: ["Speaking and Writing", "Listening and Reading", "Listening and Speaking", "Reading and Writing"],
-    answer: 1,
-    explanation: "Listening and Reading are Receptive (Passive/Input) skills, while Speaking and Writing are Productive (Active/Output) skills."
-  }
+  { q: "Which pedagogical approach emphasizes language learning through communicative tasks?", options: ["Grammar-Translation", "Communicative Language Teaching (CLT)", "Audio-Lingual", "Direct Method"], answer: 1, explanation: "CLT focuses on real-life communication tasks." },
+  { q: "What does 'Phonological Awareness' refer to?", options: ["Writing essays", "Recognizing and manipulating sounds in spoken words", "Memorizing grammar", "Dictionary use"], answer: 1, explanation: "Phonological awareness is identifying sounds in speech." },
+  { q: "Which skills are 'Productive Skills'?", options: ["Listening & Reading", "Speaking and Writing", "Listening & Speaking", "Reading & Writing"], answer: 1, explanation: "Speaking and Writing are productive (output) skills." },
+  { q: "Choose the correct article: 'He is _____ honest teacher.'", options: ["a", "an", "the", "no article"], answer: 1, explanation: "'Honest' begins with a vowel sound, taking 'an'." },
+  { q: "Identify the part of speech: 'She sings **beautifully**.'", options: ["Adjective", "Adverb", "Noun", "Verb"], answer: 1, explanation: "'Beautifully' modifies the verb sings, so it is an adverb." }
 ];
 
 var sanskritBank = [
-  {
-    q: "संस्कृतभाषा-शिक्षणे 'प्रत्यक्षविधेः' (Direct Method) मुख्यं वैशिष्ट्यं किम् वर्तते?",
-    options: ["मातृभाषायाः अत्यधिकः प्रयोगः", "मातृभाषायाः प्रयोगं विना साक्षात् संस्कृतेन एव शिक्षणम्", "केवलं व्याकरणनियमानां रटनम्", "शब्दकोशस्य कण्ठस्थीकरणम्"],
-    answer: 1,
-    explanation: "प्रत्यक्षविधौ मातृभाषायाः साहाय्यं विना साक्षात् संस्कृतमाध्यमेन एव भाषायाः पाठनं भवति, येन भाषा-वातावरणं निर्मीयते।"
-  },
-  {
-    q: "संस्कृतव्याकरणशिक्षणस्य सर्वोत्तमा मनोवैज्ञानिकविधिः का मन्यते?",
-    options: ["कण्ठस्थीकरणविधिः", "आगमन-निगमन विधिः (Inductive-Deductive)", "पाठ्यपुस्तकविधिः", "भाण्डारकरविधिः"],
-    answer: 1,
-    explanation: "आगमन-निगमन विधिः व्याकरणशिक्षार्थं सर्वोत्तमा अस्ति, यतोहि अत्र प्रथमम् उदाहरणानि तदनन्तरं नियमानां स्पष्टीकरणं भवति।"
-  },
-  {
-    q: "संस्कृतध्वनीनां वर्णानां च समुचितोच्चारणार्थं कस्य अभ्यासः अनिवार्यः?",
-    options: ["मौनपठनस्य", "सस्वर-वाचनस्य उच्चारणस्थान-अभ्यासश्च", "द्रुतपठनस्य", "केवलं गृहकार्यस्य"],
-    answer: 1,
-    explanation: "संस्कृतभाषायां शुद्धोच्चारणार्थं वर्णानाम् उत्पत्तिस्थानानां ज्ञानेन सह सस्वरवाचनस्य अभ्यासः नितान्तम् आवश्यकः।"
-  },
-  {
-    q: "छात्राणां मौलिक-संस्कृत-अभिव्यक्तेः विकासाय कः उपायः सर्वाधिकं फलप्रदः?",
-    options: ["श्लोकानां रटनम्", "संस्कृतेन संभाषणस्य, नाटक-मञ्चनस्य च अवसरप्रदानम्", "श्यामपट्टात् लेखनम्", "मूक-अभ्यासः"],
-    answer: 1,
-    explanation: "यदा छात्राः संवादेषु, नाटकेषु च स्वयं भागं गृह्णन्ति तदा तेषां मौलिक-अभिव्यक्ति-कौशलस्य स्वाभाविकः विकासः भवति।"
-  },
-  {
-    q: "भाषाधिगमने 'श्रवण-भाषण-पठन-लेखन' कौशलानां मनोवैज्ञानिकः क्रमः कः?",
-    options: ["पठनम्, लेखनम्, श्रवणम्, भाषणम्", "श्रवणम् (L) ➔ भाषणम् (S) ➔ पठनम् (R) ➔ लेखनम् (W)", "लेखनम् ➔ पठनम् ➔ भाषणम् ➔ श्रवणम्", "भाषणम् ➔ लेखनम् ➔ श्रवणम् ➔ पठनम्"],
-    answer: 1,
-    explanation: "भाषाकौशलानां स्वाभाविकः क्रमः LSRW (श्रवणं, ततः भाषणं, ततः पठनं, अन्ते च लेखनम्) भवति।"
-  }
+  { q: "संस्कृतभाषा-शिक्षणे 'प्रत्यक्षविधेः' (Direct Method) मुख्यं वैशिष्ट्यं किम् वर्तते?", options: ["मातृभाषायाः अत्यधिकः प्रयोगः", "मातृभाषायाः प्रयोगं विना साक्षात् संस्कृतेन एव शिक्षणम्", "केवलं व्याकरणनियमानां रटनम्", "शब्दकोशस्य कण्ठस्थीकरणम्"], answer: 1, explanation: "प्रत्यक्षविधौ मातृभाषायाः साहाय्यं विना साक्षात् संस्कृतमाध्यमेन एव भाषायाः पाठनं भवति।" },
+  { q: "संस्कृतव्याकरणशिक्षणस्य सर्वोत्तमा मनोवैज्ञानिकविधिः का मन्यते?", options: ["कण्ठस्थीकरणविधिः", "आगमन-निगमन विधिः (Inductive-Deductive)", "पाठ्यपुस्तकविधिः", "भाण्डारकरविधिः"], answer: 1, explanation: "आगमन-निगमन विधिः व्याकरणशिक्षार्थं सर्वोत्तमा अस्ति।" },
+  { q: "संस्कृतध्वनीनां वर्णानां च समुचितोच्चारणार्थं कस्य अभ्यासः अनिवार्यः?", options: ["मौनपठनस्य", "सस्वर-वाचनस्य उच्चारणस्थान-अभ्यासश्च", "द्रुतपठनस्य", "केवलं गृहकार्यस्य"], answer: 1, explanation: "संस्कृतभाषायां शुद्धोच्चारणार्थं सस्वरवाचनस्य अभ्यासः आवश्यकः।" },
+  { q: "छात्राणां मौलिक-संस्कृत-अभिव्यक्तेः विकासाय कः उपायः सर्वाधिकं फलप्रदः?", options: ["श्लोकानां रटनम्", "संस्कृतेन संभाषणस्य, नाटक-मञ्चनस्य च अवसरप्रदानम्", "श्यामपट्टात् लेखनम्", "मूक-अभ्यासः"], answer: 1, explanation: "संभाषणेन नाटकेन च मौलिक-अभिव्यक्ति-कौशलस्य स्वाभाविकः विकासः भवति।" },
+  { q: "भाषाधिगमने 'श्रवण-भाषण-पठन-लेखन' कौशलानां मनोवैज्ञानिकः क्रमः कः?", options: ["पठनम्, लेखनम्, श्रवणम्, भाषणम्", "श्रवणम् (L) ➔ भाषणम् (S) ➔ पठनम् (R) ➔ लेखनम् (W)", "लेखनम् ➔ पठनम् ➔ भाषणम् ➔ श्रवणम्", "भाषणम् ➔ लेखनम् ➔ श्रवणम् ➔ पठनम्"], answer: 1, explanation: "भाषाकौशलानां स्वाभाविकः क्रमः LSRW भवति।" }
 ];
 
 var hindi2Bank = [
-  {
-    q: "द्वितीय भाषा के रूप में हिन्दी शिक्षण की सबसे प्रमुख और व्यावहारिक चुनौती क्या है?",
-    options: ["पाठ्यपुस्तकों की अधिकता", "मातृभाषा के प्रभाव के कारण मानक उच्चारण व संप्रेषण में संकोच", "व्याकरण के नियमों का अभाव", "अध्यापकों की कमी"],
-    answer: 1,
-    explanation: "द्वितीय भाषा शिक्षण में प्रथम भाषा (L1) का व्यतिकरण (Interference) और बच्चों का झिझकना मुख्य चुनौती होता है।"
-  },
-  {
-    q: "हिन्दी शिक्षण में 'दृश्य-श्रव्य सामग्री' (Audio-Visual Aids) का मुख्य उद्देश्य क्या है?",
-    options: ["कक्षा का समय व्यतीत करना", "अमूर्त और कठिन भाषाई अवधारणाओं को मूर्त एवं रुचिकर बनाना", "पाठ्यपुस्तक को पूरी तरह हटा देना", "परीक्षा में अंक बढ़ाना"],
-    answer: 1,
-    explanation: "ऑडियो-विजुअल एड्स से छात्र अपनी इंद्रियों का अधिकतम उपयोग करते हैं, जिससे भाषाई समझ स्थायी और सहज हो जाती है।"
-  },
-  {
-    q: "द्वितीय भाषा के रूप में हिन्दी में प्रवाहपूर्ण संवाद विकसित करने की सबसे प्रभावी विधि कौन-सी है?",
-    options: ["केवल व्याकरण के सूत्र याद करवाना", "दैनिक जीवन की वास्तविक स्थितियों पर आधारित रोल-प्ले व समूह परिचर्चा", "कठिन शब्दों की नकल करवाना", "मौन वाचन करवाना"],
-    answer: 1,
-    explanation: "रोल-प्ले और संवाद गतिविधियों से छात्र बिना झिझक के स्वाभाविक वातावरण में संप्रेषण कौशल का विकास करते हैं।"
-  },
-  {
-    q: "प्राथमिक स्तर पर हिन्दी वर्तनी की अशुद्धियों को दूर करने के लिए कौन-सी गतिविधि सर्वोत्तम है?",
-    options: ["सख्त सजा देना", "सस्वर वाचन, श्रुतलेख और शुद्ध रूप के साथ तुलनात्मक अभ्यास", "परीक्षा रद्द करना", "व्याकरण कंठस्थ करवाना"],
-    answer: 1,
-    explanation: "श्रुतलेख (Dictation) और सही उच्चारण का प्रत्यक्ष अनुभव वर्तनी सुधार में अत्यंत वैज्ञानिक पद्धति है।"
-  },
-  {
-    q: "भाषा शिक्षण की 'अनुकरण विधि' (Imitation Method) किस स्तर के विद्यार्थियों के लिए सर्वाधिक उपयोगी है?",
-    options: ["उच्च माध्यमिक स्तर", "प्राथमिक एवं पूर्व-प्राथमिक स्तर", "शोध स्तर", "महाविद्यालयीन स्तर"],
-    answer: 1,
-    explanation: "छोटे बच्चे स्वभाव से अनुकरणशील होते हैं; वे शिक्षक के उच्चारण, हाव-भाव और वाचन का अनुकरण करके तेजी से भाषा सीखते हैं।"
-  }
+  { q: "द्वितीय भाषा के रूप में हिन्दी शिक्षण की सबसे प्रमुख चुनौती क्या है?", options: ["पाठ्यपुस्तकों की अधिकता", "मातृभाषा के प्रभाव के कारण मानक उच्चारण व संप्रेषण में संकोच", "व्याकरण के नियमों का अभाव", "अध्यापकों की कमी"], answer: 1, explanation: "द्वितीय भाषा शिक्षण में प्रथम भाषा का प्रभाव और बच्चों का झिझकना मुख्य चुनौती होता है।" },
+  { q: "हिन्दी शिक्षण में 'दृश्य-श्रव्य सामग्री' (Audio-Visual Aids) का मुख्य उद्देश्य क्या है?", options: ["कक्षा का समय व्यतीत करना", "अमूर्त और कठिन भाषाई अवधारणाओं को मूर्त एवं रुचिकर बनाना", "पाठ्यपुस्तक को पूरी तरह हटा देना", "परीक्षा में अंक बढ़ाना"], answer: 1, explanation: "ऑडियो-विजुअल एड्स से छात्र अपनी इंद्रियों का अधिकतम उपयोग करते हैं।" },
+  { q: "द्वितीय भाषा के रूप में हिन्दी में प्रवाहपूर्ण संवाद विकसित करने की सबसे प्रभावी विधि कौन-सी है?", options: ["केवल व्याकरण के सूत्र याद करवाना", "दैनिक जीवन की वास्तविक स्थितियों पर आधारित रोल-प्ले व समूह परिचर्चा", "कठिन शब्दों की नकल करवाना", "मौन वाचन करवाना"], answer: 1, explanation: "रोल-प्ले और संवाद गतिविधियों से छात्र स्वाभाविक वातावरण में भाषा सीखते हैं।" },
+  { q: "प्राथमिक स्तर पर हिन्दी वर्तनी की अशुद्धियों को दूर करने के लिए कौन-सी गतिविधि सर्वोत्तम है?", options: ["सख्त सजा देना", "सस्वर वाचन, श्रुतलेख और शुद्ध रूप के साथ तुलनात्मक अभ्यास", "परीक्षा रद्द करना", "व्याकरण कंठस्थ करवाना"], answer: 1, explanation: "श्रुतलेख और सही उच्चारण का अभ्यास वर्तनी सुधार में सर्वोत्तम है।" },
+  { q: "भाषा शिक्षण की 'अनुकरण विधि' (Imitation Method) किस स्तर के विद्यार्थियों के लिए सर्वाधिक उपयोगी है?", options: ["उच्च माध्यमिक स्तर", "प्राथमिक एवं पूर्व-प्राथमिक स्तर", "शोध स्तर", "महाविद्यालयीन स्तर"], answer: 1, explanation: "छोटे बच्चे अनुकरण करके तेजी से भाषा सीखते हैं।" }
 ];
 
 var mathBank = [
-  {
-    q: "वैन हीले (Van Hiele) के ज्यामितीय चिंतन के स्तर-0 को क्या कहा जाता है?",
-    options: ["विश्लेषण (Analysis)", "प्रत्यक्षीकरण / चक्षुषीकरण (Visualization)", "अनौपचारिक निगमन (Informal Deduction)", "औपचारिक निगमन (Formal Deduction)"],
-    answer: 1,
-    explanation: "वैन हीले मॉडल में स्तर-0 'चक्षुषीकरण' (Visualization) कहलाता है, जहाँ बच्चा आकृतियों को उनके दिखावे और समग्र रूप के आधार पर पहचानता है।"
-  },
-  {
-    q: "प्राथमिक स्तर पर गणितीय अवधारणाओं को सिखाने का वैज्ञानिक व मनोवैज्ञानिक क्रम (ELPS) क्या है?",
-    options: ["प्रतीक ➔ भाषा ➔ चित्र ➔ अनुभव", "ठोस अनुभव (E) ➔ भाषा (L) ➔ चित्र (P) ➔ प्रतीक (S)", "भाषा ➔ प्रतीक ➔ ठोस अनुभव ➔ चित्र", "चित्र ➔ ठोस अनुभव ➔ प्रतीक ➔ भाषा"],
-    answer: 1,
-    explanation: "पामेला लीबेक का ELPS मॉडल: E = Experience with physical objects, L = Spoken Language, P = Pictures, S = Written Symbols."
-  },
-  {
-    q: "गणित शिक्षण में विद्यार्थियों द्वारा की गई त्रुटियों (Errors) को शिक्षक को किस रूप में देखना चाहिए?",
-    options: ["लापरवाही और असफलता", "अधिगम प्रक्रिया का स्वाभाविक हिस्सा और चिंतन को समझने का साधन", "बुद्धि लब्धि की कमी", "दंडात्मक गलती"],
-    answer: 1,
-    explanation: "गणित में त्रुटियाँ शिक्षकों को यह अंतर्दृष्टि देती हैं कि बच्चे ने अवधारणा को किस रूप में समझा है और उसे कहाँ सुधारात्मक सहायता चाहिए।"
-  },
-  {
-    q: "संख्या 7805 में अंक '8' के स्थानीय मान (Place Value) और अंकित मान (Face Value) का अंतर क्या होगा?",
-    options: ["800", "792", "808", "8"],
-    answer: 1,
-    explanation: "8 का स्थानीय मान = 800; 8 का अंकित मान (जातीय मान) = 8। अंतर = 800 - 8 = 792।"
-  },
-  {
-    q: "गणित में 'निदानात्मक परीक्षण' (Diagnostic Test) का मुख्य उद्देश्य क्या होता है?",
-    options: ["अंतिम परीक्षा का परिणाम तैयार करना", "गणित सीखने में बच्चों की विशिष्ट कठिनाइयों और अवधारणात्मक कमियों को जानना", "विद्यार्थियों को रैंक देना", "माता-पिता को शिकायत भेजना"],
-    answer: 1,
-    explanation: "निदानात्मक परीक्षण का उद्देश्य छात्र की समझ में रह गई विशिष्ट वैचारिक कमियों का पता लगाना है ताकि उचित उपचारात्मक शिक्षण दिया जा सके।"
-  }
+  { q: "वैन हीले के ज्यामितीय चिंतन में स्तर-0 को क्या कहा जाता है?", options: ["विश्लेषण", "प्रत्यक्षीकरण / चक्षुषीकरण (Visualization)", "अनौपचारिक निगमन", "औपचारिक निगमन"], answer: 1, explanation: "स्तर-0 पर बच्चा आकृतियों को उनके दिखावे से पहचानता है।" },
+  { q: "गणित शिक्षण में ELPS का सही क्रम क्या है?", options: ["प्रतीक-चित्र-भाषा-अनुभव", "ठोस अनुभव (E) ➔ भाषा (L) ➔ चित्र (P) ➔ प्रतीक (S)", "भाषा-प्रतीक-अनुभव-चित्र", "चित्र-भाषा-अनुभव-प्रतीक"], answer: 1, explanation: "ELPS: Experience ➔ Language ➔ Pictures ➔ Symbols." },
+  { q: "संख्या 85042 में 5 के स्थानीय मान और अंकित मान का अंतर क्या है?", options: ["5000", "4995 (5000 - 5)", "5005", "5"], answer: 1, explanation: "स्थानीय मान = 5000, अंकित मान = 5। अंतर = 4995।" },
+  { q: "25 मीटर लंबाई और 12 मीटर चौड़ाई वाले आयत का परिमाप क्या होगा?", options: ["300 मीटर", "74 मीटर", "37 मीटर", "150 मीटर"], answer: 1, explanation: "परिमाप = 2 × (25 + 12) = 74 मीटर।" },
+  { q: "त्रिभुज के दो कोण 65° और 45° हैं, तीसरा कोण क्या होगा?", options: ["80°", "70° (180° - 110°)", "90°", "60°"], answer: 1, explanation: "त्रिभुज के तीनों कोणों का योग 180° होता है (180 - 110 = 70°)।" }
 ];
 
 var evsBank = [
-  {
-    q: "पर्यावरण अध्ययन (EVS) की मुख्य थीम 'परिवार एवं मित्र' के अंतर्गत कौन-सा उप-विषय (Sub-theme) शामिल है?",
-    options: ["भोजन एवं जल", "कार्य एवं खेल (Work & Play)", "आवास", "यात्रा"],
-    answer: 1,
-    explanation: "NCERT EVS में 'परिवार एवं मित्र' की 4 उप-थीम हैं: 1. संबंध, 2. कार्य एवं खेल, 3. पशु, 4. पौधे।"
-  },
-  {
-    q: "मध्य प्रदेश का राज्य पशु (State Animal) कौन-सा है?",
-    options: ["रॉयल बंगाल टाइगर", "बारहसिंगा (दलदल का हिरण / Rucervus duvaucelii)", "काला हिरण (Blackbuck)", "तेंदुआ"],
-    answer: 1,
-    explanation: "मध्य प्रदेश का राज्य पशु 'बारहसिंगा' (हार्डग्राउंड प्रजाति) है, जो कान्हा राष्ट्रीय उद्यान में विशेष रूप से पाया जाता है।"
-  },
-  {
-    q: "प्रकाश संश्लेषण (Photosynthesis) की प्रक्रिया में हरे पौधे कौन-सी गैस अवशोषित करते हैं और कौन-सी गैस छोड़ते हैं?",
-    options: ["ऑक्सीजन अवशोषित, कार्बन डाइऑक्साइड मुक्त", "कार्बन डाइऑक्साइड अवशोषित, ऑक्सीजन मुक्त", "नाइट्रोजन अवशोषित, मीथेन मुक्त", "कार्बन डाइऑक्साइड अवशोषित, नाइट्रोजन मुक्त"],
-    answer: 1,
-    explanation: "पौधे सूर्य के प्रकाश और क्लोरोफिल की उपस्थिति में CO2 ग्रहण करके कार्बोहाइड्रेट बनाते हैं तथा ऑक्सीजन (O2) गैस वातावरण में मुक्त करते हैं।"
-  },
-  {
-    q: "पर्यावरण अध्ययन (EVS) में 'क्षेत्र भ्रमण' (Field Trip) कराने का सबसे मुख्य शैक्षणिक उद्देश्य क्या है?",
-    options: ["विद्यार्थियों का मनोरंजन करना", "विद्यार्थियों को वास्तविक और प्रत्यक्ष (Hands-on) अनुभव प्रदान करना", "शिक्षकों के शिक्षण कार्य का समय बचाना", "गृहकार्य का बोझ कम करना"],
-    answer: 1,
-    explanation: "क्षेत्र भ्रमण से छात्र किताबी ज्ञान को अपने परिवेश और वास्तविक दुनिया की घटनाओं से जोड़कर प्रत्यक्ष अवलोकन से सीखते हैं।"
-  },
-  {
-    q: "सूर्य से आने वाली हानिकारक पराबैंगनी किरणों (UV Rays) को रोकने वाली 'ओजोन परत' वायुमंडल के किस मंडल में स्थित है?",
-    options: ["क्षोभमंडल (Troposphere)", "समताप मंडल (Stratosphere)", "मध्यमंडल (Mesosphere)", "आयनमंडल (Ionosphere)"],
-    answer: 1,
-    explanation: "ओजोन परत (O3 Layer) मुख्य रूप से समताप मंडल (Stratosphere) के निचले हिस्से में पाई जाती है जो पृथ्वी को पराबैंगनी विकिरण से बचाती है।"
-  }
+  { q: "EVS की थीम 'परिवार एवं मित्र' की उप-थीम कौन-सी है?", options: ["आवास", "कार्य एवं खेल (Work & Play)", "भोजन", "जल"], answer: 1, explanation: "'कार्य एवं खेल' परिवार एवं मित्र की उप-थीम है।" },
+  { q: "मध्य प्रदेश का राज्य पशु 'बारहसिंगा' कहाँ संरक्षित है?", options: ["कान्हा राष्ट्रीय उद्यान", "बांधवगढ़", "पन्ना", "पेंच"], answer: 0, explanation: "कान्हा राष्ट्रीय उद्यान में बारहसिंगा संरक्षित है।" },
+  { q: "अंतरिक्ष में भारहीनता के दौरान पानी कैसे पिया जाता है?", options: ["गिलास से", "विशेष पाउच/स्ट्रॉ से बुलबुले चूसकर", "बैठकर", "गर्म करके"], answer: 1, explanation: "माइक्रोग्रैविटी में पानी तैरता है, इसलिए सीलबंद पाउच का प्रयोग होता है।" },
+  { q: "प्रकाश संश्लेषण में पौधे कौन-सी गैस लेते हैं और कौन-सी छोड़ते हैं?", options: ["O2 लेते, CO2 छोड़ते", "CO2 लेते हैं, O2 छोड़ते हैं", "नाइट्रोजन लेते हैं", "मीथेन"], answer: 1, explanation: "पौधे CO2 ग्रहण करके O2 मुक्त करते हैं।" },
+  { q: "ओजोन परत वायुमंडल के किस मंडल में पाई जाती है?", options: ["क्षोभमंडल", "समताप मंडल (Stratosphere)", "मध्यमंडल", "आयनमंडल"], answer: 1, explanation: "ओजोन परत समताप मंडल में पाई जाती है।" }
 ];
 
 // ==========================================
@@ -608,7 +392,7 @@ function buildQuestions(day, lang2) {
   var qArr = [];
   var seed = (day - 1) * 3;
 
-  // 1. CDP (Q.1 - Q.30)
+  // 1. CDP (1-30)
   for (var i = 0; i < 30; i++) {
     var raw = cdpBank[(i + seed) % cdpBank.length];
     qArr.push({
@@ -620,7 +404,7 @@ function buildQuestions(day, lang2) {
     });
   }
 
-  // 2. Hindi-1 (Q.31 - Q.60)
+  // 2. Hindi-1 (31-60)
   for (var i = 0; i < 30; i++) {
     var raw = hindi1Bank[(i + seed) % hindi1Bank.length];
     qArr.push({
@@ -632,7 +416,7 @@ function buildQuestions(day, lang2) {
     });
   }
 
-  // 3. Language-2 (Q.61 - Q.90)
+  // 3. Language-2 (61-90)
   var l2Bank = englishBank;
   var subTitle = "भाग 3: भाषा-2 (English)";
   if (lang2 === 'sanskrit') {
@@ -640,7 +424,7 @@ function buildQuestions(day, lang2) {
     subTitle = "भाग 3: भाषा-2 (संस्कृत)";
   } else if (lang2 === 'hindi2') {
     l2Bank = hindi2Bank;
-    subTitle = "भाग 3: भाषा-2 (हिन्दी)";
+    subTitle = "भाग 3: भाषा-2 (हिन्दी-II)";
   }
 
   for (var i = 0; i < 30; i++) {
@@ -654,7 +438,7 @@ function buildQuestions(day, lang2) {
     });
   }
 
-  // 4. Mathematics (Q.91 - Q.120)
+  // 4. Mathematics (91-120)
   for (var i = 0; i < 30; i++) {
     var raw = mathBank[(i + seed) % mathBank.length];
     qArr.push({
@@ -666,7 +450,7 @@ function buildQuestions(day, lang2) {
     });
   }
 
-  // 5. EVS (Q.121 - Q.150)
+  // 5. EVS (121-150)
   for (var i = 0; i < 30; i++) {
     var raw = evsBank[(i + seed) % evsBank.length];
     qArr.push({
@@ -684,7 +468,9 @@ function buildQuestions(day, lang2) {
 function loadDayTest(day) {
   activeDay = day;
   var item = schedule[day - 1] || schedule[0];
-  document.getElementById('daySelect').value = item.day;
+  
+  var selectBox = document.getElementById('daySelect');
+  if (selectBox) selectBox.value = item.day;
   
   if (!item.unlocked) {
     document.getElementById('lockScreen').style.display = 'block';
@@ -936,7 +722,8 @@ function submitTest() {
   }
 }
 
-// Auto-load latest available test
+// Initialization
+populateDaySelect();
 loadDayTest(latestAvailableDay);
 </script>
 </body>
