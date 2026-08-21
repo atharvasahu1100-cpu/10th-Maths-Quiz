@@ -9,7 +9,7 @@
 header{background:#0b4f9c;color:#fff;padding:12px 14px;position:sticky;top:0;z-index:10}
 .head{max-width:1150px;margin:auto;display:flex;justify-content:space-between;gap:10px;align-items:center}
 h1{font-size:18px;margin:0} .timer{background:#fff;color:#0b4f9c;padding:8px 12px;border-radius:10px;font-weight:900;min-width:88px;text-align:center}
-.home{max-width:1150px;margin:14px auto;padding:0 12px} .card{background:#fff;border-radius:15px;padding:17px;box-shadow:0 4px 18px #0001}
+.home{max-width:1150px;margin:14px auto;padding:0 12px} .card{background:#fff;border-radius:15px;padding:17px;box-shadow:0 4px 18px #0001} .calendarIcon{display:inline-flex;vertical-align:middle;width:38px;height:38px;margin-right:7px;flex-direction:column;justify-content:center;align-items:center;border:2px solid #d33;border-radius:6px;background:#fff;color:#111;line-height:1;overflow:hidden;font-size:10px;position:relative;top:-2px}.calendarIcon span{width:100%;padding:3px 0 2px;background:#d33;color:#fff;font-size:9px;font-weight:800;text-align:center}.calendarIcon b{font-size:16px;padding-top:3px}
 .selector{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end} label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 select{width:100%;padding:12px;border:1px solid #cfd9e3;border-radius:10px;font-size:15px;background:#fff}
 button{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:pointer} button:disabled{opacity:.5;cursor:not-allowed}
@@ -30,6 +30,53 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:point
 .score{font-size:34px;font-weight:900;color:#0b4f9c} .history button{padding:6px 9px;font-size:12px}
 .notice{margin-top:10px;padding:10px;border-radius:10px;background:#fff8df;color:#735600;font-size:12px}
 @media(max-width:800px){.selector{grid-template-columns:1fr}.exam{grid-template-columns:1fr}.q{font-size:16px}.palette{grid-template-columns:repeat(8,1fr)}}
+
+/* Mobile-friendly question typography and alignment */
+body{font-family:Arial,"Noto Sans Devanagari","Noto Sans",sans-serif}
+.q,.feedback,.notice,.card,.exam,.home{word-break:normal;overflow-wrap:anywhere}
+.q{line-height:1.65;text-align:left}
+.q .question-text,.question-text{line-height:1.65;text-align:left;margin:0 0 12px}
+.opt{display:flex;align-items:flex-start;gap:9px;line-height:1.55;text-align:left}
+.opt input{flex:0 0 auto;margin:4px 0 0}
+.opt span,.opt label{flex:1;min-width:0}
+.feedback{line-height:1.6;text-align:left}
+h1,h2,h3,p{line-height:1.5}
+@media(max-width:600px){
+  body{font-size:15px}
+  .q{font-size:16px;line-height:1.7}
+  .opt{font-size:15px;line-height:1.6;padding:11px}
+  .feedback{font-size:14px;line-height:1.65}
+  .card{padding:14px}
+}
+
+
+/* Large, thumb-friendly navigation controls */
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;position:sticky;bottom:0;background:#fff;padding:10px 0 calc(10px + env(safe-area-inset-bottom));z-index:15;border-top:1px solid #e5e7eb}
+.actions button{min-height:48px;min-width:120px;font-size:15px;font-weight:700;padding:11px 16px;border-radius:10px;touch-action:manipulation}
+#nextBtn{order:3;flex:1.35;min-width:150px}
+#prevBtn{order:1;flex:0.8}
+#markBtn{order:2;flex:0.8}
+#submitBtn{order:4;flex:1.15;min-width:150px}
+@media(max-width:600px){
+  .actions{gap:8px}
+  .actions button{min-height:52px;font-size:16px;padding:12px 10px}
+  #nextBtn{min-width:155px}
+  #submitBtn{min-width:155px}
+}
+
+
+/* Prevent sticky navigation from covering question/feedback content */
+body{padding-bottom:110px}
+.exam{padding-bottom:30px}
+#questionArea{padding-bottom:28px}
+.actions{bottom:0}
+@media(max-width:600px){
+  body{padding-bottom:145px}
+  .exam{padding-bottom:45px}
+  #questionArea{padding-bottom:40px}
+  .actions{padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+}
+
 </style>
 </head>
 <body>
@@ -37,7 +84,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:point
 
 <section class="home" id="home">
 <div class="card">
-<h2 style="margin-top:0">📅 दिनवार परीक्षा चुनें</h2>
+<h2 style="margin-top:0"><span class="calendarIcon" aria-hidden="true"><span id="calendarMonth">AUG</span><b id="calendarDay">21</b></span> दिनवार परीक्षा चुनें</h2>
 <p style="margin-top:0"><small>आज की तारीख: <b>21-08-2026</b>। तारीख आने पर वह टेस्ट अपने-आप उपलब्ध होगा। भविष्य की तारीखें अभी लॉक रहेंगी।</small></p>
 <div class="selector">
 <div><label for="dateSelect">SET A टेस्ट की तारीख</label><select id="dateSelect"></select></div>
@@ -48,7 +95,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:point
 </select></div>
 <button class="primary" id="startBtn">टेस्ट शुरू करें</button>
 </div>
-<div class="notice">यह SET A का 90-दिन का अभ्यास है: 50 प्रश्न (5 भाग × 10) हैं। प्रश्नों को आधिकारिक syllabus के आधार पर रखा गया है। भाषा-2 में हिन्दी, English और संस्कृत में से एक भाषा चुनकर उसी भाषा के 10 प्रश्न दिए जाएंगे।</div>
+<div class="notice">यह प्रश्न संबंधित पाठ्यक्रम की महत्वपूर्ण अवधारणा और परीक्षा-अभ्यास को ध्यान में रखकर तैयार किया गया है। इसका उद्देश्य विषय की समझ को मजबूत करना है। यह किसी आधिकारिक परीक्षा, अधिसूचना या वास्तविक प्रश्नपत्र का दावा नहीं करता।<br><br>यह SET A का 90-दिन का अभ्यास है: 50 प्रश्न (5 भाग × 10) हैं। प्रश्नों को आधिकारिक syllabus के आधार पर रखा गया है। भाषा-2 में हिन्दी, English और संस्कृत में से एक भाषा चुनकर उसी भाषा के 10 प्रश्न दिए जाएंगे।</div>
 <div class="history">
 <h3>📊 मेरे पिछले प्रयास</h3>
 <div id="historyBox"><small>अभी कोई attempt saved नहीं है।</small></div>
@@ -86,7 +133,11 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:point
 </div></div>
 
 <script>
-const QUESTION_BANK = [];
+const SUPABASE_URL = "https://xgmeivfvuujculkplxjf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+const SUPABASE_TABLE = "teacher_question";
+const SET_NAME = "A";
+
 const TEST_DATES = ["2026-08-21", "2026-08-22", "2026-08-23", "2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28", "2026-08-29", "2026-08-30", "2026-08-31", "2026-09-01", "2026-09-02", "2026-09-03", "2026-09-04", "2026-09-05", "2026-09-06", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12", "2026-09-13", "2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18", "2026-09-19", "2026-09-20", "2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24", "2026-09-25", "2026-09-26", "2026-09-27", "2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15", "2026-11-16", "2026-11-17", "2026-11-18"];
 const SECTION_ORDER = ["बाल विकास एवं शिक्षाशास्त्र","भाषा-1: हिन्दी","भाषा-2","गणित","पर्यावरण अध्ययन"];
 const TEST_MINUTES = 50;
@@ -95,6 +146,15 @@ let timerId=null;
 
 function todayISO(){ return new Date().toISOString().slice(0,10); }
 function fmtDate(s){ const [y,m,d]=s.split("-"); return `${d}-${m}-${y}`; }
+function updateCalendarIcon(){
+  const now = new Date();
+  const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  const m = document.getElementById("calendarMonth");
+  const d = document.getElementById("calendarDay");
+  if(m) m.textContent = months[now.getMonth()];
+  if(d) d.textContent = now.getDate();
+}
+
 function esc(s){ return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function seedShuffle(arr, seed){
@@ -102,28 +162,66 @@ function seedShuffle(arr, seed){
  for(let k=a.length-1;k>0;k--){ x=(x*1664525+1013904223)>>>0; let j=x%(k+1); [a[k],a[j]]=[a[j],a[k]]; }
  return a;
 }
-const QUESTION_API_URL = "https://script.google.com/macros/s/AKfycbzPBuEVI9LyzsaU_Pr_l8yI9kdRS0Wog1VMlU8PR1lR7yc6IeOeZqm5jPdvgT87sgs/exec";
+async function buildDayQuestions(dayNumber){
+  if(!SUPABASE_URL || SUPABASE_URL.includes("PASTE_") || !SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes("PASTE_")){
+    throw new Error("Supabase URL और Publishable/Anon Key अभी HTML में डालनी बाकी है।");
+  }
 
-function loadDayQuestions(dayNumber, language){
-  return fetch(QUESTION_API_URL + "?day=" + encodeURIComponent(dayNumber) + "&lang=" + encodeURIComponent(language), {
-    method:"GET",
-    cache:"no-store"
-  })
-  .then(function(response){
-    if(!response.ok){
-      throw new Error("Apps Script response error: " + response.status);
+  const fields = "question_id,day,set_name,subject,question,option_a,option_b,option_c,option_d,answer,explanation";
+  const url = SUPABASE_URL.replace(/\/$/,"") +
+    "/rest/v1/" + SUPABASE_TABLE +
+    "?select=" + encodeURIComponent(fields) +
+    "&day=eq." + encodeURIComponent(dayNumber) +
+    "&set_name=eq." + encodeURIComponent(SET_NAME) +
+    "&order=question_id.asc";
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "apikey": SUPABASE_ANON_KEY,
+      "Accept": "application/json"
     }
-    return response.json();
-  })
-  .then(function(data){
-    if(!data || !data.ok){
-      throw new Error((data && data.error) || "Question API error");
-    }
-    if(!Array.isArray(data.questions) || data.questions.length===0){
-      throw new Error("इस Day के लिए प्रश्न नहीं मिले।");
-    }
-    return data.questions;
   });
+
+  if(!response.ok){
+    const text = await response.text();
+    throw new Error("Supabase से प्रश्न नहीं मिले: " + response.status + " " + text.slice(0,180));
+  }
+
+  const rows = await response.json();
+  if(!Array.isArray(rows) || rows.length===0){
+    throw new Error("Day " + dayNumber + " के SET A प्रश्न नहीं मिले।");
+  }
+
+  const langMap={Hindi:"भाषा-2: हिन्दी",English:"भाषा-2: English",Sanskrit:"भाषा-2: संस्कृत"};
+  const sections=["बाल विकास एवं शिक्षाशास्त्र","भाषा-1: हिन्दी",langMap[selectedLanguage2],"गणित","पर्यावरण अध्ययन"];
+  const out=[];
+
+  sections.forEach(section=>{
+    const pool=rows.filter(r=>String(r.subject||"")===section);
+    out.push(...pool.slice(0,10).map(r=>({
+      s:String(r.subject||""),
+      q:String(r.question||""),
+      o:[String(r.option_a||""),String(r.option_b||""),String(r.option_c||""),String(r.option_d||"")],
+      a:answerIndex(r.answer),
+      e:String(r.explanation||"")
+    })));
+  });
+
+  if(out.length===0){
+    throw new Error("Day " + dayNumber + " के लिए चुने गए subjects में प्रश्न नहीं मिले।");
+  }
+  return out;
+}
+
+function answerIndex(value){
+  const v=String(value==null?"":value).trim().toUpperCase();
+  if(v==="A" || v==="0") return 0;
+  if(v==="B" || v==="1") return 1;
+  if(v==="C" || v==="2") return 2;
+  if(v==="D" || v==="3") return 3;
+  const n=parseInt(v,10);
+  return Number.isFinite(n) && n>=0 && n<=3 ? n : 0;
 }
 
 function populateDates(){
@@ -253,17 +351,19 @@ async function startExam(){
  const sel=document.getElementById("dateSelect"), d=sel.value, idx=TEST_DATES.indexOf(d);
  if(d>todayISO())return;
  selectedLanguage2=document.getElementById("language2Select").value;
- const btn=document.getElementById("startBtn");
- const oldText=btn.textContent;
- btn.disabled=true; btn.textContent="प्रश्न लोड हो रहे हैं…";
+ const startBtn=document.getElementById("startBtn");
+ const oldText=startBtn.textContent;
+ startBtn.disabled=true;
+ startBtn.textContent="⏳ प्रश्न लोड हो रहे हैं...";
  try{
-   const loaded=await loadDayQuestions(idx+1, selectedLanguage2);
-   currentDate=d; questions=loaded; i=0; answers=Array(questions.length).fill(null);locked=Array(questions.length).fill(false);marked=Array(questions.length).fill(false);left=TEST_MINUTES*60;submitted=false;
+   questions=await buildDayQuestions(idx+1);
+   currentDate=d; i=0; answers=Array(questions.length).fill(null);locked=Array(questions.length).fill(false);marked=Array(questions.length).fill(false);left=TEST_MINUTES*60;submitted=false;
    document.getElementById("home").style.display="none";document.getElementById("exam").style.display="grid";window.scrollTo(0,0);render();startTimer();
- }catch(err){
-   alert("प्रश्न लोड नहीं हो सके।\n\n" + (err && err.message ? err.message : err));
+ }catch(error){
+   alert(error.message || "प्रश्न लोड नहीं हो पाए।");
  }finally{
-   btn.disabled=false; btn.textContent=oldText;
+   startBtn.disabled=false;
+   startBtn.textContent=oldText;
  }
 }
 function startTimer(){
@@ -283,6 +383,28 @@ document.getElementById("markBtn").onclick=markReview;
 document.getElementById("submitBtn").onclick=submitTest;
 document.getElementById("exitBtn").onclick=exitExam;
 populateDates();renderHistory();
+updateCalendarIcon();
 </script>
+
+<script>
+(function(){
+  function scrollToQuestionTop(){
+    setTimeout(function(){
+      var q = document.getElementById('questionArea');
+      if(q){
+        var y = q.getBoundingClientRect().top + window.pageYOffset - 12;
+        window.scrollTo({top: Math.max(0,y), behavior:'smooth'});
+      } else {
+        window.scrollTo({top:0, behavior:'smooth'});
+      }
+    }, 40);
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('#nextBtn');
+    if(b) scrollToQuestionTop();
+  });
+})();
+</script>
+
 </body>
 </html>
