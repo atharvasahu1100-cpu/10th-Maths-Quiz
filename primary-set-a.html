@@ -3,116 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Primary Teacher - SET A</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    padding:15px 10px;
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:#f1f5f9;
+    color:#222;
 }
 
-body {
-  margin: 0;
-  padding: 15px 10px;
-  font-family: Arial, "Noto Sans Devanagari", sans-serif;
-  background: #f1f5f9;
-  color: #222;
+.quiz{
+    width:100%;
+    max-width:700px;
+    margin:auto;
 }
 
-.quiz {
-  max-width: 700px;
-  margin: auto;
+.header{
+    background:linear-gradient(135deg,#00897b,#26a69a);
+    color:#fff;
+    padding:20px 15px;
+    border-radius:16px;
+    text-align:center;
+    margin-bottom:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
 }
 
-.header {
-  background: linear-gradient(135deg, #00897b, #26a69a);
-  color: white;
-  padding: 20px 15px;
-  border-radius: 16px;
-  text-align: center;
-  margin-bottom: 15px;
+.header h2{
+    margin:0;
+    font-size:22px;
 }
 
-.header h2 {
-  margin: 0;
-  font-size: 22px;
+.header p{
+    margin:7px 0 0;
+    font-size:13px;
 }
 
-.header p {
-  margin: 7px 0 0;
-  font-size: 13px;
+.question-box{
+    background:#fff;
+    padding:18px;
+    border-radius:16px;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
 }
 
-.question-box {
-  background: white;
-  padding: 18px;
-  border-radius: 16px;
-  box-shadow: 0 5px 15px rgba(0,0,0,.12);
+.day{
+    font-size:14px;
+    font-weight:bold;
+    color:#00897b;
+    margin-bottom:12px;
 }
 
-.day {
-  font-size: 14px;
-  font-weight: bold;
-  color: #00897b;
-  margin-bottom: 12px;
+.question{
+    font-size:18px;
+    line-height:1.6;
+    font-weight:700;
+    margin-bottom:18px;
 }
 
-.question {
-  font-size: 18px;
-  line-height: 1.6;
-  font-weight: 700;
-  margin-bottom: 18px;
+.option{
+    display:block;
+    width:100%;
+    border:1px solid #d1d5db;
+    background:#f8fafc;
+    padding:13px;
+    margin:9px 0;
+    border-radius:11px;
+    text-align:left;
+    font-size:15px;
+    cursor:pointer;
 }
 
-.option {
-  display: block;
-  width: 100%;
-  border: 1px solid #d1d5db;
-  background: #f8fafc;
-  padding: 13px;
-  margin: 9px 0;
-  border-radius: 11px;
-  text-align: left;
-  font-size: 15px;
-  cursor: pointer;
+.option.correct{
+    background:#c8e6c9;
+    border-color:#2e7d32;
 }
 
-.option.correct {
-  background: #c8e6c9;
-  border-color: #2e7d32;
+.option.wrong{
+    background:#ffcdd2;
+    border-color:#c62828;
 }
 
-.option.wrong {
-  background: #ffcdd2;
-  border-color: #c62828;
+.option:disabled{
+    cursor:default;
 }
 
-.option:disabled {
-  cursor: default;
+#message{
+    margin-top:15px;
+    font-weight:bold;
+    line-height:1.6;
 }
 
-#message {
-  margin-top: 15px;
-  font-weight: bold;
-  line-height: 1.6;
+.next-button{
+    display:none;
+    width:100%;
+    margin-top:15px;
+    padding:13px;
+    border:0;
+    border-radius:11px;
+    background:#1565c0;
+    color:#fff;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.next-button {
-  display: none;
-  width: 100%;
-  margin-top: 15px;
-  padding: 13px;
-  border: none;
-  border-radius: 11px;
-  background: #1565c0;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+.loading{
+    text-align:center;
+    padding:30px 15px;
+    font-size:16px;
 }
 
-.loading {
-  text-align: center;
-  padding: 30px;
-  font-size: 16px;
+.loading small{
+    display:block;
+    margin-top:8px;
+    color:#64748b;
 }
 </style>
 </head>
@@ -121,162 +129,197 @@ body {
 
 <div class="quiz">
 
-  <div class="header">
-    <h2>📚 प्राथमिक शिक्षक — SET A</h2>
-    <p>90 Days Practice Quiz</p>
-  </div>
+    <div class="header">
+        <h2>📚 प्राथमिक शिक्षक — SET A</h2>
+        <p>90 Days Practice Quiz</p>
+    </div>
 
-  <div id="quizArea" class="question-box">
-    <div class="loading">⏳ प्रश्न लोड हो रहे हैं...</div>
-  </div>
+    <div id="quizArea" class="question-box">
+
+        <div class="loading">
+            ⏳ Day 1 की तैयारी हो रही है...
+            <small>प्रश्न थोड़ी देर में दिखाई देंगे।</small>
+        </div>
+
+    </div>
 
 </div>
 
 <script>
 
-var API_URL = "https://script.google.com/macros/s/AKfycbzPBuEVI9LyzsaU_Pr_l8yI9kdRS0Wog1VMlU8PR1lR7yc6IeOeZqm5jPdvgT87sgs/exec";
+var API_URL =
+"https://script.google.com/macros/s/AKfycbzPBuEVI9LyzsaU_Pr_l8yI9kdRS0Wog1VMlU8PR1lR7yc6IeOeZqm5jPdvgT87sgs/exec";
 
 var questions = [];
 var currentQuestion = 0;
 
-function loadQuestions() {
+/* Questions को केवल एक बार load करें */
+function loadQuestions(){
 
-  fetch(API_URL + "?day=1")
-    .then(function(response) {
-      if (!response.ok) {
-        throw new Error("Server response error: " + response.status);
-      }
-      return response.json();
+    var url = API_URL + "?day=1";
+
+    fetch(url, {
+        method:"GET",
+        cache:"no-store"
     })
-    .then(function(data) {
+    .then(function(response){
 
-      if (!data.ok) {
-        throw new Error(data.error || "Questions load nahi hue.");
-      }
+        if(!response.ok){
+            throw new Error("Server response error: " + response.status);
+        }
 
-      questions = data.questions || [];
+        return response.json();
+    })
+    .then(function(data){
 
-      if (questions.length === 0) {
+        if(!data.ok){
+            throw new Error(data.error || "Questions load नहीं हुए");
+        }
+
+        questions = data.questions || [];
+
+        if(questions.length === 0){
+
+            document.getElementById("quizArea").innerHTML =
+            "<div class='loading'>" +
+            "❌ Day 1 के प्रश्न नहीं मिले।" +
+            "</div>";
+
+            return;
+        }
+
+        currentQuestion = 0;
+
+        showQuestion();
+
+    })
+    .catch(function(error){
+
         document.getElementById("quizArea").innerHTML =
-          "<div class='loading'>❌ Day 1 ke questions nahi mile.</div>";
-        return;
-      }
-
-      showQuestion();
-
-    })
-    .catch(function(error) {
-
-      document.getElementById("quizArea").innerHTML =
         "<div class='loading'>" +
-        "❌ प्रश्न लोड नहीं हो सके।<br><br>" +
+        "❌ प्रश्न लोड नहीं हो सके।" +
+        "<small>" +
         error.message +
-        "<br><br>" +
-        "कृपया internet connection check करें।" +
+        "</small>" +
         "</div>";
 
     });
 }
 
-function showQuestion() {
 
-  var q = questions[currentQuestion];
+/* Question दिखाएँ */
+function showQuestion(){
 
-  var html = "";
+    var q = questions[currentQuestion];
 
-  html += "<div class='day'>";
-  html += "📅 Day " + q.day;
-  html += " &nbsp; | &nbsp; प्रश्न ";
-  html += (currentQuestion + 1) + " / " + questions.length;
-  html += "</div>";
+    var html = "";
 
-  html += "<div class='question'>";
-  html += q.q;
-  html += "</div>";
+    html += "<div class='day'>";
+    html += "📅 Day " + q.day;
+    html += " &nbsp; | &nbsp; प्रश्न ";
+    html += (currentQuestion + 1);
+    html += " / ";
+    html += questions.length;
+    html += "</div>";
 
-  for (var i = 0; i < q.o.length; i++) {
+    html += "<div class='question'>";
+    html += q.q;
+    html += "</div>";
 
-    html += "<button class='option' ";
-    html += "onclick='checkAnswer(" + i + ", this)'>";
-    html += q.o[i];
-    html += "</button>";
+    for(var i=0;i<q.o.length;i++){
 
-  }
+        html += "<button ";
+        html += "class='option' ";
+        html += "onclick='checkAnswer(" + i + ",this)'>";
+        html += q.o[i];
+        html += "</button>";
 
-  html += "<div id='message'></div>";
-
-  html += "<button id='nextBtn' class='next-button' ";
-  html += "onclick='nextQuestion()'>";
-  html += "अगला प्रश्न ➜";
-  html += "</button>";
-
-  document.getElementById("quizArea").innerHTML = html;
-}
-
-function checkAnswer(selected, button) {
-
-  var q = questions[currentQuestion];
-
-  var options = document.querySelectorAll(".option");
-
-  for (var i = 0; i < options.length; i++) {
-
-    options[i].disabled = true;
-
-    if (i === q.a) {
-      options[i].classList.add("correct");
     }
 
-  }
+    html += "<div id='message'></div>";
 
-  if (selected === q.a) {
+    html += "<button ";
+    html += "id='nextBtn' ";
+    html += "class='next-button' ";
+    html += "onclick='nextQuestion()'>";
+    html += "अगला प्रश्न ➜";
+    html += "</button>";
 
-    document.getElementById("message").innerHTML =
-      "✅ सही उत्तर!";
-
-  } else {
-
-    button.classList.add("wrong");
-
-    document.getElementById("message").innerHTML =
-      "❌ गलत उत्तर। सही उत्तर हरे रंग में है।";
-
-  }
-
-  if (q.e && q.e.trim() !== "") {
-
-    document.getElementById("message").innerHTML +=
-      "<br><br>💡 <b>व्याख्या:</b> " + q.e;
-
-  }
-
-  document.getElementById("nextBtn").style.display = "block";
+    document.getElementById("quizArea").innerHTML = html;
 }
 
-function nextQuestion() {
 
-  currentQuestion++;
+/* Answer check */
+function checkAnswer(selected,button){
 
-  if (currentQuestion >= questions.length) {
+    var q = questions[currentQuestion];
 
-    document.getElementById("quizArea").innerHTML =
-      "<div class='loading'>" +
-      "🎉 Day 1 पूरा हो गया!<br><br>" +
-      "आपने " + questions.length + " प्रश्न पूरे कर लिए।" +
-      "<br><br>" +
-      "<button class='next-button' " +
-      "style='display:block' " +
-      "onclick='location.reload()'>" +
-      "फिर से शुरू करें" +
-      "</button>" +
-      "</div>";
+    var options =
+    document.querySelectorAll(".option");
 
-    return;
-  }
+    for(var i=0;i<options.length;i++){
 
-  showQuestion();
+        options[i].disabled = true;
+
+        if(i === q.a){
+            options[i].classList.add("correct");
+        }
+    }
+
+    if(selected === q.a){
+
+        document.getElementById("message").innerHTML =
+        "✅ सही उत्तर!";
+
+    }else{
+
+        button.classList.add("wrong");
+
+        document.getElementById("message").innerHTML =
+        "❌ गलत उत्तर। सही उत्तर हरे रंग में है।";
+    }
+
+    if(q.e && q.e.trim() !== ""){
+
+        document.getElementById("message").innerHTML +=
+        "<br><br>💡 <b>व्याख्या:</b> " + q.e;
+    }
+
+    document.getElementById("nextBtn").style.display =
+    "block";
 }
 
+
+/* अगला प्रश्न */
+function nextQuestion(){
+
+    currentQuestion++;
+
+    if(currentQuestion >= questions.length){
+
+        document.getElementById("quizArea").innerHTML =
+        "<div class='loading'>" +
+        "🎉 Day 1 पूरा हो गया!" +
+        "<br><br>" +
+        "आपने " + questions.length +
+        " प्रश्न पूरे कर लिए।" +
+        "<br><br>" +
+        "<button " +
+        "class='next-button' " +
+        "style='display:block' " +
+        "onclick='location.reload()'>" +
+        "फिर से शुरू करें" +
+        "</button>" +
+        "</div>";
+
+        return;
+    }
+
+    showQuestion();
+}
+
+
+/* Page खुलते ही questions load */
 loadQuestions();
 
 </script>
