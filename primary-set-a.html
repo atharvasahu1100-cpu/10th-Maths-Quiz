@@ -1,328 +1,288 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Primary Teacher - SET A</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>प्राथमिक शिक्षक 2026 — SET A CBT अभ्यास</title>
 <style>
-*{box-sizing:border-box}
-
-body{
-    margin:0;
-    padding:15px 10px;
-    font-family:Arial,"Noto Sans Devanagari",sans-serif;
-    background:#f1f5f9;
-    color:#222;
-}
-
-.quiz{
-    width:100%;
-    max-width:700px;
-    margin:auto;
-}
-
-.header{
-    background:linear-gradient(135deg,#00897b,#26a69a);
-    color:#fff;
-    padding:20px 15px;
-    border-radius:16px;
-    text-align:center;
-    margin-bottom:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);
-}
-
-.header h2{
-    margin:0;
-    font-size:22px;
-}
-
-.header p{
-    margin:7px 0 0;
-    font-size:13px;
-}
-
-.question-box{
-    background:#fff;
-    padding:18px;
-    border-radius:16px;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);
-}
-
-.day{
-    font-size:14px;
-    font-weight:bold;
-    color:#00897b;
-    margin-bottom:12px;
-}
-
-.question{
-    font-size:18px;
-    line-height:1.6;
-    font-weight:700;
-    margin-bottom:18px;
-}
-
-.option{
-    display:block;
-    width:100%;
-    border:1px solid #d1d5db;
-    background:#f8fafc;
-    padding:13px;
-    margin:9px 0;
-    border-radius:11px;
-    text-align:left;
-    font-size:15px;
-    cursor:pointer;
-}
-
-.option.correct{
-    background:#c8e6c9;
-    border-color:#2e7d32;
-}
-
-.option.wrong{
-    background:#ffcdd2;
-    border-color:#c62828;
-}
-
-.option:disabled{
-    cursor:default;
-}
-
-#message{
-    margin-top:15px;
-    font-weight:bold;
-    line-height:1.6;
-}
-
-.next-button{
-    display:none;
-    width:100%;
-    margin-top:15px;
-    padding:13px;
-    border:0;
-    border-radius:11px;
-    background:#1565c0;
-    color:#fff;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.loading{
-    text-align:center;
-    padding:30px 15px;
-    font-size:16px;
-}
-
-.loading small{
-    display:block;
-    margin-top:8px;
-    color:#64748b;
-}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Devanagari",sans-serif;background:#eef3f8;color:#17212b}
+header{background:#0b4f9c;color:#fff;padding:12px 14px;position:sticky;top:0;z-index:10}
+.head{max-width:1150px;margin:auto;display:flex;justify-content:space-between;gap:10px;align-items:center}
+h1{font-size:18px;margin:0} .timer{background:#fff;color:#0b4f9c;padding:8px 12px;border-radius:10px;font-weight:900;min-width:88px;text-align:center}
+.home{max-width:1150px;margin:14px auto;padding:0 12px} .card{background:#fff;border-radius:15px;padding:17px;box-shadow:0 4px 18px #0001}
+.selector{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end} label{font-weight:800;font-size:13px;display:block;margin-bottom:6px}
+select{width:100%;padding:12px;border:1px solid #cfd9e3;border-radius:10px;font-size:15px;background:#fff}
+button{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:pointer} button:disabled{opacity:.5;cursor:not-allowed}
+.primary{background:#0b4f9c;color:#fff} .secondary{background:#e8eef5;color:#17324d}
+.history{margin-top:15px} table{width:100%;border-collapse:collapse;font-size:13px} th,td{padding:9px;border-bottom:1px solid #e8edf2;text-align:left}
+.badge{display:inline-block;background:#e8f1ff;color:#0b4f9c;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800}
+.exam{display:none;max-width:1150px;margin:14px auto;padding:0 12px;grid-template-columns:1fr 280px;gap:14px}
+.q{font-size:18px;font-weight:800;line-height:1.55;margin:15px 0}
+.opt{display:flex;gap:9px;align-items:flex-start;border:2px solid #d8e0e8;border-radius:10px;padding:12px;margin:9px 0;cursor:pointer;background:#fff}
+.opt.locked{cursor:default} .opt.correct{border-color:#21a366;background:#e8f7ee;color:#12643e} .opt.wrong{border-color:#e05252;background:#fdeaea;color:#8c1d1d}
+.opt input{margin-top:4px} .feedback{display:none;margin-top:10px;padding:11px;border-radius:10px;background:#f3f7fb;font-size:13px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px}
+.pbtn{padding:8px 0;background:#edf1f5;color:#222} .pbtn.answered{background:#35a853;color:#fff} .pbtn.current{outline:3px solid #ffb300} .pbtn.marked{box-shadow:inset 0 0 0 3px #8a4baf}
+.legend div{font-size:12px;margin:7px 0} .dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;background:#edf1f5} .dot.a{background:#35a853}
+.result{display:none;position:fixed;inset:0;background:#0008;z-index:30;align-items:center;justify-content:center;padding:15px}
+.resultbox{background:#fff;border-radius:16px;max-width:560px;width:100%;padding:22px;max-height:90vh;overflow:auto}
+.score{font-size:34px;font-weight:900;color:#0b4f9c} .history button{padding:6px 9px;font-size:12px}
+.notice{margin-top:10px;padding:10px;border-radius:10px;background:#fff8df;color:#735600;font-size:12px}
+@media(max-width:800px){.selector{grid-template-columns:1fr}.exam{grid-template-columns:1fr}.q{font-size:16px}.palette{grid-template-columns:repeat(8,1fr)}}
 </style>
 </head>
-
 <body>
+<header><div class="head"><h1>प्राथमिक शिक्षक पात्रता परीक्षा 2026 — 90 दिन CBT अभ्यास</h1><div class="timer" id="timer">00:50:00</div></div></header>
 
-<div class="quiz">
-
-    <div class="header">
-        <h2>📚 प्राथमिक शिक्षक — SET A</h2>
-        <p>90 Days Practice Quiz</p>
-    </div>
-
-    <div id="quizArea" class="question-box">
-
-        <div class="loading">
-            ⏳ Day 1 की तैयारी हो रही है...
-            <small>प्रश्न थोड़ी देर में दिखाई देंगे।</small>
-        </div>
-
-    </div>
-
+<section class="home" id="home">
+<div class="card">
+<h2 style="margin-top:0">📅 दिनवार परीक्षा चुनें</h2>
+<p style="margin-top:0"><small>आज की तारीख: <b>21-08-2026</b>। तारीख आने पर वह टेस्ट अपने-आप उपलब्ध होगा। भविष्य की तारीखें अभी लॉक रहेंगी।</small></p>
+<div class="selector">
+<div><label for="dateSelect">SET A टेस्ट की तारीख</label><select id="dateSelect"></select></div>
+<div><label for="language2Select">भाषा-2 चुनें</label><select id="language2Select">
+<option value="Hindi">हिन्दी</option>
+<option value="English">English</option>
+<option value="Sanskrit">संस्कृत</option>
+</select></div>
+<button class="primary" id="startBtn">टेस्ट शुरू करें</button>
 </div>
+<div class="notice">यह SET A का 90-दिन का अभ्यास है: 50 प्रश्न (5 भाग × 10) हैं। प्रश्नों को आधिकारिक syllabus के आधार पर रखा गया है। भाषा-2 में हिन्दी, English और संस्कृत में से एक भाषा चुनकर उसी भाषा के 10 प्रश्न दिए जाएंगे।</div>
+<div class="history">
+<h3>📊 मेरे पिछले प्रयास</h3>
+<div id="historyBox"><small>अभी कोई attempt saved नहीं है।</small></div>
+</div>
+</div>
+</section>
+
+<section class="exam" id="exam">
+<main class="card">
+<div><span class="badge" id="section"></span> <small id="counter"></small></div>
+<div class="q" id="question"></div>
+<div id="options"></div>
+<div class="feedback" id="feedback"></div>
+<div class="actions">
+<button class="secondary" id="prevBtn">← पिछला</button>
+<button class="secondary" id="clearBtn" disabled>उत्तर साफ करें</button>
+<button class="secondary" id="markBtn">मार्क फॉर रिव्यू</button>
+<button class="primary" id="nextBtn">अगला →</button>
+<button class="primary" id="submitBtn">टेस्ट जमा करें</button>
+</div>
+<p><small>Practice mode में उत्तर चुनते ही वह lock हो जाएगा। सही उत्तर हरा और गलत उत्तर लाल दिखाई देगा तथा अलग-अलग sound feedback मिलेगा। इस 50-प्रश्न अभ्यास test के लिए समय 50 मिनट है।</small></p>
+</main>
+<aside class="card">
+<strong>प्रश्न सूची</strong>
+<div class="palette" id="palette"></div>
+<hr>
+<div class="legend"><div><span class="dot a"></span>उत्तर दिया</div><div><span class="dot"></span>उत्तर नहीं दिया</div></div>
+<button class="secondary" id="exitBtn" style="margin-top:12px;width:100%">← दिन सूची पर वापस</button>
+</aside>
+</section>
+
+<div class="result" id="result"><div class="resultbox">
+<h2>परीक्षा परिणाम</h2><div class="score" id="score"></div>
+<p id="details"></p><div id="resultActions"></div>
+</div></div>
 
 <script>
+const QUESTION_BANK = [];
+const TEST_DATES = ["2026-08-21", "2026-08-22", "2026-08-23", "2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28", "2026-08-29", "2026-08-30", "2026-08-31", "2026-09-01", "2026-09-02", "2026-09-03", "2026-09-04", "2026-09-05", "2026-09-06", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-12", "2026-09-13", "2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18", "2026-09-19", "2026-09-20", "2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24", "2026-09-25", "2026-09-26", "2026-09-27", "2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15", "2026-11-16", "2026-11-17", "2026-11-18"];
+const SECTION_ORDER = ["बाल विकास एवं शिक्षाशास्त्र","भाषा-1: हिन्दी","भाषा-2","गणित","पर्यावरण अध्ययन"];
+const TEST_MINUTES = 50;
+let questions=[], i=0, answers=[], locked=[], marked=[], left=TEST_MINUTES*60, submitted=false, currentDate="", selectedLanguage2="Hindi";
+let timerId=null;
 
-var API_URL =
-"https://script.google.com/macros/s/AKfycbzPBuEVI9LyzsaU_Pr_l8yI9kdRS0Wog1VMlU8PR1lR7yc6IeOeZqm5jPdvgT87sgs/exec";
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function fmtDate(s){ const [y,m,d]=s.split("-"); return `${d}-${m}-${y}`; }
+function esc(s){ return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-var questions = [];
-var currentQuestion = 0;
+function seedShuffle(arr, seed){
+ let a=[...arr], x=seed||1;
+ for(let k=a.length-1;k>0;k--){ x=(x*1664525+1013904223)>>>0; let j=x%(k+1); [a[k],a[j]]=[a[j],a[k]]; }
+ return a;
+}
+const QUESTION_API_URL = "https://script.google.com/macros/s/AKfycbzPBuEVI9LyzsaU_Pr_l8yI9kdRS0Wog1VMlU8PR1lR7yc6IeOeZqm5jPdvgT87sgs/exec";
 
-/* Questions को केवल एक बार load करें */
-function loadQuestions(){
-
-    var url = API_URL + "?day=1";
-
-    fetch(url, {
-        method:"GET",
-        cache:"no-store"
-    })
-    .then(function(response){
-
-        if(!response.ok){
-            throw new Error("Server response error: " + response.status);
-        }
-
-        return response.json();
-    })
-    .then(function(data){
-
-        if(!data.ok){
-            throw new Error(data.error || "Questions load नहीं हुए");
-        }
-
-        questions = data.questions || [];
-
-        if(questions.length === 0){
-
-            document.getElementById("quizArea").innerHTML =
-            "<div class='loading'>" +
-            "❌ Day 1 के प्रश्न नहीं मिले।" +
-            "</div>";
-
-            return;
-        }
-
-        currentQuestion = 0;
-
-        showQuestion();
-
-    })
-    .catch(function(error){
-
-        document.getElementById("quizArea").innerHTML =
-        "<div class='loading'>" +
-        "❌ प्रश्न लोड नहीं हो सके।" +
-        "<small>" +
-        error.message +
-        "</small>" +
-        "</div>";
-
-    });
+function loadDayQuestions(dayNumber, language){
+  return fetch(QUESTION_API_URL + "?day=" + encodeURIComponent(dayNumber) + "&lang=" + encodeURIComponent(language), {
+    method:"GET",
+    cache:"no-store"
+  })
+  .then(function(response){
+    if(!response.ok){
+      throw new Error("Apps Script response error: " + response.status);
+    }
+    return response.json();
+  })
+  .then(function(data){
+    if(!data || !data.ok){
+      throw new Error((data && data.error) || "Question API error");
+    }
+    if(!Array.isArray(data.questions) || data.questions.length===0){
+      throw new Error("इस Day के लिए प्रश्न नहीं मिले।");
+    }
+    return data.questions;
+  });
 }
 
-
-/* Question दिखाएँ */
-function showQuestion(){
-
-    var q = questions[currentQuestion];
-
-    var html = "";
-
-    html += "<div class='day'>";
-    html += "📅 Day " + q.day;
-    html += " &nbsp; | &nbsp; प्रश्न ";
-    html += (currentQuestion + 1);
-    html += " / ";
-    html += questions.length;
-    html += "</div>";
-
-    html += "<div class='question'>";
-    html += q.q;
-    html += "</div>";
-
-    for(var i=0;i<q.o.length;i++){
-
-        html += "<button ";
-        html += "class='option' ";
-        html += "onclick='checkAnswer(" + i + ",this)'>";
-        html += q.o[i];
-        html += "</button>";
-
-    }
-
-    html += "<div id='message'></div>";
-
-    html += "<button ";
-    html += "id='nextBtn' ";
-    html += "class='next-button' ";
-    html += "onclick='nextQuestion()'>";
-    html += "अगला प्रश्न ➜";
-    html += "</button>";
-
-    document.getElementById("quizArea").innerHTML = html;
+function populateDates(){
+ const sel=document.getElementById("dateSelect"), t=todayISO();
+ sel.innerHTML="";
+ TEST_DATES.forEach((d,idx)=>{
+   const opt=document.createElement("option");
+   opt.value=d;
+   const available=d<=t;
+   opt.disabled=!available;
+   opt.textContent=`Day ${idx+1} — ${fmtDate(d)} ${available?"— उपलब्ध":"— 🔒 अभी बंद"}`;
+   sel.appendChild(opt);
+ });
+ const first=TEST_DATES.find(d=>d<=t); if(first) sel.value=first;
+}
+function getHistory(){
+ try{return JSON.parse(localStorage.getItem("primaryTeacher90History")||"[]")}catch(e){return[]}
+}
+function saveHistory(rec){
+ const h=getHistory(); h.push(rec); localStorage.setItem("primaryTeacher90History",JSON.stringify(h));
+}
+function renderHistory(){
+ const h=getHistory().sort((a,b)=>new Date(b.at)-new Date(a.at));
+ const box=document.getElementById("historyBox");
+ if(!h.length){box.innerHTML="<small>अभी कोई attempt saved नहीं है।</small>";return;}
+ box.innerHTML="<table><thead><tr><th>तारीख</th><th>भाषा-2</th><th>प्रयास</th><th>स्कोर</th><th>समय</th><th></th></tr></thead><tbody>"+
+ h.map((r,n)=>`<tr><td>${fmtDate(r.testDate)}</td><td>${r.language2||"Hindi"}</td><td>${r.attemptNo}</td><td><b>${r.score}/${r.total}</b></td><td>${new Date(r.at).toLocaleString("hi-IN")}</td><td><button class="secondary" onclick="viewHistory(${
+ h.length-1-n
+ })">देखें</button></td></tr>`).join("")+"</tbody></table>";
+}
+function viewHistory(index){
+ const h=getHistory().sort((a,b)=>new Date(b.at)-new Date(a.at)); const r=h[index];
+ document.getElementById("score").textContent=`${r.score} / ${r.total}`;
+ document.getElementById("details").innerHTML=`परीक्षा दिन: <b>${fmtDate(r.testDate)}</b><br>भाषा-2: <b>${r.language2||"Hindi"}</b><br>प्रयास संख्या: <b>${r.attemptNo}</b><br>सही: <b>${r.correct}</b> | गलत: <b>${r.wrong}</b> | छोड़े: <b>${r.unanswered}</b><hr><small>यह saved result है। चाहें तो इसी तारीख का test फिर से दे सकते हैं।</small>`;
+ document.getElementById("resultActions").innerHTML='<button class="primary" onclick="closeResult()">बंद करें</button>';
+ document.getElementById("result").style.display="flex";
 }
 
-
-/* Answer check */
-function checkAnswer(selected,button){
-
-    var q = questions[currentQuestion];
-
-    var options =
-    document.querySelectorAll(".option");
-
-    for(var i=0;i<options.length;i++){
-
-        options[i].disabled = true;
-
-        if(i === q.a){
-            options[i].classList.add("correct");
-        }
-    }
-
-    if(selected === q.a){
-
-        document.getElementById("message").innerHTML =
-        "✅ सही उत्तर!";
-
+let soundCtx=null;
+function getSoundContext(){
+  try{
+    const C=window.AudioContext||window.webkitAudioContext;
+    if(!C)return null;
+    if(!soundCtx) soundCtx=new C();
+    if(soundCtx.state==="suspended") soundCtx.resume().catch(()=>{});
+    return soundCtx;
+  }catch(e){return null;}
+}
+function unlockSound(){
+  const ctx=getSoundContext();
+  if(ctx && ctx.state==="suspended") ctx.resume().catch(()=>{});
+}
+["pointerdown","touchstart","click","keydown"].forEach(ev=>{
+  document.addEventListener(ev,unlockSound,{passive:true});
+});
+function playSound(correct){
+  try{
+    const ctx=getSoundContext();
+    if(!ctx)return;
+    const now=ctx.currentTime+0.01;
+    if(correct){
+      [523.25,659.25,783.99].forEach((f,k)=>{
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.type="sine"; o.frequency.setValueAtTime(f,now+k*.09);
+        o.connect(g); g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.0001,now+k*.09);
+        g.gain.linearRampToValueAtTime(.18,now+k*.09+.025);
+        g.gain.exponentialRampToValueAtTime(.0001,now+k*.09+.20);
+        o.start(now+k*.09); o.stop(now+k*.09+.22);
+      });
     }else{
-
-        button.classList.add("wrong");
-
-        document.getElementById("message").innerHTML =
-        "❌ गलत उत्तर। सही उत्तर हरे रंग में है।";
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type="square"; o.frequency.setValueAtTime(180,now);
+      o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(.0001,now);
+      g.gain.linearRampToValueAtTime(.20,now+.02);
+      g.gain.exponentialRampToValueAtTime(.0001,now+.28);
+      o.start(now); o.stop(now+.30);
     }
-
-    if(q.e && q.e.trim() !== ""){
-
-        document.getElementById("message").innerHTML +=
-        "<br><br>💡 <b>व्याख्या:</b> " + q.e;
-    }
-
-    document.getElementById("nextBtn").style.display =
-    "block";
+  }catch(e){}
 }
 
-
-/* अगला प्रश्न */
-function nextQuestion(){
-
-    currentQuestion++;
-
-    if(currentQuestion >= questions.length){
-
-        document.getElementById("quizArea").innerHTML =
-        "<div class='loading'>" +
-        "🎉 Day 1 पूरा हो गया!" +
-        "<br><br>" +
-        "आपने " + questions.length +
-        " प्रश्न पूरे कर लिए।" +
-        "<br><br>" +
-        "<button " +
-        "class='next-button' " +
-        "style='display:block' " +
-        "onclick='location.reload()'>" +
-        "फिर से शुरू करें" +
-        "</button>" +
-        "</div>";
-
-        return;
-    }
-
-    showQuestion();
+function render(){
+ const q=questions[i];
+ document.getElementById("section").textContent=q.s;
+ document.getElementById("counter").textContent=`प्रश्न ${i+1} / ${questions.length}`;
+ document.getElementById("question").textContent=q.q;
+ const isLocked=locked[i];
+ const opts=document.getElementById("options");
+ opts.innerHTML=q.o.map((x,n)=>{
+   let cls="opt"+(isLocked?(n===q.a?" correct":(answers[i]===n?" wrong":"")):"");
+   return `<label class="${cls}"><input type="radio" name="ans" value="${n}" ${answers[i]===n?"checked":""} ${isLocked?"disabled":""} onchange="chooseAnswer(${n})"> ${String.fromCharCode(65+n)}. ${esc(x)}</label>`;
+ }).join("");
+ const fb=document.getElementById("feedback");
+ if(isLocked){
+   fb.style.display="block";
+   fb.innerHTML=answers[i]===q.a ? `✅ <b>सही उत्तर!</b> ${esc(q.e)}` : `❌ <b>गलत उत्तर।</b> सही उत्तर: <b>${String.fromCharCode(65+q.a)}. ${esc(q.o[q.a])}</b><br>${esc(q.e)}`;
+ }else{fb.style.display="none";fb.innerHTML="";}
+ document.getElementById("clearBtn").disabled=isLocked;
+ document.querySelectorAll(".pbtn").forEach((b,n)=>{b.classList.toggle("current",n===i);b.classList.toggle("answered",locked[n]);b.classList.toggle("marked",marked[n]&&!locked[n]);});
 }
+function chooseAnswer(n){
+ if(locked[i])return;
+ answers[i]=n; locked[i]=true;
+ playSound(n===questions[i].a);
+ render();
+}
+function next(){if(i<questions.length-1){i++;render()}else submitTest()}
+function prev(){if(i>0){i--;render()}}
+function clearAns(){/* locked answers are intentionally immutable in practice mode */}
+function markReview(){marked[i]=!marked[i];render()}
+function jump(n){i=n;render()}
+function submitTest(){
+ if(submitted)return; submitted=true; clearInterval(timerId);
+ let correct=0,wrong=0,unanswered=0;
+ answers.forEach((a,n)=>{if(a===null)unanswered++; else if(a===questions[n].a)correct++; else wrong++;});
+ const attemptNo=getHistory().filter(x=>x.testDate===currentDate).length+1;
+ saveHistory({testDate:currentDate,language2:selectedLanguage2,attemptNo,score:correct,total:questions.length,correct,wrong,unanswered,at:new Date().toISOString()});
+ document.getElementById("score").textContent=`${correct} / ${questions.length}`;
+ document.getElementById("details").innerHTML=`सही: <b>${correct}</b><br>गलत: <b>${wrong}</b><br>छोड़े: <b>${unanswered}</b><br><br><small>इस attempt का record date-wise सुरक्षित कर दिया गया है। अगली बार नया attempt अलग record के रूप में जुड़ेगा।</small>`;
+ document.getElementById("resultActions").innerHTML='<button class="primary" onclick="closeResult()">दिन सूची पर जाएँ</button>';
+ document.getElementById("result").style.display="flex";
+ renderHistory();
+}
+function closeResult(){document.getElementById("result").style.display="none";exitExam();}
+async function startExam(){
+ const sel=document.getElementById("dateSelect"), d=sel.value, idx=TEST_DATES.indexOf(d);
+ if(d>todayISO())return;
+ selectedLanguage2=document.getElementById("language2Select").value;
+ const btn=document.getElementById("startBtn");
+ const oldText=btn.textContent;
+ btn.disabled=true; btn.textContent="प्रश्न लोड हो रहे हैं…";
+ try{
+   const loaded=await loadDayQuestions(idx+1, selectedLanguage2);
+   currentDate=d; questions=loaded; i=0; answers=Array(questions.length).fill(null);locked=Array(questions.length).fill(false);marked=Array(questions.length).fill(false);left=TEST_MINUTES*60;submitted=false;
+   document.getElementById("home").style.display="none";document.getElementById("exam").style.display="grid";window.scrollTo(0,0);render();startTimer();
+ }catch(err){
+   alert("प्रश्न लोड नहीं हो सके।\n\n" + (err && err.message ? err.message : err));
+ }finally{
+   btn.disabled=false; btn.textContent=oldText;
+ }
+}
+function startTimer(){
+ clearInterval(timerId);
+ timerId=setInterval(()=>{if(submitted)return;left--;if(left<=0){left=0;submitTest()}updateTimer()},1000);updateTimer();
+}
+function updateTimer(){let h=Math.floor(left/3600),m=Math.floor((left%3600)/60),s=left%60;document.getElementById("timer").textContent=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;}
+function exitExam(){clearInterval(timerId);document.getElementById("exam").style.display="none";document.getElementById("home").style.display="block";updateTimer();renderHistory();}
 
-
-/* Page खुलते ही questions load */
-loadQuestions();
-
+const pal=document.getElementById("palette");
+for(let n=0;n<50;n++){const b=document.createElement("button");b.className="pbtn";b.textContent=n+1;b.onclick=()=>jump(n);pal.appendChild(b);}
+document.getElementById("startBtn").onclick=startExam;
+document.getElementById("nextBtn").onclick=next;
+document.getElementById("prevBtn").onclick=prev;
+document.getElementById("clearBtn").onclick=clearAns;
+document.getElementById("markBtn").onclick=markReview;
+document.getElementById("submitBtn").onclick=submitTest;
+document.getElementById("exitBtn").onclick=exitExam;
+populateDates();renderHistory();
 </script>
-
 </body>
 </html>
