@@ -53,7 +53,7 @@ body {
   font-size: 14px;
   font-weight: bold;
   color: #00897b;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .question {
@@ -76,10 +76,6 @@ body {
   cursor: pointer;
 }
 
-.option:hover {
-  background: #e0f2f1;
-}
-
 .option.correct {
   background: #c8e6c9;
   border-color: #2e7d32;
@@ -90,13 +86,17 @@ body {
   border-color: #c62828;
 }
 
+.option:disabled {
+  cursor: default;
+}
+
 #message {
   margin-top: 15px;
   font-weight: bold;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-#nextBtn {
+.next-button {
   display: none;
   width: 100%;
   margin-top: 15px;
@@ -107,7 +107,6 @@ body {
   color: white;
   font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
 }
 
 .loading {
@@ -144,19 +143,22 @@ function loadQuestions() {
 
   fetch(API_URL + "?day=1")
     .then(function(response) {
+      if (!response.ok) {
+        throw new Error("Server response error: " + response.status);
+      }
       return response.json();
     })
     .then(function(data) {
 
       if (!data.ok) {
-        throw new Error(data.error || "Questions load नहीं हुए");
+        throw new Error(data.error || "Questions load nahi hue.");
       }
 
       questions = data.questions || [];
 
       if (questions.length === 0) {
         document.getElementById("quizArea").innerHTML =
-          "<div class='loading'>❌ Day 1 के प्रश्न नहीं मिले।</div>";
+          "<div class='loading'>❌ Day 1 ke questions nahi mile.</div>";
         return;
       }
 
@@ -165,4 +167,119 @@ function loadQuestions() {
     })
     .catch(function(error) {
 
-     
+      document.getElementById("quizArea").innerHTML =
+        "<div class='loading'>" +
+        "❌ प्रश्न लोड नहीं हो सके।<br><br>" +
+        error.message +
+        "<br><br>" +
+        "कृपया internet connection check करें।" +
+        "</div>";
+
+    });
+}
+
+function showQuestion() {
+
+  var q = questions[currentQuestion];
+
+  var html = "";
+
+  html += "<div class='day'>";
+  html += "📅 Day " + q.day;
+  html += " &nbsp; | &nbsp; प्रश्न ";
+  html += (currentQuestion + 1) + " / " + questions.length;
+  html += "</div>";
+
+  html += "<div class='question'>";
+  html += q.q;
+  html += "</div>";
+
+  for (var i = 0; i < q.o.length; i++) {
+
+    html += "<button class='option' ";
+    html += "onclick='checkAnswer(" + i + ", this)'>";
+    html += q.o[i];
+    html += "</button>";
+
+  }
+
+  html += "<div id='message'></div>";
+
+  html += "<button id='nextBtn' class='next-button' ";
+  html += "onclick='nextQuestion()'>";
+  html += "अगला प्रश्न ➜";
+  html += "</button>";
+
+  document.getElementById("quizArea").innerHTML = html;
+}
+
+function checkAnswer(selected, button) {
+
+  var q = questions[currentQuestion];
+
+  var options = document.querySelectorAll(".option");
+
+  for (var i = 0; i < options.length; i++) {
+
+    options[i].disabled = true;
+
+    if (i === q.a) {
+      options[i].classList.add("correct");
+    }
+
+  }
+
+  if (selected === q.a) {
+
+    document.getElementById("message").innerHTML =
+      "✅ सही उत्तर!";
+
+  } else {
+
+    button.classList.add("wrong");
+
+    document.getElementById("message").innerHTML =
+      "❌ गलत उत्तर। सही उत्तर हरे रंग में है।";
+
+  }
+
+  if (q.e && q.e.trim() !== "") {
+
+    document.getElementById("message").innerHTML +=
+      "<br><br>💡 <b>व्याख्या:</b> " + q.e;
+
+  }
+
+  document.getElementById("nextBtn").style.display = "block";
+}
+
+function nextQuestion() {
+
+  currentQuestion++;
+
+  if (currentQuestion >= questions.length) {
+
+    document.getElementById("quizArea").innerHTML =
+      "<div class='loading'>" +
+      "🎉 Day 1 पूरा हो गया!<br><br>" +
+      "आपने " + questions.length + " प्रश्न पूरे कर लिए।" +
+      "<br><br>" +
+      "<button class='next-button' " +
+      "style='display:block' " +
+      "onclick='location.reload()'>" +
+      "फिर से शुरू करें" +
+      "</button>" +
+      "</div>";
+
+    return;
+  }
+
+  showQuestion();
+}
+
+loadQuestions();
+
+</script>
+
+</body>
+</html>
