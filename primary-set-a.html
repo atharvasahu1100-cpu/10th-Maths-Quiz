@@ -1,1 +1,168 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Primary Teacher - SET A</title>
 
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 15px 10px;
+  font-family: Arial, "Noto Sans Devanagari", sans-serif;
+  background: #f1f5f9;
+  color: #222;
+}
+
+.quiz {
+  max-width: 700px;
+  margin: auto;
+}
+
+.header {
+  background: linear-gradient(135deg, #00897b, #26a69a);
+  color: white;
+  padding: 20px 15px;
+  border-radius: 16px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.header p {
+  margin: 7px 0 0;
+  font-size: 13px;
+}
+
+.question-box {
+  background: white;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.12);
+}
+
+.day {
+  font-size: 14px;
+  font-weight: bold;
+  color: #00897b;
+  margin-bottom: 10px;
+}
+
+.question {
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  background: #f8fafc;
+  padding: 13px;
+  margin: 9px 0;
+  border-radius: 11px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: #e0f2f1;
+}
+
+.option.correct {
+  background: #c8e6c9;
+  border-color: #2e7d32;
+}
+
+.option.wrong {
+  background: #ffcdd2;
+  border-color: #c62828;
+}
+
+#message {
+  margin-top: 15px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+#nextBtn {
+  display: none;
+  width: 100%;
+  margin-top: 15px;
+  padding: 13px;
+  border: none;
+  border-radius: 11px;
+  background: #1565c0;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.loading {
+  text-align: center;
+  padding: 30px;
+  font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz">
+
+  <div class="header">
+    <h2>📚 प्राथमिक शिक्षक — SET A</h2>
+    <p>90 Days Practice Quiz</p>
+  </div>
+
+  <div id="quizArea" class="question-box">
+    <div class="loading">⏳ प्रश्न लोड हो रहे हैं...</div>
+  </div>
+
+</div>
+
+<script>
+
+var API_URL = "https://script.google.com/macros/s/AKfycbzPBuEVI9LyzsaU_Pr_l8yI9kdRS0Wog1VMlU8PR1lR7yc6IeOeZqm5jPdvgT87sgs/exec";
+
+var questions = [];
+var currentQuestion = 0;
+
+function loadQuestions() {
+
+  fetch(API_URL + "?day=1")
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+
+      if (!data.ok) {
+        throw new Error(data.error || "Questions load नहीं हुए");
+      }
+
+      questions = data.questions || [];
+
+      if (questions.length === 0) {
+        document.getElementById("quizArea").innerHTML =
+          "<div class='loading'>❌ Day 1 के प्रश्न नहीं मिले।</div>";
+        return;
+      }
+
+      showQuestion();
+
+    })
+    .catch(function(error) {
+
+     
