@@ -351,8 +351,7 @@ async function handleStudentRegister() {
     ]);
     if(error) throw error;
     
-    alert(`रजिस्ट्रेशन सफल!\n\nआपकी यूनिक स्टूडेंट आईडी है: ${uniqueId}\nकृपया इसे सुरक्षित नोट कर लें!`);
-    // सीधे home.html पर रीडायरेक्ट करें
+    alert(`🎉 GANIT SETU में आपका स्वागत है!\n\nरजिस्ट्रेशन सफल!\nआपकी यूनिक स्टूडेंट आईडी है: ${uniqueId}\n\nकृपया इसे सुरक्षित नोट कर लें!`);
     window.location.href = "home.html";
   } catch(e) {
     console.error(e);
@@ -382,7 +381,7 @@ async function handleStudentLogin() {
       return;
     }
 
-    // सफल लॉगिन के बाद सीधे home.html पर जाएं
+    alert(`✨ स्वागत है, ${data.full_name} जी!\nGANIT SETU पोर्टल में आपका लॉगिन सफल रहा।`);
     window.location.href = "home.html";
   } catch(e) {
     console.error(e);
@@ -430,8 +429,7 @@ async function handleTeacherRegister() {
     ]);
     if(error) throw error;
     
-    alert("शिक्षक रजिस्ट्रेशन सफल!");
-    // सीधे home.html पर रीडायरेक्ट करें
+    alert(`🎉 GANIT SETU में आपका स्वागत है!\n\nशिक्षक रजिस्ट्रेशन सफलताપूर्वक पूरा हो गया है!`);
     window.location.href = "home.html";
   } catch(e) {
     console.error(e);
@@ -461,7 +459,7 @@ async function handleTeacherLogin() {
       return;
     }
 
-    // सफल लॉगिन के बाद सीधे home.html पर जाएं
+    alert(`✨ स्वागत है, ${data.full_name} जी!\nशिक्षक पोर्टल पर आपका लॉगिन सफल रहा।`);
     window.location.href = "home.html";
   } catch(e) {
     console.error(e);
@@ -474,8 +472,7 @@ function handleAdminLogin() {
   const pass = document.getElementById('adminPass').value.trim();
   
   if(user === "admin" && pass === "1990") {
-    alert("मास्टर एडमिन लॉगिन सफल!");
-    // सफल एडमिन लॉगिन के बाद सीधे home.html पर जाएं
+    alert("🔐 मास्टर एडमिन लॉगिन सफल!\nGANIT SETU एडमिन पैनल में आपका स्वागत है।");
     window.location.href = "home.html";
   } else {
     alert("गलत एडमिन यूजरनेम या पासवर्ड!");
