@@ -9,7 +9,7 @@
   .container{max-width:700px;margin:auto;background:#fff;border-radius:16px;padding:20px;box-shadow:0 4px 15px rgba(0,0,0,0.05)}
   h2{color:#0B63CE;text-align:center;margin-top:0;}
   .result-card{background:#f8fbff;border:1px solid #cbd5e1;border-radius:12px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,0.02)}
-  .result-header{display:flex;justify-space:between;align-items:center;font-weight:bold;font-size:15px;color:#1e293b;margin-bottom:6px;}
+  .result-header{display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:15px;color:#1e293b;margin-bottom:6px;}
   .result-details{font-size:12px;color:#64748b;display:flex;justify-content:space-between;margin-top:4px;}
   .score-badge{background:#e0f2fe;color:#0369a1;padding:4px 8px;border-radius:6px;font-weight:bold;}
   .time-badge{background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:6px;font-weight:bold;font-size:11px;}
@@ -35,19 +35,17 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLI
 async function loadResults() {
   const listEl = document.getElementById("resultsList");
   try {
-    // बिना फिल्टर के सारा डेटा मंगाकर कंसोल में चेक करेंगे
     const { data, error } = await supabaseClient
       .from("student_test_results")
       .select("*")
+      .eq("test_type", "प्रगतिशील पाठ्यक्रम टेस्ट")
       .order("created_at", { ascending: false })
       .limit(50);
 
     if (error) throw error;
 
-    console.log("Supabase fetched data:", data); // F12 कंसोल में देखने के लिए
-
     if (!data || data.length === 0) {
-      listEl.innerHTML = `<p style="text-align:center;color:#64748b;">डेटाबेस में अभी तक कोई परिणाम दर्ज नहीं है।</p>`;
+      listEl.innerHTML = `<p style="text-align:center;color:#64748b;">अभी तक कोई प्रगतिशील पाठ्यक्रम टेस्ट परिणाम उपलब्ध नहीं है।</p>`;
       return;
     }
 
@@ -76,7 +74,7 @@ async function loadResults() {
     listEl.innerHTML = html;
   } catch (err) {
     console.error("Error loading results:", err);
-    listEl.innerHTML = `<p style="text-align:center;color:#dc2626;">परिणाम लोड करने में त्रुटि: ${err.message}</p>`;
+    listEl.innerHTML = `<p style="text-align:center;color:#dc2626;font-size:14px;padding:10px;">त्रुटि: ${err.message || "कनेक्शन विफल रहा।"}</p>`;
   }
 }
 
