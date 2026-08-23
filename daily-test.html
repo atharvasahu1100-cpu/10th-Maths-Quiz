@@ -316,7 +316,7 @@ async function startTest(cls, mode) {
   getAudioContext();
   const prefix = cls === '9' ? 'p2' : 'p3';
   let s = state[cls];
-  s.startTime = new Date();
+  s.startTime = new Date(); // समय रिकॉर्ड करना शुरू
   s.testMode = mode;
   let targetChapters = [];
   if(mode === 'range') {
@@ -485,17 +485,21 @@ async function finishTest(cls) {
   const totalQ = s.questions.length;
   const percent = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
 
+  // समय की गणना (Time Calculation)
   let endTime = new Date();
   let timeTakenSec = s.startTime ? Math.round((endTime - s.startTime) / 1000) : 0;
+  if(timeTakenSec < 1) timeTakenSec = 1;
   let mins = Math.floor(timeTakenSec / 60);
   let secs = timeTakenSec % 60;
   let timeStr = mins > 0 ? `${mins} मिनट ${secs} सेकंड` : `${secs} सेकंड`;
 
+  // प्रगतिशील टेस्ट का रिजल्ट और समय Supabase में सेव करना
   if (s.testMode === 'range') {
     try {
       let studentName = localStorage.getItem("studentName") || "विद्यार्थी";
       let studentId = localStorage.getItem("studentId") || "—";
-      await supabaseClient.from("student_test_results").insert([{
+      
+      const payload = {
         student_name: studentName,
         student_id: studentId,
         class_name: "कक्षा " + cls + "वीं",
@@ -505,8 +509,15 @@ async function finishTest(cls) {
         percentage: percent,
         time_taken: timeStr,
         created_at: new Date().toISOString()
-      }]);
-    } catch(err) { console.error("Result save error:", err); }
+      };
+
+      console.log("Saving result to Supabase:", payload);
+      let { error } = await supabaseClient.from("student_test_results").insert([payload]);
+      if (error) throw error;
+      
+    } catch(err) { 
+      console.error("Result save error:", err); 
+    }
   }
 
   document.getElementById(`${prefix}-scoreText`).textContent = `${correct} / ${totalQ}`;
