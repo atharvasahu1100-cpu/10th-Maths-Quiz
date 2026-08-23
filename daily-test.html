@@ -19,7 +19,6 @@ body{font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f8fafc;colo
 .header p{margin:0;font-size:12px;opacity:.9}
 .card{background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.03);flex-shrink:0}
 .card h2{font-size:15px;margin:2px 0 8px;color:#1e293b}
-.card.colorful-box-info{background:#f0f7ff;border:1px solid #bae6fd;}
 .info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 6px;text-align:center}
 .stat b{display:block;font-size:18px;color:#0B63CE;line-height:1.1}
@@ -93,24 +92,6 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-
         </a>
       </div>
     </div>
-
-    <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0;background:#ffffff;border:1px solid #cbd5e1;">
-      <h3 style="margin:0 0 6px;color:#1e293b;font-size:14px">⭐ इस कोर्स को करने के मुख्य लाभ:</h3>
-      <div style="flex:1;overflow-y:auto;padding-right:4px;">
-        <ul style="margin:0;padding-left:16px;font-size:11px;color:#334155;line-height:1.5;">
-          <li><b>दैनिक अभ्यास:</b> रोजाना प्रैक्टिस करने से गणित के कठिन सवाल भी आसानी से हल होने लगते हैं।</li>
-          <li><b>परीक्षा का डर खत्म:</b> निरंतर टेस्ट देने से बोर्ड व वार्षिक परीक्षाओं का डर पूरी तरह समाप्त होता है।</li>
-          <li><b>मजबूत नींव:</b> कक्षा 9वीं और 10वीं के हर अध्याय के कॉन्सेप्ट एकदम स्पष्ट हो जाते हैं।</li>
-          <li><b>तुरंत मूल्यांकन:</b> टेस्ट सबमिट करते ही स्कोर और सही उत्तर की जानकारी मिल जाती है।</li>
-          <li><b>समय प्रबंधन:</b> निश्चित समय में प्रश्नों को हल करने की आदत बनती है जो परीक्षा में उपयोगी है।</li>
-          <li><b>आत्मविश्वास में वृद्धि:</b> सही उत्तर मिलने पर छात्रों का गणित के प्रति आत्मविश्वास बढ़ता है।</li>
-          <li><b>गलतियों से सीख:</b> गलत जवाबों के सही उत्तर देखकर विद्यार्थी अपनी कमियों को सुधार सकते हैं।</li>
-          <li><b>बोर्ड परीक्षा की तैयारी:</b> कक्षा 10वीं के विद्यार्थियों के लिए बोर्ड परीक्षा पैटर्न पर आधारित पक्की तैयारी।</li>
-          <li><b>रिवीजन में मददगार:</b> परीक्षा के समय कम समय में पूरे पाठ्यक्रम का त्वरित रिवीजन हो जाता है।</li>
-          <li><b>सर्वोच्च अंक (100%):</b> इन सभी फायदों से छात्र गणित विषय में बेहतरीन अंक प्राप्त कर सकते हैं।</li>
-        </ul>
-      </div>
-    </div>
   </div>
 
   <div id="page2" class="page">
@@ -136,7 +117,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-
       <div class="test-card-box">
         <div class="test-top">
           <strong id="p2-testChapter" style="font-size:13px"></strong>
-          <span style="display:flex;gap:6px;align-items:center"><span class="timer" id="p2-timer">⏱ 30s</span><span id="p2-qCount" class="note"></span></span>
+          <span style="display:flex;gap:6px;align-items:center"><span class="timer" id="p2-timer">⏱ 0s</span><span id="p2-qCount" class="note"></span></span>
         </div>
         <div class="progress"><i id="p2-bar"></i></div>
         <div class="question"><span class="question-no" id="p2-questionNo">1</span><span id="p2-questionText"></span></div>
@@ -160,7 +141,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-
         <h2 style="font-size:14px;margin-top:0">अध्यायवार परिणाम</h2>
         <div id="p2-chapterResults"></div>
       </div>
-      <button class="btn primary" style="padding:11px" onclick="goToPage('page1')">होम पर जाएँ</button>
+      <button class="btn primary" style="padding:11px" onclick="showHomePortal('9')">होम पर जाएँ</button>
     </div>
   </div>
 
@@ -187,7 +168,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-
       <div class="test-card-box">
         <div class="test-top">
           <strong id="p3-testChapter" style="font-size:13px"></strong>
-          <span style="display:flex;gap:6px;align-items:center"><span class="timer" id="p3-timer">⏱ 30s</span><span id="p3-qCount" class="note"></span></span>
+          <span style="display:flex;gap:6px;align-items:center"><span class="timer" id="p3-timer">⏱ 0s</span><span id="p3-qCount" class="note"></span></span>
         </div>
         <div class="progress"><i id="p3-bar"></i></div>
         <div class="question"><span class="question-no" id="p3-questionNo">1</span><span id="p3-questionText"></span></div>
@@ -211,7 +192,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-
         <h2 style="font-size:14px;margin-top:0">अध्यायवार परिणाम</h2>
         <div id="p3-chapterResults"></div>
       </div>
-      <button class="btn primary" style="padding:11px" onclick="goToPage('page1')">होम पर जाएँ</button>
+      <button class="btn primary" style="padding:11px" onclick="showHomePortal('10')">होम पर जाएँ</button>
     </div>
   </div>
 </div>
@@ -228,8 +209,8 @@ const syllabus = {
 };
 
 let state = {
-  "9": { upto: 1, questions: [], current: 0, answers: [], timeLeft: 30, timerHandle: null, startTime: null, testMode: "" },
-  "10": { upto: 1, questions: [], current: 0, answers: [], timeLeft: 30, timerHandle: null, startTime: null, testMode: "" }
+  "9": { upto: 1, questions: [], current: 0, answers: [], timerHandle: null, startTime: null, testMode: "" },
+  "10": { upto: 1, questions: [], current: 0, answers: [], timerHandle: null, startTime: null, testMode: "" }
 };
 
 let audioCtx = null;
@@ -316,8 +297,20 @@ async function startTest(cls, mode) {
   getAudioContext();
   const prefix = cls === '9' ? 'p2' : 'p3';
   let s = state[cls];
-  s.startTime = new Date(); // समय रिकॉर्ड करना शुरू
+  s.startTime = new Date(); // टेस्ट शुरू होते ही समय नोट हो गया
   s.testMode = mode;
+
+  // कुल समय को लाइव दिखाने के लिए टाइमर शुरू करना
+  stopTimer(cls);
+  s.timerHandle = setInterval(() => {
+    let elapsedSec = Math.floor((new Date() - s.startTime) / 1000);
+    let m = Math.floor(elapsedSec / 60);
+    let sec = elapsedSec % 60;
+    let timerText = m > 0 ? `⏱ ${m}m ${sec}s` : `⏱ ${sec}s`;
+    let tEl = document.getElementById(`${prefix}-timer`);
+    if(tEl) tEl.textContent = timerText;
+  }, 1000);
+
   let targetChapters = [];
   if(mode === 'range') {
     s.upto = Number(document.getElementById(`${prefix}-upto`).value);
@@ -378,24 +371,6 @@ async function startTest(cls, mode) {
   }
 }
 
-function resetQuestionTimer(cls) {
-  const prefix = cls === '9' ? 'p2' : 'p3';
-  let s = state[cls];
-  stopTimer(cls);
-  s.timeLeft = 30;
-  const tEl = document.getElementById(`${prefix}-timer`);
-  if(tEl) tEl.textContent = `⏱ 30s`;
-  s.timerHandle = setInterval(() => {
-    s.timeLeft--;
-    if(tEl) tEl.textContent = `⏱ ${s.timeLeft}s`;
-    if(s.timeLeft <= 0) {
-      stopTimer(cls);
-      if(s.answers[s.current] === null) s.answers[s.current] = -1;
-      if(s.current < s.questions.length - 1) { s.current++; renderQ(cls); } else { finishTest(cls); }
-    }
-  }, 1000);
-}
-
 function toggleHint(cls) {
   const prefix = cls === '9' ? 'p2' : 'p3';
   const hintEl = document.getElementById(`${prefix}-hintBox`);
@@ -440,16 +415,13 @@ function renderQ(cls) {
   }
 
   document.getElementById(`${prefix}-prevBtn`).disabled = s.current === 0;
-  document.getElementById(`${prefix}-nextBtn`).textContent = (answered || s.answers[s.current] === -1) ? (s.current === s.questions.length - 1 ? " Test Submit करें" : "अगला प्रश्न →") : "उत्तर चुनें";
+  document.getElementById(`${prefix}-nextBtn`).textContent = answered ? (s.current === s.questions.length - 1 ? " Test Submit करें" : "अगला प्रश्न →") : "उत्तर चुनें";
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  
-  if(s.answers[s.current] === null) { resetQuestionTimer(cls); } else { stopTimer(cls); document.getElementById(`${prefix}-timer`).textContent = `⏱ पूर्ण`; }
 }
 
 function selectOpt(cls, i) {
   let s = state[cls];
   if(s.answers[s.current] !== null && s.answers[s.current] !== -1) return;
-  stopTimer(cls);
   s.answers[s.current] = i;
   playTone(i === s.questions[s.current].answer);
   renderQ(cls);
@@ -457,20 +429,19 @@ function selectOpt(cls, i) {
 
 function prevQ(cls) {
   let s = state[cls];
-  if(s.current > 0) { stopTimer(cls); s.current--; renderQ(cls); }
+  if(s.current > 0) { s.current--; renderQ(cls); }
 }
 
 function nextQ(cls) {
   let s = state[cls];
   if(s.answers[s.current] === null) { alert("कृपया पहले एक विकल्प चुनें।"); return; }
-  stopTimer(cls);
   if(s.current < s.questions.length - 1) { s.current++; renderQ(cls); } else { finishTest(cls); }
 }
 
 async function finishTest(cls) {
   const prefix = cls === '9' ? 'p2' : 'p3';
   let s = state[cls];
-  stopTimer(cls);
+  stopTimer(cls); // टाइमर रोक दिया गया
   playVictorySound();
   let correct = 0;
   const chapters = syllabus[cls];
@@ -485,7 +456,7 @@ async function finishTest(cls) {
   const totalQ = s.questions.length;
   const percent = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
 
-  // समय की गणना (Time Calculation)
+  // कुल समय की गणना
   let endTime = new Date();
   let timeTakenSec = s.startTime ? Math.round((endTime - s.startTime) / 1000) : 0;
   if(timeTakenSec < 1) timeTakenSec = 1;
@@ -511,7 +482,7 @@ async function finishTest(cls) {
         created_at: new Date().toISOString()
       };
 
-      console.log("Saving result to Supabase:", payload);
+      console.log("Saving test result with time:", payload);
       let { error } = await supabaseClient.from("student_test_results").insert([payload]);
       if (error) throw error;
       
