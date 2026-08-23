@@ -200,7 +200,7 @@ label{
           <label>4-अंकों का पासवर्ड बनाएं:</label>
           <input type="password" id="stuRegPass" class="class-select" maxlength="4" placeholder="केवल 4 अंकों का पासवर्ड" autocomplete="new-password">
           
-          <button class="menu-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="handleStudentRegister()">रजिस्टर करें और आईडी प्राप्त करें ✨</button>
+          <button class="menu-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="handleStudentRegister()">रजिस्टर करें और होम पेज पर जाएं ✨</button>
         </div>
       </div>
 
@@ -253,7 +253,7 @@ label{
           <label>4-अंकों का पासवर्ड बनाएं:</label>
           <input type="password" id="teacherRegPass" class="class-select" maxlength="4" placeholder="केवल 4 अंकों का पासवर्ड" autocomplete="new-password">
           
-          <button class="menu-btn" style="background: var(--btn-teacher);" onclick="handleTeacherRegister()">शिक्षक रजिस्टर करें ⭐</button>
+          <button class="menu-btn" style="background: var(--btn-teacher);" onclick="handleTeacherRegister()">शिक्षक रजिस्टर करें और होम पेज पर जाएं ⭐</button>
         </div>
       </div>
 
@@ -270,27 +270,6 @@ label{
     </div>
   </div>
 
-  <!-- ================= HOME SCREEN (After Successful Login) ================= -->
-  <div id="home-screen" class="section">
-    <header class="brand">
-      <div class="brand-name">GANIT SETU</div>
-      <div class="tagline" id="userWelcomeText" style="margin-top:6px;font-size:14px;opacity:.9;">गणित शिक्षण मंच</div>
-      <div style="margin-top:14px;font-size:20px;font-weight:800;" id="greetingName">नमस्कार!</div>
-      <div style="font-size:13px;opacity:.95;margin-top:6px;" id="userInfoDetails"></div>
-    </header>
-    <div class="content">
-      <div style="background:#f8fafc;border:2px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:16px;box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-        <label class="class-select-label" for="class-select" style="font-size:14px;margin-bottom:8px;">🎯 अपनी कक्षा चुनें और टेस्ट दें:</label>
-        <select id="class-select" class="class-select" onchange="selectClass(this.value)">
-          <option value="" selected>-- कक्षा चुनें --</option>
-          <option value="class9.html">कक्षा 9वीं</option>
-          <option value="class10.html">कक्षा 10वीं</option>
-        </select>
-      </div>
-      <button class="menu-btn" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);" onclick="handleLogout()">लॉग आउट (Logout) 🚪</button>
-    </div>
-  </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -298,8 +277,6 @@ label{
 const SUPABASE_URL = "https://xgmeivfvuujculkplxjf.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
-let loggedInUser = null;
 
 function switchRole(role) {
   document.getElementById('roleStudentBtn').className = role === 'student' ? 'tab-btn active-tab' : 'tab-btn';
@@ -375,8 +352,8 @@ async function handleStudentRegister() {
     if(error) throw error;
     
     alert(`रजिस्ट्रेशन सफल!\n\nआपकी यूनिक स्टूडेंट आईडी है: ${uniqueId}\nकृपया इसे सुरक्षित नोट कर लें!`);
-    document.getElementById('stuLogUser').value = uniqueId;
-    switchStudentMode('login');
+    // सीधे home.html पर रीडायरेक्ट करें
+    window.location.href = "home.html";
   } catch(e) {
     console.error(e);
     alert("रजिस्ट्रेशन में त्रुटि हुई। कृपया पुनः प्रयास करें।");
@@ -405,11 +382,8 @@ async function handleStudentLogin() {
       return;
     }
 
-    loggedInUser = data;
-    document.getElementById('greetingName').textContent = `नमस्कार, ${loggedInUser.full_name}!`;
-    document.getElementById('userWelcomeText').textContent = `कक्षा ${loggedInUser.class_name}वीं • छात्र पोर्टल`;
-    document.getElementById('userInfoDetails').textContent = `आईडी: ${loggedInUser.username} | स्कूल: ${loggedInUser.school_name || 'लागू नहीं'}`;
-    showSection('home-screen');
+    // सफल लॉगिन के बाद सीधे home.html पर जाएं
+    window.location.href = "home.html";
   } catch(e) {
     console.error(e);
     alert("लॉगिन करने में समस्या आई।");
@@ -456,9 +430,9 @@ async function handleTeacherRegister() {
     ]);
     if(error) throw error;
     
-    alert("शिक्षक रजिस्ट्रेशन सफल! अब आप अपने मोबाइल नंबर और 4-अंकों के पासवर्ड से लॉगिन कर सकते हैं।");
-    document.getElementById('teacherLogUser').value = mobile;
-    switchTeacherMode('login');
+    alert("शिक्षक रजिस्ट्रेशन सफल!");
+    // सीधे home.html पर रीडायरेक्ट करें
+    window.location.href = "home.html";
   } catch(e) {
     console.error(e);
     alert("शिक्षक रजिस्ट्रेशन में त्रुटि हुई।");
@@ -487,11 +461,8 @@ async function handleTeacherLogin() {
       return;
     }
 
-    loggedInUser = data;
-    document.getElementById('greetingName').textContent = `नमस्कार, ${loggedInUser.full_name} (${loggedInUser.designation})!`;
-    document.getElementById('userWelcomeText').textContent = `शिक्षक पोर्टल • ${loggedInUser.school_name}`;
-    document.getElementById('userInfoDetails').textContent = `मोबाइल: ${loggedInUser.mobile_no} | UDISE: ${loggedInUser.udise_code}`;
-    showSection('home-screen');
+    // सफल लॉगिन के बाद सीधे home.html पर जाएं
+    window.location.href = "home.html";
   } catch(e) {
     console.error(e);
     alert("शिक्षक लॉगिन करने में समस्या आई।");
@@ -504,29 +475,11 @@ function handleAdminLogin() {
   
   if(user === "admin" && pass === "1990") {
     alert("मास्टर एडमिन लॉगिन सफल!");
-    document.getElementById('greetingName').textContent = `नमस्कार, मास्टर एडमिन!`;
-    document.getElementById('userWelcomeText').textContent = `मास्टर एडमिन पैनल`;
-    document.getElementById('userInfoDetails').textContent = `यूजरनेम: admin`;
-    showSection('home-screen');
+    // सफल एडमिन लॉगिन के बाद सीधे home.html पर जाएं
+    window.location.href = "home.html";
   } else {
     alert("गलत एडमिन यूजरनेम या पासवर्ड!");
   }
-}
-
-function handleLogout() {
-  loggedInUser = null;
-  showSection('auth-screen');
-}
-
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
-}
-
-function selectClass(page) {
-  if(!page) return;
-  window.location.href = page;
 }
 </script>
 </body>
