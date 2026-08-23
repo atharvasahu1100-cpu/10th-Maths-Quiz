@@ -1,4 +1,3 @@
-08.23 9:09 PM
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -10,98 +9,107 @@
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow-x:hidden;background:#fff}
-body{font-family:Arial,"Noto Sans Devanagari",sans-serif;background:linear-gradient(180deg,#eef3ff 0%,#f8fbff 38%,#eef7ff 100%);color:#172033;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
-.app{max-width:780px;min-height:100vh;min-height:100dvh;margin:auto;background:#fff;box-shadow:0 0 40px rgba(35,64,125,.1);position:relative;display:flex;flex-direction:column}
+body{font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f8fafc;color:#172033;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.app{max-width:780px;min-height:100vh;min-height:100dvh;margin:auto;background:#fff;box-shadow:0 0 20px rgba(0,0,0,.05);position:relative;display:flex;flex-direction:column}
 /* Page Management */
 .page{display:none;min-height:100vh;min-height:100dvh;padding:12px 15px 80px 15px;flex-direction:column}
 .page.active{display:flex}
-/* Header Styles (Compact) */
-.header{background:linear-gradient(135deg,#183bc7 0%,#5941df 48%,#b33fd4 100%);color:white;padding:16px;border-radius:18px;text-align:center;margin-bottom:10px;box-shadow:0 6px 15px rgba(72,56,190,.15);flex-shrink:0}
-.header .small{font-size:11px;font-weight:700;opacity:.9;background:rgba(255,255,255,.2);display:inline-block;padding:2px 8px;border-radius:10px;margin-bottom:2px}
+/* Header Styles */
+.header{background:linear-gradient(135deg,#082B59,#0B63CE);color:white;padding:16px;border-radius:14px;text-align:center;margin-bottom:10px;box-shadow:0 4px 12px rgba(8,43,89,.15);flex-shrink:0}
+.header .small{font-size:11px;font-weight:700;opacity:.9;background:rgba(255,255,255,.2);display:inline-block;padding:2px 8px;border-radius:6px;margin-bottom:2px}
 .header h1{margin:4px 0 2px;font-size:20px;line-height:1.2}
 .header p{margin:0;font-size:12px;opacity:.9}
-/* Colorful Card & Button Styles */
-.card{background:rgba(255,255,255,.98);border:1px solid #e1e7f3;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 4px 12px rgba(35,55,100,.05);flex-shrink:0}
-.card h2{font-size:15px;margin:2px 0 8px}
-.card.colorful-box-1 {
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border: 2px solid #86efac;
-}
-.card.colorful-box-2 {
-  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-  border: 2px solid #fca5a5;
-}
-.card.colorful-box-info {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-  border: 2px solid #bfdbfe;
-}
+/* Clean Card Styles */
+.card{background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.03);flex-shrink:0}
+.card h2{font-size:15px;margin:2px 0 8px;color:#1e293b}
+.card.colorful-box-info{background:#f0f7ff;border:1px solid #bae6fd;}
 .info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:linear-gradient(145deg,#f5f7ff,#eef3ff);border:1px solid #e4eaff;border-radius:12px;padding:8px 6px;text-align:center}
-.stat b{display:block;font-size:18px;color:#2457d6;line-height:1.1}
-.stat span{font-size:10px;color:#667085;margin-top:2px;display:block}
-.chapter{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e6eaf2;border-radius:12px;margin:5px 0;background:#fff}
-.chapter .num{width:28px;height:28px;border-radius:8px;background:#eef3ff;color:#2457d6;display:grid;place-items:center;font-weight:bold;font-size:13px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 6px;text-align:center}
+.stat b{display:block;font-size:18px;color:#0B63CE;line-height:1.1}
+.stat span{font-size:10px;color:#64748b;margin-top:2px;display:block}
+.chapter{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:10px;margin:5px 0;background:#fff}
+.chapter .num{width:28px;height:28px;border-radius:8px;background:#eef5ff;color:#0B63CE;display:grid;place-items:center;font-weight:bold;font-size:13px}
 .chapter .details{flex:1}
-.chapter .details strong{display:block;font-size:13px}
-.chapter .details small{color:#70798a;font-size:10px}
-.badge{font-size:10px;padding:3px 6px;border-radius:10px;background:#e9f8ef;color:#168447}
-.badge.locked-badge{background:#fef2f2;color:#ef4444}
-.btn{border:0;border-radius:12px;padding:12px;font-weight:800;cursor:pointer;font-size:14px;transition:.18s;width:100%;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.08)}
+.chapter .details strong{display:block;font-size:13px;color:#1e293b}
+.chapter .details small{color:#64748b;font-size:10px}
+.badge{font-size:10px;padding:3px 6px;border-radius:6px;background:#f0fdf4;color:#16a34a;font-weight:700}
+.badge.locked-badge{background:#fef2f2;color:#dc2626}
+/* Buttons */
+.btn{border:0;border-radius:12px;padding:12px;font-weight:800;cursor:pointer;font-size:14px;width:100%;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.08);transition:.15s}
 .btn:active{transform:scale(.98)}
-.primary{background:linear-gradient(135deg,#075ce7,#2e45d5);color:#fff}
+.primary{background:linear-gradient(135deg,#082B59,#0B63CE);color:#fff}
 .secondary{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
 .purple-btn{background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff}
-.note{font-size:11px;color:#667085;line-height:1.4}
-select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-size:14px;background:#fff;color:#172033;margin:6px 0;font-weight:600}
-/* Class Selection Cards */
-.class-grid{display:flex;gap:10px;margin-top:8px}
-.class-card{flex:1;background:linear-gradient(135deg,#f8fbff,#eef3ff);border:2px solid #dce4f3;border-radius:16px;padding:16px 10px;text-align:center;cursor:pointer;transition:all 0.2s}
-.class-card:hover{border-color:#4564d8;transform:translateY(-2px)}
-.class-card h3{margin:6px 0 2px;color:#183bc7;font-size:18px}
-/* --- Full Page Scrolling Layout for Test --- */
+.note{font-size:11px;color:#64748b;line-height:1.4}
+select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-size:14px;background:#fff;color:#1e293b;margin:6px 0;font-weight:600}
+
+/* Clean & Wide Class Selection Buttons without Logo Box */
+.class-test-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:12px 0;
+}
+.class-test-btn{
+  min-height:85px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:14px 10px;
+  border-radius:18px;
+  text-decoration:none;
+  color:#fff;
+  box-shadow:0 6px 16px rgba(0,0,0,.10);
+  transition:.2s;
+  cursor:pointer;
+  text-align:center;
+}
+.class-test-btn:active{transform:scale(.98)}
+.class9-test{background:linear-gradient(135deg,#6D5CE7,#8173EE);}
+.class10-test{background:linear-gradient(135deg,#009F8C,#19B39F);}
+.class-test-btn strong{display:block;font-size:16px;font-weight:800;line-height:1.2;margin-bottom:3px;}
+.class-test-btn small{display:block;font-size:12px;opacity:.95;}
+
+/* --- Test Layout --- */
 .test-card-box {
-  background:linear-gradient(145deg,#ffffff,#f8faff);
-  border:1px solid #e1e7f3;
-  border-radius:16px;
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  border-radius:14px;
   padding:14px;
   margin-bottom:70px;
+  box-shadow:0 4px 12px rgba(0,0,0,.04);
 }
 .test-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.progress{height:6px;background:#e9edf5;border-radius:99px;overflow:hidden}
-.progress i{display:block;height:100%;background:#2457d6;width:10%;transition:.2s}
-.question{font-size:15px;font-weight:700;line-height:1.4;margin:10px 0}
-.option{display:block;width:100%;text-align:left;padding:11px 12px;margin:6px 0;border:2px solid #e1e6f0;border-radius:12px;background:#fff;cursor:pointer;font-size:13px;font-weight:600}
-.option.selected{border-color:#2457d6;background:#eef3ff}
-.option.correct{border-color:#16a34a!important;background:#eaf9ef!important;color:#116b32}
-.option.wrong{border-color:#ef4444!important;background:#fff0f0!important;color:#a61b1b}
-.feedback{display:none;border-radius:12px;padding:10px 12px;margin-top:8px;font-weight:700;font-size:13px;line-height:1.5;}
-.feedback.correct{display:block;background:#eaf9ef;color:#13733a;border:1px solid #bbf7d0;}
-.feedback.wrong{display:block;background:#fff0f0;color:#b42318;border:1px solid #fecaca;}
-.hint-box{background:#fffbeb;border:1px solid #fde68a;color:#b45309;padding:10px 12px;border-radius:12px;font-size:13px;line-height:1.5;margin-top:8px;display:none;font-weight:600;}
-.timer{font-weight:800;color:#183bc7;background:#eef3ff;padding:5px 10px;border-radius:10px;font-size:12px;border:1px solid #dce4f2}
-.question-no{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:#eef3ff;color:#2457d6;font-weight:800;margin-right:6px;font-size:12px}
+.progress{height:6px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:#0B63CE;width:10%;transition:.2s}
+.question{font-size:15px;font-weight:700;line-height:1.4;margin:10px 0;color:#1e293b}
+.option{display:block;width:100%;text-align:left;padding:11px 12px;margin:6px 0;border:2px solid #cbd5e1;border-radius:10px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:#334155}
+.option.selected{border-color:#0B63CE;background:#eff6ff}
+.option.correct{border-color:#16a34a!important;background:#f0fdf4!important;color:#166534}
+.option.wrong{border-color:#dc2626!important;background:#fef2f2!important;color:#991b1b}
+.feedback{display:none;border-radius:10px;padding:10px 12px;margin-top:8px;font-weight:700;font-size:13px;line-height:1.5;}
+.feedback.correct{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+.feedback.wrong{display:block;background:#fef2f2;color:#991b1b;border:1px solid #fecaca;}
+.hint-box{background:#fffbeb;border:1px solid #fde68a;color:#b45309;padding:10px 12px;border-radius:10px;font-size:13px;line-height:1.5;margin-top:8px;display:none;font-weight:600;}
+.timer{font-weight:800;color:#0B63CE;background:#eef3ff;padding:5px 10px;border-radius:8px;font-size:12px;border:1px solid #dce4f2}
+.question-no{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:#eef3ff;color:#0B63CE;font-weight:800;margin-right:6px;font-size:12px}
 .nav{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  max-width: 780px;
-  margin: auto;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  max-width: 780px; margin: auto;
   background: #ffffff;
   padding: 10px 15px calc(10px + env(safe-area-inset-bottom)) 15px;
-  border-top: 1px solid #e1e6f0;
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  border-top: 1px solid #e2e8f0;
+  display: flex; justify-content: space-between; gap: 8px;
   z-index: 100;
-  box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 -4px 12px rgba(0,0,0,.06);
 }
 .result-score{text-align:center;padding:12px}
-.score{font-size:32px;font-weight:800;color:#2457d6}
-.percent{font-size:16px;font-weight:bold;margin-top:2px}
-.chapter-result{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #edf0f5;font-size:12px}
-.back-btn{background:#eef3ff;border:0;color:#183bc7;font-weight:800;font-size:12px;cursor:pointer;margin-bottom:8px;padding:6px 10px;border-radius:10px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
-.footer{text-align:center;color:#8a93a3;font-size:10px;padding:5px;flex-shrink:0}
+.score{font-size:32px;font-weight:800;color:#0B63CE}
+.percent{font-size:16px;font-weight:bold;margin-top:2px;color:#475569}
+.chapter-result{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12px}
+.back-btn{background:#eef3ff;border:0;color:#0B63CE;font-weight:800;font-size:12px;cursor:pointer;margin-bottom:8px;padding:6px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
+.footer{text-align:center;color:#64748b;font-size:10px;padding:5px;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -113,24 +121,28 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-
       <h1>दैनिक अभ्यास टेस्ट</h1>
       <p>कक्षा 9वीं एवं 10वीं के विद्यार्थियों के लिए अभ्यास पोर्टल</p>
     </div>
-    <div class="card" style="text-align:center;padding:14px;background:linear-gradient(135deg,#fdf4ff,#fae8ff);border:2px solid #f0abfc;">
-      <h2 style="margin-bottom:2px;font-size:16px;color:#86198f;">✨ अपनी कक्षा चुनें</h2>
-      <p style="color:#701a75;font-size:11px;margin-bottom:8px">विद्यार्थी अपनी सही कक्षा के बटन पर क्लिक करें:</p>
-      <div class="class-grid">
-        <div class="class-card" onclick="goToPage('page2')" style="background:linear-gradient(135deg,#e0f2fe,#bae6fd);border-color:#38bdf8;">
-          <h3 style="font-size:16px;margin:2px 0 0;color:#0369a1;">कक्षा 9वीं</h3>
-          <p style="font-size:11px;color:#0369a1;margin:2px 0 0;font-weight:600">गणित टेस्ट</p>
-        </div>
-        <div class="class-card" onclick="goToPage('page3')" style="background:linear-gradient(135deg,#f3e8ff,#e9d5ff);border-color:#c084fc;">
-          <h3 style="font-size:16px;margin:2px 0 0;color:#7e22ce;">कक्षा 10वीं</h3>
-          <p style="font-size:11px;color:#7e22ce;margin:2px 0 0;font-weight:600">गणित टेस्ट</p>
-        </div>
+
+    <!-- Class Selection Buttons (Wide & Clean without Logo Box) -->
+    <div class="card" style="background:#ffffff;border:1px solid #cbd5e1;">
+      <h2 style="margin-bottom:4px;font-size:16px;color:#1e293b;text-align:center;">✨ अपनी कक्षा चुनें</h2>
+      <p style="color:#64748b;font-size:11px;margin-bottom:10px;text-align:center;">विद्यार्थी अपनी सही कक्षा के बटन पर क्लिक करें:</p>
+      
+      <div class="class-test-grid">
+        <a class="class-test-btn class9-test" onclick="goToPage('page2')">
+          <strong>कक्षा 9वीं</strong>
+          <small>गणित टेस्ट</small>
+        </a>
+        <a class="class-test-btn class10-test" onclick="goToPage('page3')">
+          <strong>कक्षा 10वीं</strong>
+          <small>गणित टेस्ट</small>
+        </a>
       </div>
     </div>
-    <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #86efac;">
-      <h3 style="margin:0 0 6px;color:#166534;font-size:14px">⭐ इस कोर्स को करने के मुख्य लाभ:</h3>
+
+    <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0;background:#ffffff;border:1px solid #cbd5e1;">
+      <h3 style="margin:0 0 6px;color:#1e293b;font-size:14px">⭐ इस कोर्स को करने के मुख्य लाभ:</h3>
       <div style="flex:1;overflow-y:auto;padding-right:4px;">
-        <ul style="margin:0;padding-left:16px;font-size:11px;color:#14532d;line-height:1.5;">
+        <ul style="margin:0;padding-left:16px;font-size:11px;color:#334155;line-height:1.5;">
           <li><b>दैनिक अभ्यास:</b> रोजाना प्रैक्टिस करने से गणित के कठिन सवाल भी आसानी से हल होने लगते हैं।</li>
           <li><b>परीक्षा का डर खत्म:</b> निरंतर टेस्ट देने से बोर्ड व वार्षिक परीक्षाओं का डर पूरी तरह समाप्त होता है।</li>
           <li><b>मजबूत नींव:</b> कक्षा 9वीं और 10वीं के हर अध्याय के कॉन्सेप्ट एकदम स्पष्ट हो जाते हैं।</li>
@@ -148,7 +160,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-
   <!-- ================= PAGE 2: CLASS 9TH PORTAL ================= -->
   <div id="page2" class="page">
     <button class="back-btn" onclick="goToPage('page1')">← मुख्य होम पर जाएं</button>
-    <div class="header" style="background:linear-gradient(135deg,#0284c7,#2563eb)">
+    <div class="header" style="background:linear-gradient(135deg,#6D5CE7,#8173EE)">
       <div class="small">कक्षा 9वीं • गणित</div>
       <h1>कक्षा 9वीं अध्याय टेस्ट</h1>
       <p>अध्यायवार अभ्यास और तुरंत परिणाम</p>
@@ -157,7 +169,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-
       <div class="card hero">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
           <div>
-            <div style="font-size:11px;color:#667085;font-weight:700">आज की तैयारी</div>
+            <div style="font-size:11px;color:#64748b;font-weight:700">आज की तैयारी</div>
             <h2 style="margin:0;font-size:15px">आपका टेस्ट</h2>
           </div>
         </div>
@@ -167,27 +179,27 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-
           <div class="stat"><b id="p2-maxQ">100</b><span>अधिकतम प्रश्न</span></div>
         </div>
       </div>
-      <button class="btn" style="background:linear-gradient(135deg,#0284c7,#0369a1);color:#fff;margin-bottom:10px;font-size:13px;padding:10px;" onclick="toggleInstructions('9')">
+      <button class="btn" style="background:#f3e8ff;color:#7c3aed;border:1px solid #e9d5ff;margin-bottom:10px;font-size:13px;padding:10px;" onclick="toggleInstructions('9')">
         ℹ️ टेस्ट के निर्देश और अंतर समझें (यहाँ क्लिक करें)
       </button>
-      <div id="p2-instructionBox" class="card colorful-box-info" style="display:none;font-size:12px;color:#1e3a8a;line-height:1.5;margin-bottom:10px;">
+      <div id="p2-instructionBox" class="card colorful-box-info" style="display:none;font-size:12px;color:#334155;line-height:1.5;margin-bottom:10px;">
         <b> छात्रों के लिए महत्वपूर्ण निर्देश:</b><br>
         1️⃣ <b>प्रगतिशील पाठ्यक्रम टेस्ट:</b> इसमें आप अध्याय 1 से लेकर जिस अध्याय तक चुनेंगे (जैसे अध्याय 1 से 5), उन सभी अध्यायों के कुल प्रश्नों का एक बड़ा और मिला-जुला टेस्ट होगा।<br>
         2️⃣ <b>अध्यायवार टेस्ट (विशेष अध्याय):</b> इसमें आप केवल अपनी पसंद का कोई एक खास अध्याय (जैसे सिर्फ अध्याय 3) चुनकर उसी का टेस्ट दे सकते हैं।
       </div>
-      <div class="card colorful-box-1">
-        <h2 style="font-size:15px;color:#166534"> 1. प्रगतिशील पाठ्यक्रम टेस्ट</h2>
-        <p style="font-size:11px;color:#15803d;margin:2px 0 8px">शुरुआती अध्यायों से लेकर चुने गए अध्याय तक का संयुक्त टेस्ट</p>
+      <div class="card">
+        <h2 style="font-size:15px;color:#1e293b"> 1. प्रगतिशील पाठ्यक्रम टेस्ट</h2>
+        <p style="font-size:11px;color:#64748b;margin:2px 0 8px">शुरुआती अध्यायों से लेकर चुने गए अध्याय तक का संयुक्त टेस्ट</p>
         <select id="p2-upto"></select>
         <button class="btn secondary" style="margin-top:6px" onclick="startTest('9', 'range')"> प्रगतिशील टेस्ट शुरू करें →</button>
       </div>
-      <div class="card colorful-box-2">
-        <h2 style="font-size:15px;color:#991b1b"> 2. कोई एक विशेष अध्याय चुनें (अध्यायवार)</h2>
-        <p style="font-size:11px;color:#b91c1c;margin:2px 0 8px">किसी एक विशेष और सिंगल अध्याय का अभ्यास करने के लिए</p>
+      <div class="card">
+        <h2 style="font-size:15px;color:#1e293b"> 2. कोई एक विशेष अध्याय चुनें (अध्यायवार)</h2>
+        <p style="font-size:11px;color:#64748b;margin:2px 0 8px">किसी एक विशेष और सिंगल अध्याय का अभ्यास करने के लिए</p>
         <select id="p2-singleCh"></select>
         <button class="btn purple-btn" style="margin-top:6px" onclick="startTest('9', 'single')"> इस अध्याय का टेस्ट दें →</button>
       </div>
-      <button class="btn" style="background:#eef3ff;color:#2457d6;margin-bottom:8px;padding:10px" onclick="showChList('9')"> अध्याय सूची देखें →</button>
+      <button class="btn" style="background:#f3e8ff;color:#7c3aed;border:1px solid #e9d5ff;margin-bottom:8px;padding:10px" onclick="showChList('9')"> अध्याय सूची देखें →</button>
     </div>
     <div id="p2-chaptersSec" style="display:none;flex-direction:column;flex:1;overflow:hidden">
       <div class="card" style="flex:1;overflow-y:auto">
@@ -204,7 +216,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-
         </div>
         <div class="progress"><i id="p2-bar"></i></div>
         <div class="question"><span class="question-no" id="p2-questionNo">1</span><span id="p2-questionText"></span></div>
-        <button id="p2-hintBtn" style="background:#fffbeb;border:1px solid #fde68a;color:#b45309;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin:4px 0 8px 0;display:none;width:fit-content;" onclick="toggleHint('9')"> Hint / सूत्र देखें</button>
+        <button id="p2-hintBtn" style="background:#f8fafc;border:1px solid #cbd5e1;color:#475569;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin:4px 0 8px 0;display:none;width:fit-content;" onclick="toggleHint('9')"> Hint / सूत्र देखें</button>
         <div id="p2-options"></div>
         <div id="p2-hintBox" class="hint-box"></div>
         <div id="p2-feedback" class="feedback"></div>
@@ -231,7 +243,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-
   <!-- ================= PAGE 3: CLASS 10TH PORTAL ================= -->
   <div id="page3" class="page">
     <button class="back-btn" onclick="goToPage('page1')">← मुख्य होम पर जाएं</button>
-    <div class="header" style="background:linear-gradient(135deg,#7c3aed,#db2777)">
+    <div class="header" style="background:linear-gradient(135deg,#009F8C,#19B39F)">
       <div class="small">कक्षा 10वीं • गणित</div>
       <h1>कक्षा 10वीं अध्याय टेस्ट</h1>
       <p>अध्यायवार अभ्यास और तुरंत परिणाम</p>
@@ -240,7 +252,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-
       <div class="card hero">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
           <div>
-            <div style="font-size:11px;color:#667085;font-weight:700">आज की तैयारी</div>
+            <div style="font-size:11px;color:#64748b;font-weight:700">आज की तैयारी</div>
             <h2 style="margin:0;font-size:15px">आपका टेस्ट</h2>
           </div>
         </div>
@@ -250,27 +262,27 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-
           <div class="stat"><b id="p3-maxQ">140</b><span>अधिकतम प्रश्न</span></div>
         </div>
       </div>
-      <button class="btn" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;margin-bottom:10px;font-size:13px;padding:10px;" onclick="toggleInstructions('10')">
+      <button class="btn" style="background:#f0fdf4;color:#009F8C;border:1px solid #bbf7d0;margin-bottom:10px;font-size:13px;padding:10px;" onclick="toggleInstructions('10')">
         ℹ️ टेस्ट के निर्देश और अंतर समझें (यहाँ क्लिक करें)
       </button>
-      <div id="p3-instructionBox" class="card colorful-box-info" style="display:none;font-size:12px;color:#1e3a8a;line-height:1.5;margin-bottom:10px;">
+      <div id="p3-instructionBox" class="card colorful-box-info" style="display:none;font-size:12px;color:#334155;line-height:1.5;margin-bottom:10px;">
         <b> छात्रों के लिए महत्वपूर्ण निर्देश:</b><br>
         1️⃣ <b>प्रगतिशील पाठ्यक्रम टेस्ट:</b> इसमें आप अध्याय 1 से लेकर जिस अध्याय तक चुनेंगे (जैसे अध्याय 1 से 5), उन सभी अध्यायों के कुल प्रश्नों का एक बड़ा और मिला-जुला टेस्ट होगा।<br>
         2️⃣ <b>अध्यायवार टेस्ट (विशेष अध्याय):</b> इसमें आप केवल अपनी पसंद का कोई एक खास अध्याय (जैसे सिर्फ अध्याय 3) चुनकर उसी का टेस्ट दे सकते हैं।
       </div>
-      <div class="card colorful-box-1">
-        <h2 style="font-size:15px;color:#166534"> 1. प्रगतिशील पाठ्यक्रम टेस्ट</h2>
-        <p style="font-size:11px;color:#15803d;margin:2px 0 8px">शुरुआती अध्यायों से लेकर चुने गए अध्याय तक का संयुक्त टेस्ट</p>
+      <div class="card">
+        <h2 style="font-size:15px;color:#1e293b"> 1. प्रगतिशील पाठ्यक्रम टेस्ट</h2>
+        <p style="font-size:11px;color:#64748b;margin:2px 0 8px">शुरुआती अध्यायों से लेकर चुने गए अध्याय तक का संयुक्त टेस्ट</p>
         <select id="p3-upto"></select>
         <button class="btn secondary" style="margin-top:6px" onclick="startTest('10', 'range')"> प्रगतिशील टेस्ट शुरू करें →</button>
       </div>
-      <div class="card colorful-box-2">
-        <h2 style="font-size:15px;color:#991b1b"> 2. कोई एक विशेष अध्याय चुनें (अध्यायवार)</h2>
-        <p style="font-size:11px;color:#b91c1c;margin:2px 0 8px">किसी एक विशेष और सिंगल अध्याय का अभ्यास करने के लिए</p>
+      <div class="card">
+        <h2 style="font-size:15px;color:#1e293b"> 2. कोई एक विशेष अध्याय चुनें (अध्यायवार)</h2>
+        <p style="font-size:11px;color:#64748b;margin:2px 0 8px">किसी एक विशेष और सिंगल अध्याय का अभ्यास करने के लिए</p>
         <select id="p3-singleCh"></select>
         <button class="btn purple-btn" style="margin-top:6px" onclick="startTest('10', 'single')"> इस अध्याय का टेस्ट दें →</button>
       </div>
-      <button class="btn" style="background:#f3e8ff;color:#7e22ce;margin-bottom:8px;padding:10px" onclick="showChList('10')"> अध्याय सूची देखें →</button>
+      <button class="btn" style="background:#f0fdf4;color:#009F8C;border:1px solid #bbf7d0;margin-bottom:8px;padding:10px" onclick="showChList('10')"> अध्याय सूची देखें →</button>
     </div>
     <div id="p3-chaptersSec" style="display:none;flex-direction:column;flex:1;overflow:hidden">
       <div class="card" style="flex:1;overflow-y:auto">
@@ -287,7 +299,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:12px;font-
         </div>
         <div class="progress"><i id="p3-bar"></i></div>
         <div class="question"><span class="question-no" id="p3-questionNo">1</span><span id="p3-questionText"></span></div>
-        <button id="p3-hintBtn" style="background:#fffbeb;border:1px solid #fde68a;color:#b45309;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin:4px 0 8px 0;display:none;width:fit-content;" onclick="toggleHint('10')"> Hint / सूत्र देखें</button>
+        <button id="p3-hintBtn" style="background:#f8fafc;border:1px solid #cbd5e1;color:#475569;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin:4px 0 8px 0;display:none;width:fit-content;" onclick="toggleHint('10')"> Hint / सूत्र देखें</button>
         <div id="p3-options"></div>
         <div id="p3-hintBox" class="hint-box"></div>
         <div id="p3-feedback" class="feedback"></div>
@@ -648,8 +660,8 @@ function selectOpt(cls, i) {
   playTone(isCorrect);
   renderQ(cls);
   setTimeout(() => {
-    const fbEl = document.getElementById(`${cls === '9' ? 'p2' : 'p3'}-feedback`);
-    if(fbEl) fbEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    const fnEl = document.getElementById(`${cls === '9' ? 'p2' : 'p3'}-feedback`);
+    if(fnEl) fnEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, 100);
 }
 function prevQ(cls) {
@@ -703,7 +715,7 @@ function finishTest(cls) {
       </div>`;
     }
   });
-  document.getElementById(`${prefix}-chapterResults`).innerHTML = resultsHTML;
+  document.getElementById(`${prefix}-chapterResults`).resultsHTML = resultsHTML;
   document.getElementById(`${prefix}-testSec`).style.display = "none";
   document.getElementById(`${prefix}-resultSec`).style.display = "flex";
 }
