@@ -132,6 +132,12 @@ label{
   margin-bottom: 6px;
 }
 </style>
+<script>
+  // अगर यूजर पहले से लॉग इन है, तो तुरंत home.html पर भेज दें
+  if(localStorage.getItem('isLoggedIn') === 'true') {
+    window.location.href = "home.html";
+  }
+</script>
 </head>
 <body>
 
@@ -351,6 +357,9 @@ async function handleStudentRegister() {
     ]);
     if(error) throw error;
     
+    // लॉगिन स्थिति को हमेशा के लिए सेव करें
+    localStorage.setItem('isLoggedIn', 'true');
+    
     alert(`🎉 GANIT SETU में आपका स्वागत है!\n\nरजिस्ट्रेशन सफल!\nआपकी यूनिक स्टूडेंट आईडी है: ${uniqueId}\n\nकृपया इसे सुरक्षित नोट कर लें!`);
     window.location.href = "home.html";
   } catch(e) {
@@ -380,6 +389,9 @@ async function handleStudentLogin() {
       alert("गलत यूनिक आईडी या 4-अंकों का पासवर्ड!");
       return;
     }
+
+    // लॉगिन स्थिति को हमेशा के लिए सेव करें
+    localStorage.setItem('isLoggedIn', 'true');
 
     alert(`✨ स्वागत है, ${data.full_name} जी!\nGANIT SETU पोर्टल में आपका लॉगिन सफल रहा।`);
     window.location.href = "home.html";
@@ -429,6 +441,9 @@ async function handleTeacherRegister() {
     ]);
     if(error) throw error;
     
+    // लॉगिन स्थिति को हमेशा के लिए सेव करें
+    localStorage.setItem('isLoggedIn', 'true');
+
     alert(`🎉 GANIT SETU में आपका स्वागत है!\n\nशिक्षक रजिस्ट्रेशन सफलताપूर्वक पूरा हो गया है!`);
     window.location.href = "home.html";
   } catch(e) {
@@ -459,6 +474,9 @@ async function handleTeacherLogin() {
       return;
     }
 
+    // लॉगिन स्थिति को हमेशा के लिए सेव करें
+    localStorage.setItem('isLoggedIn', 'true');
+
     alert(`✨ स्वागत है, ${data.full_name} जी!\nशिक्षक पोर्टल पर आपका लॉगिन सफल रहा।`);
     window.location.href = "home.html";
   } catch(e) {
@@ -472,6 +490,9 @@ function handleAdminLogin() {
   const pass = document.getElementById('adminPass').value.trim();
   
   if(user === "admin" && pass === "1990") {
+    // लॉगिन स्थिति को हमेशा के लिए सेव करें
+    localStorage.setItem('isLoggedIn', 'true');
+
     alert("🔐 मास्टर एडमिन लॉगिन सफल!\nGANIT SETU एडमिन पैनल में आपका स्वागत है।");
     window.location.href = "home.html";
   } else {
