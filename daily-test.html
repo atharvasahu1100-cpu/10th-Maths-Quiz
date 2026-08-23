@@ -92,6 +92,25 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-
         </a>
       </div>
     </div>
+
+    <!-- शुरुआत के निर्देश और मुख्य लाभ कार्ड -->
+    <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0;background:#ffffff;border:1px solid #cbd5e1;">
+      <h3 style="margin:0 0 6px;color:#1e293b;font-size:14px">⭐ इस कोर्स को करने के मुख्य लाभ:</h3>
+      <div style="flex:1;overflow-y:auto;padding-right:4px;">
+        <ul style="margin:0;padding-left:16px;font-size:11px;color:#334155;line-height:1.5;">
+          <li><b>दैनिक अभ्यास:</b> रोजाना प्रैक्टिस करने से गणित के कठिन सवाल भी आसानी से हल होने लगते हैं।</li>
+          <li><b>परीक्षा का डर खत्म:</b> निरंतर टेस्ट देने से बोर्ड व वार्षिक परीक्षाओं का डर पूरी तरह समाप्त होता है।</li>
+          <li><b>मजबूत नींव:</b> कक्षा 9वीं और 10वीं के हर अध्याय के कॉन्सेप्ट एकदम स्पष्ट हो जाते हैं।</li>
+          <li><b>तुरंत मूल्यांकन:</b> टेस्ट सबमिट करते ही स्कोर और सही उत्तर की जानकारी मिल जाती है।</li>
+          <li><b>समय प्रबंधन:</b> निश्चित समय में प्रश्नों को हल करने की आदत बनती है जो परीक्षा में उपयोगी है।</li>
+          <li><b>आत्मविश्वास में वृद्धि:</b> सही उत्तर मिलने पर छात्रों का गणित के प्रति आत्मविश्वास बढ़ता है।</li>
+          <li><b>गलतियों से सीख:</b> गलत जवाबों के सही उत्तर देखकर विद्यार्थी अपनी कमियों को सुधार सकते हैं।</li>
+          <li><b>बोर्ड परीक्षा की तैयारी:</b> कक्षा 10वीं के विद्यार्थियों के लिए बोर्ड परीक्षा पैटर्न पर आधारित पक्की तैयारी।</li>
+          <li><b>रिवीजन में मददगार:</b> परीक्षा के समय कम समय में पूरे पाठ्यक्रम का त्वरित रिवीजन हो जाता है।</li>
+          <li><b>सर्वोच्च अंक (100%):</b> इन सभी फायदों से छात्र गणित विषय में बेहतरीन अंक प्राप्त कर सकते हैं।</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <div id="page2" class="page">
@@ -141,7 +160,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-
         <h2 style="font-size:14px;margin-top:0">अध्यायवार परिणाम</h2>
         <div id="p2-chapterResults"></div>
       </div>
-      <button class="btn primary" style="padding:11px" onclick="showHomePortal('9')">होम पर जाएँ</button>
+      <button class="btn primary" style="padding:11px" onclick="goToPage('page1')">होम पर जाएँ</button>
     </div>
   </div>
 
@@ -192,7 +211,7 @@ select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-
         <h2 style="font-size:14px;margin-top:0">अध्यायवार परिणाम</h2>
         <div id="p3-chapterResults"></div>
       </div>
-      <button class="btn primary" style="padding:11px" onclick="showHomePortal('10')">होम पर जाएँ</button>
+      <button class="btn primary" style="padding:11px" onclick="goToPage('page1')">होम पर जाएँ</button>
     </div>
   </div>
 </div>
@@ -297,10 +316,9 @@ async function startTest(cls, mode) {
   getAudioContext();
   const prefix = cls === '9' ? 'p2' : 'p3';
   let s = state[cls];
-  s.startTime = new Date(); // टेस्ट शुरू होते ही समय नोट हो गया
+  s.startTime = new Date();
   s.testMode = mode;
 
-  // कुल समय को लाइव दिखाने के लिए टाइमर शुरू करना
   stopTimer(cls);
   s.timerHandle = setInterval(() => {
     let elapsedSec = Math.floor((new Date() - s.startTime) / 1000);
@@ -441,7 +459,7 @@ function nextQ(cls) {
 async function finishTest(cls) {
   const prefix = cls === '9' ? 'p2' : 'p3';
   let s = state[cls];
-  stopTimer(cls); // टाइमर रोक दिया गया
+  stopTimer(cls);
   playVictorySound();
   let correct = 0;
   const chapters = syllabus[cls];
@@ -456,7 +474,6 @@ async function finishTest(cls) {
   const totalQ = s.questions.length;
   const percent = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
 
-  // कुल समय की गणना
   let endTime = new Date();
   let timeTakenSec = s.startTime ? Math.round((endTime - s.startTime) / 1000) : 0;
   if(timeTakenSec < 1) timeTakenSec = 1;
@@ -464,7 +481,6 @@ async function finishTest(cls) {
   let secs = timeTakenSec % 60;
   let timeStr = mins > 0 ? `${mins} मिनट ${secs} सेकंड` : `${secs} सेकंड`;
 
-  // प्रगतिशील टेस्ट का रिजल्ट और समय Supabase में सेव करना
   if (s.testMode === 'range') {
     try {
       let studentName = localStorage.getItem("studentName") || "विद्यार्थी";
