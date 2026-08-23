@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GANIT SETU | गणित शिक्षण मंच</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  --btn-student: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  --btn-teacher: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+  --btn-admin: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);
+  --card-bg: #ffffff;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+  --shadow-glow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background: radial-gradient(circle at 50% -20%, #312e81 0%, #0f172a 60%);
+  font-family:"Noto Sans Devanagari","Inter",sans-serif;
+  color:var(--text-dark);
+  padding:20px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app{
+  width:100%;
+  max-width:520px;
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 28px;
+  overflow:hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.section{display:none}
+.active{display:block}
+
+.brand{
+  position:relative;
+  padding: 24px 20px;
+  color: white;
+  background: var(--primary-gradient);
+  text-align: center;
+  box-shadow: inset 0 -4px 10px rgba(0,0,0,0.15);
+}
+.brand-name{
+  font-family: Inter, sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.content{padding: 24px 22px 28px}
+
+.class-select{
+  width:100%;
+  min-height:50px;
+  border:2px solid var(--border-color);
+  border-radius:14px;
+  padding:0 16px;
+  background:#f8fafc;
+  color:var(--text-dark);
+  font-family:inherit;
+  font-size:15px;
+  font-weight:600;
+  outline:none;
+  margin-bottom:14px;
+  transition: all 0.3s ease;
+}
+.class-select:focus{
+  border-color: #6366f1;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
+.menu-btn{
+  width:100%;
+  min-height:52px;
+  border:0;
+  color:white;
+  border-radius:14px;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow: var(--shadow-glow);
+  margin-top:10px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+.menu-btn:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.tab-btn{
+  flex:1;
+  min-height:44px;
+  border:0;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+  background:transparent;
+  color:var(--text-muted);
+  font-family:inherit;
+  font-size:14px;
+  transition: all 0.3s ease;
+}
+.tab-btn.active-tab{
+  background: #ffffff;
+  color: #4f46e5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+label{
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ================= AUTHENTICATION / LOGIN SECTION ================= -->
+  <div id="auth-screen" class="section active">
+    <div class="brand">
+      <div class="brand-name">GANIT SETU</div>
+      <div style="margin-top:8px;font-size:14px;font-weight:500;opacity:.95;">✨ गणित शिक्षण मंच - डिजिटल पोर्टल ✨</div>
+    </div>
+    <div class="content">
+      <!-- Role Tabs -->
+      <div style="display:flex;margin-bottom:20px;background:#e2e8f0;border-radius:14px;padding:5px;">
+        <button class="tab-btn active-tab" id="roleStudentBtn" onclick="switchRole('student')">विद्यार्थी</button>
+        <button class="tab-btn" id="roleTeacherBtn" onclick="switchRole('teacher')">शिक्षक</button>
+        <button class="tab-btn" id="roleAdminBtn" onclick="switchRole('admin')">एडमिन</button>
+      </div>
+
+      <!-- STUDENT LOGIN / REGISTER CONTAINER -->
+      <div id="studentAuthBox">
+        <div style="display:flex;gap:8px;margin-bottom:16px;background:#f1f5f9;padding:4px;border-radius:12px;">
+          <button class="tab-btn active-tab" id="stuLoginTab" onclick="switchStudentMode('login')">लॉगिन</button>
+          <button class="tab-btn" id="stuRegTab" onclick="switchStudentMode('register')">नया रजिस्ट्रेशन</button>
+        </div>
+
+        <!-- Student Login Form -->
+        <div id="stuLoginForm">
+          <label>यूनिक स्टूडेंट आईडी (Unique ID):</label>
+          <input type="text" id="stuLogUser" class="class-select" placeholder="जैसे: GS-9024" autocomplete="username">
+          <label>4-अंकों का पासवर्ड:</label>
+          <input type="password" id="stuLogPass" class="class-select" maxlength="4" placeholder="••••" autocomplete="current-password">
+          <button class="menu-btn" style="background: var(--btn-student);" onclick="handleStudentLogin()">विद्यार्थी लॉगिन करें 🚀</button>
+        </div>
+
+        <!-- Student Register Form -->
+        <div id="stuRegForm" style="display:none;">
+          <label>पूरा नाम:</label>
+          <input type="text" id="stuRegName" class="class-select" placeholder="विद्यार्थी का पूरा नाम" autocomplete="name">
+          
+          <label>मोबाइल नंबर (WhatsApp नंबर):</label>
+          <input type="tel" id="stuRegMobile" class="class-select" maxlength="10" placeholder="10 अंकों का सही मोबाइल नंबर" autocomplete="tel">
+
+          <label>मोबाइल नंबर दोबारा लिखें (Confirm Mobile):</label>
+          <input type="tel" id="stuRegConfirmMobile" class="class-select" maxlength="10" placeholder="वही मोबाइल नंबर दोबारा दर्ज करें" autocomplete="tel">
+          <small style="display:block; color:#e11d48; margin-top:-8px; margin-bottom:10px; font-weight:600; font-size:11px;">⚠️ इसी नंबर पर आपकी यूनिक आईडी और अपडेट्स भेजे जाएंगे।</small>
+          
+          <label>स्कूल का प्रकार और नाम:</label>
+          <div style="display:flex; gap:8px; margin-bottom:10px;">
+            <select id="stuSchoolType" class="class-select" style="flex: 1; margin-bottom:0;">
+              <option value="GHS">GHS</option>
+              <option value="GHSS">GHSS</option>
+            </select>
+            <input type="text" id="stuRegSchoolName" class="class-select" style="flex: 2; margin-bottom:0;" placeholder="स्कूल का स्थान/नाम लिखें" autocomplete="organization">
+          </div>
+          
+          <label>पता (Address):</label>
+          <input type="text" id="stuRegAddress" class="class-select" placeholder="गाँव/शहर का नाम" autocomplete="address-level2">
+          
+          <label>कक्षा चुनें:</label>
+          <select id="stuRegClass" class="class-select">
+            <option value="9">कक्षा 9वीं</option>
+            <option value="10">कक्षा 10वीं</option>
+          </select>
+          
+          <label>4-अंकों का पासवर्ड बनाएं:</label>
+          <input type="password" id="stuRegPass" class="class-select" maxlength="4" placeholder="केवल 4 अंकों का पासवर्ड" autocomplete="new-password">
+          
+          <button class="menu-btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="handleStudentRegister()">रजिस्टर करें और आईडी प्राप्त करें ✨</button>
+        </div>
+      </div>
+
+      <!-- TEACHER LOGIN / REGISTER CONTAINER -->
+      <div id="teacherAuthBox" style="display:none;">
+        <div style="display:flex;gap:8px;margin-bottom:16px;background:#f1f5f9;padding:4px;border-radius:12px;">
+          <button class="tab-btn active-tab" id="teacherLoginTab" onclick="switchTeacherMode('login')">लॉगिन</button>
+          <button class="tab-btn" id="teacherRegTab" onclick="switchTeacherMode('register')">नया रजिस्ट्रेशन</button>
+        </div>
+
+        <!-- Teacher Login Form -->
+        <div id="teacherLoginForm">
+          <label>शिक्षक मोबाइल नंबर:</label>
+          <input type="text" id="teacherLogUser" class="class-select" placeholder="मोबाइल नंबर दर्ज करें" autocomplete="username">
+          <label>4-अंकों का पासवर्ड:</label>
+          <input type="password" id="teacherLogPass" class="class-select" maxlength="4" placeholder="••••" autocomplete="current-password">
+          <button class="menu-btn" style="background: var(--btn-teacher);" onclick="handleTeacherLogin()">शिक्षक लॉगिन करें 🎯</button>
+        </div>
+
+        <!-- Teacher Register Form -->
+        <div id="teacherRegForm" style="display:none;">
+          <label>शिक्षक का नाम:</label>
+          <input type="text" id="teacherRegName" class="class-select" placeholder="शिक्षक का पूरा नाम" autocomplete="name">
+
+          <label>शिक्षक का पद (Designation):</label>
+          <select id="teacherRegDesignation" class="class-select">
+            <option value="">-- पद चुनें --</option>
+            <option value="Primary Teacher">सहायक शिक्षक / प्राथमिक शिक्षक (Primary Teacher)</option>
+            <option value="Middle School Teacher">उच्च श्रेणी शिक्षक / माध्यमिक शिक्षक (Middle School Teacher)</option>
+            <option value="Lecturer">व्याख्याता / उच्च माध्यमिक शिक्षक (Lecturer / High School Teacher)</option>
+            <option value="Headmaster">प्रधान पाठक / प्रधानाध्यापक (Headmaster / Principal)</option>
+            <option value="Guest Teacher">अतिथि शिक्षक (Guest Teacher)</option>
+          </select>
+          
+          <label>मोबाइल नंबर:</label>
+          <input type="tel" id="teacherRegMobile" class="class-select" maxlength="10" placeholder="10 अंकों का मोबाइल नंबर" autocomplete="tel">
+          
+          <label>स्कूल का प्रकार और नाम:</label>
+          <div style="display:flex; gap:8px; margin-bottom:10px;">
+            <select id="teacherSchoolType" class="class-select" style="flex: 1; margin-bottom:0;">
+              <option value="GHS">GHS</option>
+              <option value="GHSS">GHSS</option>
+            </select>
+            <input type="text" id="teacherRegSchoolName" class="class-select" style="flex: 2; margin-bottom:0;" placeholder="स्कूल का स्थान/नाम लिखें" autocomplete="organization">
+          </div>
+
+          <label>स्कूल का डाइस कोड (UDISE Code):</label>
+          <input type="text" id="teacherRegUdise" class="class-select" maxlength="11" placeholder="11 अंकों का UDISE कोड">
+          
+          <label>4-अंकों का पासवर्ड बनाएं:</label>
+          <input type="password" id="teacherRegPass" class="class-select" maxlength="4" placeholder="केवल 4 अंकों का पासवर्ड" autocomplete="new-password">
+          
+          <button class="menu-btn" style="background: var(--btn-teacher);" onclick="handleTeacherRegister()">शिक्षक रजिस्टर करें ⭐</button>
+        </div>
+      </div>
+
+      <!-- ADMIN LOGIN CONTAINER -->
+      <div id="adminAuthBox" style="display:none;">
+        <h3 style="font-size:18px;margin-top:0;color:#1e293b;text-align:center;margin-bottom:16px;">🔐 मास्टर एडमिन पैनल</h3>
+        <label>एडमिन यूजरनेम:</label>
+        <input type="text" id="adminUser" class="class-select" placeholder="admin" autocomplete="username">
+        <label>पासवर्ड:</label>
+        <input type="password" id="adminPass" class="class-select" placeholder="••••" autocomplete="current-password">
+        <button class="menu-btn" style="background: var(--btn-admin);" onclick="handleAdminLogin()">एडमिन लॉगिन करें ⚡</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= HOME SCREEN (After Successful Login) ================= -->
+  <div id="home-screen" class="section">
+    <header class="brand">
+      <div class="brand-name">GANIT SETU</div>
+      <div class="tagline" id="userWelcomeText" style="margin-top:6px;font-size:14px;opacity:.9;">गणित शिक्षण मंच</div>
+      <div style="margin-top:14px;font-size:20px;font-weight:800;" id="greetingName">नमस्कार!</div>
+      <div style="font-size:13px;opacity:.95;margin-top:6px;" id="userInfoDetails"></div>
+    </header>
+    <div class="content">
+      <div style="background:#f8fafc;border:2px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:16px;box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+        <label class="class-select-label" for="class-select" style="font-size:14px;margin-bottom:8px;">🎯 अपनी कक्षा चुनें और टेस्ट दें:</label>
+        <select id="class-select" class="class-select" onchange="selectClass(this.value)">
+          <option value="" selected>-- कक्षा चुनें --</option>
+          <option value="class9.html">कक्षा 9वीं</option>
+          <option value="class10.html">कक्षा 10वीं</option>
+        </select>
+      </div>
+      <button class="menu-btn" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);" onclick="handleLogout()">लॉग आउट (Logout) 🚪</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://xgmeivfvuujculkplxjf.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+let loggedInUser = null;
+
+function switchRole(role) {
+  document.getElementById('roleStudentBtn').className = role === 'student' ? 'tab-btn active-tab' : 'tab-btn';
+  document.getElementById('roleTeacherBtn').className = role === 'teacher' ? 'tab-btn active-tab' : 'tab-btn';
+  document.getElementById('roleAdminBtn').className = role === 'admin' ? 'tab-btn active-tab' : 'tab-btn';
+
+  document.getElementById('studentAuthBox').style.display = role === 'student' ? 'block' : 'none';
+  document.getElementById('teacherAuthBox').style.display = role === 'teacher' ? 'block' : 'none';
+  document.getElementById('adminAuthBox').style.display = role === 'admin' ? 'block' : 'none';
+}
+
+function switchStudentMode(mode) {
+  document.getElementById('stuLoginTab').className = mode === 'login' ? 'tab-btn active-tab' : 'tab-btn';
+  document.getElementById('stuRegTab').className = mode === 'register' ? 'tab-btn active-tab' : 'tab-btn';
+  document.getElementById('stuLoginForm').style.display = mode === 'login' ? 'block' : 'none';
+  document.getElementById('stuRegForm').style.display = mode === 'register' ? 'block' : 'none';
+}
+
+function switchTeacherMode(mode) {
+  document.getElementById('teacherLoginTab').className = mode === 'login' ? 'tab-btn active-tab' : 'tab-btn';
+  document.getElementById('teacherRegTab').className = mode === 'register' ? 'tab-btn active-tab' : 'tab-btn';
+  document.getElementById('teacherLoginForm').style.display = mode === 'login' ? 'block' : 'none';
+  document.getElementById('teacherRegForm').style.display = mode === 'register' ? 'block' : 'none';
+}
+
+async function handleStudentRegister() {
+  const name = document.getElementById('stuRegName').value.trim();
+  const mobile = document.getElementById('stuRegMobile').value.trim();
+  const confirmMobile = document.getElementById('stuRegConfirmMobile').value.trim();
+  
+  const schoolType = document.getElementById('stuSchoolType').value;
+  const schoolInput = document.getElementById('stuRegSchoolName').value.trim();
+  const school = `${schoolType} ${schoolInput}`;
+
+  const address = document.getElementById('stuRegAddress').value.trim();
+  const cls = document.getElementById('stuRegClass').value;
+  const pass = document.getElementById('stuRegPass').value.trim();
+
+  if(!name || !mobile || !confirmMobile || !schoolInput || !pass) {
+    alert("कृपया सभी अनिवार्य विवरण भरें।");
+    return;
+  }
+
+  if(mobile.length !== 10 || isNaN(mobile)) {
+    alert("कृपया ठीक 10 अंकों का सही मोबाइल नंबर दर्ज करें।");
+    return;
+  }
+
+  if(mobile !== confirmMobile) {
+    alert("दोनों मोबाइल नंबर मेल नहीं खा रहे हैं! कृपया सही नंबर दोबारा जाँच कर लिखें।");
+    return;
+  }
+
+  if(pass.length !== 4 || isNaN(pass)) {
+    alert("पासवर्ड केवल 4 अंकों का होना चाहिए (जैसे: 1234)।");
+    return;
+  }
+
+  const uniqueId = "GS-" + Math.floor(1000 + Math.random() * 9000);
+
+  try {
+    const { error } = await supabaseClient.from('student_users').insert([
+      { 
+        username: uniqueId, 
+        password: pass, 
+        full_name: name, 
+        class_name: cls,
+        mobile_no: mobile,
+        school_name: school,
+        address: address
+      }
+    ]);
+    if(error) throw error;
+    
+    alert(`रजिस्ट्रेशन सफल!\n\nआपकी यूनिक स्टूडेंट आईडी है: ${uniqueId}\nकृपया इसे सुरक्षित नोट कर लें!`);
+    document.getElementById('stuLogUser').value = uniqueId;
+    switchStudentMode('login');
+  } catch(e) {
+    console.error(e);
+    alert("रजिस्ट्रेशन में त्रुटि हुई। कृपया पुनः प्रयास करें।");
+  }
+}
+
+async function handleStudentLogin() {
+  const user = document.getElementById('stuLogUser').value.trim();
+  const pass = document.getElementById('stuLogPass').value.trim();
+
+  if(!user || !pass) {
+    alert("कृपया अपनी यूनिक आईडी और 4-अंकों का पासवर्ड दर्ज करें।");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('student_users')
+      .select('*')
+      .eq('username', user)
+      .eq('password', pass)
+      .single();
+
+    if(error || !data) {
+      alert("गलत यूनिक आईडी या 4-अंकों का पासवर्ड!");
+      return;
+    }
+
+    loggedInUser = data;
+    document.getElementById('greetingName').textContent = `नमस्कार, ${loggedInUser.full_name}!`;
+    document.getElementById('userWelcomeText').textContent = `कक्षा ${loggedInUser.class_name}वीं • छात्र पोर्टल`;
+    document.getElementById('userInfoDetails').textContent = `आईडी: ${loggedInUser.username} | स्कूल: ${loggedInUser.school_name || 'लागू नहीं'}`;
+    showSection('home-screen');
+  } catch(e) {
+    console.error(e);
+    alert("लॉगिन करने में समस्या आई।");
+  }
+}
+
+async function handleTeacherRegister() {
+  const name = document.getElementById('teacherRegName').value.trim();
+  const designation = document.getElementById('teacherRegDesignation').value;
+  const mobile = document.getElementById('teacherRegMobile').value.trim();
+  
+  const schoolType = document.getElementById('teacherSchoolType').value;
+  const schoolInput = document.getElementById('teacherRegSchoolName').value.trim();
+  const school = `${schoolType} ${schoolInput}`;
+
+  const udise = document.getElementById('teacherRegUdise').value.trim();
+  const pass = document.getElementById('teacherRegPass').value.trim();
+
+  if(!name || !designation || !mobile || !schoolInput || !udise || !pass) {
+    alert("कृपया सभी जानकारी (नाम, पद, मोबाइल, स्कूल, डाइस कोड और पासवर्ड) भरें।");
+    return;
+  }
+
+  if(mobile.length !== 10 || isNaN(mobile)) {
+    alert("कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।");
+    return;
+  }
+
+  if(pass.length !== 4 || isNaN(pass)) {
+    alert("पासवर्ड केवल 4 अंकों का होना चाहिए।");
+    return;
+  }
+
+  try {
+    const { error } = await supabaseClient.from('teacher_users').insert([
+      { 
+        full_name: name, 
+        designation: designation,
+        mobile_no: mobile,
+        school_name: school,
+        udise_code: udise,
+        password: pass
+      }
+    ]);
+    if(error) throw error;
+    
+    alert("शिक्षक रजिस्ट्रेशन सफल! अब आप अपने मोबाइल नंबर और 4-अंकों के पासवर्ड से लॉगिन कर सकते हैं।");
+    document.getElementById('teacherLogUser').value = mobile;
+    switchTeacherMode('login');
+  } catch(e) {
+    console.error(e);
+    alert("शिक्षक रजिस्ट्रेशन में त्रुटि हुई।");
+  }
+}
+
+async function handleTeacherLogin() {
+  const user = document.getElementById('teacherLogUser').value.trim();
+  const pass = document.getElementById('teacherLogPass').value.trim();
+
+  if(!user || !pass) {
+    alert("कृपया मोबाइल नंबर और 4-अंकों का पासवर्ड दर्ज करें।");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('teacher_users')
+      .select('*')
+      .eq('mobile_no', user)
+      .eq('password', pass)
+      .single();
+
+    if(error || !data) {
+      alert("गलत मोबाइल नंबर या 4-अंकों का पासवर्ड!");
+      return;
+    }
+
+    loggedInUser = data;
+    document.getElementById('greetingName').textContent = `नमस्कार, ${loggedInUser.full_name} (${loggedInUser.designation})!`;
+    document.getElementById('userWelcomeText').textContent = `शिक्षक पोर्टल • ${loggedInUser.school_name}`;
+    document.getElementById('userInfoDetails').textContent = `मोबाइल: ${loggedInUser.mobile_no} | UDISE: ${loggedInUser.udise_code}`;
+    showSection('home-screen');
+  } catch(e) {
+    console.error(e);
+    alert("शिक्षक लॉगिन करने में समस्या आई।");
+  }
+}
+
+function handleAdminLogin() {
+  const user = document.getElementById('adminUser').value.trim();
+  const pass = document.getElementById('adminPass').value.trim();
+  
+  if(user === "admin" && pass === "1990") {
+    alert("मास्टर एडमिन लॉगिन सफल!");
+    document.getElementById('greetingName').textContent = `नमस्कार, मास्टर एडमिन!`;
+    document.getElementById('userWelcomeText').textContent = `मास्टर एडमिन पैनल`;
+    document.getElementById('userInfoDetails').textContent = `यूजरनेम: admin`;
+    showSection('home-screen');
+  } else {
+    alert("गलत एडमिन यूजरनेम या पासवर्ड!");
+  }
+}
+
+function handleLogout() {
+  loggedInUser = null;
+  showSection('auth-screen');
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function selectClass(page) {
+  if(!page) return;
+  window.location.href = page;
+}
+</script>
+</body>
+</html>
