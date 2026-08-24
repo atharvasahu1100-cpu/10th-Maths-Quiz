@@ -135,6 +135,22 @@ body{
   body{padding:18px 0}
   .app{border-radius:24px;box-shadow:0 14px 45px rgba(20,70,110,.14)}
 }
+
+/* ===== Student Registration Modal ===== */
+.reg-modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(8,45,86,.48)}
+.reg-modal.show{display:flex}
+.reg-box{width:min(94vw,470px);max-height:94vh;overflow:auto;background:#fff;border-radius:24px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+.reg-head{text-align:center;margin-bottom:14px}.reg-head h2{margin:0;color:#0b397b;font-size:24px;font-weight:950}.reg-head p{margin:5px 0 0;color:#687b91;font-size:11px}
+.reg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.reg-field{display:flex;flex-direction:column;gap:5px}.reg-field.full{grid-column:1/-1}
+.reg-field label{font-size:10px;font-weight:900;color:#294d7b}
+.reg-field input,.reg-field select{width:100%;height:43px;border:1.5px solid #d7e1eb;border-radius:11px;padding:0 11px;outline:0;background:#fff;color:#23466e;font-size:13px}
+.reg-field input:focus,.reg-field select:focus{border-color:#1974e4;box-shadow:0 0 0 3px rgba(25,116,228,.08)}
+.reg-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.reg-save,.reg-cancel{height:45px;border-radius:12px;font-weight:900;cursor:pointer}
+.reg-save{border:0;background:linear-gradient(135deg,#167cf0,#075bc5);color:#fff}.reg-cancel{border:1px solid #cbd8e6;background:#fff;color:#315273}
+.reg-msg{display:none;margin-top:10px;padding:8px;border-radius:9px;text-align:center;font-size:10px;font-weight:700}
+.reg-msg.error{display:block;background:#fff3f3;color:#9d1d1d;border:1px solid #ffcaca}.reg-msg.success{display:block;background:#effdf4;color:#166b38;border:1px solid #bfe7cc}
+@media(max-width:380px){.reg-grid{grid-template-columns:1fr}.reg-field.full{grid-column:auto}}
+
 </style>
 </head>
 <body>
@@ -160,52 +176,421 @@ body{
 
   <div id="status" class="status"></div>
 
+
+  <div id="regModal" class="reg-modal" role="dialog" aria-modal="true">
+    <div class="reg-box">
+      <div class="reg-head">
+        <h2>नया विद्यार्थी पंजीयन</h2>
+        <p>अपनी जानकारी भरकर Ganit Setu से जुड़ें</p>
+      </div>
+      <div class="reg-grid">
+        <div class="reg-field full">
+          <label for="regName">विद्यार्थी का नाम *</label>
+          <input id="regName" type="text" maxlength="80" placeholder="पूरा नाम">
+        </div>
+        <div class="reg-field">
+          <label for="regMobile">मोबाइल नंबर *</label>
+          <input id="regMobile" type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का नंबर">
+        </div>
+        <div class="reg-field">
+          <label for="regClass">कक्षा *</label>
+          <select id="regClass">
+            <option value="">कक्षा चुनें</option>
+            <option value="9">9वीं</option>
+            <option value="10">10वीं</option>
+          </select>
+        </div>
+        <div class="reg-field full">
+          <label for="regSchool">विद्यालय का नाम *</label>
+          <input id="regSchool" type="text" maxlength="150" placeholder="विद्यालय का पूरा नाम">
+        </div>
+        <div class="reg-field">
+          <label for="regDise">विद्यालय DISE/UDISE Code *</label>
+          <input id="regDise" type="text" maxlength="20" inputmode="numeric" placeholder="DISE Code">
+        </div>
+        <div class="reg-field">
+          <label for="regDistrict">जिला</label>
+          <input id="regDistrict" type="text" maxlength="80" placeholder="जिला">
+        </div>
+        <div class="reg-field full">
+          <label for="regBlock">विकासखंड / ब्लॉक</label>
+          <input id="regBlock" type="text" maxlength="80" placeholder="ब्लॉक">
+        </div>
+      </div>
+      <div id="regMsg" class="reg-msg"></div>
+      <div class="reg-actions">
+        <button class="reg-cancel" onclick="closeRegistration()">वापस</button>
+        <button class="reg-save" onclick="submitRegistration()">पंजीयन करें</button>
+      </div>
+    </div>
+  </div>
+
   <div id="loading" class="loading">
     <span class="spinner"></span>कृपया प्रतीक्षा करें...
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+/* =========================================================
+   GANIT SETU — STUDENT LOGIN
+   Existing visual design is unchanged.
+   ========================================================= */
+
+const SUPABASE_URL = "https://xgmeivfvuujculkplxjf.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
 function cleanMobile(){
-  const el=document.getElementById('mobile');
-  el.value=el.value.replace(/\D/g,'').slice(0,10);
+  const el = document.getElementById('mobile');
+
+  el.value = el.value
+    .replace(/\D/g,'')
+    .slice(0,10);
+
   hideStatus();
 }
 
 function showStatus(text,type){
-  const el=document.getElementById('status');
-  el.className='status '+type;
-  el.textContent=text;
+  const el = document.getElementById('status');
+
+  el.className = 'status ' + type;
+  el.textContent = text;
 }
 
 function hideStatus(){
-  const el=document.getElementById('status');
-  el.className='status';
-  el.textContent='';
+  const el = document.getElementById('status');
+
+  el.className = 'status';
+  el.textContent = '';
 }
 
-function loginStudent(){
-  const mobile=document.getElementById('mobile').value.trim();
+function setLoading(isLoading){
+  const loginZone = document.querySelector('.login-zone');
+  const loading = document.getElementById('loading');
+
+  if(isLoading){
+    loginZone.disabled = true;
+    loginZone.style.pointerEvents = 'none';
+    loading.style.display = 'flex';
+  }else{
+    loginZone.disabled = false;
+    loginZone.style.pointerEvents = 'auto';
+    loading.style.display = 'none';
+  }
+}
+
+async function loginStudent(){
+
+  const mobile =
+    document.getElementById('mobile').value.trim();
+
+  hideStatus();
 
   if(!/^[6-9]\d{9}$/.test(mobile)){
-    showStatus('कृपया सही 10 अंकों का मोबाइल नंबर दर्ज करें।','error');
+
+    showStatus(
+      'कृपया सही 10 अंकों का मोबाइल नंबर दर्ज करें।',
+      'error'
+    );
+
     document.getElementById('mobile').focus();
     return;
   }
 
-  /*
-    अगले चरण में यहीं Supabase student-login query जोड़ी जाएगी।
-    Visual design को नहीं बदला जाएगा।
-  */
-  showStatus('मोबाइल नंबर सही है।','success');
+  setLoading(true);
+
+  try{
+
+    /*
+      Secure Supabase RPC:
+      get_student_by_mobile(TEXT)
+
+      यह function केवल दिए गए mobile number
+      के विद्यार्थी की जानकारी लौटाता है।
+    */
+
+    const { data, error } =
+      await supabaseClient.rpc(
+        'get_student_by_mobile',
+        {
+          p_mobile: mobile
+        }
+      );
+
+    if(error){
+      console.error('Student Login Error:', error);
+
+      showStatus(
+        'Login में समस्या आ रही है। कृपया थोड़ी देर बाद फिर प्रयास करें।',
+        'error'
+      );
+
+      return;
+    }
+
+    if(!data || !Array.isArray(data) || data.length === 0){
+
+      showStatus(
+        'यह मोबाइल नंबर अभी Ganit Setu में registered नहीं है।',
+        'error'
+      );
+
+      return;
+    }
+
+    const student = data[0];
+
+    if(
+      student.status &&
+      String(student.status).toLowerCase() !== 'active'
+    ){
+
+      showStatus(
+        'यह विद्यार्थी account अभी active नहीं है।',
+        'error'
+      );
+
+      return;
+    }
+
+    /*
+      Student information save करें।
+      Mobile number केवल internal use के लिए रखा जा रहा है।
+      इसे किसी visible profile में दिखाने की जरूरत नहीं है।
+    */
+
+    localStorage.setItem(
+      'studentId',
+      String(student.student_id || '')
+    );
+
+    localStorage.setItem(
+      'studentName',
+      String(student.student_name || '')
+    );
+
+    localStorage.setItem(
+      'studentMobile',
+      mobile
+    );
+
+    localStorage.setItem(
+      'mobileNumber',
+      mobile
+    );
+
+    localStorage.setItem(
+      'studentClass',
+      String(student.class_name || '')
+    );
+
+    localStorage.setItem(
+      'schoolName',
+      String(student.school_name || '')
+    );
+
+    localStorage.setItem(
+      'schoolDiseCode',
+      String(student.school_dise_code || '')
+    );
+
+    localStorage.setItem(
+      'district',
+      String(student.district || '')
+    );
+
+    localStorage.setItem(
+      'block',
+      String(student.block || '')
+    );
+
+    localStorage.setItem(
+      'studentLoggedIn',
+      'true'
+    );
+
+    localStorage.setItem(
+      'studentLoginTime',
+      new Date().toISOString()
+    );
+
+    showStatus(
+      'स्वागत है, ' +
+      (student.student_name || 'विद्यार्थी') +
+      '! आगे बढ़ रहे हैं...',
+      'success'
+    );
+
+    /*
+      आपका existing Student Home Page.
+      Login के बाद इसी page पर जाना है।
+    */
+    setTimeout(function(){
+      // Student Home Page: login data is already stored above.
+      window.location.href = 'home.html';
+    }, 500);
+
+  }catch(err){
+
+    console.error('Unexpected Student Login Error:', err);
+
+    showStatus(
+      'कुछ तकनीकी समस्या हुई। कृपया फिर प्रयास करें।',
+      'error'
+    );
+
+  }finally{
+
+    setLoading(false);
+  }
 }
 
 function registerStudent(){
-  /*
-    अगले चरण में Registration Page से जोड़ा जाएगा।
-  */
-  showStatus('नया विद्यार्थी Registration अगले चरण में जोड़ा जाएगा।','success');
+  document.getElementById('regModal').classList.add('show');
+
+  const loginMobile = document.getElementById('mobile').value.trim();
+  if(loginMobile){
+    document.getElementById('regMobile').value = loginMobile;
+  }
+
+  document.getElementById('regName').focus();
 }
+
+function closeRegistration(){
+  document.getElementById('regModal').classList.remove('show');
+  clearRegistrationMessage();
+}
+
+function clearRegistrationMessage(){
+  const el = document.getElementById('regMsg');
+  el.className = 'reg-msg';
+  el.textContent = '';
+}
+
+function showRegistrationMessage(text,type){
+  const el = document.getElementById('regMsg');
+  el.className = 'reg-msg ' + type;
+  el.textContent = text;
+}
+
+async function submitRegistration(){
+
+  clearRegistrationMessage();
+
+  const name = document.getElementById('regName').value.trim();
+  const mobile = document.getElementById('regMobile').value.trim();
+  const className = document.getElementById('regClass').value.trim();
+  const schoolName = document.getElementById('regSchool').value.trim();
+  const dise = document.getElementById('regDise').value.trim();
+  const district = document.getElementById('regDistrict').value.trim();
+  const block = document.getElementById('regBlock').value.trim();
+
+  if(!name){
+    showRegistrationMessage('विद्यार्थी का नाम दर्ज करें।','error'); return;
+  }
+
+  if(!/^[6-9]\d{9}$/.test(mobile)){
+    showRegistrationMessage('सही 10 अंकों का मोबाइल नंबर दर्ज करें।','error'); return;
+  }
+
+  if(!className){
+    showRegistrationMessage('कक्षा चुनें।','error'); return;
+  }
+
+  if(!schoolName){
+    showRegistrationMessage('विद्यालय का नाम दर्ज करें।','error'); return;
+  }
+
+  if(!/^\d{6,20}$/.test(dise)){
+    showRegistrationMessage('सही DISE/UDISE Code दर्ज करें।','error'); return;
+  }
+
+  const saveButton = document.querySelector('.reg-save');
+  saveButton.disabled = true;
+  saveButton.textContent = 'पंजीयन हो रहा है...';
+
+  try{
+
+    const { data, error } = await supabaseClient.rpc(
+      'register_student',
+      {
+        p_student_name: name,
+        p_mobile_number: mobile,
+        p_class_name: className,
+        p_school_name: schoolName,
+        p_school_dise_code: dise,
+        p_district: district || null,
+        p_block: block || null
+      }
+    );
+
+    if(error){
+      console.error('Student Registration Error:', error);
+
+      const duplicate =
+        String(error.message || '').toLowerCase().includes('duplicate') ||
+        String(error.message || '').toLowerCase().includes('already');
+
+      showRegistrationMessage(
+        duplicate
+          ? 'यह मोबाइल नंबर पहले से registered है। उसी नंबर से Login करें।'
+          : 'पंजीयन नहीं हो सका। कृपया जानकारी जाँचकर फिर प्रयास करें।',
+        'error'
+      );
+      return;
+    }
+
+    if(!data || !data.student_id){
+      showRegistrationMessage(
+        'पंजीयन का उत्तर सही नहीं मिला। कृपया फिर प्रयास करें।',
+        'error'
+      );
+      return;
+    }
+
+    document.getElementById('mobile').value = mobile;
+
+    showRegistrationMessage(
+      'पंजीयन सफल हुआ! अब इसी मोबाइल नंबर से Login करें।',
+      'success'
+    );
+
+    setTimeout(function(){
+      closeRegistration();
+      showStatus(
+        'पंजीयन सफल है। अब अपना मोबाइल नंबर डालकर आगे बढ़ें।',
+        'success'
+      );
+    }, 900);
+
+  }catch(err){
+
+    console.error('Unexpected Registration Error:', err);
+
+    showRegistrationMessage(
+      'तकनीकी समस्या हुई। कृपया फिर प्रयास करें।',
+      'error'
+    );
+
+  }finally{
+    saveButton.disabled = false;
+    saveButton.textContent = 'पंजीयन करें';
+  }
+}
+
+document.getElementById('regModal').addEventListener('click', function(e){
+  if(e.target === this){
+    closeRegistration();
+  }
+});
+
 </script>
+
 </body>
 </html>
