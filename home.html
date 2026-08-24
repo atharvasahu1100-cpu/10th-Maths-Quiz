@@ -1748,13 +1748,13 @@ body{
 <div class="daily-champions-dashboard" id="dailyChampionsDashboard">
   <div class="daily-champions-title-row">
     <span class="daily-champions-title">🏆 Daily Champions</span>
-    <span class="daily-champions-date" id="dailyChampionsDate">आज</span>
+    <span class="daily-champions-date" id="dailyChampionsDate">कल</span>
   </div>
   <div class="daily-top3" id="dailyTop3">
     <div class="daily-champion-card loading">परिणाम लोड हो रहे हैं...</div>
   </div>
   <div class="daily-top10-wrap">
-    <div class="daily-top10-title">⭐ आज की Top 10 सूची</div>
+    <div class="daily-top10-title">⭐ पिछले दिन की Top 10 सूची</div>
     <div class="daily-top10-list" id="dailyTop10List"></div>
   </div>
 </div>
@@ -2331,75 +2331,221 @@ function startTeacherTest(){
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script id="dailyChampionsDataScript">
 (function(){
-  const API='https://script.google.com/macros/s/AKfycbxaxuBqb6M9Ikpch2_6peN7UF5ehnJkLxuZPp0B4rJEKE_801BdyWjx8hKfpi7u_IQLmw/exec';
-  const top3=document.getElementById('dailyTop3');
-  const top10=document.getElementById('dailyTop10List');
-  if(!top3||!top10)return;
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const num=v=>{const m=String(v??'').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);return m?Number(m[0]):NaN;};
-  const timeNum=v=>{const m=String(v??'').match(/(\d{1,2}):(\d{2})(?::(\d{2}))?/);return m?(+m[1]*3600 + +m[2]*60 + +(m[3]||0)):99999999;};
-  function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-  function normDate(v){const x=String(v??'').trim(); if(/^\d{4}-\d{2}-\d{2}$/.test(x))return x; const d=new Date(x); return isNaN(d)?x:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-  function render(rows){
-    if(!Array.isArray(rows)||rows.length<2)throw Error('No results');
-    const h=rows[0].map(x=>String(x).trim().toLowerCase());
-    const idx=(rx,fallback)=>{let i=h.findIndex(x=>rx.test(x));return i<0?fallback:i;};
-    const ni=idx(/^(name|student name|student|नाम|विद्यार्थी)$/,3);
-    const si=idx(/^(score|marks|mark|अंक|प्राप्तांक)$/,5);
-    const di=idx(/(date|दिनांक|तिथि)/,1);
-    const ti=idx(/(time|समय)/,2);
-    const mi=idx(/(mobile|phone|मोबाइल)/,4);
-    const idI=idx(/(student id|studentid|id|विद्यार्थी.*आईडी)/,-1);
-    const todayStr=today();
-    let students=rows.slice(1).map(r=>({name:r[ni],score:num(r[si]),date:r[di],time:r[ti],mobile:r[mi],id:idI>=0?r[idI]:''}))
-      .filter(s=>String(s.name||'').trim()&&Number.isFinite(s.score));
-    const dated=students.filter(s=>normDate(s.date)===todayStr);
-    if(dated.length) students=dated;
-    students.sort((a,b)=>b.score-a.score || timeNum(a.time)-timeNum(b.time));
-    const top=students.slice(0,10);
-    window.__dailyChampionsStudents = students;
-    window.__dailyChampionsMaxScore = 10;
-    document.getElementById('dailyChampionsDate').textContent='📅 '+new Date().toLocaleDateString('hi-IN');
-    if(!top.length){top3.innerHTML='<div class="daily-champion-card loading">आज का परिणाम अभी उपलब्ध नहीं है।</div>';top10.innerHTML='';return;}
-    const medals=['🥇','🥈','🥉'];
-    top3.innerHTML=top.slice(0,3).map((s,i)=>`<div class="daily-champion-card ${i===0?'first':''}"><div class="daily-rank">${medals[i]||''}</div><div class="daily-champion-photo">${esc(String(s.name).trim().charAt(0))}</div><div class="daily-champion-name">${esc(s.name)}</div><div class="daily-champion-score">${esc(s.score)} अंक</div><div class="daily-champion-meta">${esc(s.time||'')} • Rank ${i+1}</div></div>`).join('');
-    const top10Html=top.map((s,i)=>`<div class="daily-top10-row"><span class="r">${i+1}</span><span class="n">${esc(s.name)}</span><span class="m">${esc(s.score)} अंक</span><span class="t">${esc(s.time||'')}</span></div>`).join('');
-     top10.innerHTML=top10Html+top10Html;
+  'use strict';
+
+  /* =====================================================
+     ONLY Daily Champions data connection is changed here.
+     Existing Home Page interface/design remains untouched.
+     Data source: Supabase -> student_test_records
+     Showing: PREVIOUS DAY's Top 10
+  ===================================================== */
+
+  const SUPABASE_URL = "https://xgmeivfvuujculkplxjf.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+
+  const top3 = document.getElementById('dailyTop3');
+  const top10 = document.getElementById('dailyTop10List');
+  const dateBox = document.getElementById('dailyChampionsDate');
+  const titleBox = document.querySelector('#dailyChampionsDashboard .daily-top10-title');
+
+  if(!top3 || !top10) return;
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  const esc = v => String(v ?? '').replace(/[&<>"']/g,c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[c]));
+
+  function indiaDate(){
+    const parts = new Intl.DateTimeFormat('en-CA',{
+      timeZone:'Asia/Kolkata',
+      year:'numeric', month:'2-digit', day:'2-digit'
+    }).formatToParts(new Date());
+    const o={};
+    parts.forEach(x=>o[x.type]=x.value);
+    return `${o.year}-${o.month}-${o.day}`;
   }
+
+  function previousDate(){
+    const today = indiaDate();
+    const d = new Date(today + 'T00:00:00+05:30');
+    d.setDate(d.getDate()-1);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function hindiDate(iso){
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('hi-IN',{
+      day:'numeric', month:'long', year:'numeric'
+    });
+  }
+
+  function timeSeconds(v){
+    const x=String(v||'').match(/(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+    return x ? (+x[1]*3600 + +x[2]*60 + +(x[3]||0)) : 99999999;
+  }
+
+  function cleanName(v){
+    const x=String(v??'').trim();
+    return x || 'विद्यार्थी';
+  }
+
+  function render(rows, resultDate){
+    if(!Array.isArray(rows) || !rows.length){
+      top3.innerHTML='<div class="daily-champion-card loading">इस दिन कोई result उपलब्ध नहीं है।</div>';
+      top10.innerHTML='';
+      return;
+    }
+
+    /* One student may submit more than once in a day.
+       Keep that student's best result only. */
+    const best = new Map();
+
+    rows.forEach(r=>{
+      const key = String(r.student_id || r.mobile_number || r.student_name || '').trim();
+      if(!key) return;
+
+      const item={
+        id:r.student_id || '',
+        name:cleanName(r.student_name),
+        mobile:r.mobile_number || '',
+        className:r.class_name || '',
+        total:Number(r.total_questions)||0,
+        correct:Number(r.correct_answers)||0,
+        percentage:Number(r.percentage)||0,
+        time:r.time_taken || '',
+        testTime:r.test_time || ''
+      };
+
+      const old=best.get(key);
+      if(!old ||
+         item.percentage > old.percentage ||
+         (item.percentage === old.percentage && item.correct > old.correct) ||
+         (item.percentage === old.percentage && item.correct === old.correct &&
+          timeSeconds(item.time) < timeSeconds(old.time))){
+        best.set(key,item);
+      }
+    });
+
+    const students=Array.from(best.values()).sort((a,b)=>{
+      if(b.percentage !== a.percentage) return b.percentage-a.percentage;
+      if(b.correct !== a.correct) return b.correct-a.correct;
+      return timeSeconds(a.time)-timeSeconds(b.time);
+    });
+
+    const top=students.slice(0,10);
+
+    window.__dailyChampionsStudents = students;
+    window.__dailyChampionsMaxScore = 100;
+
+    if(dateBox) dateBox.textContent='📅 '+hindiDate(resultDate);
+    if(titleBox) titleBox.textContent='⭐ पिछले दिन की Top 10 सूची';
+
+    if(!top.length){
+      top3.innerHTML='<div class="daily-champion-card loading">इस दिन कोई result उपलब्ध नहीं है।</div>';
+      top10.innerHTML='';
+      return;
+    }
+
+    const medals=['🥇','🥈','🥉'];
+
+    top3.innerHTML=top.slice(0,3).map((s,i)=>`
+      <div class="daily-champion-card ${i===0?'first':''}">
+        <div class="daily-rank">${medals[i]}</div>
+        <div class="daily-champion-photo">${esc(cleanName(s.name).charAt(0))}</div>
+        <div class="daily-champion-name">${esc(s.name)}</div>
+        <div class="daily-champion-score">${esc(s.percentage)}%</div>
+        <div class="daily-champion-meta">${esc(s.correct)}/${esc(s.total)} • Rank ${i+1}</div>
+      </div>
+    `).join('');
+
+    top10.innerHTML=top.map((s,i)=>{
+      const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+      const cls = i===0?' gold':i===1?' silver':i===2?' bronze':'';
+      return `<div class="daily-top10-row${cls}">
+        <span class="r">${medal || (i+1)}</span>
+        <span class="n">${esc(s.name)}</span>
+        <span class="m">${esc(s.percentage)}%</span>
+        <span class="t">${esc(s.time||'')}</span>
+      </div>`;
+    }).join('');
+  }
+
+  async function loadDailyChampions(){
+    const resultDate=previousDate();
+
+    if(dateBox) dateBox.textContent='📅 '+hindiDate(resultDate);
+    if(titleBox) titleBox.textContent='⭐ पिछले दिन की Top 10 सूची';
+
+    try{
+      const {data,error}=await supabaseClient
+        .from('student_test_records')
+        .select('student_id,student_name,mobile_number,class_name,total_questions,correct_answers,percentage,time_taken,test_date,test_time')
+        .eq('test_date',resultDate);
+
+      if(error) throw error;
+      render(Array.isArray(data)?data:[],resultDate);
+
+    }catch(error){
+      console.error('Supabase Daily Champions Error:',error);
+      top3.innerHTML='<div class="daily-champion-card loading">Daily Winner का result लोड नहीं हो पाया।</div>';
+      top10.innerHTML='';
+    }
+  }
+
+  /* Existing Today Rank button is kept functional.
+     It uses the same loaded Supabase data and does not change UI. */
   const rankBtn=document.getElementById('studentTodayRankBtn');
   const rankResult=document.getElementById('studentTodayRankResult');
-  const cleanText=v=>String(v??'').trim().toLowerCase();
+
   function currentStudent(){
-    let profile=null;
-    try{
-      const readObj=(store,keys)=>{for(const k of keys){const raw=store.getItem(k);if(raw){try{const o=JSON.parse(raw);if(o&&typeof o==='object')return o;}catch(e){}}}return null;};
-      profile=readObj(localStorage,['studentProfile','studentData','student','userProfile','user'])||readObj(sessionStorage,['studentProfile','studentData','student','userProfile','user']);
-    }catch(e){}
-    const read=(store,keys)=>{try{for(const k of keys){const v=store.getItem(k);if(String(v??'').trim())return v;}}catch(e){}return '';};
+    const read=(keys)=>{
+      for(const k of keys){
+        const v=localStorage.getItem(k);
+        if(String(v??'').trim()) return String(v).trim().toLowerCase();
+      }
+      return '';
+    };
     return {
-      name:cleanText(profile&&(profile.name||profile.studentName||profile.student_name))||cleanText(read(localStorage,['studentName','student_name','name','username']))||cleanText(read(sessionStorage,['studentName','student_name','name','username'])),
-      id:cleanText(profile&&(profile.studentId||profile.studentID||profile.student_id||profile.id))||cleanText(read(localStorage,['studentId','studentID','student_id','student_id_no','id']))||cleanText(read(sessionStorage,['studentId','studentID','student_id','student_id_no','id'])),
-      mobile:cleanText(profile&&(profile.mobile||profile.mobileNumber||profile.phone||profile.studentMobile))||cleanText(read(localStorage,['mobile','mobileNumber','phone','studentMobile']))||cleanText(read(sessionStorage,['mobile','mobileNumber','phone','studentMobile']))
+      id:read(['studentId','studentID','student_id']),
+      mobile:read(['studentMobile','mobileNumber','mobile']),
+      name:read(['studentName','student_name','name'])
     };
   }
-  function showTodayRank(){
-    const students=window.__dailyChampionsStudents||[];
-    if(!students.length){rankResult.textContent='आज का परिणाम अभी उपलब्ध नहीं है।';rankResult.classList.add('show');return;}
-    const me=currentStudent();
-    const found=students.find(s=>me.id&&cleanText(s.id)===me.id)
-      ||students.find(s=>me.mobile&&cleanText(s.mobile)===me.mobile)
-      ||students.find(s=>me.name&&cleanText(s.name)===me.name);
-    if(!found){rankResult.textContent='आपका आज का स्कोर इस परिणाम सूची में नहीं मिला।';rankResult.classList.add('show');return;}
-    const rank=students.findIndex(s=>s===found)+1;
-    const max=Number(window.__dailyChampionsMaxScore)||10;
-    const percentage=Math.max(0,Math.min(100,(Number(found.score)/max)*100));
-    rankResult.innerHTML=`आज की रैंक: <span class="rank-value">#${rank}</span> &nbsp; | &nbsp; स्कोर: <span class="percent-value">${esc(found.score)} अंक</span> &nbsp; | &nbsp; प्रतिशत: <span class="percent-value">${percentage.toFixed(0)}%</span>`;
-    rankResult.classList.add('show');
+
+  if(rankBtn && rankResult){
+    rankBtn.addEventListener('click',function(){
+      const students=window.__dailyChampionsStudents||[];
+      if(!students.length){
+        rankResult.textContent='पिछले दिन का परिणाम उपलब्ध नहीं है।';
+        rankResult.classList.add('show');
+        return;
+      }
+      const me=currentStudent();
+      const found=students.find(s=>me.id && String(s.id).toLowerCase()===me.id)
+        || students.find(s=>me.mobile && String(s.mobile).toLowerCase()===me.mobile)
+        || students.find(s=>me.name && String(s.name).toLowerCase()===me.name);
+
+      if(!found){
+        rankResult.textContent='आपका परिणाम पिछले दिन की सूची में नहीं मिला।';
+        rankResult.classList.add('show');
+        return;
+      }
+
+      const rank=students.indexOf(found)+1;
+      rankResult.innerHTML=`पिछले दिन की रैंक: <span class="rank-value">#${rank}</span> &nbsp; | &nbsp; प्रतिशत: <span class="percent-value">${esc(found.percentage)}%</span>`;
+      rankResult.classList.add('show');
+    });
   }
-  if(rankBtn)rankBtn.addEventListener('click',showTodayRank);
-  fetch(API,{method:'GET',cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(render).catch(e=>{console.error(e);top3.innerHTML='<div class="daily-champion-card loading">आज का result लोड नहीं हो पाया।</div>';});
+
+  loadDailyChampions();
 })();
 </script>
 
@@ -2615,7 +2761,6 @@ function startTeacherTest(){
 
 </body>
 </html>
-
 
 
 
