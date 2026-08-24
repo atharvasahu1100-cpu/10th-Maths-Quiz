@@ -460,72 +460,154 @@ function nextQ(cls) {
 async function finishTest(cls) {
   const prefix = cls === '9' ? 'p2' : 'p3';
   let s = state[cls];
+
   stopTimer(cls);
   playVictorySound();
+
   let correct = 0;
   const chapters = syllabus[cls];
   const byChapter = chapters.map(() => ({correct: 0, total: 0}));
+
   s.questions.forEach((q, i) => {
     byChapter[q.chapter].total++;
-    if(s.answers[i] === q.answer) {
+    if (s.answers[i] === q.answer) {
       correct++;
       byChapter[q.chapter].correct++;
     }
   });
+
   const totalQ = s.questions.length;
+  const wrong = totalQ - correct;
   const percent = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
 
-  let endTime = new Date();
-  let timeTakenSec = s.startTime ? Math.round((endTime - s.startTime) / 1000) : 0;
-  if(timeTakenSec < 1) timeTakenSec = 1;
-  let mins = Math.floor(timeTakenSec / 60);
-  let secs = timeTakenSec % 60;
-  let timeStr = mins > 0 ? `${mins} मिनट ${secs} सेकंड` : `${secs} सेकंड`;
+  // Test पूरा होने का समय
+  const endTime = new Date();
+  const timeTakenSec = s.startTime
+    ? Math.max(1, Math.round((endTime - s.startTime) / 1000))
+    : 1;
 
-  // ✅ अब यह कोड बिना किसी शर्त के सभी टेस्ट परिणाम सीधे Supabase में सेव करेगा
-  try {
-    let studentName = localStorage.getItem("studentName") || "विद्यार्थी";
-    let studentId = localStorage.getItem("studentId") || "—";
-    
-    let testTypeName = s.testMode === 'range' 
-      ? "प्रगतिशील पाठ्यक्रम टेस्ट" 
-      : `अध्याय टेस्ट (${syllabus[cls][s.upto - 1]})`;
+  const mins = Math.floor(timeTakenSec / 60);
+  const secs = timeTakenSec % 60;
+  const timeStr = mins > 0
+    ? `${mins} मिनट ${secs} सेकंड`
+    : `${secs} सेकंड`;
 
-    const payload = {
-      student_name: studentName,
-      student_id: studentId,
-      class_name: "कक्षा " + cls + "वीं",
-      test_type: testTypeName,
-      correct_answers: correct,
-      total_questions: totalQ,
-      percentage: percent,
-      time_taken: timeStr,
-      created_at: new Date().toISOString()
-    };
+  // -----------------------------------------
+  // विद्यार्थी की जानकारी localStorage से
+  // -----------------------------------------
+  const studentName =
+    localStorage.getItem("studentName") || "विद्यार्थी";
 
-    console.log("Supabase में डेटा भेजा जा रहा है:", payload);
-    let { error } = await supabaseClient.from("student_test_results").insert([payload]);
-    if (error) throw error;
-    console.log("डेटा सफलतापूर्वक Supabase टेबल में सेव हो गया!");
-    
-  } catch(err) { 
-    console.error("Result save error:", err); 
-  }
+  const studentId =
+    localStorage.getItem("studentId") || "—";
 
-  document.getElementById(`${prefix}-scoreText`).textContent = `${correct} / ${totalQ}`;
-  document.getElementById(`${prefix}-percentText`).textContent = `${percent}% अंक प्राप्त हुए (${timeStr})`;
-  
-  let resultsHTML = "";
-  byChapter.forEach((chData, idx) => {
-    if(chData.total > 0) {
-      let chPercent = Math.round((chData.correct / chData.total) * 100);
-      resultsHTML += `<div class="chapter-result">
-        <span>अध्याय ${idx + 1}: ${chapters[idx]}</span>
-        <b>${chData.correct}/${chData.total} (${chPercent}%)</b>
-      </div>`;
+  // Mobile number के लिए कई संभावित keys support की गई हैं
+  const mobileNumber =
+    localStorage.getItem("mobileNumber") ||
+    localStorage.getItem("mobile") ||
+    localStorage.getItem("studentMobile") ||
+    localStorage.getItem("phone") ||
+    "";
+
+  // -----------------------------------------
+  // Test Type
+  // -----------------------------------------
+  const testTypeName = s.testMode === 'range'
+    ? "प्रगतिशील पाठ्यक्रम टेस्ट"
+    : "अध्याय टेस्ट";
+
+  // -----------------------------------------
+  // Test में शामिल अध्याय
+  // -----------------------------------------
+  const chapterNames = [];
+
+  s.questions.forEach(q => {
+    const chName = syllabus[cls][q.chapter];
+
+    if (chName && !chapterNames.includes(chName)) {
+      chapterNames.push(chName);
     }
   });
-  document.getElementById(`${prefix}-chapterResults`).innerHTML = resultsHTML;
+
+  const chapterText = chapterNames.join(", ");
+
+  // -----------------------------------------
+  // Date और Time
+  // -----------------------------------------
+  const testDate = endTime.toLocaleDateString("en-CA");
+  const testTime = endTime.toTimeString().slice(0, 8);
+
+  // -----------------------------------------
+  // नया Supabase Record
+  // -----------------------------------------
+  const payload = {
+    student_id: studentId,
+    student_name: studentName,
+    mobile_number: mobileNumber,
+
+    class_name: "कक्षा " + cls + "वीं",
+    test_type: testTypeName,
+    chapter: chapterText,
+
+    total_questions: totalQ,
+    correct_answers: correct,
+    wrong_answers: wrong,
+    percentage: percent,
+
+    time_taken: timeStr,
+
+    test_date: testDate,
+    test_time: testTime
+  };
+
+  console.log("student_test_records में डेटा भेजा जा रहा है:", payload);
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("student_test_records")
+      .insert([payload])
+      .select();
+
+    if (error) {
+      console.error("Supabase Test Record Error:", error);
+      alert("टेस्ट का परिणाम सेव नहीं हो सका। कृपया इंटरनेट कनेक्शन जाँचें।");
+    } else {
+      console.log("✅ Test Record सफलतापूर्वक सेव हो गया:", data);
+    }
+
+  } catch (err) {
+    console.error("Test Record Save Error:", err);
+    alert("टेस्ट का परिणाम सेव नहीं हो सका।");
+  }
+
+  // -----------------------------------------
+  // Result Screen
+  // -----------------------------------------
+  document.getElementById(`${prefix}-scoreText`).textContent =
+    `${correct} / ${totalQ}`;
+
+  document.getElementById(`${prefix}-percentText`).textContent =
+    `${percent}% अंक प्राप्त हुए (${timeStr})`;
+
+  let resultsHTML = "";
+
+  byChapter.forEach((chData, idx) => {
+    if (chData.total > 0) {
+      const chPercent =
+        Math.round((chData.correct / chData.total) * 100);
+
+      resultsHTML += `
+        <div class="chapter-result">
+          <span>अध्याय ${idx + 1}: ${chapters[idx]}</span>
+          <b>${chData.correct}/${chData.total} (${chPercent}%)</b>
+        </div>
+      `;
+    }
+  });
+
+  document.getElementById(`${prefix}-chapterResults`).innerHTML =
+    resultsHTML;
+
   document.getElementById(`${prefix}-testSec`).style.display = "none";
   document.getElementById(`${prefix}-resultSec`).style.display = "flex";
 }
