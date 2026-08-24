@@ -452,10 +452,11 @@ function prevQ(cls) {
 
 function nextQ(cls) {
   let s = state[cls];
-  if(s.answers[s.current] === null) { alert("कृपया पहले एक विकल्प चुनें।"); return; }
+  if(s.answers[s.current] === null) { alert("कृपया पहले एक विकल्प चुनें। जोड़ी ठीक करें।"); return; }
   if(s.current < s.questions.length - 1) { s.current++; renderQ(cls); } else { finishTest(cls); }
 }
 
+// 🟢 यहाँ हमने finishTest फंक्शन को पूरी तरह ठीक कर दिया है ताकि यह हर प्रकार के टेस्ट का डेटा Supabase में सेव करे
 async function finishTest(cls) {
   const prefix = cls === '9' ? 'p2' : 'p3';
   let s = state[cls];
@@ -481,30 +482,34 @@ async function finishTest(cls) {
   let secs = timeTakenSec % 60;
   let timeStr = mins > 0 ? `${mins} मिनट ${secs} सेकंड` : `${secs} सेकंड`;
 
-  if (s.testMode === 'range') {
-    try {
-      let studentName = localStorage.getItem("studentName") || "विद्यार्थी";
-      let studentId = localStorage.getItem("studentId") || "—";
-      
-      const payload = {
-        student_name: studentName,
-        student_id: studentId,
-        class_name: "कक्षा " + cls + "वीं",
-        test_type: "प्रगतिशील पाठ्यक्रम टेस्ट",
-        correct_answers: correct,
-        total_questions: totalQ,
-        percentage: percent,
-        time_taken: timeStr,
-        created_at: new Date().toISOString()
-      };
+  // ✅ अब यह कोड बिना किसी शर्त के सभी टेस्ट परिणाम सीधे Supabase में सेव करेगा
+  try {
+    let studentName = localStorage.getItem("studentName") || "विद्यार्थी";
+    let studentId = localStorage.getItem("studentId") || "—";
+    
+    let testTypeName = s.testMode === 'range' 
+      ? "प्रगतिशील पाठ्यक्रम टेस्ट" 
+      : `अध्याय टेस्ट (${syllabus[cls][s.upto - 1]})`;
 
-      console.log("Saving test result with time:", payload);
-      let { error } = await supabaseClient.from("student_test_results").insert([payload]);
-      if (error) throw error;
-      
-    } catch(err) { 
-      console.error("Result save error:", err); 
-    }
+    const payload = {
+      student_name: studentName,
+      student_id: studentId,
+      class_name: "कक्षा " + cls + "वीं",
+      test_type: testTypeName,
+      correct_answers: correct,
+      total_questions: totalQ,
+      percentage: percent,
+      time_taken: timeStr,
+      created_at: new Date().toISOString()
+    };
+
+    console.log("Supabase में डेटा भेजा जा रहा है:", payload);
+    let { error } = await supabaseClient.from("student_test_results").insert([payload]);
+    if (error) throw error;
+    console.log("डेटा सफलतापूर्वक Supabase टेबल में सेव हो गया!");
+    
+  } catch(err) { 
+    console.error("Result save error:", err); 
   }
 
   document.getElementById(`${prefix}-scoreText`).textContent = `${correct} / ${totalQ}`;
