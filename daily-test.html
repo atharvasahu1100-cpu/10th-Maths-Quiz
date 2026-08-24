@@ -1,3 +1,461 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>गणित सेतु — दैनिक अभ्यास टेस्ट पोर्टल</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow-x:hidden;background:#fff}
+body{font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f8fafc;color:#172033;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.app{max-width:780px;min-height:100vh;min-height:100dvh;margin:auto;background:#fff;box-shadow:0 0 20px rgba(0,0,0,.05);position:relative;display:flex;flex-direction:column}
+.page{display:none;min-height:100vh;min-height:100dvh;padding:12px 15px 80px 15px;flex-direction:column}
+.page.active{display:flex}
+.header{background:linear-gradient(135deg,#082B59,#0B63CE);color:white;padding:16px;border-radius:14px;text-align:center;margin-bottom:10px;box-shadow:0 4px 12px rgba(8,43,89,.15);flex-shrink:0}
+.header .small{font-size:11px;font-weight:700;opacity:.9;background:rgba(255,255,255,.2);display:inline-block;padding:2px 8px;border-radius:6px;margin-bottom:2px}
+.header h1{margin:4px 0 2px;font-size:20px;line-height:1.2}
+.header p{margin:0;font-size:12px;opacity:.9}
+.card{background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.03);flex-shrink:0}
+.card h2{font-size:15px;margin:2px 0 8px;color:#1e293b}
+.info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 6px;text-align:center}
+.stat b{display:block;font-size:18px;color:#0B63CE;line-height:1.1}
+.stat span{font-size:10px;color:#64748b;margin-top:2px;display:block}
+.chapter{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:10px;margin:5px 0;background:#fff}
+.chapter .num{width:28px;height:28px;border-radius:8px;background:#eef5ff;color:#0B63CE;display:grid;place-items:center;font-weight:bold;font-size:13px}
+.chapter .details{flex:1}
+.chapter .details strong{display:block;font-size:13px;color:#1e293b}
+.chapter .details small{color:#64748b;font-size:10px}
+.badge{font-size:10px;padding:3px 6px;border-radius:6px;background:#f0fdf4;color:#16a34a;font-weight:700}
+.badge.locked-badge{background:#fef2f2;color:#dc2626}
+.btn{border:0;border-radius:12px;padding:12px;font-weight:800;cursor:pointer;font-size:14px;width:100%;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.08);transition:.15s}
+.btn:active{transform:scale(.98)}
+.primary{background:linear-gradient(135deg,#082B59,#0B63CE);color:#fff}
+.secondary{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
+.purple-btn{background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff}
+.note{font-size:11px;color:#64748b;line-height:1.4}
+select{width:100%;padding:11px;border:2px solid #cbd5e1;border-radius:10px;font-size:14px;background:#fff;color:#1e293b;margin:6px 0;font-weight:600}
+.class-test-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+.class-test-btn{min-height:85px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 10px;border-radius:18px;text-decoration:none;color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.10);transition:.2s;cursor:pointer;text-align:center;}
+.class-test-btn:active{transform:scale(.98)}
+.class9-test{background:linear-gradient(135deg,#6D5CE7,#8173EE);}
+.class10-test{background:linear-gradient(135deg,#009F8C,#19B39F);}
+.class-test-btn strong{display:block;font-size:16px;font-weight:800;line-height:1.2;margin-bottom:3px;}
+.class-test-btn small{display:block;font-size:12px;opacity:.95;}
+.test-card-box {background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:70px;box-shadow:0 4px 12px rgba(0,0,0,.04);}
+.test-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress{height:6px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:#0B63CE;width:10%;transition:.2s}
+.question{font-size:15px;font-weight:700;line-height:1.4;margin:10px 0;color:#1e293b}
+.option{display:block;width:100%;text-align:left;padding:11px 12px;margin:6px 0;border:2px solid #cbd5e1;border-radius:10px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:#334155}
+.option.selected{border-color:#0B63CE;background:#eff6ff}
+.option.correct{border-color:#16a34a!important;background:#f0fdf4!important;color:#166534}
+.option.wrong{border-color:#dc2626!important;background:#fef2f2!important;color:#991b1b}
+.feedback{display:none;border-radius:10px;padding:10px 12px;margin-top:8px;font-weight:700;font-size:13px;line-height:1.5;}
+.feedback.correct{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+.feedback.wrong{display:block;background:#fef2f2;color:#b42318;border:1px solid #fecaca;}
+.hint-box{background:#fffbeb;border:1px solid #fde68a;color:#b45309;padding:10px 12px;border-radius:10px;font-size:13px;line-height:1.5;margin-top:8px;display:none;font-weight:600;}
+.timer{font-weight:800;color:#0B63CE;background:#eef3ff;padding:5px 10px;border-radius:8px;font-size:12px;border:1px solid #dce4f2}
+.question-no{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:#eef3ff;color:#0B63CE;font-weight:800;margin-right:6px;font-size:12px}
+.nav{position: fixed; bottom: 0; left: 0; right: 0; max-width: 780px; margin: auto; background: #ffffff; padding: 10px 15px calc(10px + env(safe-area-inset-bottom)) 15px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; gap: 8px; z-index: 100; box-shadow: 0 -4px 12px rgba(0,0,0,.06);}
+.result-score{text-align:center;padding:12px}
+.score{font-size:32px;font-weight:800;color:#0B63CE}
+.percent{font-size:16px;font-weight:bold;margin-top:2px;color:#475569}
+.chapter-result{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12px}
+.back-btn{background:#eef3ff;border:0;color:#0B63CE;font-weight:800;font-size:12px;cursor:pointer;margin-bottom:8px;padding:6px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
+.footer{text-align:center;color:#64748b;font-size:10px;padding:5px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="page1" class="page active">
+    <div class="header">
+      <div class="small">गणित सेतु डिजिटल प्लेटफार्म</div>
+      <h1>दैनिक अभ्यास टेस्ट</h1>
+      <p>कक्षा 9वीं एवं 10वीं के विद्यार्थियों के लिए अभ्यास पोर्टल</p>
+    </div>
+
+    <div class="card" style="background:#ffffff;border:1px solid #cbd5e1;">
+      <h2 style="margin-bottom:4px;font-size:16px;color:#1e293b;text-align:center;">✨ अपनी कक्षा चुनें</h2>
+      <p style="color:#64748b;font-size:11px;margin-bottom:10px;text-align:center;">विद्यार्थी अपनी सही कक्षा के बटन पर क्लिक करें:</p>
+      
+      <div class="class-test-grid">
+        <a class="class-test-btn class9-test" onclick="goToPage('page2')">
+          <strong>कक्षा 9वीं</strong>
+          <small>गणित टेस्ट</small>
+        </a>
+        <a class="class-test-btn class10-test" onclick="goToPage('page3')">
+          <strong>कक्षा 10वीं</strong>
+          <small>गणित टेस्ट</small>
+        </a>
+      </div>
+    </div>
+
+    <!-- शुरुआत के निर्देश और मुख्य लाभ कार्ड -->
+    <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0;background:#ffffff;border:1px solid #cbd5e1;">
+      <h3 style="margin:0 0 6px;color:#1e293b;font-size:14px">⭐ इस कोर्स को करने के मुख्य लाभ:</h3>
+      <div style="flex:1;overflow-y:auto;padding-right:4px;">
+        <ul style="margin:0;padding-left:16px;font-size:11px;color:#334155;line-height:1.5;">
+          <li><b>दैनिक अभ्यास:</b> रोजाना प्रैक्टिस करने से गणित के कठिन सवाल भी आसानी से हल होने लगते हैं।</li>
+          <li><b>परीक्षा का डर खत्म:</b> निरंतर टेस्ट देने से बोर्ड व वार्षिक परीक्षाओं का डर पूरी तरह समाप्त होता है।</li>
+          <li><b>मजबूत नींव:</b> कक्षा 9वीं और 10वीं के हर अध्याय के कॉन्सेप्ट एकदम स्पष्ट हो जाते हैं।</li>
+          <li><b>तुरंत मूल्यांकन:</b> टेस्ट सबमिट करते ही स्कोर और सही उत्तर की जानकारी मिल जाती है।</li>
+          <li><b>समय प्रबंधन:</b> निश्चित समय में प्रश्नों को हल करने की आदत बनती है जो परीक्षा में उपयोगी है।</li>
+          <li><b>आत्मविश्वास में वृद्धि:</b> सही उत्तर मिलने पर छात्रों का गणित के प्रति आत्मविश्वास बढ़ता है।</li>
+          <li><b>गलतियों से सीख:</b> गलत जवाबों के सही उत्तर देखकर विद्यार्थी अपनी कमियों को सुधार सकते हैं।</li>
+          <li><b>बोर्ड परीक्षा की तैयारी:</b> कक्षा 10वीं के विद्यार्थियों के लिए बोर्ड परीक्षा पैटर्न पर आधारित पक्की तैयारी।</li>
+          <li><b>रिवीजन में मददगार:</b> परीक्षा के समय कम समय में पूरे पाठ्यक्रम का त्वरित रिवीजन हो जाता है।</li>
+          <li><b>सर्वोच्च अंक (100%):</b> इन सभी फायदों से छात्र गणित विषय में बेहतरीन अंक प्राप्त कर सकते हैं।</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="page2" class="page">
+    <button class="back-btn" onclick="goToPage('page1')">← मुख्य होम पर जाएं</button>
+    <div class="header" style="background:linear-gradient(135deg,#6D5CE7,#8173EE)">
+      <div class="small">कक्षा 9वीं • गणित</div>
+      <h1>कक्षा 9वीं अध्याय टेस्ट</h1>
+      <p>अध्यायवार अभ्यास और तुरंत परिणाम</p>
+    </div>
+    <div id="p2-homeSec" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+      <div class="card">
+        <h2 style="font-size:15px;color:#1e293b"> 1. प्रगतिशील पाठ्यक्रम टेस्ट</h2>
+        <select id="p2-upto"></select>
+        <button class="btn secondary" style="margin-top:6px" onclick="startTest('9', 'range')"> प्रगतिशील टेस्ट शुरू करें →</button>
+      </div>
+      <div class="card">
+        <h2 style="font-size:15px;color:#1e293b"> 2. कोई एक विशेष अध्याय चुनें</h2>
+        <select id="p2-singleCh"></select>
+        <button class="btn purple-btn" style="margin-top:6px" onclick="startTest('9', 'single')"> इस अध्याय का टेस्ट दें →</button>
+      </div>
+    </div>
+    <div id="p2-testSec" style="display:none;flex-direction:column;flex:1">
+      <div class="test-card-box">
+        <div class="test-top">
+          <strong id="p2-testChapter" style="font-size:13px"></strong>
+          <span style="display:flex;gap:6px;align-items:center"><span class="timer" id="p2-timer">⏱ 0s</span><span id="p2-qCount" class="note"></span></span>
+        </div>
+        <div class="progress"><i id="p2-bar"></i></div>
+        <div class="question"><span class="question-no" id="p2-questionNo">1</span><span id="p2-questionText"></span></div>
+        <button id="p2-hintBtn" style="background:#f8fafc;border:1px solid #cbd5e1;color:#475569;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin:4px 0 8px 0;display:none;width:fit-content;" onclick="toggleHint('9')"> Hint / सूत्र देखें</button>
+        <div id="p2-options"></div>
+        <div id="p2-hintBox" class="hint-box"></div>
+        <div id="p2-feedback" class="feedback"></div>
+      </div>
+      <div class="nav">
+        <button class="btn secondary" id="p2-prevBtn" onclick="prevQ('9')">← पिछला</button>
+        <button class="btn primary" id="p2-nextBtn" onclick="nextQ('9')">अगला →</button>
+      </div>
+    </div>
+    <div id="p2-resultSec" style="display:none;flex-direction:column;flex:1">
+      <div class="card result-score">
+        <div class="note">आपका परिणाम</div>
+        <div class="score" id="p2-scoreText">0/0</div>
+        <div class="percent" id="p2-percentText">0%</div>
+      </div>
+      <div class="card" style="flex:1;overflow-y:auto">
+        <h2 style="font-size:14px;margin-top:0">अध्यायवार परिणाम</h2>
+        <div id="p2-chapterResults"></div>
+      </div>
+      <button class="btn primary" style="padding:11px" onclick="goToPage('page1')">होम पर जाएँ</button>
+    </div>
+  </div>
+
+  <div id="page3" class="page">
+    <button class="back-btn" onclick="goToPage('page1')">← मुख्य होम पर जाएं</button>
+    <div class="header" style="background:linear-gradient(135deg,#009F8C,#19B39F)">
+      <div class="small">कक्षा 10वीं • गणित</div>
+      <h1>कक्षा 10वीं अध्याय टेस्ट</h1>
+      <p>अध्यायवार अभ्यास और तुरंत परिणाम</p>
+    </div>
+    <div id="p3-homeSec" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+      <div class="card">
+        <h2 style="font-size:15px;color:#1e293b"> 1. प्रगतिशील पाठ्यक्रम टेस्ट</h2>
+        <select id="p3-upto"></select>
+        <button class="btn secondary" style="margin-top:6px" onclick="startTest('10', 'range')"> प्रगतिशील टेस्ट शुरू करें →</button>
+      </div>
+      <div class="card">
+        <h2 style="font-size:15px;color:#1e293b"> 2. कोई एक विशेष अध्याय चुनें</h2>
+        <select id="p3-singleCh"></select>
+        <button class="btn purple-btn" style="margin-top:6px" onclick="startTest('10', 'single')"> इस अध्याय का टेस्ट दें →</button>
+      </div>
+    </div>
+    <div id="p3-testSec" style="display:none;flex-direction:column;flex:1">
+      <div class="test-card-box">
+        <div class="test-top">
+          <strong id="p3-testChapter" style="font-size:13px"></strong>
+          <span style="display:flex;gap:6px;align-items:center"><span class="timer" id="p3-timer">⏱ 0s</span><span id="p3-qCount" class="note"></span></span>
+        </div>
+        <div class="progress"><i id="p3-bar"></i></div>
+        <div class="question"><span class="question-no" id="p3-questionNo">1</span><span id="p3-questionText"></span></div>
+        <button id="p3-hintBtn" style="background:#f8fafc;border:1px solid #cbd5e1;color:#475569;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin:4px 0 8px 0;display:none;width:fit-content;" onclick="toggleHint('10')"> Hint / सूत्र देखें</button>
+        <div id="p3-options"></div>
+        <div id="p3-hintBox" class="hint-box"></div>
+        <div id="p3-feedback" class="feedback"></div>
+      </div>
+      <div class="nav">
+        <button class="btn secondary" id="p3-prevBtn" onclick="prevQ('10')">← पिछला</button>
+        <button class="btn primary" id="p3-nextBtn" onclick="nextQ('10')">अगला →</button>
+      </div>
+    </div>
+    <div id="p3-resultSec" style="display:none;flex-direction:column;flex:1">
+      <div class="card result-score">
+        <div class="note">आपका परिणाम</div>
+        <div class="score" id="p3-scoreText">0/0</div>
+        <div class="percent" id="p3-percentText">0%</div>
+      </div>
+      <div class="card" style="flex:1;overflow-y:auto">
+        <h2 style="font-size:14px;margin-top:0">अध्यायवार परिणाम</h2>
+        <div id="p3-chapterResults"></div>
+      </div>
+      <button class="btn primary" style="padding:11px" onclick="goToPage('page1')">होम पर जाएँ</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://xgmeivfvuujculkplxjf.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+const syllabus = {
+  "9": ["संख्या पद्धति", "बहुपद", "निर्देशांक ज्यामिति", "दो चरों वाले रैखिक समीकरण", "यूक्लिड की ज्यामिति का परिचय", "रेखाएँ और कोण", "त्रिभुज", "चतुर्भुज", "वृत्त", "हीरोन का सूत्र"],
+  "10": ["वास्तविक संख्याएँ", "बहुपद", "दो चर वाले रैखिक समीकरण युग्म", "द्विघात समीकरण", "समांतर श्रेढ़ियाँ", "त्रिभुज", "निर्देशांक ज्यामिति", "त्रिकोणमिति का परिचय", "त्रिकोणमिति के कुछ अनुप्रयोग", "वृत्त", "वृत्तों से संबंधित क्षेत्रफल", "पृष्ठीय क्षेत्रफल और आयतन", "सांख्यिकी", "प्रायिकता"]
+};
+
+let state = {
+  "9": { upto: 1, questions: [], current: 0, answers: [], timerHandle: null, startTime: null, testMode: "" },
+  "10": { upto: 1, questions: [], current: 0, answers: [], timerHandle: null, startTime: null, testMode: "" }
+};
+
+let audioCtx = null;
+function getAudioContext() {
+  if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+  if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+  return audioCtx;
+}
+
+function playTone(correct) {
+  try {
+    const ctx = getAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    if (correct) {
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(); osc.stop(ctx.currentTime + 0.35);
+    } else {
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(); osc.stop(ctx.currentTime + 0.3);
+    }
+  } catch (e) {}
+}
+
+function playVictorySound() {
+  try {
+    const ctx = getAudioContext();
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const startTime = ctx.currentTime + (idx * 0.12);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, startTime);
+      gain.gain.setValueAtTime(0.2, startTime);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(startTime); osc.stop(startTime + 0.35);
+    });
+  } catch (e) {}
+}
+
+function initPortals() {
+  ["9", "10"].forEach(cls => {
+    const prefix = cls === '9' ? 'p2' : 'p3';
+    const selUpto = document.getElementById(`${prefix}-upto`);
+    selUpto.innerHTML = "";
+    syllabus[cls].forEach((c, i) => {
+      let opt = document.createElement("option");
+      opt.value = i + 1;
+      opt.textContent = `अध्याय 1 से ${i + 1} तक (${c})`;
+      selUpto.appendChild(opt);
+    });
+    const selSingle = document.getElementById(`${prefix}-singleCh`);
+    selSingle.innerHTML = "";
+    syllabus[cls].forEach((c, i) => {
+      let opt = document.createElement("option");
+      opt.value = i + 1;
+      opt.textContent = `अध्याय ${i + 1} (${c})`;
+      selSingle.appendChild(opt);
+    });
+  });
+}
+initPortals();
+
+function goToPage(pageId) {
+  ["9", "10"].forEach(cls => stopTimer(cls));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function stopTimer(cls) {
+  let s = state[cls];
+  if(s.timerHandle) { clearInterval(s.timerHandle); s.timerHandle = null; }
+}
+
+async function startTest(cls, mode) {
+  getAudioContext();
+  const prefix = cls === '9' ? 'p2' : 'p3';
+  let s = state[cls];
+  s.startTime = new Date();
+  s.testMode = mode;
+
+  stopTimer(cls);
+  s.timerHandle = setInterval(() => {
+    let elapsedSec = Math.floor((new Date() - s.startTime) / 1000);
+    let m = Math.floor(elapsedSec / 60);
+    let sec = elapsedSec % 60;
+    let timerText = m > 0 ? `⏱ ${m}m ${sec}s` : `⏱ ${sec}s`;
+    let tEl = document.getElementById(`${prefix}-timer`);
+    if(tEl) tEl.textContent = timerText;
+  }, 1000);
+
+  let targetChapters = [];
+  if(mode === 'range') {
+    s.upto = Number(document.getElementById(`${prefix}-upto`).value);
+    for(let i=1; i<=s.upto; i++) targetChapters.push(i);
+  } else {
+    let singleCh = Number(document.getElementById(`${prefix}-singleCh`).value);
+    s.upto = singleCh;
+    targetChapters.push(singleCh);
+  }
+  s.questions = [];
+  try {
+    const { data, error } = await supabaseClient
+      .from("student_practice_questions")
+      .select("id,class_name,chapter_no,question_text,option_a,option_b,option_c,option_d,correct_option,explanation,hint")
+      .eq("class_name", String(cls))
+      .in("chapter_no", targetChapters)
+      .limit(10000);
+    if (error) throw error;
+    let rows = Array.isArray(data) ? data : [];
+    const todayStr = new Date().toISOString().slice(0, 10);
+    let seed = 0;
+    for (let i = 0; i < todayStr.length; i++) { seed = (seed * 31 + todayStr.charCodeAt(i)) % 1000000; }
+    let finalSelectedRows = [];
+    for (let cNum of targetChapters) {
+      let chapRows = rows.filter(r => Number(r.chapter_no) === cNum);
+      chapRows.sort((a, b) => {
+        let x = Math.sin(seed + a.id + cNum * 100) * 10000;
+        let y = Math.sin(seed + b.id + cNum * 100) * 10000;
+        return (x - Math.floor(x)) - (y - Math.floor(y));
+      });
+      finalSelectedRows.push(...chapRows.slice(0, 10));
+    }
+    rows = finalSelectedRows;
+    for (const row of rows) {
+      s.questions.push({
+        id: row.id,
+        chapter: Number(row.chapter_no) - 1,
+        q: row.question_text ?? "",
+        options: [row.option_a ?? "", row.option_b ?? "", row.option_c ?? "", row.option_d ?? ""],
+        answer: Number(row.correct_option),
+        explanation: row.explanation ?? "",
+        hint: row.hint ?? ""
+      });
+    }
+    if (!s.questions.length) {
+      alert(`कक्षा ${cls} के लिए चयनित अध्याय में अभी डेटाबेस में प्रश्न उपलब्ध नहीं हैं।`);
+      return;
+    }
+    s.answers = new Array(s.questions.length).fill(null);
+    s.current = 0;
+    document.getElementById(`${prefix}-homeSec`).style.display = "none";
+    document.getElementById(`${prefix}-testSec`).style.display = "flex";
+    document.getElementById(`${prefix}-resultSec`).style.display = "none";
+    renderQ(cls);
+  } catch (error) {
+    console.error("Supabase error:", error);
+    alert("प्रश्न लोड नहीं हो सके।");
+  }
+}
+
+function toggleHint(cls) {
+  const prefix = cls === '9' ? 'p2' : 'p3';
+  const hintEl = document.getElementById(`${prefix}-hintBox`);
+  hintEl.style.display = hintEl.style.display === "block" ? "none" : "block";
+}
+
+function renderQ(cls) {
+  const prefix = cls === '9' ? 'p2' : 'p3';
+  let s = state[cls];
+  let item = s.questions[s.current];
+  document.getElementById(`${prefix}-testChapter`).textContent = `अध्याय ${item.chapter + 1} • ${syllabus[cls][item.chapter]}`;
+  document.getElementById(`${prefix}-qCount`).textContent = `प्रश्न ${s.current + 1} / ${s.questions.length}`;
+  document.getElementById(`${prefix}-questionNo`).textContent = s.current + 1;
+  document.getElementById(`${prefix}-questionText`).textContent = item.q;
+  document.getElementById(`${prefix}-bar`).style.width = ((s.current + 1) / s.questions.length * 100) + "%";
+  
+  const hintBtn = document.getElementById(`${prefix}-hintBtn`);
+  const hintEl = document.getElementById(`${prefix}-hintBox`);
+  hintEl.style.display = "none";
+  if (item.hint && item.hint.trim() !== "") {
+    hintBtn.style.display = "block";
+    hintEl.innerHTML = ` <b>Hint / सूत्र:</b> ${item.hint}`;
+  } else { hintBtn.style.display = "none"; hintEl.innerHTML = ""; }
+
+  const answered = s.answers[s.current] !== null && s.answers[s.current] !== -1;
+  document.getElementById(`${prefix}-options`).innerHTML = item.options.map((o, i) => {
+    let clsOpt = "";
+    if(answered && i === item.answer) clsOpt = "correct";
+    else if(answered && i === s.answers[s.current] && s.answers[s.current] !== item.answer) clsOpt = "wrong";
+    else if(i === s.answers[s.current]) clsOpt = "selected";
+    return `<button class="option ${clsOpt}" onclick="selectOpt('${cls}', ${i})">${String.fromCharCode(65 + i)}. ${o}</button>`;
+  }).join("");
+
+  const fb = document.getElementById(`${prefix}-feedback`);
+  if(answered) {
+    let explText = item.explanation ? `<br><br>💡 <b>स्पष्टीकरण:</b> ${item.explanation}` : "";
+    fb.className = "feedback " + (s.answers[s.current] === item.answer ? "correct" : "wrong");
+    fb.innerHTML = (s.answers[s.current] === item.answer ? "बहुत बढ़िया! आपका उत्तर सही है।" : "सही उत्तर हरा वाला विकल्प है।") + explText;
+  } else { 
+    fb.className = "feedback"; 
+    fb.innerHTML = ""; 
+  }
+
+  document.getElementById(`${prefix}-prevBtn`).disabled = s.current === 0;
+  document.getElementById(`${prefix}-nextBtn`).textContent = answered ? (s.current === s.questions.length - 1 ? " Test Submit करें" : "अगला प्रश्न →") : "उत्तर चुनें";
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectOpt(cls, i) {
+  let s = state[cls];
+  if(s.answers[s.current] !== null && s.answers[s.current] !== -1) return;
+  s.answers[s.current] = i;
+  playTone(i === s.questions[s.current].answer);
+  renderQ(cls);
+}
+
+function prevQ(cls) {
+  let s = state[cls];
+  if(s.current > 0) { s.current--; renderQ(cls); }
+}
+
+function nextQ(cls) {
+  let s = state[cls];
+  if(s.answers[s.current] === null) { alert("कृपया पहले एक विकल्प चुनें।"); return; }
+  if(s.current < s.questions.length - 1) { s.current++; renderQ(cls); } else { finishTest(cls); }
+}
+
 async function finishTest(cls) {
   const prefix = cls === '9' ? 'p2' : 'p3';
   let s = state[cls];
@@ -16,7 +474,6 @@ async function finishTest(cls) {
   const totalQ = s.questions.length;
   const percent = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
 
-  // समय की गणना (Time Calculation)
   let endTime = new Date();
   let timeTakenSec = s.startTime ? Math.round((endTime - s.startTime) / 1000) : 0;
   if(timeTakenSec < 1) timeTakenSec = 1;
@@ -24,35 +481,30 @@ async function finishTest(cls) {
   let secs = timeTakenSec % 60;
   let timeStr = mins > 0 ? `${mins} मिनट ${secs} सेकंड` : `${secs} सेकंड`;
 
-  // डेटाबेस में रिजल्ट सेव करने का कोड
-  try {
-    let studentName = localStorage.getItem("studentName") || "विद्यार्थी";
-    let studentId = localStorage.getItem("studentId") || "—";
-    
-    const payload = {
-      student_name: studentName,
-      student_id: studentId,
-      class_name: "कक्षा " + cls + "वीं",
-      test_type: s.testMode === 'range' ? "प्रगतिशील पाठ्यक्रम टेस्ट" : `अध्याय टेस्ट (${syllabus[cls][s.upto - 1]})`,
-      correct_answers: correct,
-      total_questions: totalQ,
-      percentage: percent,
-      time_taken: timeStr,
-      created_at: new Date().toISOString()
-    };
+  if (s.testMode === 'range') {
+    try {
+      let studentName = localStorage.getItem("studentName") || "विद्यार्थी";
+      let studentId = localStorage.getItem("studentId") || "—";
+      
+      const payload = {
+        student_name: studentName,
+        student_id: studentId,
+        class_name: "कक्षा " + cls + "वीं",
+        test_type: "प्रगतिशील पाठ्यक्रम टेस्ट",
+        correct_answers: correct,
+        total_questions: totalQ,
+        percentage: percent,
+        time_taken: timeStr,
+        created_at: new Date().toISOString()
+      };
 
-    console.log("Supabase में डेटा भेजा जा रहा है:", payload);
-    let { data, error } = await supabaseClient.from("student_test_results").insert([payload]);
-    
-    if (error) {
-      console.error("Supabase Save Error:", error.message);
-      alert("परिणाम डेटाबेस में सेव होने में त्रुटि: " + error.message);
-    } else {
-      console.log("परिणाम सफलतापूर्वक सेव हो गया!", data);
+      console.log("Saving test result with time:", payload);
+      let { error } = await supabaseClient.from("student_test_results").insert([payload]);
+      if (error) throw error;
+      
+    } catch(err) { 
+      console.error("Result save error:", err); 
     }
-    
-  } catch(err) { 
-    console.error("Network or Code Error:", err); 
   }
 
   document.getElementById(`${prefix}-scoreText`).textContent = `${correct} / ${totalQ}`;
@@ -72,3 +524,6 @@ async function finishTest(cls) {
   document.getElementById(`${prefix}-testSec`).style.display = "none";
   document.getElementById(`${prefix}-resultSec`).style.display = "flex";
 }
+</script>
+</body>
+</html>
