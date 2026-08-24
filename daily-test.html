@@ -563,16 +563,15 @@ async function finishTest(cls) {
   console.log("student_test_records में डेटा भेजा जा रहा है:", payload);
 
   try {
-    const { data, error } = await supabaseClient
+    const { error } = await supabaseClient
       .from("student_test_records")
-      .insert([payload])
-      .select();
+      .insert([payload]);
 
     if (error) {
       console.error("Supabase Test Record Error:", error);
       alert("टेस्ट का परिणाम सेव नहीं हो सका। कृपया इंटरनेट कनेक्शन जाँचें।");
     } else {
-      console.log("✅ Test Record सफलतापूर्वक सेव हो गया:", data);
+      console.log("✅ Test Record सफलतापूर्वक Supabase में सेव हो गया!");
     }
 
   } catch (err) {
