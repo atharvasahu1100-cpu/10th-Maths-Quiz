@@ -6191,6 +6191,7 @@ body{
       <div class="student-photo-upload student-photo-top" title="विद्यार्थी की फोटो">
         <img id="studentPhotoPreview" class="student-photo-preview" alt="विद्यार्थी की फोटो">
         <span id="studentPhotoPlaceholder" class="student-photo-placeholder">📷</span>
+        <input id="studentPhotoInput" type="file" accept="image/*" capture="environment" style="display:none">
       </div>
       <div class="student-today-rank-wrap" id="studentTodayRankWrap">
         <button type="button" class="student-today-rank-btn" id="studentTodayRankBtn" aria-live="polite">
@@ -6819,6 +6820,118 @@ function startTeacherTest(){
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script id="ganitSetuSupabasePhotoOnly">
+(function(){
+  'use strict';
+
+  /* ONLY photo functionality is added here.
+     Existing Home design, buttons, tests and data logic are untouched. */
+  const PHOTO_BUCKET = 'student-photos';
+  const SUPABASE_URL = "https://xgmeivfvuujculkplxjf.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+  const client = window.supabase && window.supabase.createClient
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+    : null;
+
+  function clean(v){ return v == null ? '' : String(v).trim(); }
+  function store(keys){
+    for(const s of [localStorage, sessionStorage]){
+      for(const k of keys){
+        try{ const v=s.getItem(k); if(v) return v; }catch(e){}
+      }
+    }
+    return '';
+  }
+  function identity(){
+    return {
+      id: store(['studentId','studentID','student_id','student_id_no','id']),
+      mobile: store(['mobile','mobileNumber','phone','studentMobile'])
+    };
+  }
+  function safe(v){ return clean(v).replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,80); }
+  function photoPath(){
+    const me=identity();
+    const key=safe(me.id || me.mobile);
+    return key ? `students/${key}/profile.jpg` : '';
+  }
+  function show(src){
+    const img=document.getElementById('studentPhotoPreview');
+    const ph=document.getElementById('studentPhotoPlaceholder');
+    if(img && src){ img.src=src; img.style.display='block'; if(ph) ph.style.display='none'; }
+  }
+  function fallback(){
+    try{
+      const p=localStorage.getItem('studentPhoto');
+      if(p) show(p);
+    }catch(e){}
+  }
+  async function loadPhoto(){
+    fallback();
+    if(!client) return;
+    const path=photoPath();
+    if(!path) return;
+    try{
+      const {data,error}=await client.storage.from(PHOTO_BUCKET).createSignedUrl(path, 60*60*24*7);
+      if(!error && data && data.signedUrl){
+        show(data.signedUrl);
+        try{ localStorage.setItem('studentPhotoPath',path); }catch(e){}
+      }
+    }catch(e){ console.warn('Student photo load:',e); }
+  }
+  async function upload(file){
+    if(!file) return;
+    if(!String(file.type||'').startsWith('image/')){ alert('कृपया केवल फोटो चुनें।'); return; }
+    if(file.size > 5*1024*1024){ alert('फोटो का आकार 5 MB से कम रखें।'); return; }
+    if(!client){ alert('Supabase connection उपलब्ध नहीं है।'); return; }
+    const path=photoPath();
+    if(!path){ alert('विद्यार्थी की पहचान नहीं मिली। कृपया पहले विद्यार्थी के रूप में login करें।'); return; }
+
+    // Instant preview; existing local fallback retained.
+    const reader=new FileReader();
+    reader.onload=e=>{
+      if(e.target && e.target.result){ show(e.target.result); try{localStorage.setItem('studentPhoto',e.target.result);}catch(x){} }
+    };
+    reader.readAsDataURL(file);
+
+    try{
+      const {error}=await client.storage.from(PHOTO_BUCKET).upload(path,file,{
+        upsert:true,
+        cacheControl:'3600',
+        contentType:file.type || 'image/jpeg'
+      });
+      if(error) throw error;
+      const {data,error:urlError}=await client.storage.from(PHOTO_BUCKET).createSignedUrl(path,60*60*24*7);
+      if(urlError) throw urlError;
+      if(data && data.signedUrl) show(data.signedUrl);
+      try{localStorage.setItem('studentPhotoPath',path);}catch(e){}
+      alert('विद्यार्थी की फोटो सफलतापूर्वक सेव हो गई।');
+    }catch(err){
+      console.error('Student photo upload error:',err);
+      alert('फोटो Supabase में सेव नहीं हो पाई। Storage policy और bucket की जाँच करें।');
+    }
+  }
+
+  function setup(){
+    const box=document.querySelector('.student-photo-top');
+    const input=document.getElementById('studentPhotoInput');
+    if(!box || !input) return;
+    if(!box.dataset.gsPhotoBound){
+      box.dataset.gsPhotoBound='1';
+      box.addEventListener('click',()=>input.click());
+      box.setAttribute('role','button');
+      box.setAttribute('tabindex','0');
+      box.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click();}});
+    }
+    if(!input.dataset.gsPhotoBound){
+      input.dataset.gsPhotoBound='1';
+      input.addEventListener('change',()=>{const f=input.files&&input.files[0]; if(f) upload(f); input.value='';});
+    }
+    loadPhoto();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup); else setup();
+})();
+</script>
 
 <script id="dailyChampionsDataScript">
 (function(){
