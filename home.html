@@ -9930,6 +9930,97 @@ body{
 }
 </style>
 
+
+<style id="GS_SAMPLE_PHOTO_TEST">
+/* Sample photo testing: hidden until gsShowWinnerTest() */
+#gsManualWinnerTestPanel .gs-sample-actions{
+  display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;
+}
+#gsManualWinnerTestPanel .gs-sample-btn{
+  border:0;border-radius:9px;padding:8px 12px;
+  font-weight:900;cursor:pointer;
+  background:#6b43c6;color:#fff;
+}
+#gsManualWinnerTestPanel .gs-sample-help{
+  margin-top:7px;font-size:11px;color:#42586d;line-height:1.35;
+}
+</style>
+
+<style id="GS_SIMPLE_WINNER_TEST_UI">
+#gsSimpleWinnerTest{display:none;margin:10px 0;padding:12px;border:2px solid #e7b52b;border-radius:18px;background:#fffdf1;box-shadow:0 5px 16px rgba(80,60,10,.12);font-family:Arial,sans-serif}
+#gsSimpleWinnerTest.gs-open{display:block}
+#gsSimpleWinnerTest .swt-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+#gsSimpleWinnerTest .swt-title{color:#07366f;font-size:17px;font-weight:1000}
+#gsSimpleWinnerTest .swt-close{border:0;border-radius:9px;padding:6px 10px;background:#e04444;color:#fff;font-weight:900}
+#gsSimpleWinnerTest .swt-help{font-size:11px;line-height:1.4;color:#52677b;margin-bottom:9px}
+#gsSimpleWinnerTest .swt-row{display:grid;grid-template-columns:30px minmax(0,1fr) 75px 90px;gap:5px;align-items:center;margin:5px 0}
+#gsSimpleWinnerTest input{width:100%;min-width:0;box-sizing:border-box;border:1px solid #b9cfe3;border-radius:8px;padding:8px;background:#fff;font-size:12px}
+#gsSimpleWinnerTest .swt-file{font-size:10px}
+#gsSimpleWinnerTest .swt-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+#gsSimpleWinnerTest .swt-actions button{border:0;border-radius:10px;padding:9px 13px;font-weight:1000}
+#gsSimpleWinnerTest .swt-preview{background:#087f4f;color:#fff}.swt-real{background:#0b63b6;color:#fff}.swt-clear{background:#687887;color:#fff}
+#gsSimpleWinnerTest .swt-status{margin-top:7px;font-size:11px;font-weight:900;color:#087f4f}
+@media(max-width:600px){#gsSimpleWinnerTest .swt-row{grid-template-columns:24px minmax(0,1fr) 65px 75px;gap:4px}#gsSimpleWinnerTest input{padding:7px 5px;font-size:11px}}
+</style>
+
+<style id="GS_EASY_WINNER_TEST_FINAL">
+/* SIMPLE WINNER TEST — Winner section only */
+#gsEasyWinnerTest{
+  display:none;
+  margin:10px 0;
+  padding:12px;
+  border:2px solid #e2b52d;
+  border-radius:16px;
+  background:#fffdf1;
+  box-sizing:border-box;
+}
+#gsEasyWinnerTest.open{display:block}
+#gsEasyWinnerTest .ewt-title{font-size:16px;font-weight:1000;color:#07366f;margin-bottom:4px}
+#gsEasyWinnerTest .ewt-help{font-size:11px;color:#53687b;margin-bottom:9px}
+#gsEasyWinnerTest .ewt-row{
+  display:grid;
+  grid-template-columns:25px minmax(0,1fr) 70px 92px;
+  gap:5px;
+  align-items:center;
+  margin:5px 0;
+}
+#gsEasyWinnerTest input{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  border:1px solid #b9cfe3;
+  border-radius:8px;
+  padding:7px;
+  background:#fff;
+  font-size:11px;
+}
+#gsEasyWinnerTest .ewt-file{font-size:9px}
+#gsEasyWinnerTest .ewt-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+#gsEasyWinnerTest button{
+  border:0;border-radius:9px;padding:8px 11px;font-weight:1000;cursor:pointer
+}
+#gsEasyWinnerTest .ewt-preview{background:#087f4f;color:#fff}
+#gsEasyWinnerTest .ewt-real{background:#0b63b6;color:#fff}
+#gsEasyWinnerTest .ewt-clear{background:#687887;color:#fff}
+#gsEasyWinnerTest .ewt-status{margin-top:7px;font-size:11px;font-weight:900;color:#087f4f}
+#gsEasyWinnerOpen{
+  display:none;
+  margin:7px 0;
+  padding:7px 11px;
+  border:0;border-radius:9px;
+  background:#6b43c6;color:#fff;
+  font-weight:1000;
+}
+@media(max-width:600px){
+  #gsEasyWinnerTest .ewt-row{
+    grid-template-columns:23px minmax(0,1fr) 62px 76px;
+    gap:4px;
+  }
+  #gsEasyWinnerTest input{padding:6px 4px;font-size:10px}
+  #gsEasyWinnerTest .ewt-file{font-size:8px}
+}
+</style>
+
 </head>
 
 
@@ -11890,7 +11981,17 @@ function startTeacherTest(){
   {"rank":9,"name":"Winner 9","score":"84%","photo":""},
   {"rank":10,"name":"Winner 10","score":"82%","photo":""}
 ]</textarea>
-  <div class="gs-mwt-actions">
+  
+<div class="gs-sample-actions">
+  <button class="gs-sample-btn" type="button" id="gsLoadSample10">
+    📸 10 Sample Photos लगाएँ
+  </button>
+</div>
+<div class="gs-sample-help">
+  यह केवल design testing के लिए है। ये sample photos आपके Supabase Storage में upload नहीं होतीं और आपके real student data को नहीं बदलतीं।
+</div>
+
+<div class="gs-mwt-actions">
     <button class="gs-mwt-fill" type="button" id="gsMwtLoad">👀 10 Winners दिखाएँ</button>
     <button class="gs-mwt-on" type="button" id="gsMwtOn">🧪 Test Mode ON</button>
     <button class="gs-mwt-off" type="button" id="gsMwtOff">↩ Real Data</button>
@@ -12090,6 +12191,257 @@ function startTeacherTest(){
       catch(e){ console.error('Manual Winner Test:',e); }
     },700);
   }
+})();
+</script>
+
+
+<script id="GS_SAMPLE_PHOTO_TEST_SCRIPT">
+(function(){
+  const btn=document.getElementById('gsLoadSample10');
+  const area=document.getElementById('gsManualWinnerJson');
+  const status=document.getElementById('gsMwtStatus');
+  if(!btn || !area) return;
+
+  const sampleData=[{"rank": 1, "name": "Raj", "score": "100%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPlI8L3RleHQ+Cjwvc3ZnPg=="}, {"rank": 2, "name": "Aman", "score": "98%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPkE8L3RleHQ+Cjwvc3ZnPg=="}, {"rank": 3, "name": "Neha", "score": "96%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPk48L3RleHQ+Cjwvc3ZnPg=="}, {"rank": 4, "name": "Ravi", "score": "94%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPlI8L3RleHQ+Cjwvc3ZnPg=="}, {"rank": 5, "name": "Pooja", "score": "92%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPlA8L3RleHQ+Cjwvc3ZnPg=="}, {"rank": 6, "name": "Ankit", "score": "90%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPkE8L3RleHQ+Cjwvc3ZnPg=="}, {"rank": 7, "name": "Sita", "score": "88%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPlM8L3RleHQ+Cjwvc3ZnPg=="}, {"rank": 8, "name": "Mohan", "score": "86%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPk08L3RleHQ+Cjwvc3ZnPg=="}, {"rank": 9, "name": "Kiran", "score": "84%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPks8L3RleHQ+Cjwvc3ZnPg=="}, {"rank": 10, "name": "Rohit", "score": "82%", "photo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMjQwIDI0MCI+CjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTIwIiBmaWxsPSIjZThmMmZmIi8+CjxjaXJjbGUgY3g9IjEyMCIgY3k9IjkxIiByPSI0OCIgZmlsbD0iI2YxYzdhOCIvPgo8cGF0aCBkPSJNNzAgODhjOC01NSA5Mi02OCAxMDUgMC0xOC0xNi02NC0xOS0xMDUgMHoiIGZpbGw9IiMyZDJhMjYiLz4KPHBhdGggZD0iTTY2IDIxNWM1LTU1IDM4LTc5IDU0LTc5czQ5IDI0IDU0IDc5IiBmaWxsPSIjMmY3M2M5Ii8+CjxjaXJjbGUgY3g9IjEwMiIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxjaXJjbGUgY3g9IjEzOCIgY3k9IjkyIiByPSI1IiBmaWxsPSIjMjIyIi8+CjxwYXRoIGQ9Ik0xMDMgMTE2YzExIDkgMjMgOSAzNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZDRmM2YiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjx0ZXh0IHg9IjEyMCIgeT0iMjI5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxMjNiNjkiPlI8L3RleHQ+Cjwvc3ZnPg=="}];
+
+  btn.addEventListener('click',()=>{
+    area.value=JSON.stringify(sampleData,null,2);
+    try{
+      localStorage.setItem('ganitSetu_manual_winner_test_data_v1',JSON.stringify(sampleData));
+      localStorage.setItem('ganitSetu_manual_winner_test_mode_v1','ON');
+    }catch(e){}
+    status.textContent='📸 10 sample photos loaded — अब “10 Winners दिखाएँ” दबाएँ।';
+    status.style.color='#087f4f';
+  });
+})();
+</script>
+
+<button id="gsOpenSimpleWinnerTest" type="button" style="display:none;margin:6px 0;padding:7px 11px;border:0;border-radius:9px;background:#6b43c6;color:#fff;font-weight:900">🧪 Winner Test</button>
+<div id="gsSimpleWinnerTest">
+<div class="swt-head"><div class="swt-title">🧪 Winner Test — 10 बच्चे भरें</div><button class="swt-close" type="button" id="swtClose">✕</button></div>
+<div class="swt-help">नाम, score और photo चुनें। Photo URL की जरूरत नहीं। फिर Winners Preview दबाएँ।</div>
+<div id="swtRows"></div>
+<div class="swt-actions"><button class="swt-preview" type="button" id="swtPreview">👀 Winners Preview</button><button class="swt-real" type="button" id="swtReal">↩ Real Winners</button><button class="swt-clear" type="button" id="swtClear">🧹 Clear</button></div>
+<div class="swt-status" id="swtStatus">Test Mode OFF</div>
+</div>
+<script id="GS_SIMPLE_WINNER_TEST_UI_SCRIPT">
+(function(){
+'use strict';
+const MODE='ganitSetu_simple_winner_test_mode_v1', DATA='ganitSetu_simple_winner_test_data_v1';
+const opener=document.getElementById('gsOpenSimpleWinnerTest'), panel=document.getElementById('gsSimpleWinnerTest'), rows=document.getElementById('swtRows'), status=document.getElementById('swtStatus');
+if(!opener||!panel||!rows)return;
+window.openWinnerTest=function(){opener.style.display='inline-block';panel.classList.add('gs-open')};
+function makeRows(){rows.innerHTML='';for(let i=1;i<=10;i++)rows.insertAdjacentHTML('beforeend',`<div class="swt-row" data-rank="${i}"><b>${i}</b><input class="swt-name" type="text" placeholder="नाम"><input class="swt-score" type="text" placeholder="Score"><input class="swt-file" type="file" accept="image/*"></div>`)}
+function readFile(f){return new Promise((res,rej)=>{if(!f)return res('');let r=new FileReader();r.onload=()=>res(r.result||'');r.onerror=rej;r.readAsDataURL(f)})}
+async function collect(){let a=[];for(const row of rows.querySelectorAll('.swt-row')){let f=row.querySelector('.swt-file').files[0];let photo=await readFile(f);let name=row.querySelector('.swt-name').value.trim(),score=row.querySelector('.swt-score').value.trim();if(name||score||photo)a.push({rank:+row.dataset.rank,name:name||'Winner '+row.dataset.rank,score:score||'—',photo})}return a}
+function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function render(a){
+let t3=document.getElementById('dailyTop3'),t10=document.getElementById('dailyTop10List'),root=document.getElementById('dailyChampionsDashboard');if(!t3||!t10||!root)throw Error('Winner section नहीं मिला');
+a.sort((x,y)=>x.rank-y.rank);let by=r=>a.find(x=>x.rank===r), slots=[by(2),by(1),by(3)], cls=['gs-second','gs-first','gs-third'], crowns=['♕','👑','♕'], medals=['🥈','🥇','🥉'];
+t3.innerHTML=slots.map((s,i)=>s?`<article class="gs-winner-card ${cls[i]}"><div class="gs-rank-badge">${s.rank}</div><div class="gs-crown">${crowns[i]}</div><div class="gs-photo">${s.photo?`<img src="${esc(s.photo)}" style="width:100%;height:100%;object-fit:cover;object-position:center;border-radius:50%">`:'👤'}</div><div class="gs-name">${esc(s.name)}</div><div class="gs-score">${esc(s.score)}</div><div class="gs-meta">${medals[i]} Rank ${s.rank}</div></article>`:'').join('');
+t10.innerHTML=a.map(s=>`<article class="gs-top10-card ${s.rank===1?'gs-gold':s.rank===2?'gs-silver':s.rank===3?'gs-bronze':''}"><div class="gs-top10-rank">${s.rank===1?'🥇':s.rank===2?'🥈':s.rank===3?'🥉':s.rank}</div><div class="gs-top10-name">${esc(s.name)}</div><div class="gs-top10-score">${esc(s.score)}</div></article>`).join('');
+let title=root.querySelector('.daily-champions-title'),date=root.querySelector('.daily-champions-date');if(title)title.innerHTML='🏆 DAILY CHAMPION';if(date)date.textContent='🧪 TEST MODE';localStorage.setItem(DATA,JSON.stringify(a));localStorage.setItem(MODE,'ON');status.textContent='✅ '+a.length+' winners preview हो रहे हैं।'
+}
+opener.onclick=()=>panel.classList.add('gs-open');document.getElementById('swtClose').onclick=()=>panel.classList.remove('gs-open');
+document.getElementById('swtPreview').onclick=async()=>{try{let a=await collect();if(!a.length){status.textContent='⚠️ कम से कम 1 winner भरें';return}render(a)}catch(e){status.textContent='❌ '+e.message}};
+document.getElementById('swtReal').onclick=()=>{localStorage.setItem(MODE,'OFF');localStorage.removeItem(DATA);location.reload()};
+document.getElementById('swtClear').onclick=()=>{rows.querySelectorAll('input').forEach(x=>x.value='');localStorage.removeItem(DATA);status.textContent='🧹 साफ हो गया'};
+makeRows();
+})();
+</script>
+
+<button id="gsEasyWinnerOpen" type="button">🧪 Winner Test</button>
+
+<div id="gsEasyWinnerTest">
+  <div class="ewt-title">🧪 Winner Test — 10 बच्चे</div>
+  <div class="ewt-help">
+    नाम, Score और अपनी computer/mobile से Photo चुनें। Photo URL या SQL की जरूरत नहीं।
+  </div>
+  <div id="gsEasyWinnerRows"></div>
+  <div class="ewt-actions">
+    <button class="ewt-preview" id="gsEasyWinnerPreview" type="button">👀 Preview Winners</button>
+    <button class="ewt-real" id="gsEasyWinnerReal" type="button">↩ Real Winners</button>
+    <button class="ewt-clear" id="gsEasyWinnerClear" type="button">🧹 Clear</button>
+  </div>
+  <div class="ewt-status" id="gsEasyWinnerStatus">Test Mode OFF</div>
+</div>
+
+
+<script id="GS_EASY_WINNER_TEST_FINAL_SCRIPT">
+(function(){
+  'use strict';
+
+  const MODE='ganitSetu_easy_winner_test_mode_v2';
+  const DATA='ganitSetu_easy_winner_test_data_v2';
+
+  const openBtn=document.getElementById('gsEasyWinnerOpen');
+  const panel=document.getElementById('gsEasyWinnerTest');
+  const rows=document.getElementById('gsEasyWinnerRows');
+  const status=document.getElementById('gsEasyWinnerStatus');
+
+  if(!openBtn || !panel || !rows) return;
+
+  /* Teacher/test access. Hidden from normal students. */
+  window.openWinnerTest=function(){
+    openBtn.style.display='inline-block';
+    panel.classList.add('open');
+  };
+
+  function makeRows(){
+    rows.innerHTML='';
+    for(let i=1;i<=10;i++){
+      rows.insertAdjacentHTML('beforeend',
+        '<div class="ewt-row" data-rank="'+i+'">'+
+          '<b>'+i+'</b>'+
+          '<input class="ewt-name" type="text" placeholder="नाम">'+
+          '<input class="ewt-score" type="text" placeholder="Score">'+
+          '<input class="ewt-file" type="file" accept="image/*">'+
+        '</div>'
+      );
+    }
+  }
+
+  function readPhoto(file){
+    return new Promise(function(resolve,reject){
+      if(!file){ resolve(''); return; }
+      const reader=new FileReader();
+      reader.onload=function(){ resolve(String(reader.result||'')); };
+      reader.onerror=reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function collect(){
+    const out=[];
+    const list=rows.querySelectorAll('.ewt-row');
+
+    for(const row of list){
+      const rank=Number(row.dataset.rank);
+      const name=row.querySelector('.ewt-name').value.trim();
+      const score=row.querySelector('.ewt-score').value.trim();
+      const file=row.querySelector('.ewt-file').files[0]||null;
+      const photo=await readPhoto(file);
+
+      if(name || score || photo){
+        out.push({
+          rank:rank,
+          name:name||('Winner '+rank),
+          score:score||'—',
+          photo:photo
+        });
+      }
+    }
+    return out;
+  }
+
+  function esc(v){
+    return String(v==null?'':v)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  function render(data){
+    const top3=document.getElementById('dailyTop3');
+    const top10=document.getElementById('dailyTop10List');
+    const root=document.getElementById('dailyChampionsDashboard');
+
+    if(!top3 || !top10 || !root){
+      throw new Error('Winner section नहीं मिला।');
+    }
+
+    data.sort(function(a,b){return a.rank-b.rank;});
+
+    const byRank=function(r){
+      return data.find(function(x){return x.rank===r;});
+    };
+
+    const slots=[byRank(2),byRank(1),byRank(3)];
+    const cardClass=['gs-second','gs-first','gs-third'];
+    const crown=['♕','👑','♕'];
+    const medal=['🥈','🥇','🥉'];
+
+    top3.innerHTML=slots.map(function(s,i){
+      if(!s){
+        return '<article class="gs-winner-card '+cardClass[i]+'">'+
+          '<div class="gs-rank-badge">'+(i===0?2:i===1?1:3)+'</div>'+
+          '<div class="gs-crown">'+crown[i]+'</div>'+
+          '<div class="gs-photo">👤</div>'+
+          '<div class="gs-name">अभी उपलब्ध नहीं</div>'+
+          '<div class="gs-score">—</div>'+
+          '<div class="gs-meta">'+medal[i]+'</div>'+
+        '</article>';
+      }
+
+      const image=s.photo
+        ? '<img src="'+esc(s.photo)+'" alt="" style="width:100%;height:100%;object-fit:cover;object-position:center;border-radius:50%;">'
+        : '👤';
+
+      return '<article class="gs-winner-card '+cardClass[i]+'">'+
+        '<div class="gs-rank-badge">'+s.rank+'</div>'+
+        '<div class="gs-crown">'+crown[i]+'</div>'+
+        '<div class="gs-photo">'+image+'</div>'+
+        '<div class="gs-name">'+esc(s.name)+'</div>'+
+        '<div class="gs-score">'+esc(s.score)+'</div>'+
+        '<div class="gs-meta">'+medal[i]+' Rank '+s.rank+'</div>'+
+      '</article>';
+    }).join('');
+
+    top10.innerHTML=data.map(function(s){
+      const medal=s.rank===1?'🥇':s.rank===2?'🥈':s.rank===3?'🥉':s.rank;
+      const cls=s.rank===1?'gs-gold':s.rank===2?'gs-silver':s.rank===3?'gs-bronze':'';
+
+      return '<article class="gs-top10-card '+cls+'">'+
+        '<div class="gs-top10-rank">'+medal+'</div>'+
+        '<div class="gs-top10-name">'+esc(s.name)+'</div>'+
+        '<div class="gs-top10-score">'+esc(s.score)+'</div>'+
+      '</article>';
+    }).join('');
+
+    const title=root.querySelector('.daily-champions-title');
+    const date=root.querySelector('.daily-champions-date');
+    if(title) title.innerHTML='🏆 DAILY CHAMPION';
+    if(date) date.textContent='🧪 TEST MODE';
+
+    localStorage.setItem(MODE,'ON');
+    localStorage.setItem(DATA,JSON.stringify(data));
+
+    status.textContent='✅ '+data.length+' winners Preview में दिख रहे हैं।';
+  }
+
+  openBtn.addEventListener('click',function(){
+    panel.classList.add('open');
+  });
+
+  document.getElementById('gsEasyWinnerPreview').addEventListener('click',async function(){
+    try{
+      const data=await collect();
+      if(!data.length){
+        status.textContent='⚠️ पहले कम से कम 1 Winner भरें।';
+        return;
+      }
+      render(data);
+    }catch(e){
+      status.textContent='❌ '+e.message;
+    }
+  });
+
+  document.getElementById('gsEasyWinnerReal').addEventListener('click',function(){
+    localStorage.setItem(MODE,'OFF');
+    localStorage.removeItem(DATA);
+    location.reload();
+  });
+
+  document.getElementById('gsEasyWinnerClear').addEventListener('click',function(){
+    rows.querySelectorAll('input').forEach(function(input){
+      input.value='';
+    });
+    localStorage.removeItem(DATA);
+    status.textContent='🧹 Test data साफ हो गया।';
+  });
+
+  makeRows();
 })();
 </script>
 
