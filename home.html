@@ -7926,6 +7926,23 @@ body{
 }
 </style>
 
+
+<style id="GS_WINNER_SIGNED_PHOTO_FINAL">
+#dailyChampionsDashboard .gs-podium-photo img,
+#dailyChampionsDashboard .gs-top10-photo img{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:100% !important;
+  min-height:100% !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  border-radius:50% !important;
+}
+</style>
+
 </head>
 
 
@@ -8838,70 +8855,95 @@ function startTeacherTest(){
   async function attachPhotos(students){
     if(!Array.isArray(students) || !students.length) return;
 
-    const ids=students
-      .map(s=>String(s.id||'').trim())
-      .filter(Boolean);
-
-    if(!ids.length) return;
+    /*
+     * FINAL PHOTO METHOD
+     *
+     * Profile section already uses and successfully loads:
+     * student-photos/students/<student_id>/profile.jpg
+     * through createSignedUrl().
+     *
+     * Winner uses the exact same Storage method.
+     * photo_url is only a fallback.
+     */
 
     const BASE =
       'https://xgmeivfvuujculkplxjf.supabase.co/storage/v1/object/public/student-photos/';
 
-    try{
-      /*
-       * पहले students.photo_url से exact URL लें।
-       */
-      const {data,error}=await supabaseClient
-        .from('students')
-        .select('student_id,photo_url')
-        .in('student_id',ids);
+    for(const student of students){
 
-      if(!error && Array.isArray(data)){
-        const map=new Map();
+      const sid=String(student.id||'').trim();
 
-        data.forEach(row=>{
-          map.set(
-            String(row.student_id||'').trim().toLowerCase(),
-            String(row.photo_url||'').trim()
+      if(!sid) continue;
+
+      const path=
+        'students/'+
+        sid+
+        '/profile.jpg';
+
+      let finalUrl='';
+
+      /* 1. PRIMARY: actual Storage object */
+      try{
+
+        const {data,error}=await supabaseClient
+          .storage
+          .from('student-photos')
+          .createSignedUrl(
+            path,
+            60*60*24*7
           );
-        });
 
-        students.forEach(student=>{
-          const sid=String(student.id||'').trim();
-          const saved=map.get(sid.toLowerCase());
+        if(!error && data && data.signedUrl){
+          finalUrl=String(data.signedUrl).trim();
+        }
 
-          if(saved){
-            student.photoUrl=saved;
-          }else{
-            student.photoUrl=
-              BASE+
-              'students/'+
-              encodeURIComponent(sid)+
-              '/profile.jpg';
-          }
-        });
+      }catch(e){
 
-        return;
+        console.warn(
+          'Winner signed photo lookup:',
+          e
+        );
+
       }
 
-    }catch(e){
-      console.warn('Winner photo table lookup:',e);
+      /* 2. FALLBACK: saved photo_url */
+      if(!finalUrl){
+
+        try{
+
+          const {data,error}=await supabaseClient
+            .from('students')
+            .select('photo_url')
+            .eq('student_id',sid)
+            .maybeSingle();
+
+          if(!error && data && data.photo_url){
+            finalUrl=String(data.photo_url).trim();
+          }
+
+        }catch(e){
+
+          console.warn(
+            'Winner photo_url lookup:',
+            e
+          );
+
+        }
+      }
+
+      /* 3. FINAL FALLBACK: public Storage URL */
+      if(!finalUrl){
+
+        finalUrl=
+          BASE+
+          'students/'+
+          encodeURIComponent(sid)+
+          '/profile.jpg';
+
+      }
+
+      student.photoUrl=finalUrl;
     }
-
-    /*
-     * अगर students table read RLS से block हो तो direct Storage
-     * path से photo फिर भी दिखाएँ।
-     */
-    students.forEach(student=>{
-      const sid=String(student.id||'').trim();
-      if(!sid) return;
-
-      student.photoUrl=
-        BASE+
-        'students/'+
-        encodeURIComponent(sid)+
-        '/profile.jpg';
-    });
   }
 
   function renderTop3(top){
