@@ -7904,6 +7904,28 @@ body{
 }
 </style>
 
+
+<style id="GS_WINNER_PHOTO_DISPLAY_FIX">
+#dailyChampionsDashboard .gs-podium-photo,
+#dailyChampionsDashboard .gs-top10-photo{
+  overflow:hidden !important;
+}
+
+#dailyChampionsDashboard .gs-podium-photo-img,
+#dailyChampionsDashboard .gs-top10-photo-img{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:100% !important;
+  min-height:100% !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  border-radius:50% !important;
+}
+</style>
+
 </head>
 
 
@@ -8784,57 +8806,100 @@ function startTeacherTest(){
   function photoMarkup(student, extraClass){
     const url=String(student.photoUrl || '').trim();
 
-    if(url){
-
+    if(!url){
       return `
-        <img
-          class="${extraClass || ''}"
-          src="${esc(url)}"
-          alt="${esc(student.name)}"
-          loading="eager"
-          referrerpolicy="no-referrer"
-          onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src=this.src.replace(/\.jpg(?:\?.*)?$/i,'.jpeg');}else{this.style.display='none';this.nextElementSibling.style.display='flex';}"
-        >
-        <span
-          class="gs-winner-initial-fallback"
-          style="display:none"
-        >
+        <span class="gs-winner-initial-fallback">
           ${esc(initials(student.name))}
         </span>
       `;
-
     }
 
     return `
-      <span class="gs-winner-initial-fallback">
+      <img
+        class="${extraClass || ''}"
+        src="${esc(url)}"
+        alt="${esc(student.name)}"
+        loading="eager"
+        decoding="async"
+        referrerpolicy="no-referrer"
+        style="display:block;width:100%;height:100%;object-fit:cover;object-position:center;border-radius:50%;"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+      >
+      <span
+        class="gs-winner-initial-fallback"
+        style="display:none"
+      >
         ${esc(initials(student.name))}
       </span>
     `;
   }
 
+
   async function attachPhotos(students){
     if(!Array.isArray(students) || !students.length) return;
 
-    /*
-     * FINAL PHOTO AUTO MATCH
-     *
-     * Confirmed Storage structure:
-     * student-photos/students/<student_id>/profile.jpg
-     *
-     * student_test_records already gives us student_id.
-     * So no photo_url or students-table lookup is required.
-     */
+    const ids=students
+      .map(s=>String(s.id||'').trim())
+      .filter(Boolean);
+
+    if(!ids.length) return;
+
     const BASE =
       'https://xgmeivfvuujculkplxjf.supabase.co/storage/v1/object/public/student-photos/';
 
+    try{
+      /*
+       * पहले students.photo_url से exact URL लें।
+       */
+      const {data,error}=await supabaseClient
+        .from('students')
+        .select('student_id,photo_url')
+        .in('student_id',ids);
+
+      if(!error && Array.isArray(data)){
+        const map=new Map();
+
+        data.forEach(row=>{
+          map.set(
+            String(row.student_id||'').trim().toLowerCase(),
+            String(row.photo_url||'').trim()
+          );
+        });
+
+        students.forEach(student=>{
+          const sid=String(student.id||'').trim();
+          const saved=map.get(sid.toLowerCase());
+
+          if(saved){
+            student.photoUrl=saved;
+          }else{
+            student.photoUrl=
+              BASE+
+              'students/'+
+              encodeURIComponent(sid)+
+              '/profile.jpg';
+          }
+        });
+
+        return;
+      }
+
+    }catch(e){
+      console.warn('Winner photo table lookup:',e);
+    }
+
+    /*
+     * अगर students table read RLS से block हो तो direct Storage
+     * path से photo फिर भी दिखाएँ।
+     */
     students.forEach(student=>{
       const sid=String(student.id||'').trim();
       if(!sid) return;
 
-      student.photoUrl =
-        BASE +
-        'students/' +
-        encodeURIComponent(sid) +
+      student.photoUrl=
+        BASE+
+        'students/'+
+        encodeURIComponent(sid)+
         '/profile.jpg';
     });
   }
