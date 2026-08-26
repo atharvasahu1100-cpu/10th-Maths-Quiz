@@ -9573,8 +9573,7 @@ function startTeacherTest(){
 
   function currentStudentId(){
     return readStore([
-      'studentId','studentID','student_id',
-      'profileId','profile_id'
+      'studentId','studentID','student_id'
     ]);
   }
 
@@ -9640,56 +9639,98 @@ function startTeacherTest(){
       return;
     }
 
-    const studentId=currentStudentId() || currentMobile();
+    /*
+     * Current logged-in student की वास्तविक UUID निकालें।
+     * यही UUID Storage folder और students.photo_url दोनों में
+     * इस्तेमाल होगी।
+     */
+    const studentId=currentStudentId();
 
     if(!studentId){
-      alert('Student ID नहीं मिली।');
+      alert('Current student ID नहीं मिली। पहले student login/profile load करें।');
       return;
     }
 
-    const ext=(file.name.split('.').pop() || 'jpg')
-      .toLowerCase().replace(/[^a-z0-9]/g,'');
-
-    const path='students/'+studentId+'/profile.'+(ext || 'jpg');
+    /*
+     * सभी student photos एक consistent path पर जाएँगी:
+     * student-photos/students/<student_id>/profile.jpg
+     *
+     * इसलिए बाद में Winner/Top 10 को अलग से photo set नहीं करनी पड़ेगी।
+     */
+    const path='students/'+studentId+'/profile.jpg';
 
     try{
+
       const {error:uploadError}=await sb
         .storage
         .from(BUCKET)
         .upload(path,file,{
           upsert:true,
-          contentType:file.type,
+          contentType:'image/jpeg',
           cacheControl:'3600'
         });
 
       if(uploadError) throw uploadError;
 
-      const {data}=sb.storage
+      /*
+       * Public URL पहले लें।
+       * Bucket public है, इसलिए यही URL students.photo_url में
+       * permanently save किया जाएगा।
+       */
+      const {data:urlData}=sb.storage
         .from(BUCKET)
         .getPublicUrl(path);
 
-      const publicUrl=clean(data && data.publicUrl);
+      const publicUrl=clean(urlData && urlData.publicUrl);
 
       if(!publicUrl)
         throw new Error('Photo URL नहीं मिला।');
 
-      await updateStudentPhoto(publicUrl);
+      /*
+       * IMPORTANT:
+       * Profile photo upload होते ही students.photo_url automatic
+       * update होगा। User को कभी manually URL डालने की जरूरत नहीं।
+       */
+      const {error:updateError}=await sb
+        .from('students')
+        .update({
+          photo_url: publicUrl
+        })
+        .eq('student_id',studentId);
 
-      /* Existing photo elements को तुरंत refresh करें. */
+      if(updateError) throw updateError;
+
+      /*
+       * Existing profile image को तुरंत update करें।
+       * Cache-busting query सिर्फ display के लिए है; database में
+       * clean URL ही रखा गया है।
+       */
+      const displayUrl=publicUrl+
+        (publicUrl.includes('?')?'&':'?')+
+        'v='+Date.now();
+
       document.querySelectorAll(
         '#studentProfilePhoto,'+
         '#studentPhoto,'+
         '.student-profile-photo img,'+
         '.student-photo img'
-      ).forEach(img=>{
-        img.src=publicUrl;
+      ).forEach(el=>{
+        if(el.tagName && el.tagName.toLowerCase()==='img'){
+          el.src=displayUrl;
+        }else{
+          const img=el.querySelector && el.querySelector('img');
+          if(img) img.src=displayUrl;
+        }
       });
 
       alert('Profile photo सफलतापूर्वक save हो गई।');
 
     }catch(err){
       console.error('Profile photo upload:',err);
-      alert('Photo save नहीं हो सकी: '+(err.message || err));
+      alert(
+        'Photo save नहीं हो सकी: '+
+        (err && err.message ? err.message : err)
+      );
     }
   }
 
@@ -9744,6 +9785,8 @@ function startTeacherTest(){
 
 
 <!-- GS PHOTO DIRECT MATCH: confirmed Storage path student-photos/students/<student_id>/profile.jpg -->
+
+<!-- GS FULL AUTO PHOTO: profile upload automatically updates students.photo_url -->
 </body>
 </html>
 
