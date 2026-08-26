@@ -7905,41 +7905,101 @@ body{
 </style>
 
 
-<style id="GS_WINNER_PHOTO_DISPLAY_FIX">
-#dailyChampionsDashboard .gs-podium-photo,
-#dailyChampionsDashboard .gs-top10-photo{
+
+
+
+
+
+
+<style id="GS_WINNER_PHOTO_CLEAN_CENTER_FINAL">
+/* =========================================================
+   WINNER PHOTO FINAL FIX
+   - Removes name initial behind/alongside photo
+   - Exact circular clipping
+   - Exact center alignment
+   - No change to Winner data/ranking/layout logic
+   ========================================================= */
+
+/* The outer circle is the single source of positioning. */
+#home-screen #dailyChampionsDashboard .gs-podium-photo{
+  position:relative !important;
+  box-sizing:border-box !important;
   overflow:hidden !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  border-radius:50% !important;
+  line-height:0 !important;
+  background:#eaf1f8 !important;
 }
 
-#dailyChampionsDashboard .gs-podium-photo-img,
-#dailyChampionsDashboard .gs-top10-photo-img{
+/* The actual photo fills ONLY the circle and is centered. */
+#home-screen #dailyChampionsDashboard .gs-podium-photo > img.gs-podium-photo-img{
+  position:static !important;
   display:block !important;
-  visibility:visible !important;
-  opacity:1 !important;
+  flex:0 0 100% !important;
   width:100% !important;
   height:100% !important;
   min-width:100% !important;
   min-height:100% !important;
-  object-fit:cover !important;
-  object-position:center !important;
+  max-width:none !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
   border-radius:50% !important;
+  object-fit:cover !important;
+  object-position:50% 50% !important;
+  transform:none !important;
 }
-</style>
 
+/* If an image cannot load, do NOT show a name letter. */
+#home-screen #dailyChampionsDashboard .gs-podium-photo > img.gs-podium-photo-img[src=""]{
+  display:none !important;
+}
 
-<style id="GS_WINNER_SIGNED_PHOTO_FINAL">
-#dailyChampionsDashboard .gs-podium-photo img,
-#dailyChampionsDashboard .gs-top10-photo img{
+/* Top-10 photos use the same clean rule. */
+#home-screen #dailyChampionsDashboard .gs-top10-photo{
+  position:relative !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 !important;
+  border-radius:50% !important;
+  line-height:0 !important;
+  background:#eaf1f8 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-photo > img.gs-top10-photo-img{
+  position:static !important;
   display:block !important;
-  visibility:visible !important;
-  opacity:1 !important;
+  flex:0 0 100% !important;
   width:100% !important;
   height:100% !important;
   min-width:100% !important;
   min-height:100% !important;
-  object-fit:cover !important;
-  object-position:center !important;
+  max-width:none !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
   border-radius:50% !important;
+  object-fit:cover !important;
+  object-position:50% 50% !important;
+  transform:none !important;
+}
+
+/* Mobile keeps exactly the same centering logic. */
+@media(max-width:430px){
+  #home-screen #dailyChampionsDashboard .gs-podium-photo > img.gs-podium-photo-img,
+  #home-screen #dailyChampionsDashboard .gs-top10-photo > img.gs-top10-photo-img{
+    object-position:50% 50% !important;
+  }
 }
 </style>
 
@@ -8823,31 +8883,27 @@ function startTeacherTest(){
   function photoMarkup(student, extraClass){
     const url=String(student.photoUrl || '').trim();
 
+    /*
+     * IMPORTANT:
+     * No student-name initial is placed behind the photo.
+     * This was causing the white letter to appear on the right side.
+     * If the image fails, the parent circle simply shows a clean
+     * neutral placeholder instead of any letter/text.
+     */
     if(!url){
-      return `
-        <span class="gs-winner-initial-fallback">
-          ${esc(initials(student.name))}
-        </span>
-      `;
+      return '';
     }
 
     return `
       <img
         class="${extraClass || ''}"
         src="${esc(url)}"
-        alt="${esc(student.name)}"
+        alt=""
+        aria-hidden="true"
         loading="eager"
         decoding="async"
         referrerpolicy="no-referrer"
-        style="display:block;width:100%;height:100%;object-fit:cover;object-position:center;border-radius:50%;"
-        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
       >
-      <span
-        class="gs-winner-initial-fallback"
-        style="display:none"
-      >
-        ${esc(initials(student.name))}
-      </span>
     `;
   }
 
