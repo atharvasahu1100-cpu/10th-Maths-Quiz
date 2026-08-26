@@ -954,6 +954,152 @@ body{
 </style>
 
 <script id="studentPortalDetailsScript">
+  <script id="GS_PROFILE_ID_FROM_SUPABASE">
+(function () {
+  'use strict';
+
+  function clean(v) {
+    return String(v == null ? '' : v).trim();
+  }
+
+  function getStoreValue(keys) {
+    for (const storage of [localStorage, sessionStorage]) {
+      for (const key of keys) {
+        try {
+          const value = clean(storage.getItem(key));
+          if (value) return value;
+        } catch (e) {}
+      }
+    }
+    return '';
+  }
+
+  async function loadGSProfileId() {
+
+    /* Existing Supabase connection का ही उपयोग */
+    if (
+      !window.supabase ||
+      !window.supabase.createClient
+    ) {
+      return;
+    }
+
+    const SUPABASE_URL =
+      "https://xgmeivfvuujculkplxjf.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+
+    const client =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+    /*
+      Login में पहले से saved mobile number से
+      उसी विद्यार्थी का students record खोजेंगे।
+    */
+    const mobile = getStoreValue([
+      'mobileNumber',
+      'studentMobile',
+      'mobile',
+      'phone'
+    ]);
+
+    if (!mobile) {
+      console.log('GS Profile: mobile number नहीं मिला');
+      return;
+    }
+
+    try {
+
+      const { data, error } = await client
+        .from('students')
+        .select('profile_id')
+        .eq('mobile_number', mobile)
+        .maybeSingle();
+
+      if (error) {
+        console.error(
+          'GS Profile ID error:',
+          error
+        );
+        return;
+      }
+
+      if (!data || !clean(data.profile_id)) {
+        console.log(
+          'GS Profile ID नहीं मिली'
+        );
+        return;
+      }
+
+      const profileId =
+        clean(data.profile_id);
+
+      /*
+        Home Page के Profile में
+        GS000001 / GS000002 / GS000003...
+        दिखाएँ।
+      */
+      const idElement =
+        document.getElementById('studentId');
+
+      if (idElement) {
+        idElement.textContent = profileId;
+      }
+
+      /*
+        आगे Home Page में जहाँ studentId की जरूरत हो,
+        वहाँ भी यही GS ID उपलब्ध रहे।
+      */
+      localStorage.setItem(
+        'profileId',
+        profileId
+      );
+
+      localStorage.setItem(
+        'studentProfileId',
+        profileId
+      );
+
+      console.log(
+        'GANIT SETU Profile ID:',
+        profileId
+      );
+
+    } catch (err) {
+
+      console.error(
+        'GS Profile ID loading failed:',
+        err
+      );
+
+    }
+  }
+
+  function start() {
+    setTimeout(
+      loadGSProfileId,
+      500
+    );
+  }
+
+  if (
+    document.readyState === 'loading'
+  ) {
+    document.addEventListener(
+      'DOMContentLoaded',
+      start,
+      { once: true }
+    );
+  } else {
+    start();
+  }
+
+})();
+</script>
 (function(){
   function clean(v){ return String(v == null ? '' : v).trim(); }
 
