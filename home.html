@@ -7891,6 +7891,19 @@ body{
 }
 </style>
 
+
+<style id="GS_DAILY_CHAMPION_PHOTO_AUTOCHECK_FINAL">
+#home-screen #dailyChampionsDashboard .gs-podium-photo-img,
+#home-screen #dailyChampionsDashboard .gs-top10-photo-img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  display:block !important;
+  border-radius:50% !important;
+}
+</style>
+
 </head>
 
 
@@ -8804,140 +8817,196 @@ function startTeacherTest(){
 
     try{
 
-      const {data,error}=await supabaseClient
+      /*
+       * PHOTO AUTO-CHECK
+       * Existing Profile Photo system already stores:
+       * student-photos/students/<student_id>/profile.jpg
+       *
+       * We therefore use the SAME path and SAME signed-URL method
+       * that the Profile section uses. This works even if photo_url
+       * is still NULL or the bucket is not publicly readable.
+       */
+
+      const {data:rows,error}=await supabaseClient
         .from('students')
-        .select('*');
+        .select(
+          'student_id,mobile_number,profile_id,student_code,photo_url'
+        );
 
       if(error) throw error;
 
-      const rows=Array.isArray(data)?data:[];
+      const allRows=Array.isArray(rows)?rows:[];
 
       const norm=v=>
         String(v==null?'':v).trim().toLowerCase();
-
-      const photoFields=[
-        'photo_url','profile_photo_url','profile_photo',
-        'student_photo','image_url','avatar_url',
-        'profile_image_url','profile_image','photo'
-      ];
-
-      function rowPhoto(row){
-        for(const field of photoFields){
-          const value=String(row?.[field]??'').trim();
-          if(value) return value;
-        }
-        return '';
-      }
 
       const byStudentId=new Map();
       const byMobile=new Map();
       const byProfileId=new Map();
       const byStudentCode=new Map();
 
-      rows.forEach(row=>{
-        const sid=norm(row.student_id || row.studentId);
-        const mobile=norm(row.mobile_number || row.mobile || row.phone);
-        const profile=norm(row.profile_id || row.profileId);
-        const code=norm(row.student_code || row.studentCode);
+      allRows.forEach(row=>{
+
+        const sid=norm(row.student_id);
+        const mobile=norm(row.mobile_number);
+        const profile=norm(row.profile_id);
+        const code=norm(row.student_code);
 
         if(sid) byStudentId.set(sid,row);
         if(mobile) byMobile.set(mobile,row);
         if(profile) byProfileId.set(profile,row);
         if(code) byStudentCode.set(code,row);
+
       });
 
       /*
-       * Existing profile photos को भी automatically खोजें।
-       * आपके current Storage structure:
-       * student-photos/students/<student_id>/profile.jpg
+       * Get the actual existing profile.jpg from Storage.
+       * First try a signed URL — exactly like the Profile section.
+       * If that fails, try the public URL.
        */
-      async function findExistingPhoto(studentId){
+      async function getStudentPhoto(studentId,row){
+
         if(!studentId) return '';
 
-        try{
-          const folder='students/'+studentId;
+        const path=
+          'students/' +
+          String(studentId).trim() +
+          '/profile.jpg';
 
-          const {data:files,error:listError}=await supabaseClient
+        /* 1. Signed URL — primary */
+        try{
+
+          const {data,error}=await supabaseClient
             .storage
             .from('student-photos')
-            .list(folder,{limit:100});
+            .createSignedUrl(path,60*60*24);
 
-          if(listError || !Array.isArray(files)) return '';
+          if(!error && data && data.signedUrl)
+            return String(data.signedUrl).trim();
 
-          const file=files.find(f=>
-            String(f.name||'').toLowerCase()==='profile.jpg'
-          ) || files.find(f=>
-            /^profile\.(jpg|jpeg|png|webp)$/i.test(String(f.name||''))
+        }catch(e){
+          console.warn(
+            'Signed student photo lookup:',
+            e
           );
+        }
 
-          if(!file) return '';
+        /* 2. Public URL — fallback */
+        try{
 
-          const path=folder+'/'+file.name;
-
-          const {data:urlData}=supabaseClient
+          const {data}=supabaseClient
             .storage
             .from('student-photos')
             .getPublicUrl(path);
 
-          return String(urlData?.publicUrl||'').trim();
+          const publicUrl=
+            String(data?.publicUrl||'').trim();
+
+          if(publicUrl) return publicUrl;
 
         }catch(e){
-          console.warn('Existing student photo lookup:',e);
-          return '';
+          console.warn(
+            'Public student photo lookup:',
+            e
+          );
         }
+
+        return '';
       }
 
       for(const student of students){
 
         let row=null;
-        const sid=norm(student.id);
-        const mobile=norm(student.mobile);
 
-        if(sid) row=byStudentId.get(sid)||null;
-        if(!row && mobile) row=byMobile.get(mobile)||null;
+        /* Primary: student_id */
+        if(student.id)
+          row=byStudentId.get(
+            norm(student.id)
+          ) || null;
+
+        /* Fallback: mobile */
+        if(!row && student.mobile)
+          row=byMobile.get(
+            norm(student.mobile)
+          ) || null;
+
+        /* Fallback: profile_id */
         if(!row && student.profileId)
-          row=byProfileId.get(norm(student.profileId))||null;
+          row=byProfileId.get(
+            norm(student.profileId)
+          ) || null;
+
+        /* Fallback: student_code */
         if(!row && student.studentCode)
-          row=byStudentCode.get(norm(student.studentCode))||null;
+          row=byStudentCode.get(
+            norm(student.studentCode)
+          ) || null;
 
-        if(!row) continue;
-
-        let photo=rowPhoto(row);
+        if(!row || !row.student_id) continue;
 
         /*
-         * photo_url NULL होने पर Storage से existing profile.jpg
-         * automatically ढूँढकर photo_url में save करें।
+         * If photo_url already exists, use it first.
          */
-        if(!photo && row.student_id){
+        let photo=
+          String(row.photo_url||'').trim();
 
-          photo=await findExistingPhoto(row.student_id);
+        /*
+         * If photo_url is NULL, automatically find
+         * students/<student_id>/profile.jpg.
+         */
+        if(!photo){
+          photo=await getStudentPhoto(
+            row.student_id,
+            row
+          );
+        }
 
-          if(photo){
+        if(!photo) continue;
 
-            const {error:updateError}=await supabaseClient
-              .from('students')
-              .update({photo_url:photo})
-              .eq('student_id',row.student_id);
+        student.photoUrl=photo;
+
+        /*
+         * Try to save the URL for future use.
+         * Even if RLS blocks this update, the current page
+         * still uses student.photoUrl and shows the photo.
+         */
+        if(!row.photo_url){
+
+          try{
+
+            const {error:updateError}=
+              await supabaseClient
+                .from('students')
+                .update({
+                  photo_url:photo
+                })
+                .eq(
+                  'student_id',
+                  row.student_id
+                );
 
             if(updateError){
               console.warn(
-                'photo_url update failed:',
+                'photo_url update blocked:',
                 updateError
               );
-            }else{
-              row.photo_url=photo;
             }
+
+          }catch(e){
+
+            console.warn(
+              'photo_url update skipped:',
+              e
+            );
+
           }
         }
-
-        if(photo)
-          student.photoUrl=photo;
       }
 
     }catch(error){
 
       console.warn(
-        'Daily Champion photo lookup failed:',
+        'Daily Champion photo auto-check failed:',
         error
       );
 
@@ -9853,5 +9922,3 @@ function startTeacherTest(){
 
 
 
-
-  
