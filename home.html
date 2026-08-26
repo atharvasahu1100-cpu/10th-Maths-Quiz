@@ -6280,6 +6280,120 @@ body{
 }
 </style>
 
+
+<style id="GS_PROFILE_RANK_CLEAN_FINAL">
+/* =========================================================
+   FINAL PROFILE CLEANUP
+   1) Camera/red placeholder removed
+   2) Today's rank is compact and stays inside its yellow box
+   3) No extra "रैंक" word before the number
+   ========================================================= */
+
+/* Photo: no placeholder icon/box */
+#home-screen .student-photo-top .student-photo-placeholder{
+  display:none !important;
+}
+
+/* Rank box itself */
+#home-screen .student-today-rank-wrap{
+  overflow:hidden !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+}
+
+#home-screen .student-today-rank-btn{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  white-space:nowrap !important;
+  flex-shrink:0 !important;
+}
+
+/* Title: "आज की मेरी रैंक" */
+#home-screen .student-today-rank-text{
+  display:block !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  overflow:hidden !important;
+  text-overflow:clip !important;
+  white-space:nowrap !important;
+  text-align:center !important;
+  font-size:clamp(7px, 1.8vw, 11px) !important;
+  line-height:1.05 !important;
+}
+
+/* Result stays INSIDE yellow box */
+#home-screen .student-today-rank-result{
+  position:absolute !important;
+  left:3px !important;
+  right:3px !important;
+  top:42px !important;
+  bottom:3px !important;
+  width:auto !important;
+  max-width:calc(100% - 6px) !important;
+  min-width:0 !important;
+  height:auto !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:2px !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  white-space:normal !important;
+  overflow-wrap:anywhere !important;
+  word-break:break-word !important;
+  text-align:center !important;
+  line-height:1.05 !important;
+  font-size:clamp(7px, 1.7vw, 10px) !important;
+  font-weight:850 !important;
+  background:transparent !important;
+  border:0 !important;
+  color:#073a80 !important;
+}
+
+/* Number/score should be readable but never force overflow */
+#home-screen .student-today-rank-result .rank-value{
+  font-size:clamp(13px, 3vw, 18px) !important;
+  line-height:1 !important;
+  font-weight:950 !important;
+}
+
+#home-screen .student-today-rank-result .score-value,
+#home-screen .student-today-rank-result .percent-value{
+  font-size:clamp(8px, 2vw, 12px) !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+}
+
+/* Mobile: even more compact */
+@media(max-width:380px){
+  #home-screen .student-today-rank-text{
+    font-size:7.5px !important;
+  }
+
+  #home-screen .student-today-rank-result{
+    top:40px !important;
+    left:2px !important;
+    right:2px !important;
+    bottom:2px !important;
+    max-width:calc(100% - 4px) !important;
+    font-size:6.8px !important;
+    line-height:1 !important;
+  }
+
+  #home-screen .student-today-rank-result .rank-value{
+    font-size:12px !important;
+  }
+
+  #home-screen .student-today-rank-result .score-value,
+  #home-screen .student-today-rank-result .percent-value{
+    font-size:7.5px !important;
+  }
+}
+</style>
+
 </head>
 
 
@@ -6311,7 +6425,7 @@ body{
     <div class="student-photo-top-wrap">
       <div class="student-photo-upload student-photo-top" title="विद्यार्थी की फोटो">
         <img id="studentPhotoPreview" class="student-photo-preview" alt="विद्यार्थी की फोटो">
-        <span id="studentPhotoPlaceholder" class="student-photo-placeholder">📷</span>
+        
         <input id="studentPhotoInput" type="file" accept="image/*" capture="environment" style="display:none">
       </div>
       <div class="student-today-rank-wrap" id="studentTodayRankWrap">
@@ -7336,10 +7450,10 @@ function startTeacherTest(){
       students.indexOf(found) + 1;
 
     rankResult.innerHTML =
-      `रैंक <span class="rank-value">#${rank}</span> • ` +
-      `स्कोर <span class="score-value">${esc(found.correct)}/${esc(found.total)}</span><br>` +
-      `प्रतिशत <span class="percent-value">${esc(found.percentage)}%</span> • ` +
-      `समय <span class="time-value">${esc(found.time || '—')}</span>`;
+      `<span class="rank-value">#${rank}</span> • ` +
+      `<span class="score-value">${esc(found.correct)}/${esc(found.total)}</span><br>` +
+      `<span class="percent-value">${esc(found.percentage)}%</span> • ` +
+      `${esc(found.time || '—')}`;
 
     rankResult.classList.add('show');
 
