@@ -392,61 +392,62 @@ async function loginStudent(){
       इसे किसी visible profile में दिखाने की जरूरत नहीं है।
     */
 
-    /*
-      IMPORTANT:
-      studentId = internal Supabase UUID.
-      profileId = visible Ganit Setu ID (GS000001...).
-      दोनों को अलग रखा गया है ताकि Test/Result linking न टूटे।
-    */
     localStorage.setItem(
       'studentId',
       String(student.student_id || '')
     );
 
-    /* Existing RPC में profile_id आए तो उसे सीधे लें। */
-    let visibleProfileId = String(student.profile_id || '').trim();
-
     /*
-      यदि existing login RPC profile_id नहीं लौटाता,
-      तो उसी mobile के लिए सुरक्षित RPC से profile_id लें।
-      students table को direct read नहीं किया जा रहा।
+      Visible Ganit Setu Profile ID.
+      Existing student_id UUID को नहीं बदला जा रहा।
+      profile_id हमारे अलग RPC से लिया जाएगा।
     */
-    if(!/^GS\d{6}$/i.test(visibleProfileId)){
-      try{
-        const profileResult = await supabaseClient.rpc(
-          'get_student_profile_id',
-          { p_mobile: mobile }
-        );
+    let visibleProfileId = '';
 
-        if(
-          !profileResult.error &&
-          profileResult.data != null
-        ){
-          if(Array.isArray(profileResult.data)){
+    try{
+      const profileResult = await supabaseClient.rpc(
+        'get_student_profile_id',
+        { p_mobile: mobile }
+      );
+
+      if(
+        !profileResult.error &&
+        profileResult.data != null
+      ){
+        if(Array.isArray(profileResult.data)){
+          const first = profileResult.data[0];
+
+          if(first && typeof first === 'object'){
             visibleProfileId = String(
-              profileResult.data[0]?.profile_id ||
-              profileResult.data[0] ||
-              ''
-            ).trim();
-          }else if(typeof profileResult.data === 'object'){
-            visibleProfileId = String(
-              profileResult.data.profile_id || ''
+              first.profile_id || ''
             ).trim();
           }else{
             visibleProfileId = String(
-              profileResult.data || ''
+              first || ''
             ).trim();
           }
+        }else if(
+          typeof profileResult.data === 'object'
+        ){
+          visibleProfileId = String(
+            profileResult.data.profile_id || ''
+          ).trim();
+        }else{
+          visibleProfileId = String(
+            profileResult.data || ''
+          ).trim();
         }
-      }catch(profileError){
-        console.warn(
-          'Profile ID RPC not available:',
-          profileError
-        );
       }
+    }catch(profileError){
+      console.warn(
+        'Profile ID RPC error:',
+        profileError
+      );
     }
 
-    /* केवल GS format को visible profile key में save करें। */
+    /*
+      केवल सही GS format को save करें।
+    */
     localStorage.setItem(
       'profileId',
       /^GS\d{6}$/i.test(visibleProfileId)
