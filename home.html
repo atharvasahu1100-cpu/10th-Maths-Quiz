@@ -955,16 +955,44 @@ body{
 
 <script id="studentPortalDetailsScript">
 (function(){
-  function clean(v){ return String(v == null ? '' : v).trim(); }
+  'use strict';
+
+  /*
+   * GANIT SETU — FINAL STUDENT PROFILE
+   *
+   * Visible Student ID = students.profile_id
+   * Example: GS000001, GS000002, GS000003...
+   *
+   * Existing students.student_id UUID is NOT changed.
+   * Existing localStorage studentId is also NOT overwritten,
+   * because other Test/Result modules may use that UUID.
+   */
+
+  const SUPABASE_URL =
+    "https://xgmeivfvuujculkplxjf.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+
+  function clean(v){
+    return String(v == null ? '' : v).trim();
+  }
 
   function readStore(store, keys){
     try{
       for(var i=0;i<keys.length;i++){
         var v=store.getItem(keys[i]);
-        if(clean(v)) return v;
+        if(clean(v)) return clean(v);
       }
     }catch(e){}
     return '';
+  }
+
+  function readAny(keys){
+    return (
+      readStore(localStorage,keys) ||
+      readStore(sessionStorage,keys)
+    );
   }
 
   function readObjectStore(store, keys){
@@ -983,92 +1011,519 @@ body{
 
   function setText(id,value){
     var el=document.getElementById(id);
-    if(el && clean(value)) el.textContent=value;
+    if(el && clean(value)){
+      el.textContent=clean(value);
+    }
   }
 
-  function loadStudentDetails(){
-    var profile=null;
-    try{
-      profile=readObjectStore(localStorage,['studentProfile','studentData','student','userProfile','user'])
-        || readObjectStore(sessionStorage,['studentProfile','studentData','student','userProfile','user']);
-    }catch(e){}
+  function normalizeClass(value){
+    var cls=clean(value);
+    var low=cls.toLowerCase();
 
-    var name=profile && (profile.name || profile.studentName || profile.student_name);
-    var id=profile && (profile.studentId || profile.studentID || profile.student_id || profile.id);
-    var mobile=profile && (profile.mobile || profile.mobileNumber || profile.phone || profile.studentMobile);
-    var school=profile && (profile.school || profile.schoolName || profile.school_name);
-
-    try{
-      name=clean(name) || readStore(localStorage,['studentName','student_name','name','username']) || readStore(sessionStorage,['studentName','student_name','name','username']);
-      id=clean(id) || readStore(localStorage,['studentId','studentID','student_id','student_id_no','id']) || readStore(sessionStorage,['studentId','studentID','student_id','student_id_no','id']);
-      mobile=clean(mobile) || readStore(localStorage,['mobile','mobileNumber','phone','studentMobile']) || readStore(sessionStorage,['mobile','mobileNumber','phone','studentMobile']);
-      school=clean(school) || readStore(localStorage,['schoolName','school','school_name']) || readStore(sessionStorage,['schoolName','school','school_name']);
-    }catch(e){}
-
-    setText('studentName',name || 'लॉगिन विवरण');
-    setText('studentId',id || '—');
-    setText('studentMobile',mobile || '—');
-    setText('studentSchool',school || '—');
-
-    var classDisplay=document.getElementById('studentClassDisplay');
-    if(classDisplay){
-      /* कक्षा registration/profile से read-only दिखाई जाएगी */
-      var studentClass=(profile && (
-          profile.className || profile.class || profile.studentClass ||
-          profile.grade || profile.class_name || profile.class_id
-        ))
-        || readStore(localStorage,['studentClass','className','class','grade'])
-        || readStore(sessionStorage,['studentClass','className','class','grade']);
-
-      var normalizedClass=studentClass==null ? '' : String(studentClass).trim();
-      if(normalizedClass==='9' || normalizedClass==='9वीं' || normalizedClass==='कक्षा 9' ||
-         normalizedClass.toLowerCase()==='class 9' || normalizedClass.toLowerCase()==='class 9th'){
-        normalizedClass='कक्षा 9वीं';
-      }
-      if(normalizedClass==='10' || normalizedClass==='10वीं' || normalizedClass==='कक्षा 10' ||
-         normalizedClass.toLowerCase()==='class 10' || normalizedClass.toLowerCase()==='class 10th'){
-        normalizedClass='कक्षा 10वीं';
-      }
-      setText('studentClassDisplay', normalizedClass || '—');
+    if(
+      cls==='9' ||
+      cls==='9वीं' ||
+      cls==='कक्षा 9' ||
+      low==='class 9' ||
+      low==='class 9th'
+    ){
+      return 'कक्षा 9वीं';
     }
 
-    var photo=(profile && (profile.photo || profile.photoUrl || profile.image || profile.profilePhoto))
-      || readStore(localStorage,['studentPhoto','studentPhotoUrl','profilePhoto'])
-      || readStore(sessionStorage,['studentPhoto','studentPhotoUrl','profilePhoto']);
-    if(photo) showStudentPhoto(photo);
+    if(
+      cls==='10' ||
+      cls==='10वीं' ||
+      cls==='कक्षा 10' ||
+      low==='class 10' ||
+      low==='class 10th'
+    ){
+      return 'कक्षा 10वीं';
+    }
+
+    return cls;
+  }
+
+  async function getSupabaseStudent(){
+
+    try{
+
+      if(
+        !window.supabase ||
+        typeof window.supabase.createClient !== 'function'
+      ){
+        return null;
+      }
+
+      var storedId=readAny([
+        'studentId',
+        'studentID',
+        'student_id',
+        'student_id_no'
+      ]);
+
+      var mobile=readAny([
+        'studentMobile',
+        'mobileNumber',
+        'mobile',
+        'phone'
+      ]);
+
+      /*
+       * यदि किसी पुराने Home version ने studentId में GS ID save कर दी हो,
+       * उसे UUID समझकर query न करें।
+       */
+      var uuidId=storedId;
+
+      if(/^GS\d+$/i.test(uuidId)){
+        uuidId='';
+      }
+
+      var client=window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+      var row=null;
+
+      /*
+       * सबसे पहले existing UUID से exact student खोजें।
+       * इससे गलत विद्यार्थी की GS ID आने की संभावना नहीं रहती।
+       */
+      if(uuidId){
+
+        var byId=await client
+          .from('students')
+          .select(
+            'student_id,profile_id,student_name,mobile_number,class_name,school_name,district,block,status'
+          )
+          .eq('student_id',uuidId)
+          .limit(1);
+
+        if(
+          !byId.error &&
+          Array.isArray(byId.data) &&
+          byId.data.length
+        ){
+          row=byId.data[0];
+        }
+      }
+
+      /*
+       * यदि UUID उपलब्ध नहीं है/record नहीं मिला,
+       * तो उसी logged-in mobile number से student खोजें।
+       */
+      if(!row && mobile){
+
+        var byMobile=await client
+          .from('students')
+          .select(
+            'student_id,profile_id,student_name,mobile_number,class_name,school_name,district,block,status'
+          )
+          .eq('mobile_number',mobile)
+          .order('created_at',{ascending:false})
+          .limit(1);
+
+        if(
+          !byMobile.error &&
+          Array.isArray(byMobile.data) &&
+          byMobile.data.length
+        ){
+          row=byMobile.data[0];
+        }
+      }
+
+      return row;
+
+    }catch(err){
+
+      console.error(
+        'GANIT SETU Profile Supabase Error:',
+        err
+      );
+
+      return null;
+    }
+  }
+
+  async function loadStudentDetails(){
+
+    var profile=null;
+
+    try{
+      profile=
+        readObjectStore(
+          localStorage,
+          ['studentProfile','studentData','student','userProfile','user']
+        )
+        ||
+        readObjectStore(
+          sessionStorage,
+          ['studentProfile','studentData','student','userProfile','user']
+        );
+    }catch(e){}
+
+    /*
+     * Existing saved values — इन्हें fallback के रूप में रखें।
+     */
+    var name=
+      profile &&
+      (
+        profile.name ||
+        profile.studentName ||
+        profile.student_name
+      );
+
+    var internalStudentId=
+      profile &&
+      (
+        profile.studentId ||
+        profile.studentID ||
+        profile.student_id ||
+        profile.id
+      );
+
+    var mobile=
+      profile &&
+      (
+        profile.mobile ||
+        profile.mobileNumber ||
+        profile.phone ||
+        profile.studentMobile
+      );
+
+    var school=
+      profile &&
+      (
+        profile.school ||
+        profile.schoolName ||
+        profile.school_name
+      );
+
+    var studentClass=
+      profile &&
+      (
+        profile.className ||
+        profile.class ||
+        profile.studentClass ||
+        profile.grade ||
+        profile.class_name ||
+        profile.class_id
+      );
+
+    try{
+
+      name=
+        clean(name) ||
+        readAny([
+          'studentName',
+          'student_name',
+          'name',
+          'username'
+        ]);
+
+      internalStudentId=
+        clean(internalStudentId) ||
+        readAny([
+          'studentId',
+          'studentID',
+          'student_id',
+          'student_id_no'
+        ]);
+
+      mobile=
+        clean(mobile) ||
+        readAny([
+          'mobile',
+          'mobileNumber',
+          'phone',
+          'studentMobile'
+        ]);
+
+      school=
+        clean(school) ||
+        readAny([
+          'schoolName',
+          'school',
+          'school_name'
+        ]);
+
+      studentClass=
+        clean(studentClass) ||
+        readAny([
+          'studentClass',
+          'className',
+          'class',
+          'grade'
+        ]);
+
+    }catch(e){}
+
+    /*
+     * पहले saved information दिखाएँ ताकि page खाली न रहे।
+     */
+    setText(
+      'studentName',
+      name || 'लॉगिन विवरण'
+    );
+
+    setText(
+      'studentId',
+      '—'
+    );
+
+    setText(
+      'studentMobile',
+      mobile || '—'
+    );
+
+    setText(
+      'studentSchool',
+      school || '—'
+    );
+
+    setText(
+      'studentClassDisplay',
+      normalizeClass(studentClass) || '—'
+    );
+
+    /*
+     * अब Supabase से exact student row लें।
+     */
+    var student=await getSupabaseStudent();
+
+    if(student){
+
+      /*
+       * Visible Profile ID:
+       * केवल profile_id.
+       */
+      var profileId=
+        clean(student.profile_id);
+
+      setText(
+        'studentName',
+        student.student_name || name || 'लॉगिन विवरण'
+      );
+
+      setText(
+        'studentId',
+        profileId || '—'
+      );
+
+      setText(
+        'studentMobile',
+        student.mobile_number || mobile || '—'
+      );
+
+      setText(
+        'studentSchool',
+        student.school_name || school || '—'
+      );
+
+      setText(
+        'studentClassDisplay',
+        normalizeClass(
+          student.class_name || studentClass
+        ) || '—'
+      );
+
+      /*
+       * IMPORTANT:
+       * studentId = existing UUID ही रहने दें।
+       * Profile ID को अलग key में रखें।
+       */
+      try{
+
+        if(clean(student.student_id)){
+          localStorage.setItem(
+            'studentId',
+            clean(student.student_id)
+          );
+        }
+
+        if(profileId){
+          localStorage.setItem(
+            'profileId',
+            profileId
+          );
+
+          localStorage.setItem(
+            'studentProfileId',
+            profileId
+          );
+        }
+
+        if(clean(student.student_name)){
+          localStorage.setItem(
+            'studentName',
+            clean(student.student_name)
+          );
+        }
+
+        if(clean(student.mobile_number)){
+          localStorage.setItem(
+            'studentMobile',
+            clean(student.mobile_number)
+          );
+
+          localStorage.setItem(
+            'mobileNumber',
+            clean(student.mobile_number)
+          );
+        }
+
+        if(clean(student.class_name)){
+          localStorage.setItem(
+            'studentClass',
+            clean(student.class_name)
+          );
+
+          localStorage.setItem(
+            'className',
+            clean(student.class_name)
+          );
+        }
+
+        if(clean(student.school_name)){
+          localStorage.setItem(
+            'schoolName',
+            clean(student.school_name)
+          );
+        }
+
+      }catch(e){}
+
+      window.GanitSetuCurrentStudent={
+        studentId:clean(student.student_id),
+        profileId:profileId,
+        name:clean(student.student_name),
+        mobile:clean(student.mobile_number),
+        className:clean(student.class_name),
+        schoolName:clean(student.school_name),
+        district:clean(student.district),
+        block:clean(student.block)
+      };
+
+      console.log(
+        'GANIT SETU Profile:',
+        window.GanitSetuCurrentStudent
+      );
+
+    }
+
+    /*
+     * Profile photo — existing functionality retained.
+     */
+    var photo=
+      (profile &&
+        (
+          profile.photo ||
+          profile.photoUrl ||
+          profile.image ||
+          profile.profilePhoto
+        ))
+      ||
+      readAny([
+        'studentPhoto',
+        'studentPhotoUrl',
+        'profilePhoto'
+      ]);
+
+    if(photo){
+      showStudentPhoto(photo);
+    }
   }
 
   function showStudentPhoto(src){
-    var img=document.getElementById('studentPhotoPreview');
-    var ph=document.getElementById('studentPhotoPlaceholder');
+    var img=
+      document.getElementById(
+        'studentPhotoPreview'
+      );
+
+    var ph=
+      document.getElementById(
+        'studentPhotoPlaceholder'
+      );
+
     if(img && ph){
-      img.src=src; img.style.display='block'; ph.style.display='none';
+      img.src=src;
+      img.style.display='block';
+      ph.style.display='none';
     }
   }
 
   function saveStudentPhoto(file){
     if(!file)return;
+
     var reader=new FileReader();
+
     reader.onload=function(e){
-      try{ localStorage.setItem('studentPhoto',e.target.result); }catch(err){}
-      showStudentPhoto(e.target.result);
+
+      try{
+        localStorage.setItem(
+          'studentPhoto',
+          e.target.result
+        );
+      }catch(err){}
+
+      showStudentPhoto(
+        e.target.result
+      );
     };
+
     reader.readAsDataURL(file);
   }
 
   function setupStudentPhoto(){
-    var input=document.getElementById('studentPhotoInput');
-    if(input) input.addEventListener('change',function(){ saveStudentPhoto(this.files && this.files[0]); });
 
+    var input=
+      document.getElementById(
+        'studentPhotoInput'
+      );
+
+    if(input){
+
+      input.addEventListener(
+        'change',
+        function(){
+          saveStudentPhoto(
+            this.files &&
+            this.files[0]
+          );
+        }
+      );
+
+    }
+  }
+
+  function start(){
+
+    loadStudentDetails();
+
+    /*
+     * Login → Home redirect के तुरंत बाद
+     * एक अतिरिक्त load.
+     */
+    setTimeout(
+      loadStudentDetails,
+      1200
+    );
   }
 
   if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',function(){loadStudentDetails();setupStudentPhoto();});
-    document.addEventListener('DOMContentLoaded',loadStudentDetails);
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      start,
+      {once:true}
+    );
+
   }else{
-    loadStudentDetails();
-    setupStudentPhoto();
+
+    start();
+
   }
+
 })();
 </script>
 
@@ -6821,261 +7276,6 @@ function startTeacherTest(){
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script id="ganitSetuStudentProfileSupabaseLoader">
-(function(){
-  'use strict';
-
-  /*
-   * GANIT SETU — Student Profile Loader
-   * केवल विद्यार्थी विवरण Supabase से लाने के लिए।
-   * Existing Home design, buttons, tests और बाकी functionality को नहीं बदला गया।
-   */
-
-  const SUPABASE_URL =
-    "https://xgmeivfvuujculkplxjf.supabase.co";
-
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
-
-  function clean(v){
-    return String(v == null ? '' : v).trim();
-  }
-
-  function readStore(keys){
-    for(const store of [localStorage, sessionStorage]){
-      for(const key of keys){
-        try{
-          const value = store.getItem(key);
-          if(clean(value)) return clean(value);
-        }catch(e){}
-      }
-    }
-    return '';
-  }
-
-  function setText(id, value){
-    const el = document.getElementById(id);
-    if(el && clean(value)){
-      el.textContent = clean(value);
-    }
-  }
-
-  function normalizeClass(value){
-    let cls = clean(value);
-
-    const low = cls.toLowerCase();
-
-    if(
-      cls === '9' ||
-      cls === '9वीं' ||
-      cls === 'कक्षा 9' ||
-      low === 'class 9' ||
-      low === 'class 9th'
-    ){
-      return 'कक्षा 9वीं';
-    }
-
-    if(
-      cls === '10' ||
-      cls === '10वीं' ||
-      cls === 'कक्षा 10' ||
-      low === 'class 10' ||
-      low === 'class 10th'
-    ){
-      return 'कक्षा 10वीं';
-    }
-
-    return cls;
-  }
-
-  function saveIdentity(student){
-    const values = {
-      studentId: student.student_id,
-      studentName: student.student_name,
-      studentMobile: student.mobile_number,
-      studentClass: student.class_name,
-      schoolName: student.school_name,
-      district: student.district,
-      block: student.block
-    };
-
-    Object.keys(values).forEach(function(key){
-      const value = clean(values[key]);
-      if(!value) return;
-
-      try{
-        localStorage.setItem(key, value);
-      }catch(e){}
-    });
-
-    /* Existing Home/Test code में भी यही keys उपलब्ध रहें। */
-    try{
-      if(clean(student.mobile_number)){
-        localStorage.setItem('mobileNumber', clean(student.mobile_number));
-        localStorage.setItem('mobile', clean(student.mobile_number));
-      }
-
-      if(clean(student.class_name)){
-        localStorage.setItem('className', clean(student.class_name));
-      }
-    }catch(e){}
-  }
-
-  async function loadStudentProfile(){
-
-    try{
-
-      if(
-        !window.supabase ||
-        typeof window.supabase.createClient !== 'function'
-      ){
-        console.warn('GANIT SETU: Supabase library अभी उपलब्ध नहीं है।');
-        return;
-      }
-
-      const mobile = readStore([
-        'studentMobile',
-        'mobileNumber',
-        'mobile',
-        'phone'
-      ]);
-
-      const studentId = readStore([
-        'studentId',
-        'studentID',
-        'student_id',
-        'student_id_no'
-      ]);
-
-      if(!mobile && !studentId){
-        console.warn(
-          'GANIT SETU: Student पहचान नहीं मिली।'
-        );
-        return;
-      }
-
-      const client = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
-
-      let student = null;
-      let error = null;
-
-      /*
-       * पहले Student ID से खोजें, क्योंकि यह unique identity है।
-       */
-      if(studentId){
-
-        const result = await client
-          .from('students')
-          .select(
-            'student_id,profile_id,student_name,mobile_number,class_name,school_name,district,block,status'
-          )
-          .eq('student_id', studentId)
-          .maybeSingle();
-
-        student = result.data;
-        error = result.error;
-      }
-
-      /*
-       * Student ID से record न मिले तो मोबाइल नंबर से खोजें।
-       */
-      if(!student && mobile){
-
-        const result = await client
-          .from('students')
-          .select(
-            'student_id,profile_id,student_name,mobile_number,class_name,school_name,district,block,status'
-          )
-          .eq('mobile_number', mobile)
-          .maybeSingle();
-
-        student = result.data;
-        error = result.error;
-      }
-
-      if(error){
-        console.error(
-          'GANIT SETU Student Profile Error:',
-          error
-        );
-        return;
-      }
-
-      if(!student){
-        console.warn(
-          'GANIT SETU: Supabase में विद्यार्थी record नहीं मिला।'
-        );
-        return;
-      }
-
-      /*
-       * Home Page पर Supabase की वास्तविक जानकारी दिखाएँ।
-       */
-      setText('studentName', student.student_name || '—');
-      setText('studentId', student.profile_id || '—');
-      setText('studentMobile', student.mobile_number || '—');
-      setText(
-        'studentClassDisplay',
-        normalizeClass(student.class_name) || '—'
-      );
-      setText('studentSchool', student.school_name || '—');
-
-      saveIdentity(student);
-
-      /*
-       * Current student object भी उपलब्ध रहेगा।
-       * इससे existing Test/Result code प्रभावित नहीं होगा।
-       */
-      window.GanitSetuCurrentStudent = {
-        studentId: clean(student.student_id),
-        profileId: clean(student.profile_id),
-        name: clean(student.student_name),
-        mobile: clean(student.mobile_number),
-        className: clean(student.class_name),
-        schoolName: clean(student.school_name),
-        district: clean(student.district),
-        block: clean(student.block)
-      };
-
-      console.log(
-        'GANIT SETU: Student profile loaded from Supabase.',
-        window.GanitSetuCurrentStudent
-      );
-
-    }catch(err){
-
-      console.error(
-        'GANIT SETU Student Profile Loader Error:',
-        err
-      );
-
-    }
-  }
-
-  function start(){
-
-    /* DOM तैयार होने के बाद profile fields मौजूद रहेंगे। */
-    loadStudentProfile();
-
-    /*
-     * Login → Home redirect के तुरंत बाद एक अतिरिक्त check।
-     */
-    setTimeout(loadStudentProfile, 700);
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', start, {once:true});
-  }else{
-    start();
-  }
-
-})();
-</script>
-
-
 <script id="ganitSetuSupabasePhotoOnly">
 (function(){
   'use strict';
@@ -7691,208 +7891,6 @@ function startTeacherTest(){
    The displayed result now includes rank, score, percentage and time. */
 </script>
 
-
-
-
-
-
-<script id="GS_PROFILE_ID_FINAL_HARD_FIX">
-(function(){
-  'use strict';
-
-  /*
-   * FINAL HARD FIX
-   * Visible "Student ID" = students.profile_id only.
-   * Existing student_id UUID is never changed.
-   *
-   * We identify the logged-in student by the existing mobile number.
-   * The query intentionally returns an array so duplicate mobile records
-   * do not make maybeSingle() fail.
-   */
-
-  const SUPABASE_URL =
-    "https://xgmeivfvuujculkplxjf.supabase.co";
-
-  const SUPABASE_KEY =
-    "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
-
-  function clean(v){
-    return String(v == null ? '' : v).trim();
-  }
-
-  function stored(keys){
-    for(const storage of [localStorage, sessionStorage]){
-      for(const key of keys){
-        try{
-          const v = clean(storage.getItem(key));
-          if(v) return v;
-        }catch(e){}
-      }
-    }
-    return '';
-  }
-
-  async function getGSId(){
-
-    if(
-      !window.supabase ||
-      typeof window.supabase.createClient !== 'function'
-    ){
-      return '';
-    }
-
-    const mobile = stored([
-      'studentMobile',
-      'mobileNumber',
-      'mobile',
-      'phone'
-    ]);
-
-    if(!mobile) return '';
-
-    const sb = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
-
-    /*
-     * Mobile number से सीधे students table की profile_id लें।
-     * Array + limit(1) इसलिए कि duplicate mobile होने पर भी
-     * query fail न हो।
-     */
-    const result = await sb
-      .from('students')
-      .select('profile_id')
-      .eq('mobile_number', mobile)
-      .order('created_at', {ascending:false})
-      .limit(1);
-
-    if(result.error){
-      console.error(
-        'GANIT SETU GS Profile ID:',
-        result.error
-      );
-      return '';
-    }
-
-    const rows = Array.isArray(result.data)
-      ? result.data
-      : [];
-
-    return clean(
-      rows.length ? rows[0].profile_id : ''
-    );
-  }
-
-  function putOnScreen(gsId){
-
-    if(!gsId) return;
-
-    const el =
-      document.getElementById('studentId');
-
-    if(el){
-      el.textContent = gsId;
-      el.setAttribute('data-gs-profile-id', gsId);
-    }
-
-    try{
-      localStorage.setItem(
-        'profileId',
-        gsId
-      );
-
-      localStorage.setItem(
-        'studentProfileId',
-        gsId
-      );
-    }catch(e){}
-  }
-
-  async function apply(){
-
-    try{
-      const gsId = await getGSId();
-
-      if(gsId){
-        putOnScreen(gsId);
-        console.log(
-          'GANIT SETU FINAL VISIBLE PROFILE ID:',
-          gsId
-        );
-      }
-
-    }catch(e){
-      console.error(
-        'GANIT SETU GS Profile ID failed:',
-        e
-      );
-    }
-  }
-
-  function start(){
-
-    /*
-     * Existing scripts के बाद पहली बार।
-     */
-    setTimeout(apply, 1800);
-
-    /*
-     * पुराने script यदि बाद में UUID लिख दें,
-     * तो फिर से GS ID लगा दें।
-     */
-    setTimeout(apply, 3500);
-    setTimeout(apply, 6000);
-
-    /*
-     * यदि कोई पुराना script #studentId की value बदलता है,
-     * तो उसे वापस GS profile_id में बदलें।
-     */
-    const target =
-      document.getElementById('studentId');
-
-    if(target){
-
-      const observer =
-        new MutationObserver(function(){
-
-          const expected =
-            target.getAttribute(
-              'data-gs-profile-id'
-            );
-
-          if(
-            expected &&
-            clean(target.textContent) !== expected
-          ){
-            target.textContent = expected;
-          }
-
-        });
-
-      observer.observe(
-        target,
-        {
-          childList:true,
-          characterData:true,
-          subtree:true
-        }
-      );
-    }
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener(
-      'DOMContentLoaded',
-      start,
-      {once:true}
-    );
-  }else{
-    start();
-  }
-
-})();
-</script>
 </body>
 </html>
 
