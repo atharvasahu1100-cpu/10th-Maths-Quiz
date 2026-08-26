@@ -11978,7 +11978,7 @@ if(!editor||!list)return;
 function build(){list.innerHTML='';for(let i=1;i<=10;i++)list.insertAdjacentHTML('beforeend','<div class="gwm-row" data-rank="'+i+'"><b>'+i+'</b><input class="gwm-name" type="text" placeholder="Winner '+i+' का नाम"><input class="gwm-score" type="text" placeholder="Score"><input class="gwm-photo" type="file" accept="image/*"></div>')}
 function read(f){return new Promise((res,rej)=>{if(!f)return res('');let r=new FileReader();r.onload=()=>res(r.result||'');r.onerror=rej;r.readAsDataURL(f)})}
 function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-async function collect(){let a=[];for(const row of list.querySelectorAll('.gwm-row')){let n=row.querySelector('.gwm-name').value.trim(),s=row.querySelector('.gwm-score').value.trim(),p=await read(row.querySelector('.gwm-photo').files[0]);if(n||s||p)a.push({rank:+row.dataset.rank,name:n||'Winner '+row.dataset.rank,score:s||'—',photo:p})}return a}
+async function collect(){let a=[];for(const row of list.querySelectorAll('.gwm-row')){let n=row.querySelector('.gwm-name').value.trim(),s=row.querySelector('.gwm-score').value.trim(),p=await read(row.querySelector('.gwm-photo').files[0]); if(!p && window.gwmGetSavedPhoto) p=window.gwmGetSavedPhoto(+row.dataset.rank);if(n||s||p)a.push({rank:+row.dataset.rank,name:n||'Winner '+row.dataset.rank,score:s||'—',photo:p})}return a}
 function render(a){
 let t3=document.getElementById('dailyTop3'),t10=document.getElementById('dailyTop10List'),root=document.getElementById('dailyChampionsDashboard');if(!t3||!t10||!root)throw Error('Winner section नहीं मिला');
 a.sort((x,y)=>x.rank-y.rank);let by=r=>a.find(x=>x.rank===r),slots=[by(2),by(1),by(3)],cls=['gs-second','gs-first','gs-third'],crowns=['♕','👑','♕'],medals=['🥈','🥇','🥉'];
@@ -11987,8 +11987,88 @@ t10.innerHTML=a.map(s=>'<article class="gs-top10-card '+(s.rank===1?'gs-gold':s.
 let title=root.querySelector('.daily-champions-title'),date=root.querySelector('.daily-champions-date');if(title)title.innerHTML='🏆 DAILY CHAMPION';if(date)date.textContent='Manual Preview';status.textContent='✅ '+a.length+' winners Preview में दिख रहे हैं।'
 }
 document.getElementById('gwmPreview').onclick=async()=>{try{let a=await collect();if(!a.length){status.textContent='⚠️ पहले कम से कम 1 Winner भरें।';return}render(a)}catch(e){status.textContent='❌ '+e.message}};
-document.getElementById('gwmClear').onclick=()=>{list.querySelectorAll('input').forEach(x=>x.value='');status.textContent='🧹 Manual list साफ हो गई।'};
+document.getElementById('gwmClear').onclick=()=>{list.querySelectorAll('input').forEach(x=>x.value='');try{localStorage.removeItem('ganitSetu_winner_manual_saved_v1')}catch(e){};list.querySelectorAll('.gwm-row').forEach(x=>delete x.dataset.savedPhoto);status.textContent='🧹 Manual list साफ हो गई।'};
 build();
+})();
+</script>
+<script id="GS_WINNER_AUTOSAVE">
+(function(){
+'use strict';
+const KEY='ganitSetu_winner_manual_saved_v1';
+const list=document.getElementById('gwmList');
+const status=document.getElementById('gwmStatus');
+if(!list)return;
+
+function readFile(file){
+ return new Promise((resolve,reject)=>{
+  if(!file)return resolve('');
+  const r=new FileReader();
+  r.onload=()=>resolve(String(r.result||''));
+  r.onerror=reject;
+  r.readAsDataURL(file);
+ });
+}
+function snapshot(){
+ const out=[];
+ list.querySelectorAll('.gwm-row').forEach(row=>{
+  out.push({
+   rank:Number(row.dataset.rank),
+   name:row.querySelector('.gwm-name')?.value||'',
+   score:row.querySelector('.gwm-score')?.value||'',
+   photo:row.dataset.savedPhoto||''
+  });
+ });
+ return out;
+}
+function save(){
+ try{localStorage.setItem(KEY,JSON.stringify(snapshot()));}catch(e){}
+}
+function load(){
+ try{
+  const a=JSON.parse(localStorage.getItem(KEY)||'[]');
+  if(!Array.isArray(a))return;
+  a.forEach(x=>{
+   const row=list.querySelector('.gwm-row[data-rank="'+x.rank+'"]');
+   if(!row)return;
+   const n=row.querySelector('.gwm-name'),s=row.querySelector('.gwm-score');
+   if(n)n.value=x.name||'';
+   if(s)s.value=x.score||'';
+   if(x.photo)row.dataset.savedPhoto=x.photo;
+  });
+  if(a.some(x=>x.name||x.score||x.photo) && status)
+   status.textContent='💾 आपकी Winner List अपने-आप वापस आ गई है।';
+ }catch(e){}
+}
+list.addEventListener('input',save);
+list.addEventListener('change',async e=>{
+ if(!e.target.classList.contains('gwm-photo'))return;
+ const row=e.target.closest('.gwm-row');
+ try{
+  row.dataset.savedPhoto=await readFile(e.target.files[0]);
+  save();
+  if(status)status.textContent='💾 Photo भी save हो गई है।';
+ }catch(err){}
+});
+
+const preview=document.getElementById('gwmPreview');
+if(preview){
+ preview.addEventListener('click',function(){
+  /* Existing preview code reads the current file input.
+     Put saved photo back into the renderer through a temporary File. */
+  list.querySelectorAll('.gwm-row').forEach(row=>{
+   if(!row.dataset.savedPhoto)return;
+   row.dataset.hasSavedPhoto='1';
+  });
+ },true);
+}
+
+/* Expose saved photo for the existing Winner renderer. */
+window.gwmGetSavedPhoto=function(rank){
+ const row=list.querySelector('.gwm-row[data-rank="'+rank+'"]');
+ return row ? (row.dataset.savedPhoto||'') : '';
+};
+
+load();
 })();
 </script>
 </body>
