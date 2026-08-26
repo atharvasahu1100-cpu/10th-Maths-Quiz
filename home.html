@@ -7878,6 +7878,19 @@ body{
 }
 </style>
 
+
+<style id="GS_PROFILE_PHOTO_CACHE_FIX">
+#home-screen #dailyChampionsDashboard .gs-podium-photo-img,
+#home-screen #dailyChampionsDashboard .gs-top10-photo-img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  display:block !important;
+  border-radius:50% !important;
+}
+</style>
+
 </head>
 
 
@@ -8791,10 +8804,6 @@ function startTeacherTest(){
 
     try{
 
-      /*
-       * सभी winners के student_id/mobile से students table में
-       * उनकी profile photo खोजी जाएगी।
-       */
       const {data,error}=await supabaseClient
         .from('students')
         .select('*');
@@ -8804,20 +8813,12 @@ function startTeacherTest(){
       const rows=Array.isArray(data)?data:[];
 
       const norm=v=>
-        String(v==null?'':v)
-          .trim()
-          .toLowerCase();
+        String(v==null?'':v).trim().toLowerCase();
 
       const photoFields=[
-        'photo_url',
-        'profile_photo_url',
-        'profile_photo',
-        'student_photo',
-        'image_url',
-        'avatar_url',
-        'profile_image_url',
-        'profile_image',
-        'photo'
+        'photo_url','profile_photo_url','profile_photo',
+        'student_photo','image_url','avatar_url',
+        'profile_image_url','profile_image','photo'
       ];
 
       function rowPhoto(row){
@@ -8828,87 +8829,113 @@ function startTeacherTest(){
         return '';
       }
 
-      /*
-       * Fast lookup maps.
-       */
       const byStudentId=new Map();
       const byMobile=new Map();
       const byProfileId=new Map();
       const byStudentCode=new Map();
 
       rows.forEach(row=>{
-
-        const sid=norm(
-          row.student_id ||
-          row.studentId
-        );
-
-        const mobile=norm(
-          row.mobile_number ||
-          row.mobile ||
-          row.phone
-        );
-
-        const profile=norm(
-          row.profile_id ||
-          row.profileId
-        );
-
-        const code=norm(
-          row.student_code ||
-          row.studentCode
-        );
+        const sid=norm(row.student_id || row.studentId);
+        const mobile=norm(row.mobile_number || row.mobile || row.phone);
+        const profile=norm(row.profile_id || row.profileId);
+        const code=norm(row.student_code || row.studentCode);
 
         if(sid) byStudentId.set(sid,row);
         if(mobile) byMobile.set(mobile,row);
         if(profile) byProfileId.set(profile,row);
         if(code) byStudentCode.set(code,row);
-
       });
 
-      students.forEach(student=>{
+      /*
+       * Existing profile photos को भी automatically खोजें।
+       * आपके current Storage structure:
+       * student-photos/students/<student_id>/profile.jpg
+       */
+      async function findExistingPhoto(studentId){
+        if(!studentId) return '';
+
+        try{
+          const folder='students/'+studentId;
+
+          const {data:files,error:listError}=await supabaseClient
+            .storage
+            .from('student-photos')
+            .list(folder,{limit:100});
+
+          if(listError || !Array.isArray(files)) return '';
+
+          const file=files.find(f=>
+            String(f.name||'').toLowerCase()==='profile.jpg'
+          ) || files.find(f=>
+            /^profile\.(jpg|jpeg|png|webp)$/i.test(String(f.name||''))
+          );
+
+          if(!file) return '';
+
+          const path=folder+'/'+file.name;
+
+          const {data:urlData}=supabaseClient
+            .storage
+            .from('student-photos')
+            .getPublicUrl(path);
+
+          return String(urlData?.publicUrl||'').trim();
+
+        }catch(e){
+          console.warn('Existing student photo lookup:',e);
+          return '';
+        }
+      }
+
+      for(const student of students){
 
         let row=null;
-
         const sid=norm(student.id);
         const mobile=norm(student.mobile);
 
-        /* 1 — student_id is the primary match */
-        if(sid)
-          row=byStudentId.get(sid) || null;
-
-        /* 2 — mobile fallback */
-        if(!row && mobile)
-          row=byMobile.get(mobile) || null;
-
-        /* 3 — profile ID fallback */
+        if(sid) row=byStudentId.get(sid)||null;
+        if(!row && mobile) row=byMobile.get(mobile)||null;
         if(!row && student.profileId)
-          row=byProfileId.get(
-            norm(student.profileId)
-          ) || null;
-
-        /* 4 — student code fallback */
+          row=byProfileId.get(norm(student.profileId))||null;
         if(!row && student.studentCode)
-          row=byStudentCode.get(
-            norm(student.studentCode)
-          ) || null;
+          row=byStudentCode.get(norm(student.studentCode))||null;
 
-        if(row){
+        if(!row) continue;
 
-          const photo=rowPhoto(row);
+        let photo=rowPhoto(row);
 
-          if(photo)
-            student.photoUrl=photo;
+        /*
+         * photo_url NULL होने पर Storage से existing profile.jpg
+         * automatically ढूँढकर photo_url में save करें।
+         */
+        if(!photo && row.student_id){
 
+          photo=await findExistingPhoto(row.student_id);
+
+          if(photo){
+
+            const {error:updateError}=await supabaseClient
+              .from('students')
+              .update({photo_url:photo})
+              .eq('student_id',row.student_id);
+
+            if(updateError){
+              console.warn(
+                'photo_url update failed:',
+                updateError
+              );
+            }else{
+              row.photo_url=photo;
+            }
+          }
         }
 
-      });
+        if(photo)
+          student.photoUrl=photo;
+      }
 
     }catch(error){
 
-      /*
-       * Photo lookup fail होने पर Winner section फिर भी चलेगा।
-       */
       console.warn(
         'Daily Champion photo lookup failed:',
         error
@@ -9826,3 +9853,5 @@ function startTeacherTest(){
 
 
 
+
+  
