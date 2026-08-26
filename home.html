@@ -7693,197 +7693,206 @@ function startTeacherTest(){
 
 
 
-<script id="GS_FINAL_PROFILE_ID_OVERRIDE">
+
+
+
+<script id="GS_PROFILE_ID_FINAL_HARD_FIX">
 (function(){
   'use strict';
 
   /*
-   * FINAL FIX:
-   * Visible Profile ID = students.profile_id
-   * Existing student_id UUID is used ONLY to find the row.
-   * Existing test/result student_id is NOT changed.
+   * FINAL HARD FIX
+   * Visible "Student ID" = students.profile_id only.
+   * Existing student_id UUID is never changed.
+   *
+   * We identify the logged-in student by the existing mobile number.
+   * The query intentionally returns an array so duplicate mobile records
+   * do not make maybeSingle() fail.
    */
 
-  const URL =
+  const SUPABASE_URL =
     "https://xgmeivfvuujculkplxjf.supabase.co";
 
-  const KEY =
+  const SUPABASE_KEY =
     "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
 
   function clean(v){
     return String(v == null ? '' : v).trim();
   }
 
-  function getStored(keys){
-    for(const store of [localStorage, sessionStorage]){
+  function stored(keys){
+    for(const storage of [localStorage, sessionStorage]){
       for(const key of keys){
         try{
-          const value = clean(store.getItem(key));
-          if(value) return value;
+          const v = clean(storage.getItem(key));
+          if(v) return v;
         }catch(e){}
       }
     }
     return '';
   }
 
-  async function setGSProfileId(){
+  async function getGSId(){
+
+    if(
+      !window.supabase ||
+      typeof window.supabase.createClient !== 'function'
+    ){
+      return '';
+    }
+
+    const mobile = stored([
+      'studentMobile',
+      'mobileNumber',
+      'mobile',
+      'phone'
+    ]);
+
+    if(!mobile) return '';
+
+    const sb = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    /*
+     * Mobile number से सीधे students table की profile_id लें।
+     * Array + limit(1) इसलिए कि duplicate mobile होने पर भी
+     * query fail न हो।
+     */
+    const result = await sb
+      .from('students')
+      .select('profile_id')
+      .eq('mobile_number', mobile)
+      .order('created_at', {ascending:false})
+      .limit(1);
+
+    if(result.error){
+      console.error(
+        'GANIT SETU GS Profile ID:',
+        result.error
+      );
+      return '';
+    }
+
+    const rows = Array.isArray(result.data)
+      ? result.data
+      : [];
+
+    return clean(
+      rows.length ? rows[0].profile_id : ''
+    );
+  }
+
+  function putOnScreen(gsId){
+
+    if(!gsId) return;
+
+    const el =
+      document.getElementById('studentId');
+
+    if(el){
+      el.textContent = gsId;
+      el.setAttribute('data-gs-profile-id', gsId);
+    }
 
     try{
-
-      if(
-        !window.supabase ||
-        typeof window.supabase.createClient !== 'function'
-      ){
-        console.warn('GS ID: Supabase library not ready.');
-        return;
-      }
-
-      /*
-       * सबसे पहले existing student_id UUID लें।
-       * यही current login/student identity है।
-       */
-      const existingStudentId = getStored([
-        'studentId',
-        'studentID',
-        'student_id',
-        'student_id_no'
-      ]);
-
-      const mobile = getStored([
-        'studentMobile',
-        'mobileNumber',
-        'mobile',
-        'phone'
-      ]);
-
-      if(!existingStudentId && !mobile){
-        console.warn('GS ID: student identity नहीं मिली।');
-        return;
-      }
-
-      const sb =
-        window.supabase.createClient(URL, KEY);
-
-      let row = null;
-      let error = null;
-
-      /*
-       * 1. Existing student_id UUID से exact row खोजें।
-       */
-      if(existingStudentId){
-
-        const result = await sb
-          .from('students')
-          .select('student_id, profile_id')
-          .eq('student_id', existingStudentId)
-          .maybeSingle();
-
-        row = result.data;
-        error = result.error;
-      }
-
-      /*
-       * 2. जरूरत पड़े तो mobile से उसी student का row खोजें।
-       */
-      if(!row && mobile){
-
-        const result = await sb
-          .from('students')
-          .select('student_id, profile_id')
-          .eq('mobile_number', mobile)
-          .limit(1)
-          .maybeSingle();
-
-        row = result.data;
-        error = result.error;
-      }
-
-      if(error){
-        console.error(
-          'GS ID Supabase error:',
-          error
-        );
-        return;
-      }
-
-      if(!row){
-        console.warn(
-          'GS ID: students table में student record नहीं मिला।'
-        );
-        return;
-      }
-
-      const gsId = clean(row.profile_id);
-
-      if(!gsId){
-        console.warn(
-          'GS ID: इस student के profile_id में value नहीं है।'
-        );
-        return;
-      }
-
-      /*
-       * यही visible Profile ID है।
-       */
-      const visibleId =
-        document.getElementById('studentId');
-
-      if(visibleId){
-        visibleId.textContent = gsId;
-      }
-
-      /*
-       * केवल profile ID को अलग keys में save करें।
-       * studentId UUID को बिल्कुल नहीं बदलना।
-       */
-      try{
-        localStorage.setItem(
-          'profileId',
-          gsId
-        );
-
-        localStorage.setItem(
-          'studentProfileId',
-          gsId
-        );
-      }catch(e){}
-
-      console.log(
-        'GANIT SETU: Visible Profile ID =',
+      localStorage.setItem(
+        'profileId',
         gsId
       );
 
-    }catch(err){
+      localStorage.setItem(
+        'studentProfileId',
+        gsId
+      );
+    }catch(e){}
+  }
 
+  async function apply(){
+
+    try{
+      const gsId = await getGSId();
+
+      if(gsId){
+        putOnScreen(gsId);
+        console.log(
+          'GANIT SETU FINAL VISIBLE PROFILE ID:',
+          gsId
+        );
+      }
+
+    }catch(e){
       console.error(
         'GANIT SETU GS Profile ID failed:',
-        err
+        e
       );
-
     }
   }
 
-  /*
-   * पुराने profile scripts के बाद चलाएँ।
-   */
-  function run(){
-    setTimeout(setGSProfileId, 1500);
-    setTimeout(setGSProfileId, 3500);
+  function start(){
+
+    /*
+     * Existing scripts के बाद पहली बार।
+     */
+    setTimeout(apply, 1800);
+
+    /*
+     * पुराने script यदि बाद में UUID लिख दें,
+     * तो फिर से GS ID लगा दें।
+     */
+    setTimeout(apply, 3500);
+    setTimeout(apply, 6000);
+
+    /*
+     * यदि कोई पुराना script #studentId की value बदलता है,
+     * तो उसे वापस GS profile_id में बदलें।
+     */
+    const target =
+      document.getElementById('studentId');
+
+    if(target){
+
+      const observer =
+        new MutationObserver(function(){
+
+          const expected =
+            target.getAttribute(
+              'data-gs-profile-id'
+            );
+
+          if(
+            expected &&
+            clean(target.textContent) !== expected
+          ){
+            target.textContent = expected;
+          }
+
+        });
+
+      observer.observe(
+        target,
+        {
+          childList:true,
+          characterData:true,
+          subtree:true
+        }
+      );
+    }
   }
 
   if(document.readyState === 'loading'){
     document.addEventListener(
       'DOMContentLoaded',
-      run,
+      start,
       {once:true}
     );
   }else{
-    run();
+    start();
   }
 
 })();
 </script>
-
 </body>
 </html>
 
