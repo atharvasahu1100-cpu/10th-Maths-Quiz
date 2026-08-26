@@ -8793,7 +8793,7 @@ function startTeacherTest(){
           alt="${esc(student.name)}"
           loading="eager"
           referrerpolicy="no-referrer"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+          onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src=this.src.replace(/\.jpg(?:\?.*)?$/i,'.jpeg');}else{this.style.display='none';this.nextElementSibling.style.display='flex';}"
         >
         <span
           class="gs-winner-initial-fallback"
@@ -8815,202 +8815,28 @@ function startTeacherTest(){
   async function attachPhotos(students){
     if(!Array.isArray(students) || !students.length) return;
 
-    try{
+    /*
+     * FINAL PHOTO AUTO MATCH
+     *
+     * Confirmed Storage structure:
+     * student-photos/students/<student_id>/profile.jpg
+     *
+     * student_test_records already gives us student_id.
+     * So no photo_url or students-table lookup is required.
+     */
+    const BASE =
+      'https://xgmeivfvuujculkplxjf.supabase.co/storage/v1/object/public/student-photos/';
 
-      /*
-       * PHOTO AUTO-CHECK
-       * Existing Profile Photo system already stores:
-       * student-photos/students/<student_id>/profile.jpg
-       *
-       * We therefore use the SAME path and SAME signed-URL method
-       * that the Profile section uses. This works even if photo_url
-       * is still NULL or the bucket is not publicly readable.
-       */
+    students.forEach(student=>{
+      const sid=String(student.id||'').trim();
+      if(!sid) return;
 
-      const {data:rows,error}=await supabaseClient
-        .from('students')
-        .select(
-          'student_id,mobile_number,profile_id,student_code,photo_url'
-        );
-
-      if(error) throw error;
-
-      const allRows=Array.isArray(rows)?rows:[];
-
-      const norm=v=>
-        String(v==null?'':v).trim().toLowerCase();
-
-      const byStudentId=new Map();
-      const byMobile=new Map();
-      const byProfileId=new Map();
-      const byStudentCode=new Map();
-
-      allRows.forEach(row=>{
-
-        const sid=norm(row.student_id);
-        const mobile=norm(row.mobile_number);
-        const profile=norm(row.profile_id);
-        const code=norm(row.student_code);
-
-        if(sid) byStudentId.set(sid,row);
-        if(mobile) byMobile.set(mobile,row);
-        if(profile) byProfileId.set(profile,row);
-        if(code) byStudentCode.set(code,row);
-
-      });
-
-      /*
-       * Get the actual existing profile.jpg from Storage.
-       * First try a signed URL — exactly like the Profile section.
-       * If that fails, try the public URL.
-       */
-      async function getStudentPhoto(studentId,row){
-
-        if(!studentId) return '';
-
-        const path=
-          'students/' +
-          String(studentId).trim() +
-          '/profile.jpg';
-
-        /* 1. Signed URL — primary */
-        try{
-
-          const {data,error}=await supabaseClient
-            .storage
-            .from('student-photos')
-            .createSignedUrl(path,60*60*24);
-
-          if(!error && data && data.signedUrl)
-            return String(data.signedUrl).trim();
-
-        }catch(e){
-          console.warn(
-            'Signed student photo lookup:',
-            e
-          );
-        }
-
-        /* 2. Public URL — fallback */
-        try{
-
-          const {data}=supabaseClient
-            .storage
-            .from('student-photos')
-            .getPublicUrl(path);
-
-          const publicUrl=
-            String(data?.publicUrl||'').trim();
-
-          if(publicUrl) return publicUrl;
-
-        }catch(e){
-          console.warn(
-            'Public student photo lookup:',
-            e
-          );
-        }
-
-        return '';
-      }
-
-      for(const student of students){
-
-        let row=null;
-
-        /* Primary: student_id */
-        if(student.id)
-          row=byStudentId.get(
-            norm(student.id)
-          ) || null;
-
-        /* Fallback: mobile */
-        if(!row && student.mobile)
-          row=byMobile.get(
-            norm(student.mobile)
-          ) || null;
-
-        /* Fallback: profile_id */
-        if(!row && student.profileId)
-          row=byProfileId.get(
-            norm(student.profileId)
-          ) || null;
-
-        /* Fallback: student_code */
-        if(!row && student.studentCode)
-          row=byStudentCode.get(
-            norm(student.studentCode)
-          ) || null;
-
-        if(!row || !row.student_id) continue;
-
-        /*
-         * If photo_url already exists, use it first.
-         */
-        let photo=
-          String(row.photo_url||'').trim();
-
-        /*
-         * If photo_url is NULL, automatically find
-         * students/<student_id>/profile.jpg.
-         */
-        if(!photo){
-          photo=await getStudentPhoto(
-            row.student_id,
-            row
-          );
-        }
-
-        if(!photo) continue;
-
-        student.photoUrl=photo;
-
-        /*
-         * Try to save the URL for future use.
-         * Even if RLS blocks this update, the current page
-         * still uses student.photoUrl and shows the photo.
-         */
-        if(!row.photo_url){
-
-          try{
-
-            const {error:updateError}=
-              await supabaseClient
-                .from('students')
-                .update({
-                  photo_url:photo
-                })
-                .eq(
-                  'student_id',
-                  row.student_id
-                );
-
-            if(updateError){
-              console.warn(
-                'photo_url update blocked:',
-                updateError
-              );
-            }
-
-          }catch(e){
-
-            console.warn(
-              'photo_url update skipped:',
-              e
-            );
-
-          }
-        }
-      }
-
-    }catch(error){
-
-      console.warn(
-        'Daily Champion photo auto-check failed:',
-        error
-      );
-
-    }
+      student.photoUrl =
+        BASE +
+        'students/' +
+        encodeURIComponent(sid) +
+        '/profile.jpg';
+    });
   }
 
   function renderTop3(top){
@@ -9916,6 +9742,8 @@ function startTeacherTest(){
 })();
 </script>
 
+
+<!-- GS PHOTO DIRECT MATCH: confirmed Storage path student-photos/students/<student_id>/profile.jpg -->
 </body>
 </html>
 
