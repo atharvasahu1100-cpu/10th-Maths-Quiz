@@ -7285,29 +7285,102 @@ function startTeacherTest(){
     };
   }
 
-  if(rankBtn && rankResult){
-    rankBtn.addEventListener('click',function(){
-      const students=window.__dailyChampionsStudents||[];
-      if(!students.length){
-        rankResult.textContent='पिछले दिन का परिणाम उपलब्ध नहीं है।';
-        rankResult.classList.add('show');
-        return;
-      }
-      const me=currentStudent();
-      const found=students.find(s=>me.id && String(s.id).toLowerCase()===me.id)
-        || students.find(s=>me.mobile && String(s.mobile).toLowerCase()===me.mobile)
-        || students.find(s=>me.name && String(s.name).toLowerCase()===me.name);
+  /*
+   * Today's Rank:
+   * पहले button click पर ही result दिखता था।
+   * अब Daily Champions data load होते ही current student की
+   * rank/score/percentage/time अपने-आप दिखेगी।
+   *
+   * Button बना रहेगा, लेकिन click करना जरूरी नहीं होगा।
+   */
 
-      if(!found){
-        rankResult.textContent='आपका परिणाम पिछले दिन की सूची में नहीं मिला।';
-        rankResult.classList.add('show');
-        return;
-      }
+  function showCurrentStudentRank(){
 
-      const rank=students.indexOf(found)+1;
-      rankResult.innerHTML=`रैंक <span class="rank-value">#${rank}</span> • स्कोर <span class="score-value">${esc(found.correct)}/${esc(found.total)}</span><br>प्रतिशत <span class="percent-value">${esc(found.percentage)}%</span> • समय <span class="time-value">${esc(found.time||'—')}</span>`;
+    const students =
+      window.__dailyChampionsStudents || [];
+
+    if(!students.length){
+      return false;
+    }
+
+    const me = currentStudent();
+
+    const found =
+      students.find(
+        s =>
+          me.id &&
+          String(s.id).toLowerCase() === me.id
+      )
+      ||
+      students.find(
+        s =>
+          me.mobile &&
+          String(s.mobile).toLowerCase() === me.mobile
+      )
+      ||
+      students.find(
+        s =>
+          me.name &&
+          String(s.name).toLowerCase() === me.name
+      );
+
+    if(!found){
+      rankResult.textContent =
+        'आज की आपकी रैंक अभी उपलब्ध नहीं है।';
+
       rankResult.classList.add('show');
-    });
+      return false;
+    }
+
+    const rank =
+      students.indexOf(found) + 1;
+
+    rankResult.innerHTML =
+      `रैंक <span class="rank-value">#${rank}</span> • ` +
+      `स्कोर <span class="score-value">${esc(found.correct)}/${esc(found.total)}</span><br>` +
+      `प्रतिशत <span class="percent-value">${esc(found.percentage)}%</span> • ` +
+      `समय <span class="time-value">${esc(found.time || '—')}</span>`;
+
+    rankResult.classList.add('show');
+
+    return true;
+  }
+
+  if(rankBtn && rankResult){
+
+    /*
+     * Button अब केवल manual refresh/recheck के लिए रहेगा।
+     */
+    rankBtn.addEventListener(
+      'click',
+      function(){
+        showCurrentStudentRank();
+      }
+    );
+
+    /*
+     * Daily Champions data load होने के बाद
+     * अपने-आप current student's rank दिखाएँ।
+     */
+    let attempts = 0;
+
+    const autoRankTimer =
+      setInterval(
+        function(){
+
+          attempts++;
+
+          if(
+            showCurrentStudentRank() ||
+            attempts >= 20
+          ){
+            clearInterval(autoRankTimer);
+          }
+
+        },
+        300
+      );
+  }
   }
 
   loadDailyChampions();
