@@ -9952,6 +9952,23 @@ body{
 #gsWinnerManualEditor .gwm-status{margin-top:7px;font-size:11px;font-weight:900;color:#087f4f}
 @media(max-width:600px){#gsWinnerManualEditor .gwm-row{grid-template-columns:23px minmax(0,1fr) 62px 78px;gap:4px}#gsWinnerManualEditor input{padding:6px 4px;font-size:10px}}
 </style>
+
+<style id="GS_TOP10_AUTO_SLIDER">
+/* Continuous Top-10 left-to-right movement */
+#dailyTop10List{
+  overflow:hidden !important;
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  justify-content:flex-start !important;
+  align-items:stretch !important;
+  gap:10px !important;
+  scroll-behavior:auto !important;
+}
+#dailyTop10List > *{
+  flex:0 0 auto !important;
+}
+</style>
+
 </head>
 
 
@@ -12071,6 +12088,60 @@ window.gwmGetSavedPhoto=function(rank){
 load();
 })();
 </script>
+
+<script id="GS_TOP10_AUTO_SLIDER_SCRIPT">
+(function(){
+  'use strict';
+
+  function startTop10Slider(){
+    const el=document.getElementById('dailyTop10List');
+    if(!el || el.dataset.autoSliderStarted==='1') return;
+    el.dataset.autoSliderStarted='1';
+
+    let last=performance.now();
+    let pos=0;
+    const speed=0.45; // smooth, slow movement
+
+    function frame(now){
+      if(!document.body.contains(el)) return;
+
+      const max=Math.max(0,el.scrollWidth-el.clientWidth);
+
+      if(max>0){
+        pos += (now-last)*speed/16;
+        if(pos >= max + 2) pos=0;
+        el.scrollLeft=pos;
+      }
+      last=now;
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* Winner Preview replaces the Top-10 innerHTML, so start after every preview. */
+  const preview=document.getElementById('gwmPreview');
+  if(preview){
+    preview.addEventListener('click',function(){
+      setTimeout(startTop10Slider,80);
+      setTimeout(startTop10Slider,500);
+    });
+  }
+
+  /* Also start when real data fills the list. */
+  const target=document.getElementById('dailyTop10List');
+  if(target){
+    const observer=new MutationObserver(function(){
+      setTimeout(startTop10Slider,50);
+    });
+    observer.observe(target,{childList:true});
+  }
+
+  window.addEventListener('load',function(){
+    setTimeout(startTop10Slider,300);
+  });
+})();
+</script>
+
 </body>
 </html>
 
