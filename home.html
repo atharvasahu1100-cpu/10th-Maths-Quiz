@@ -6825,19 +6825,6 @@ function startTeacherTest(){
 (function(){
   'use strict';
 
-  /*
-   * FINAL DISPLAY FIX
-   *
-   * Visible Profile field:
-   *   #profileId = students.profile_id
-   *
-   * Internal database identity:
-   *   student_id remains unchanged.
-   *
-   * This intentionally uses a different DOM id so older Home scripts
-   * that write UUID into #studentId cannot overwrite the visible GS ID.
-   */
-
   const SUPABASE_URL =
     "https://xgmeivfvuujculkplxjf.supabase.co";
 
@@ -6848,36 +6835,35 @@ function startTeacherTest(){
     return String(v == null ? '' : v).trim();
   }
 
-  function readStorage(keys){
+  function read(keys){
     for(const storage of [localStorage, sessionStorage]){
       for(const key of keys){
         try{
-          const value = clean(storage.getItem(key));
-          if(value) return value;
+          const v = clean(storage.getItem(key));
+          if(v) return v;
         }catch(e){}
       }
     }
     return '';
   }
 
-  function showProfileId(value){
-    const id = clean(value);
-    if(!id) return false;
+  function show(gsId){
+    gsId = clean(gsId);
+    if(!gsId) return;
 
     const el = document.getElementById('profileId');
-    if(!el) return false;
 
-    el.textContent = id;
+    if(el){
+      el.textContent = gsId;
+    }
 
     try{
-      localStorage.setItem('profileId', id);
-      localStorage.setItem('studentProfileId', id);
+      localStorage.setItem('profileId', gsId);
+      localStorage.setItem('studentProfileId', gsId);
     }catch(e){}
-
-    return true;
   }
 
-  async function loadProfileId(){
+  async function load(){
 
     try{
 
@@ -6885,110 +6871,108 @@ function startTeacherTest(){
         !window.supabase ||
         typeof window.supabase.createClient !== 'function'
       ){
-        console.warn('GANIT SETU: Supabase client ready नहीं है।');
         return;
       }
 
-      /*
-       * Login से मिला mobile number सबसे भरोसेमंद current-student key है।
-       */
-      const mobile = readStorage([
+      const savedProfile = read([
+        'profileId',
+        'studentProfileId'
+      ]);
+
+      if(/^GS\d{6}$/i.test(savedProfile)){
+        show(savedProfile);
+        return;
+      }
+
+      const studentId = read([
+        'studentId',
+        'studentID',
+        'student_id',
+        'student_id_no'
+      ]);
+
+      const mobile = read([
         'studentMobile',
         'mobileNumber',
         'mobile',
         'phone'
       ]);
 
-      /*
-       * यदि पहले से सही GS ID saved है, उसे तुरंत दिखा दें।
-       */
-      const savedGS = readStorage([
-        'profileId',
-        'studentProfileId'
-      ]);
-
-      if(/^GS\d+$/i.test(savedGS)){
-        showProfileId(savedGS);
-      }
-
-      if(!mobile){
-        console.warn('GANIT SETU: logged-in mobile नहीं मिला।');
-        return;
-      }
-
-      const client = window.supabase.createClient(
+      const sb = window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
       );
 
+      let rows = [];
+
       /*
-       * Array + limit(1):
-       * duplicate mobile records होने पर भी query टूटे नहीं।
+       * सबसे पहले existing student_id से exact row।
+       * इससे current student की सही GS ID मिलेगी।
        */
-      const result = await client
-        .from('students')
-        .select('profile_id,student_name,mobile_number')
-        .eq('mobile_number', mobile)
-        .order('created_at', {ascending:false})
-        .limit(1);
+      if(
+        studentId &&
+        !/^GS\d+$/i.test(studentId)
+      ){
 
-      if(result.error){
-        console.error(
-          'GANIT SETU Profile ID Supabase Error:',
-          result.error
-        );
-        return;
+        const result = await sb
+          .from('students')
+          .select('profile_id')
+          .eq('student_id', studentId)
+          .limit(1);
+
+        if(!result.error && Array.isArray(result.data)){
+          rows = result.data;
+        }
       }
 
-      const rows = Array.isArray(result.data)
-        ? result.data
-        : [];
+      /*
+       * अगर student_id से नहीं मिला तो mobile से।
+       */
+      if(!rows.length && mobile){
 
-      if(!rows.length){
+        const result = await sb
+          .from('students')
+          .select('profile_id')
+          .eq('mobile_number', mobile)
+          .order('created_at', {ascending:false})
+          .limit(1);
+
+        if(!result.error && Array.isArray(result.data)){
+          rows = result.data;
+        }
+      }
+
+      const gsId =
+        rows.length
+          ? clean(rows[0].profile_id)
+          : '';
+
+      if(/^GS\d{6}$/i.test(gsId)){
+        show(gsId);
+      }else{
         console.warn(
-          'GANIT SETU: इस mobile के लिए students row नहीं मिली:',
-          mobile
+          'GANIT SETU: profile_id नहीं मिला।'
         );
-        return;
       }
-
-      const gsId = clean(rows[0].profile_id);
-
-      if(!gsId){
-        console.warn(
-          'GANIT SETU: profile_id खाली है।'
-        );
-        return;
-      }
-
-      showProfileId(gsId);
-
-      console.log(
-        'GANIT SETU: Visible Profile ID =',
-        gsId
-      );
 
     }catch(error){
 
       console.error(
-        'GANIT SETU Profile ID Loader Error:',
+        'GANIT SETU Profile ID Error:',
         error
       );
+
     }
   }
 
   function start(){
 
     /*
-     * DOM + Supabase library दोनों तैयार होने के बाद।
+     * पुराने scripts के बाद load करें।
      */
-    loadProfileId();
-
-    /*
-     * Login → Home redirect / पुराने scripts के बाद दो rechecks।
-     */
-    setTimeout(loadProfileId, 1000);
-    setTimeout(loadProfileId, 2500);
+    setTimeout(load, 1500);
+    setTimeout(load, 3000);
+    setTimeout(load, 5000);
   }
 
   if(document.readyState === 'loading'){
