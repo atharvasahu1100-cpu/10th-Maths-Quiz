@@ -344,7 +344,7 @@ async function loginStudent(){
 
     const { data, error } =
       await supabaseClient.rpc(
-        'get_student_by_mobile',
+        'get_student_by_mobile_with_code',
         {
           p_mobile: mobile
         }
@@ -395,6 +395,11 @@ async function loginStudent(){
     localStorage.setItem(
       'studentId',
       String(student.student_id || '')
+    );
+
+    localStorage.setItem(
+      'studentCode',
+      String(student.student_code || '')
     );
 
     localStorage.setItem(
