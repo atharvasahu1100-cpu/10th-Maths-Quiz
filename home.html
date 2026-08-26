@@ -7865,6 +7865,19 @@ body{
 }
 </style>
 
+
+<style id="GS_WINNER_AUTO_PHOTO_FINAL">
+#home-screen #dailyChampionsDashboard .gs-podium-photo-img,
+#home-screen #dailyChampionsDashboard .gs-top10-photo-img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  display:block !important;
+  border-radius:50% !important;
+}
+</style>
+
 </head>
 
 
@@ -8774,56 +8787,77 @@ function startTeacherTest(){
   }
 
   async function attachPhotos(students){
-
-    if(!students.length) return;
+    if(!Array.isArray(students) || !students.length) return;
 
     try{
 
       /*
-       * सभी possible identifiers पहले से तैयार रखें।
-       */
-      const ids=students
-        .map(s=>String(s.id || '').trim())
-        .filter(Boolean);
-
-      const mobiles=students
-        .map(s=>String(s.mobile || '').trim())
-        .filter(Boolean);
-
-      if(!ids.length && !mobiles.length) return;
-
-      /*
-       * students table से पूरा row पढ़ते हैं ताकि
-       * जिस भी photo column में URL हो, उसे इस्तेमाल किया जा सके।
+       * सभी winners के student_id/mobile से students table में
+       * उनकी profile photo खोजी जाएगी।
        */
       const {data,error}=await supabaseClient
         .from('students')
         .select('*');
 
-      if(error || !Array.isArray(data)){
-        console.warn(
-          'Students photo lookup:',
-          error
-        );
-        return;
-      }
+      if(error) throw error;
 
-      const normalize=v =>
-        String(v == null ? '' : v)
+      const rows=Array.isArray(data)?data:[];
+
+      const norm=v=>
+        String(v==null?'':v)
           .trim()
           .toLowerCase();
 
+      const photoFields=[
+        'photo_url',
+        'profile_photo_url',
+        'profile_photo',
+        'student_photo',
+        'image_url',
+        'avatar_url',
+        'profile_image_url',
+        'profile_image',
+        'photo'
+      ];
+
+      function rowPhoto(row){
+        for(const field of photoFields){
+          const value=String(row?.[field]??'').trim();
+          if(value) return value;
+        }
+        return '';
+      }
+
+      /*
+       * Fast lookup maps.
+       */
       const byStudentId=new Map();
       const byMobile=new Map();
       const byProfileId=new Map();
       const byStudentCode=new Map();
 
-      data.forEach(row=>{
+      rows.forEach(row=>{
 
-        const sid=normalize(row.student_id);
-        const mobile=normalize(row.mobile_number);
-        const profile=normalize(row.profile_id);
-        const code=normalize(row.student_code);
+        const sid=norm(
+          row.student_id ||
+          row.studentId
+        );
+
+        const mobile=norm(
+          row.mobile_number ||
+          row.mobile ||
+          row.phone
+        );
+
+        const profile=norm(
+          row.profile_id ||
+          row.profileId
+        );
+
+        const code=norm(
+          row.student_code ||
+          row.studentCode
+        );
 
         if(sid) byStudentId.set(sid,row);
         if(mobile) byMobile.set(mobile,row);
@@ -8832,58 +8866,52 @@ function startTeacherTest(){
 
       });
 
-      students.forEach(s=>{
+      students.forEach(student=>{
 
         let row=null;
 
-        const sid=normalize(s.id);
-        const mobile=normalize(s.mobile);
+        const sid=norm(student.id);
+        const mobile=norm(student.mobile);
 
-        /*
-         * Primary match: Supabase UUID.
-         */
+        /* 1 — student_id is the primary match */
         if(sid)
           row=byStudentId.get(sid) || null;
 
-        /*
-         * Secondary match: mobile number.
-         */
+        /* 2 — mobile fallback */
         if(!row && mobile)
           row=byMobile.get(mobile) || null;
 
-        /*
-         * Profile/GS ID support.
-         */
-        if(!row && s.profileId)
+        /* 3 — profile ID fallback */
+        if(!row && student.profileId)
           row=byProfileId.get(
-            normalize(s.profileId)
+            norm(student.profileId)
           ) || null;
 
-        if(!row && s.studentCode)
+        /* 4 — student code fallback */
+        if(!row && student.studentCode)
           row=byStudentCode.get(
-            normalize(s.studentCode)
+            norm(student.studentCode)
           ) || null;
 
         if(row){
 
-          const photo=photoFromRow(row);
+          const photo=rowPhoto(row);
 
-          if(photo){
-            s.photoUrl=photo;
-          }
+          if(photo)
+            student.photoUrl=photo;
 
         }
 
       });
 
-    }catch(e){
+    }catch(error){
 
       /*
-       * Photo failure से Daily Champion कभी बंद नहीं होगा।
+       * Photo lookup fail होने पर Winner section फिर भी चलेगा।
        */
       console.warn(
-        'Winner photo lookup skipped:',
-        e
+        'Daily Champion photo lookup failed:',
+        error
       );
 
     }
@@ -9066,6 +9094,8 @@ function startTeacherTest(){
 
         const item={
           id:r.student_id || '',
+          profileId:r.profile_id || '',
+          studentCode:r.student_code || '',
           name:cleanName(r.student_name),
           mobile:r.mobile_number || '',
           className:r.class_name || '',
