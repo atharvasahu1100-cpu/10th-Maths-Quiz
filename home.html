@@ -958,13 +958,13 @@ body{
   'use strict';
 
   /*
-   * GANIT SETU PROFILE — FINAL
+   * GANIT SETU — FINAL PROFILE DISPLAY
    *
-   * Visible field: #profileId = localStorage.profileId
-   * Internal field: localStorage.studentId = Supabase UUID
+   * Student ID shown on screen = profileId
+   * Example: GS000003
    *
-   * Existing Supabase/login flow is preserved.
-   * No direct students-table query is made from Home.
+   * studentId remains the internal Supabase UUID
+   * for existing Test/Result modules.
    */
 
   function clean(v){
@@ -975,7 +975,7 @@ body{
     for(const store of [localStorage, sessionStorage]){
       for(const key of keys){
         try{
-          const value=clean(store.getItem(key));
+          const value = clean(store.getItem(key));
           if(value) return value;
         }catch(e){}
       }
@@ -984,51 +984,75 @@ body{
   }
 
   function setText(id,value){
-    const el=document.getElementById(id);
-    if(el) el.textContent=clean(value) || '—';
+    const el = document.getElementById(id);
+    if(el){
+      el.textContent = clean(value) || '—';
+    }
   }
 
   function normalizeClass(value){
-    const cls=clean(value);
-    const low=cls.toLowerCase();
+    const cls = clean(value);
+    const low = cls.toLowerCase();
 
     if(
-      cls==='9' || cls==='9वीं' || cls==='कक्षा 9' ||
-      low==='class 9' || low==='class 9th'
-    ) return 'कक्षा 9वीं';
+      cls === '9' ||
+      cls === '9वीं' ||
+      cls === 'कक्षा 9' ||
+      low === 'class 9' ||
+      low === 'class 9th'
+    ){
+      return 'कक्षा 9वीं';
+    }
 
     if(
-      cls==='10' || cls==='10वीं' || cls==='कक्षा 10' ||
-      low==='class 10' || low==='class 10th'
-    ) return 'कक्षा 10वीं';
+      cls === '10' ||
+      cls === '10वीं' ||
+      cls === 'कक्षा 10' ||
+      low === 'class 10' ||
+      low === 'class 10th'
+    ){
+      return 'कक्षा 10वीं';
+    }
 
     return cls;
   }
 
   function loadStudentDetails(){
 
-    const name=read([
-      'studentName','student_name','name'
+    const name = read([
+      'studentName',
+      'student_name',
+      'name'
     ]);
 
-    const mobile=read([
-      'studentMobile','mobileNumber','mobile','phone'
+    const mobile = read([
+      'studentMobile',
+      'mobileNumber',
+      'mobile',
+      'phone'
     ]);
 
-    const school=read([
-      'schoolName','school','school_name'
+    const school = read([
+      'schoolName',
+      'school',
+      'school_name'
     ]);
 
-    const studentClass=read([
-      'studentClass','className','class','grade'
+    const studentClass = read([
+      'studentClass',
+      'className',
+      'class',
+      'grade'
     ]);
 
     /*
-     * केवल profileId दिखाएँ।
-     * studentId UUID को कभी visible profile field में न डालें।
+     * IMPORTANT:
+     * Visible Student ID = profileId.
+     * studentId UUID को यहाँ बिल्कुल नहीं पढ़ना है।
      */
-    const profileId=read([
-      'profileId','studentProfileId'
+    const profileId = read([
+      'profileId',
+      'studentProfileId'
     ]);
 
     setText(
@@ -1037,8 +1061,8 @@ body{
     );
 
     setText(
-      'profileId',
-      /^GS\\d{6}$/i.test(profileId)
+      'studentId',
+      /^GS\d{6}$/i.test(profileId)
         ? profileId
         : '—'
     );
@@ -1049,38 +1073,121 @@ body{
     );
 
     setText(
-      'studentSchool',
-      school
-    );
-
-    setText(
       'studentClassDisplay',
       normalizeClass(studentClass)
     );
 
+    setText(
+      'studentSchool',
+      school
+    );
+
     console.log(
-      'GANIT SETU Profile:',
+      'GANIT SETU PROFILE:',
       {
-        profileId:profileId,
-        studentId:read(['studentId']),
-        name:name
+        profileId: profileId,
+        internalStudentId: read(['studentId']),
+        name: name,
+        mobile: mobile
       }
     );
   }
 
-  function start(){
-    loadStudentDetails();
-    setTimeout(loadStudentDetails,500);
+  function showStudentPhoto(src){
+    const img =
+      document.getElementById(
+        'studentPhotoPreview'
+      );
+
+    const placeholder =
+      document.getElementById(
+        'studentPhotoPlaceholder'
+      );
+
+    if(img && placeholder && clean(src)){
+      img.src = src;
+      img.style.display = 'block';
+      placeholder.style.display = 'none';
+    }
   }
 
-  if(document.readyState==='loading'){
+  function setupStudentPhoto(){
+
+    const input =
+      document.getElementById(
+        'studentPhotoInput'
+      );
+
+    if(input){
+      input.addEventListener(
+        'change',
+        function(){
+          const file =
+            this.files && this.files[0];
+
+          if(!file) return;
+
+          const reader =
+            new FileReader();
+
+          reader.onload = function(e){
+
+            try{
+              localStorage.setItem(
+                'studentPhoto',
+                e.target.result
+              );
+            }catch(err){}
+
+            showStudentPhoto(
+              e.target.result
+            );
+          };
+
+          reader.readAsDataURL(file);
+        }
+      );
+    }
+
+    try{
+      const saved =
+        localStorage.getItem(
+          'studentPhoto'
+        );
+
+      if(saved){
+        showStudentPhoto(saved);
+      }
+    }catch(e){}
+  }
+
+  function start(){
+
+    loadStudentDetails();
+    setupStudentPhoto();
+
+    /*
+     * Login → Home redirect के बाद
+     * एक बार फिर saved profileId पढ़ें।
+     */
+    setTimeout(
+      loadStudentDetails,
+      500
+    );
+  }
+
+  if(document.readyState === 'loading'){
+
     document.addEventListener(
       'DOMContentLoaded',
       start,
       {once:true}
     );
+
   }else{
+
     start();
+
   }
 
 })();
@@ -6222,7 +6329,7 @@ body{
       </div>
       <div class="student-detail">
         <span class="student-detail-label">Student ID</span>
-        <strong id="profileId">—</strong>
+        <strong id="studentId">—</strong>
       </div>
       <div class="student-detail">
         <span class="student-detail-label">मोबाइल नंबर</span>
