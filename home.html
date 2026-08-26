@@ -11871,6 +11871,228 @@ function startTeacherTest(){
 <!-- GS PHOTO DIRECT MATCH: confirmed Storage path student-photos/students/<student_id>/profile.jpg -->
 
 <!-- GS FULL AUTO PHOTO: profile upload automatically updates students.photo_url -->
+
+<div id="gsManualWinnerTestPanel" aria-label="Manual Winner Test Mode">
+  <div class="gs-mwt-title">🧪 Winner Manual Test Mode</div>
+  <div class="gs-mwt-note">
+    Testing के लिए नीचे 10 winners भरें। Photo में direct image URL दें।
+    यह mode ON होने पर केवल Winner section का data बदलेगा; Profile/Supabase data सुरक्षित रहेगा।
+  </div>
+  <textarea id="gsManualWinnerJson" spellcheck="false">[
+  {"rank":1,"name":"Winner 1","score":"100%","photo":""},
+  {"rank":2,"name":"Winner 2","score":"98%","photo":""},
+  {"rank":3,"name":"Winner 3","score":"96%","photo":""},
+  {"rank":4,"name":"Winner 4","score":"94%","photo":""},
+  {"rank":5,"name":"Winner 5","score":"92%","photo":""},
+  {"rank":6,"name":"Winner 6","score":"90%","photo":""},
+  {"rank":7,"name":"Winner 7","score":"88%","photo":""},
+  {"rank":8,"name":"Winner 8","score":"86%","photo":""},
+  {"rank":9,"name":"Winner 9","score":"84%","photo":""},
+  {"rank":10,"name":"Winner 10","score":"82%","photo":""}
+]</textarea>
+  <div class="gs-mwt-actions">
+    <button class="gs-mwt-fill" type="button" id="gsMwtLoad">👀 10 Winners दिखाएँ</button>
+    <button class="gs-mwt-on" type="button" id="gsMwtOn">🧪 Test Mode ON</button>
+    <button class="gs-mwt-off" type="button" id="gsMwtOff">↩ Real Data</button>
+  </div>
+  <div class="gs-mwt-status" id="gsMwtStatus">Test Mode OFF — वास्तविक data चलेगा।</div>
+</div>
+
+
+<script id="GS_MANUAL_WINNER_TEST_MODE_SCRIPT">
+(function(){
+  'use strict';
+
+  const STORAGE_KEY='ganitSetu_manual_winner_test_data_v1';
+  const MODE_KEY='ganitSetu_manual_winner_test_mode_v1';
+
+  const panel=document.getElementById('gsManualWinnerTestPanel');
+  const textarea=document.getElementById('gsManualWinnerJson');
+  const status=document.getElementById('gsMwtStatus');
+  const btnLoad=document.getElementById('gsMwtLoad');
+  const btnOn=document.getElementById('gsMwtOn');
+  const btnOff=document.getElementById('gsMwtOff');
+
+  if(!panel || !textarea) return;
+
+  function esc(v){
+    return String(v==null?'':v)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#039;');
+  }
+
+  function getData(){
+    try{
+      const raw=localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : JSON.parse(textarea.value);
+    }catch(e){
+      return [];
+    }
+  }
+
+  function normalize(list){
+    if(!Array.isArray(list)) throw new Error('Data array होना चाहिए।');
+
+    return list.slice(0,10).map((x,i)=>({
+      rank:Number(x.rank)||i+1,
+      name:String(x.name||('Winner '+(i+1))).trim(),
+      score:String(x.score==null?'':x.score).trim(),
+      photo:String(x.photo||'').trim()
+    }));
+  }
+
+  function saveData(){
+    const data=normalize(JSON.parse(textarea.value));
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+    return data;
+  }
+
+  function photoHTML(s){
+    if(!s.photo){
+      return '<div class="gs-photo-placeholder">👤</div>';
+    }
+    return '<img src="'+esc(s.photo)+'" alt="" loading="eager" decoding="async" '+
+           'style="width:100%;height:100%;object-fit:cover;object-position:center;border-radius:50%;">';
+  }
+
+  /*
+   * Render into the existing Winner section only.
+   * It does NOT touch profile DOM.
+   */
+  function render(data){
+    const root=document.getElementById('dailyChampionsDashboard');
+    if(!root) throw new Error('dailyChampionsDashboard नहीं मिला।');
+
+    const top3=document.getElementById('dailyTop3');
+    const top10=document.getElementById('dailyTop10List');
+    if(!top3 || !top10) throw new Error('Winner containers नहीं मिले।');
+
+    const ordered=data.slice(0,10).sort((a,b)=>a.rank-b.rank);
+    const slots=[
+      ordered.find(x=>x.rank===2) || ordered[1] || null,
+      ordered.find(x=>x.rank===1) || ordered[0] || null,
+      ordered.find(x=>x.rank===3) || ordered[2] || null
+    ];
+
+    const cardClasses=['gs-second','gs-first','gs-third'];
+    const crowns=['♕','👑','♕'];
+    const medals=['🥈','🥇','🥉'];
+
+    top3.innerHTML=slots.map((s,i)=>{
+      if(!s) return '<div class="gs-winner-empty">अभी उपलब्ध नहीं</div>';
+
+      return `
+        <article class="gs-winner-card ${cardClasses[i]}">
+          <div class="gs-rank-badge">${s.rank}</div>
+          <div class="gs-crown">${crowns[i]}</div>
+          <div class="gs-photo">${photoHTML(s)}</div>
+          <div class="gs-name">${esc(s.name)}</div>
+          <div class="gs-score">${esc(s.score||'—')}</div>
+          <div class="gs-meta">${medals[i]} Rank ${s.rank}</div>
+        </article>`;
+    }).join('');
+
+    top10.innerHTML=ordered.map(s=>`
+      <article class="gs-top10-card ${
+        s.rank===1?'gs-gold':s.rank===2?'gs-silver':s.rank===3?'gs-bronze':''
+      }">
+        <div class="gs-top10-rank">${
+          s.rank===1?'🥇':s.rank===2?'🥈':s.rank===3?'🥉':esc(s.rank)
+        }</div>
+        <div class="gs-top10-name">${esc(s.name)}</div>
+        <div class="gs-top10-score">${esc(s.score||'—')}</div>
+      </article>
+    `).join('');
+
+    startSlider(top10);
+
+    const title=root.querySelector('.daily-champions-title');
+    if(title) title.innerHTML='🏆 DAILY CHAMPION';
+
+    const date=root.querySelector('.daily-champions-date');
+    if(date) date.textContent='🧪 TEST MODE';
+
+    status.textContent='Test Mode ON — '+ordered.length+' manual winners दिख रहे हैं।';
+    status.style.color='#087f4f';
+  }
+
+  let timer=null;
+  function startSlider(el){
+    if(timer) clearInterval(timer);
+    if(!el || el.children.length<2) return;
+
+    let index=0;
+    timer=setInterval(()=>{
+      const card=el.children[index];
+      if(!card){index=0;return;}
+
+      const step=card.getBoundingClientRect().width+8;
+      const max=Math.max(0,el.scrollWidth-el.clientWidth);
+
+      index++;
+      if(index*step>max) index=0;
+
+      el.scrollTo({left:index*step,behavior:'smooth'});
+    },2600);
+  }
+
+  btnLoad.addEventListener('click',()=>{
+    try{
+      const data=saveData();
+      render(data);
+    }catch(e){
+      status.textContent='❌ JSON/Data में गलती: '+e.message;
+      status.style.color='#c62828';
+    }
+  });
+
+  btnOn.addEventListener('click',()=>{
+    try{
+      const data=saveData();
+      localStorage.setItem(MODE_KEY,'ON');
+      render(data);
+      status.textContent='Test Mode ON — manual 10 winners active.';
+    }catch(e){
+      status.textContent='❌ '+e.message;
+      status.style.color='#c62828';
+    }
+  });
+
+  btnOff.addEventListener('click',()=>{
+    localStorage.setItem(MODE_KEY,'OFF');
+    status.textContent='Test Mode OFF — page फिर से real data mode में है।';
+    status.style.color='#087f4f';
+    location.reload();
+  });
+
+  /*
+   * Developer/testing access:
+   * Open browser console and run:
+   *   gsShowWinnerTest()
+   * This keeps the panel hidden from normal students.
+   */
+  window.gsShowWinnerTest=function(){
+    panel.classList.add('gs-show');
+  };
+
+  window.gsHideWinnerTest=function(){
+    panel.classList.remove('gs-show');
+  };
+
+  /* If test mode was already ON, render automatically after page load. */
+  if(localStorage.getItem(MODE_KEY)==='ON'){
+    panel.classList.add('gs-show');
+    setTimeout(()=>{
+      try{ render(getData()); }
+      catch(e){ console.error('Manual Winner Test:',e); }
+    },700);
+  }
+})();
+</script>
+
 </body>
 </html>
 
