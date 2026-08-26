@@ -6344,6 +6344,430 @@ body{
 }
 </style>
 
+
+<style id="GS_DAILY_CHAMPION_TOP3_TOP10_FINAL">
+/* =========================================================
+   DAILY CHAMPION — professional podium + Top 10 slider
+   ========================================================= */
+
+#home-screen #dailyChampionsDashboard{
+  margin:0 0 14px !important;
+  padding:10px !important;
+  border-radius:20px !important;
+  background:linear-gradient(180deg,#f7fbff 0%,#ffffff 100%) !important;
+  border:1px solid #d9e7f5 !important;
+  box-shadow:0 7px 20px rgba(7,55,105,.12) !important;
+  overflow:hidden !important;
+}
+
+#home-screen #dailyChampionsDashboard .daily-champions-title-row{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+  margin-bottom:10px !important;
+  padding:5px 7px !important;
+  border-radius:12px !important;
+  background:linear-gradient(135deg,#082e67,#0b63ce) !important;
+}
+
+#home-screen #dailyChampionsDashboard .daily-champions-title{
+  color:#fff !important;
+  font-size:clamp(14px,3.5vw,18px) !important;
+  font-weight:950 !important;
+}
+
+#home-screen #dailyChampionsDashboard .daily-champions-date{
+  color:#fff !important;
+  font-size:clamp(8px,2.2vw,11px) !important;
+  font-weight:800 !important;
+}
+
+/* Top 3 */
+#home-screen #dailyChampionsDashboard .daily-top3{
+  display:grid !important;
+  grid-template-columns:1fr 1.12fr 1fr !important;
+  align-items:end !important;
+  gap:7px !important;
+  min-width:0 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-card{
+  position:relative !important;
+  min-width:0 !important;
+  min-height:142px !important;
+  padding:8px 5px 9px !important;
+  border-radius:16px !important;
+  text-align:center !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-card.silver{
+  background:linear-gradient(180deg,#f8fbff,#e8eef5) !important;
+  border:1px solid #b9c6d4 !important;
+  box-shadow:0 5px 13px rgba(60,80,100,.12) !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-card.gold{
+  min-height:158px !important;
+  background:linear-gradient(180deg,#fff9dc,#fff0a9) !important;
+  border:1px solid #e3b52f !important;
+  box-shadow:0 7px 18px rgba(202,151,20,.22) !important;
+  transform:translateY(-3px) !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-card.bronze{
+  background:linear-gradient(180deg,#fff3e9,#f4d1b9) !important;
+  border:1px solid #d99058 !important;
+  box-shadow:0 5px 13px rgba(140,75,30,.13) !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-crown{
+  height:21px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:18px !important;
+  line-height:1 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-card.gold .gs-podium-crown{
+  font-size:21px !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-photo{
+  width:58px !important;
+  height:58px !important;
+  min-width:58px !important;
+  min-height:58px !important;
+  margin:4px auto 3px !important;
+  border-radius:50% !important;
+  overflow:hidden !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:#fff !important;
+  border:3px solid #fff !important;
+  box-shadow:0 2px 9px rgba(0,0,0,.18) !important;
+  color:#0b63ce !important;
+  font-size:17px !important;
+  font-weight:950 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gold .gs-podium-photo{
+  width:68px !important;
+  height:68px !important;
+  min-width:68px !important;
+  min-height:68px !important;
+  border-color:#f2bd35 !important;
+}
+
+#home-screen #dailyChampionsDashboard .silver .gs-podium-photo{
+  border-color:#b9c6d4 !important;
+}
+
+#home-screen #dailyChampionsDashboard .bronze .gs-podium-photo{
+  border-color:#d99058 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-photo img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-winner-initial-fallback{
+  width:100% !important;
+  height:100% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:linear-gradient(135deg,#eaf4ff,#d7e9ff) !important;
+  color:#0b63ce !important;
+  font-size:17px !important;
+  font-weight:950 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-medal{
+  width:27px !important;
+  height:27px !important;
+  margin-top:-2px !important;
+  border-radius:50% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:#fff !important;
+  font-size:13px !important;
+  font-weight:950 !important;
+  box-shadow:0 2px 5px rgba(0,0,0,.15) !important;
+}
+
+#home-screen #dailyChampionsDashboard .gold .gs-podium-medal{
+  color:#b57900 !important;
+  border:2px solid #e3b52f !important;
+}
+
+#home-screen #dailyChampionsDashboard .silver .gs-podium-medal{
+  color:#607080 !important;
+  border:2px solid #b9c6d4 !important;
+}
+
+#home-screen #dailyChampionsDashboard .bronze .gs-podium-medal{
+  color:#a75b24 !important;
+  border:2px solid #d99058 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-card .daily-champion-name{
+  width:100% !important;
+  margin-top:4px !important;
+  color:#0b2d5c !important;
+  font-size:clamp(10px,2.7vw,14px) !important;
+  font-weight:950 !important;
+  line-height:1.15 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-card .daily-champion-score{
+  margin-top:3px !important;
+  color:#c21f16 !important;
+  font-size:clamp(11px,2.8vw,15px) !important;
+  font-weight:950 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-card .daily-champion-meta{
+  margin-top:2px !important;
+  color:#4b6078 !important;
+  font-size:clamp(7px,1.9vw,10px) !important;
+  font-weight:800 !important;
+}
+
+/* Top 10 heading */
+#home-screen #dailyChampionsDashboard .daily-top10-wrap{
+  margin-top:12px !important;
+  padding-top:10px !important;
+  border-top:0 !important;
+}
+
+#home-screen #dailyChampionsDashboard .daily-top10-title{
+  width:max-content !important;
+  max-width:100% !important;
+  margin:0 auto 8px !important;
+  padding:5px 14px !important;
+  border-radius:20px !important;
+  background:linear-gradient(135deg,#082e67,#0b63ce) !important;
+  color:#fff !important;
+  font-size:clamp(13px,3.5vw,18px) !important;
+  font-weight:950 !important;
+  box-shadow:0 4px 10px rgba(7,55,105,.16) !important;
+}
+
+/* Top 10 viewport */
+#home-screen #dailyChampionsDashboard .daily-top10-list{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  padding:2px 0 8px !important;
+  box-sizing:border-box !important;
+  touch-action:pan-y !important;
+}
+
+/* Moving track */
+#home-screen #dailyChampionsDashboard .gs-top10-track{
+  display:flex !important;
+  flex-direction:row !important;
+  flex-wrap:nowrap !important;
+  gap:10px !important;
+  width:max-content !important;
+  transition:transform .65s ease !important;
+  will-change:transform !important;
+}
+
+/* Individual slider cards */
+#home-screen #dailyChampionsDashboard .gs-top10-card{
+  flex:0 0 calc((100vw - 72px)/3) !important;
+  width:calc((100vw - 72px)/3) !important;
+  max-width:135px !important;
+  min-height:100px !important;
+  padding:7px 5px !important;
+  border-radius:14px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:3px !important;
+  box-sizing:border-box !important;
+  background:#f8fbff !important;
+  border:1px solid #c9d9ea !important;
+  box-shadow:0 3px 8px rgba(20,60,100,.10) !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-card.gold{
+  background:linear-gradient(180deg,#fff9db,#fff) !important;
+  border-color:#e3b52f !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-card.silver{
+  background:linear-gradient(180deg,#f4f7fa,#fff) !important;
+  border-color:#b9c6d4 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-card.bronze{
+  background:linear-gradient(180deg,#fff1e5,#fff) !important;
+  border-color:#d99058 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-rank{
+  width:25px !important;
+  height:25px !important;
+  border-radius:7px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:#0b3b78 !important;
+  color:#fff !important;
+  font-size:12px !important;
+  font-weight:950 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-photo{
+  width:39px !important;
+  height:39px !important;
+  min-width:39px !important;
+  min-height:39px !important;
+  border-radius:50% !important;
+  overflow:hidden !important;
+  background:#e7f1ff !important;
+  border:2px solid #fff !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-shadow:0 2px 6px rgba(0,0,0,.13) !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-photo img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-info{
+  width:100% !important;
+  min-width:0 !important;
+  text-align:center !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-name{
+  color:#102f5f !important;
+  font-size:clamp(9px,2.4vw,12px) !important;
+  font-weight:950 !important;
+  line-height:1.12 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-class{
+  color:#65758a !important;
+  font-size:8px !important;
+  font-weight:750 !important;
+  margin-top:2px !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-score{
+  display:flex !important;
+  align-items:center !important;
+  gap:3px !important;
+  color:#c21f16 !important;
+  font-size:9px !important;
+  font-weight:950 !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-top10-score strong{
+  font-size:11px !important;
+}
+
+/* Desktop / tablet: don't make cards huge */
+@media(min-width:600px){
+  #home-screen #dailyChampionsDashboard .gs-top10-card{
+    flex-basis:130px !important;
+    width:130px !important;
+  }
+}
+
+@media(max-width:380px){
+  #home-screen #dailyChampionsDashboard{
+    padding:8px !important;
+  }
+
+  #home-screen #dailyChampionsDashboard .gs-podium-card{
+    min-height:132px !important;
+    padding:6px 3px 7px !important;
+  }
+
+  #home-screen #dailyChampionsDashboard .gs-podium-card.gold{
+    min-height:145px !important;
+  }
+
+  #home-screen #dailyChampionsDashboard .gs-podium-photo{
+    width:50px !important;
+    height:50px !important;
+    min-width:50px !important;
+    min-height:50px !important;
+  }
+
+  #home-screen #dailyChampionsDashboard .gold .gs-podium-photo{
+    width:58px !important;
+    height:58px !important;
+    min-width:58px !important;
+    min-height:58px !important;
+  }
+
+  #home-screen #dailyChampionsDashboard .gs-top10-card{
+    flex-basis:calc((100vw - 48px)/2) !important;
+    width:calc((100vw - 48px)/2) !important;
+    min-height:96px !important;
+  }
+}
+</style>
+
+
+<style id="GS_DAILY_CHAMPION_ALL_PHOTOS_FINAL">
+/* सभी Daily Champion photos को साफ और समान आकार में दिखाएँ */
+#home-screen .gs-podium-photo-img,
+#home-screen .gs-top10-photo-img{
+  width:100% !important;
+  height:100% !important;
+  display:block !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  border-radius:50% !important;
+}
+
+/* Real photo आने पर initials छिपे रहें */
+#home-screen .gs-winner-initial-fallback{
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  border-radius:50%;
+}
+
+/* फोटो उपलब्ध हो तो पूरा card बना रहे */
+#home-screen .gs-podium-photo,
+#home-screen .gs-top10-photo{
+  overflow:hidden !important;
+}
+</style>
+
 </head>
 
 
@@ -7122,12 +7546,12 @@ function startTeacherTest(){
 (function(){
   'use strict';
 
-  /* =====================================================
-     ONLY Daily Champions data connection is changed here.
-     Existing Home Page interface/design remains untouched.
-     Data source: Supabase -> student_test_records
-     Showing: PREVIOUS DAY's Top 10
-  ===================================================== */
+  /* =========================================================
+     GANIT SETU — DAILY CHAMPION
+     Data: previous day's student_test_records
+     Design: Top 3 podium + automatic Top 10 slider
+     Existing Home/Profile/Rank logic remains untouched.
+     ========================================================= */
 
   const SUPABASE_URL = "https://xgmeivfvuujculkplxjf.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
@@ -7137,7 +7561,7 @@ function startTeacherTest(){
   const dateBox = document.getElementById('dailyChampionsDate');
   const titleBox = document.querySelector('#dailyChampionsDashboard .daily-top10-title');
 
-  if(!top3 || !top10) return;
+  if(!top3 || !top10 || !window.supabase) return;
 
   const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
@@ -7182,28 +7606,358 @@ function startTeacherTest(){
     return x || 'विद्यार्थी';
   }
 
-  function render(rows, resultDate){
-    /* =====================================================
-       ALWAYS SHOW 3 WINNER SLOTS.
-       Display order:
-       LEFT  = 2nd (Silver)
-       CENTER = 1st (Gold)
-       RIGHT = 3rd (Bronze)
-       Missing records remain as blank placeholders.
-    ===================================================== */
+  function photoFromRow(row){
+    if(!row || typeof row !== 'object') return '';
+
+    const keys=[
+      'photo_url','photoUrl',
+      'profile_photo','profilePhoto',
+      'profile_photo_url','profilePhotoUrl',
+      'student_photo','studentPhoto',
+      'image_url','imageUrl',
+      'profile_image','profileImage',
+      'profile_image_url','profileImageUrl',
+      'avatar_url','avatarUrl',
+      'image','photo'
+    ];
+
+    for(const key of keys){
+      const value=String(row[key] ?? '').trim();
+      if(value) return value;
+    }
+
+    return '';
+  }
+
+  function initials(name){
+    const parts=cleanName(name).split(/\s+/).filter(Boolean);
+    if(parts.length===1)
+      return parts[0].slice(0,2).toUpperCase();
+
+    return (
+      (parts[0][0] || '') +
+      (parts[1][0] || '')
+    ).toUpperCase();
+  }
+
+  function photoMarkup(student, extraClass){
+    const url=String(student.photoUrl || '').trim();
+
+    if(url){
+
+      return `
+        <img
+          class="${extraClass || ''}"
+          src="${esc(url)}"
+          alt="${esc(student.name)}"
+          loading="eager"
+          referrerpolicy="no-referrer"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+        >
+        <span
+          class="gs-winner-initial-fallback"
+          style="display:none"
+        >
+          ${esc(initials(student.name))}
+        </span>
+      `;
+
+    }
+
+    return `
+      <span class="gs-winner-initial-fallback">
+        ${esc(initials(student.name))}
+      </span>
+    `;
+  }
+
+  async function attachPhotos(students){
+
+    if(!students.length) return;
+
+    try{
+
+      /*
+       * सभी possible identifiers पहले से तैयार रखें।
+       */
+      const ids=students
+        .map(s=>String(s.id || '').trim())
+        .filter(Boolean);
+
+      const mobiles=students
+        .map(s=>String(s.mobile || '').trim())
+        .filter(Boolean);
+
+      if(!ids.length && !mobiles.length) return;
+
+      /*
+       * students table से पूरा row पढ़ते हैं ताकि
+       * जिस भी photo column में URL हो, उसे इस्तेमाल किया जा सके।
+       */
+      const {data,error}=await supabaseClient
+        .from('students')
+        .select('*');
+
+      if(error || !Array.isArray(data)){
+        console.warn(
+          'Students photo lookup:',
+          error
+        );
+        return;
+      }
+
+      const normalize=v =>
+        String(v == null ? '' : v)
+          .trim()
+          .toLowerCase();
+
+      const byStudentId=new Map();
+      const byMobile=new Map();
+      const byProfileId=new Map();
+      const byStudentCode=new Map();
+
+      data.forEach(row=>{
+
+        const sid=normalize(row.student_id);
+        const mobile=normalize(row.mobile_number);
+        const profile=normalize(row.profile_id);
+        const code=normalize(row.student_code);
+
+        if(sid) byStudentId.set(sid,row);
+        if(mobile) byMobile.set(mobile,row);
+        if(profile) byProfileId.set(profile,row);
+        if(code) byStudentCode.set(code,row);
+
+      });
+
+      students.forEach(s=>{
+
+        let row=null;
+
+        const sid=normalize(s.id);
+        const mobile=normalize(s.mobile);
+
+        /*
+         * Primary match: Supabase UUID.
+         */
+        if(sid)
+          row=byStudentId.get(sid) || null;
+
+        /*
+         * Secondary match: mobile number.
+         */
+        if(!row && mobile)
+          row=byMobile.get(mobile) || null;
+
+        /*
+         * Profile/GS ID support.
+         */
+        if(!row && s.profileId)
+          row=byProfileId.get(
+            normalize(s.profileId)
+          ) || null;
+
+        if(!row && s.studentCode)
+          row=byStudentCode.get(
+            normalize(s.studentCode)
+          ) || null;
+
+        if(row){
+
+          const photo=photoFromRow(row);
+
+          if(photo){
+            s.photoUrl=photo;
+          }
+
+        }
+
+      });
+
+    }catch(e){
+
+      /*
+       * Photo failure से Daily Champion कभी बंद नहीं होगा।
+       */
+      console.warn(
+        'Winner photo lookup skipped:',
+        e
+      );
+
+    }
+  }
+
+  function renderTop3(top){
+    const winnerByRank=[
+      top[1] || null,
+      top[0] || null,
+      top[2] || null
+    ];
 
     const medals=['🥈','🥇','🥉'];
-    const titles=['दूसरा स्थान','पहला स्थान','तीसरा स्थान'];
+    const ranks=[2,1,3];
+    const classes=['silver','gold','bronze'];
 
-    /* One student may submit more than once in a day.
-       Keep that student's best result only. */
-    const best = new Map();
+    top3.innerHTML=winnerByRank.map((s,i)=>{
+
+      if(!s){
+        return `
+          <div class="daily-champion-card gs-podium-card ${classes[i]}">
+            <div class="gs-podium-rank">${medals[i]}</div>
+            <div class="daily-champion-photo gs-podium-photo">—</div>
+            <div class="daily-champion-name">अभी उपलब्ध नहीं</div>
+            <div class="daily-champion-score">—</div>
+            <div class="daily-champion-meta">स्थान ${ranks[i]}</div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="daily-champion-card gs-podium-card ${classes[i]}">
+          <div class="gs-podium-crown">
+            ${i===1 ? '👑' : medals[i]}
+          </div>
+
+          <div class="daily-champion-photo gs-podium-photo">
+            ${photoMarkup(s,'gs-podium-photo-img')}
+          </div>
+
+          <div class="gs-podium-medal">${ranks[i]}</div>
+
+          <div class="daily-champion-name">
+            ${esc(s.name)}
+          </div>
+
+          <div class="daily-champion-score">
+            ${esc(s.percentage)}%
+          </div>
+
+          <div class="daily-champion-meta">
+            ${esc(s.correct)}/${esc(s.total)} • Rank ${ranks[i]}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderTop10(top){
+    /*
+     * All 10 cards are present.
+     * CSS + JS automatically moves the track.
+     */
+    top10.innerHTML=`
+      <div class="gs-top10-track" id="gsTop10Track">
+        ${top.map((s,i)=>{
+          const rank=i+1;
+          const medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+          const cls=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
+
+          return `
+            <div class="daily-top10-row gs-top10-card ${cls}">
+              <div class="gs-top10-rank">
+                ${medal || rank}
+              </div>
+
+              <div class="gs-top10-photo">
+                ${photoMarkup(s,'gs-top10-photo-img')}
+              </div>
+
+              <div class="gs-top10-info">
+                <div class="gs-top10-name">${esc(s.name)}</div>
+                <div class="gs-top10-class">${esc(s.className || 'कक्षा')}</div>
+              </div>
+
+              <div class="gs-top10-score">
+                <span>🏆</span>
+                <strong>${esc(s.percentage)}%</strong>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    startTop10Slider();
+  }
+
+  let top10Timer=null;
+  let top10Index=0;
+
+  function startTop10Slider(){
+    if(top10Timer) clearInterval(top10Timer);
+
+    const viewport=top10;
+    const track=document.getElementById('gsTop10Track');
+
+    if(!viewport || !track) return;
+
+    top10Index=0;
+    track.style.transform='translateX(0px)';
+
+    /*
+     * Every 2.8 seconds one card moves.
+     * At the end it smoothly returns to the first card.
+     */
+    top10Timer=setInterval(()=>{
+
+      const cards=track.children;
+      if(!cards.length) return;
+
+      const cardWidth=
+        cards[0].getBoundingClientRect().width;
+
+      const gap=10;
+      const visibleWidth=viewport.clientWidth;
+
+      const maxOffset=Math.max(
+        0,
+        track.scrollWidth-visibleWidth
+      );
+
+      top10Index++;
+
+      let offset=top10Index*(cardWidth+gap);
+
+      if(offset>maxOffset){
+        top10Index=0;
+        offset=0;
+      }
+
+      track.style.transform=
+        `translateX(-${offset}px)`;
+
+    },2800);
+
+    viewport.onmouseenter=()=>{
+      if(top10Timer) clearInterval(top10Timer);
+    };
+
+    viewport.onmouseleave=()=>{
+      startTop10Slider();
+    };
+
+    viewport.ontouchstart=()=>{
+      if(top10Timer) clearInterval(top10Timer);
+    };
+
+    viewport.ontouchend=()=>{
+      startTop10Slider();
+    };
+  }
+
+  async function render(rows,resultDate){
+
+    const best=new Map();
 
     if(Array.isArray(rows)){
       rows.forEach(r=>{
-        const key = String(
-          r.student_id || r.mobile_number || r.student_name || ''
+        const key=String(
+          r.student_id ||
+          r.mobile_number ||
+          r.student_name ||
+          ''
         ).trim();
+
         if(!key) return;
 
         const item={
@@ -7215,122 +7969,106 @@ function startTeacherTest(){
           correct:Number(r.correct_answers)||0,
           percentage:Number(r.percentage)||0,
           time:r.time_taken || '',
-          testTime:r.test_time || ''
+          testTime:r.test_time || '',
+          photoUrl:''
         };
 
         const old=best.get(key);
+
         if(!old ||
-           item.percentage > old.percentage ||
-           (item.percentage === old.percentage && item.correct > old.correct) ||
-           (item.percentage === old.percentage &&
-            item.correct === old.correct &&
-            timeSeconds(item.time) < timeSeconds(old.time))){
+          item.percentage>old.percentage ||
+          (item.percentage===old.percentage &&
+           item.correct>old.correct) ||
+          (item.percentage===old.percentage &&
+           item.correct===old.correct &&
+           timeSeconds(item.time)<timeSeconds(old.time))
+        ){
           best.set(key,item);
         }
       });
     }
 
     const students=Array.from(best.values()).sort((a,b)=>{
-      if(b.percentage !== a.percentage) return b.percentage-a.percentage;
-      if(b.correct !== a.correct) return b.correct-a.correct;
+      if(b.percentage!==a.percentage)
+        return b.percentage-a.percentage;
+
+      if(b.correct!==a.correct)
+        return b.correct-a.correct;
+
       return timeSeconds(a.time)-timeSeconds(b.time);
     });
 
     const top=students.slice(0,10);
 
-    window.__dailyChampionsStudents = students;
-    window.__dailyChampionsMaxScore = 100;
+    /*
+     * Shared data remains exactly where Rank logic expects it.
+     */
+    window.__dailyChampionsStudents=students;
+    window.__dailyChampionsMaxScore=100;
 
-    if(dateBox) dateBox.textContent='📅 '+hindiDate(resultDate);
-    if(titleBox) titleBox.textContent='⭐ पिछले दिन की Top 10 सूची';
+    if(dateBox)
+      dateBox.textContent='📅 '+hindiDate(resultDate);
+
+    if(titleBox)
+      titleBox.textContent='🏆 आज के Top 10 विजेता';
 
     /*
-      Create exactly three visual slots.
-      Slot 0 = rank 2
-      Slot 1 = rank 1
-      Slot 2 = rank 3
-    */
-    const winnerByRank=[
-      top[1] || null,
-      top[0] || null,
-      top[2] || null
-    ];
+     * Photos are optional. Failure never removes the winners.
+     */
+    await attachPhotos(top);
 
-    top3.innerHTML = winnerByRank.map((s,slot)=>{
-      const actualRank = slot===0 ? 2 : (slot===1 ? 1 : 3);
-      const isFirst = actualRank===1;
-
-      if(!s){
-        return `
-          <div class="daily-champion-card ${isFirst?'first':''} gs-winner-empty">
-            <div class="daily-rank">${medals[slot]}</div>
-            <div class="daily-champion-photo gs-empty-photo">—</div>
-            <div class="daily-champion-name">अभी उपलब्ध नहीं</div>
-            <div class="daily-champion-score">—</div>
-            <div class="daily-champion-meta">${titles[slot]}</div>
-          </div>
-        `;
-      }
-
-      return `
-        <div class="daily-champion-card ${isFirst?'first':''}">
-          <div class="daily-rank">${medals[slot]}</div>
-          <div class="daily-champion-photo">${esc(cleanName(s.name).charAt(0))}</div>
-          <div class="daily-champion-name">${esc(s.name)}</div>
-          <div class="daily-champion-score">${esc(s.percentage)}%</div>
-          <div class="daily-champion-meta">${esc(s.correct)}/${esc(s.total)} • Rank ${actualRank}</div>
-        </div>
-      `;
-    }).join('');
-
-    /* Top 10 keeps all available students and scrolls right-to-left. */
-    top10.innerHTML=top.map((s,i)=>{
-      const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
-      const cls = i===0?' gold':i===1?' silver':i===2?' bronze':'';
-      return `<div class="daily-top10-row${cls}">
-        <span class="r">${medal || (i+1)}</span>
-        <span class="n">${esc(s.name)}</span>
-        <span class="m">${esc(s.percentage)}%</span>
-        <span class="t">${esc(s.time||'')}</span>
-      </div>`;
-    }).join('');
-
-    /* Ensure horizontal RTL movement without changing the data. */
-    top10.style.display='flex';
-    top10.style.flexDirection='row-reverse';
-    top10.style.flexWrap='nowrap';
-    top10.style.overflowX='auto';
-    top10.style.overflowY='hidden';
-    top10.style.gap='8px';
-    top10.querySelectorAll('.daily-top10-row').forEach(el=>{
-      el.style.flex='0 0 auto';
-    });
+    renderTop3(top);
+    renderTop10(top);
   }
 
   async function loadDailyChampions(){
+
     const resultDate=previousDate();
 
-    if(dateBox) dateBox.textContent='📅 '+hindiDate(resultDate);
-    if(titleBox) titleBox.textContent='⭐ पिछले दिन की Top 10 सूची';
+    if(dateBox)
+      dateBox.textContent='📅 '+hindiDate(resultDate);
+
+    if(titleBox)
+      titleBox.textContent='🏆 आज के Top 10 विजेता';
 
     try{
+
       const {data,error}=await supabaseClient
         .from('student_test_records')
-        .select('student_id,student_name,mobile_number,class_name,total_questions,correct_answers,percentage,time_taken,test_date,test_time')
+        .select(
+          'student_id,student_name,mobile_number,class_name,'+
+          'total_questions,correct_answers,percentage,'+
+          'time_taken,test_date,test_time'
+        )
         .eq('test_date',resultDate);
 
       if(error) throw error;
-      render(Array.isArray(data)?data:[],resultDate);
+
+      await render(
+        Array.isArray(data)?data:[],
+        resultDate
+      );
 
     }catch(error){
-      console.error('Supabase Daily Champions Error:',error);
-      top3.innerHTML='<div class="daily-champion-card loading">Daily Winner का result लोड नहीं हो पाया।</div>';
+
+      console.error(
+        'Supabase Daily Champions Error:',
+        error
+      );
+
+      top3.innerHTML=
+        '<div class="daily-champion-card loading">'+
+        'Daily Winner का result लोड नहीं हो पाया।'+
+        '</div>';
+
       top10.innerHTML='';
     }
   }
 
-  /* Existing Today Rank button is kept functional.
-     It uses the same loaded Supabase data and does not change UI. */
+  /*
+   * Existing Rank functionality is kept.
+   * The shared students array above is still used.
+   */
   const rankBtn=document.getElementById('studentTodayRankBtn');
   const rankResult=document.getElementById('studentTodayRankResult');
 
@@ -7338,10 +8076,12 @@ function startTeacherTest(){
     const read=(keys)=>{
       for(const k of keys){
         const v=localStorage.getItem(k);
-        if(String(v??'').trim()) return String(v).trim().toLowerCase();
+        if(String(v??'').trim())
+          return String(v).trim().toLowerCase();
       }
       return '';
     };
+
     return {
       id:read(['studentId','studentID','student_id']),
       mobile:read(['studentMobile','mobileNumber','mobile']),
@@ -7349,169 +8089,77 @@ function startTeacherTest(){
     };
   }
 
-  /*
-   * Today's Rank:
-   * पहले button click पर ही result दिखता था।
-   * अब Daily Champions data load होते ही current student की
-   * rank/score/percentage/time अपने-आप दिखेगी।
-   *
-   * Button बना रहेगा, लेकिन click करना जरूरी नहीं होगा।
-   */
+  function showMyTodayRank(){
 
-  function showCurrentStudentRank(){
-
-    const students =
+    const students=
       window.__dailyChampionsStudents || [];
 
-    if(!students.length){
+    if(!Array.isArray(students) || !students.length)
       return false;
+
+    const me=currentStudent();
+    let found=null;
+
+    if(me.id){
+      found=students.find(
+        s=>String(s.id||'').toLowerCase()===me.id
+      );
     }
 
-    const me = currentStudent();
-
-    const found =
-      students.find(
-        s =>
-          me.id &&
-          String(s.id).toLowerCase() === me.id
-      )
-      ||
-      students.find(
-        s =>
-          me.mobile &&
-          String(s.mobile).toLowerCase() === me.mobile
-      )
-      ||
-      students.find(
-        s =>
-          me.name &&
-          String(s.name).toLowerCase() === me.name
+    if(!found && me.mobile){
+      found=students.find(
+        s=>String(s.mobile||'').toLowerCase()===me.mobile
       );
+    }
 
-    if(!found){
-      rankResult.textContent =
-        'आज की आपकी रैंक अभी उपलब्ध नहीं है।';
+    if(!found && me.name){
+      found=students.find(
+        s=>String(s.name||'').toLowerCase()===me.name
+      );
+    }
+
+    if(!found) return false;
+
+    const rank=students.indexOf(found)+1;
+
+    if(rankResult){
+
+      rankResult.innerHTML=
+        `<span class="rank-value">#${esc(rank)}</span>`+
+        ` <span class="rank-extra">• `+
+        `${esc(found.correct)}/${esc(found.total)}`+
+        ` • ${esc(found.percentage)}%`+
+        `${found.time ? ` • ${esc(found.time)}` : ''}`+
+        `</span>`;
 
       rankResult.classList.add('show');
-      return false;
     }
-
-    const rank =
-      students.indexOf(found) + 1;
-
-    rankResult.innerHTML =
-      `रैंक <span class="rank-value">#${rank}</span> • ` +
-      `स्कोर <span class="score-value">${esc(found.correct)}/${esc(found.total)}</span><br>` +
-      `प्रतिशत <span class="percent-value">${esc(found.percentage)}%</span> • ` +
-      `समय <span class="time-value">${esc(found.time || '—')}</span>`;
-
-    rankResult.classList.add('show');
 
     return true;
   }
 
   if(rankBtn && rankResult){
 
-    function showMyTodayRank(){
-
-      const students =
-        window.__dailyChampionsStudents || [];
-
-      if(!Array.isArray(students) || !students.length){
-        return false;
-      }
-
-      const me = currentStudent();
-
-      let found = null;
-
-      if(me.id){
-        found = students.find(
-          s => String(s.id || '').toLowerCase() === me.id
-        );
-      }
-
-      if(!found && me.mobile){
-        found = students.find(
-          s => String(s.mobile || '').toLowerCase() === me.mobile
-        );
-      }
-
-      if(!found && me.name){
-        found = students.find(
-          s => String(s.name || '').toLowerCase() === me.name
-        );
-      }
-
-      if(!found){
-        return false;
-      }
-
-      const rank =
-        students.indexOf(found) + 1;
-
-      const correct =
-        Number(found.correct) || 0;
-
-      const total =
-        Number(found.total) || 0;
-
-      const percentage =
-        String(found.percentage || '').trim();
-
-      const time =
-        String(found.time || '').trim();
-
-      /*
-       * केवल result दिखाएँ।
-       * "रैंक" शब्द दोबारा नहीं।
-       */
-      rankResult.innerHTML =
-        `<span class="rank-value">#${esc(rank)}</span>` +
-        ` <span class="rank-extra">• ${esc(correct)}/${esc(total)}` +
-        ` • ${esc(percentage)}%` +
-        `${time ? ` • ${esc(time)}` : ''}</span>`;
-
-      rankResult.classList.add('show');
-
-      return true;
-    }
-
-    /*
-     * Button अब manual refresh के लिए रहेगा।
-     */
     rankBtn.addEventListener(
       'click',
       showMyTodayRank
     );
 
-    /*
-     * IMPORTANT:
-     * Daily Champions पहले load होता है, इसलिए यहाँ
-     * उसी shared array का इंतजार किया जाता है।
-     */
-    let rankAttempts = 0;
+    let rankAttempts=0;
 
-    const rankAutoTimer =
-      setInterval(
-        function(){
+    const rankAutoTimer=setInterval(()=>{
 
-          rankAttempts++;
+      rankAttempts++;
 
-          if(showMyTodayRank()){
-            clearInterval(rankAutoTimer);
-          }
+      if(showMyTodayRank() || rankAttempts>=40){
+        clearInterval(rankAutoTimer);
+      }
 
-          if(rankAttempts >= 40){
-            clearInterval(rankAutoTimer);
-          }
-
-        },
-        500
-      );
+    },500);
   }
 
   loadDailyChampions();
+
 })();
 </script>
 
