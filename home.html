@@ -6970,7 +6970,7 @@ function startTeacherTest(){
         const result = await client
           .from('students')
           .select(
-            'student_id,student_name,mobile_number,class_name,school_name,district,block,status'
+            'student_id,profile_id,student_name,mobile_number,class_name,school_name,district,block,status'
           )
           .eq('student_id', studentId)
           .maybeSingle();
@@ -6987,7 +6987,7 @@ function startTeacherTest(){
         const result = await client
           .from('students')
           .select(
-            'student_id,student_name,mobile_number,class_name,school_name,district,block,status'
+            'student_id,profile_id,student_name,mobile_number,class_name,school_name,district,block,status'
           )
           .eq('mobile_number', mobile)
           .maybeSingle();
@@ -7015,7 +7015,7 @@ function startTeacherTest(){
        * Home Page पर Supabase की वास्तविक जानकारी दिखाएँ।
        */
       setText('studentName', student.student_name || '—');
-      setText('studentId', student.student_id || '—');
+      setText('studentId', student.profile_id || '—');
       setText('studentMobile', student.mobile_number || '—');
       setText(
         'studentClassDisplay',
@@ -7031,6 +7031,7 @@ function startTeacherTest(){
        */
       window.GanitSetuCurrentStudent = {
         studentId: clean(student.student_id),
+        profileId: clean(student.profile_id),
         name: clean(student.student_name),
         mobile: clean(student.mobile_number),
         className: clean(student.class_name),
