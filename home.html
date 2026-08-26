@@ -7691,6 +7691,119 @@ function startTeacherTest(){
    The displayed result now includes rank, score, percentage and time. */
 </script>
 
+
+
+<script id="GS_FINAL_PROFILE_ID_OVERRIDE">
+(function(){
+  'use strict';
+
+  /*
+   * FINAL PROFILE-ID OVERRIDE
+   * पुराने Home scripts studentId में UUID डाल सकते हैं।
+   * यह अंतिम script केवल visible Profile ID को students.profile_id
+   * (GS000001, GS000002...) से सेट करता है।
+   *
+   * Existing student_id को बिल्कुल नहीं बदलता।
+   */
+
+  const URL = "https://xgmeivfvuujculkplxjf.supabase.co";
+  const KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+
+  function clean(v){
+    return String(v == null ? '' : v).trim();
+  }
+
+  function read(keys){
+    for(const s of [localStorage, sessionStorage]){
+      for(const k of keys){
+        try{
+          const v = clean(s.getItem(k));
+          if(v) return v;
+        }catch(e){}
+      }
+    }
+    return '';
+  }
+
+  async function applyGSProfileId(){
+
+    try{
+      if(!window.supabase ||
+         typeof window.supabase.createClient !== 'function'){
+        return;
+      }
+
+      const mobile = read([
+        'studentMobile',
+        'mobileNumber',
+        'mobile',
+        'phone'
+      ]);
+
+      if(!mobile) return;
+
+      const sb = window.supabase.createClient(URL, KEY);
+
+      const {data, error} = await sb
+        .from('students')
+        .select('profile_id')
+        .eq('mobile_number', mobile)
+        .maybeSingle();
+
+      if(error){
+        console.warn('GS Profile ID:', error);
+        return;
+      }
+
+      const gsId = clean(data && data.profile_id);
+
+      if(!gsId) return;
+
+      const el = document.getElementById('studentId');
+
+      if(el){
+        el.textContent = gsId;
+      }
+
+      /*
+       * GS ID को अलग key में रखें।
+       * studentId को जानबूझकर नहीं बदल रहे हैं,
+       * क्योंकि बाकी test/result code में वह existing UUID हो सकता है।
+       */
+      try{
+        localStorage.setItem('profileId', gsId);
+        localStorage.setItem('studentProfileId', gsId);
+      }catch(e){}
+
+      console.log(
+        'GANIT SETU FINAL Profile ID:',
+        gsId
+      );
+
+    }catch(e){
+      console.warn('GS Profile ID final loader:', e);
+    }
+  }
+
+  function run(){
+    applyGSProfileId();
+
+    /*
+     * पुराने scripts के बाद भी GS ID बनी रहे।
+     */
+    setTimeout(applyGSProfileId, 1000);
+    setTimeout(applyGSProfileId, 2500);
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', run, {once:true});
+  }else{
+    run();
+  }
+
+})();
+</script>
+
 </body>
 </html>
 
