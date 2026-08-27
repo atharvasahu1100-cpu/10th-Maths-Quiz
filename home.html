@@ -9931,83 +9931,100 @@ body{
 </style>
 
 
-<style id="GS_REFERENCE_EXACT_OVERRIDE">
-/* FINAL reference-style Daily Champion redesign */
-#dailyChampionsDashboard{
- max-width:1120px!important;margin:16px auto 28px!important;padding:0 0 20px!important;
- background:linear-gradient(135deg,#eaf5ff,#fff 50%,#d9ecff)!important;border:2px solid #a9c7e4!important;
- border-radius:28px!important;overflow:hidden!important;box-shadow:0 12px 28px rgba(7,47,92,.18)!important}
-#dailyChampionsDashboard .daily-champions-title-row{
- min-height:125px!important;margin:0 0 76px!important;padding:18px 70px!important;box-sizing:border-box!important;
- display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
- text-align:center!important;position:relative!important;background:radial-gradient(circle at 50% -30%,#2766af,#103d7c 46%,#061d47 82%)!important;
- border-bottom:3px solid #f5bd31!important;border-radius:0 0 38px 38px!important}
-#dailyChampionsDashboard .daily-champions-title-row:before{content:"🏆"!important;position:absolute!important;left:30px!important;top:28px!important;font-size:58px!important}
-#dailyChampionsDashboard .daily-champions-title-row:after{content:"✦ ✧ ✦"!important;position:absolute!important;right:28px!important;top:46px!important;color:#ffd55a!important;font-size:26px!important}
-#dailyChampionsDashboard .daily-champions-title{font-size:clamp(34px,6vw,68px)!important;font-weight:1000!important;color:#ffd65d!important;line-height:1!important;text-shadow:0 4px 0 #805000,0 8px 15px #0006!important}
-#dailyChampionsDashboard .daily-champions-date{font-size:clamp(16px,2.4vw,26px)!important;font-weight:900!important;color:#fff!important;margin-top:9px!important}
+<style id="GS_FINAL_WINNER_DETAILS_UPDATE">
+/* First winner crown: crown sits above the photo circle, not on the face */
+#dailyTop3 .daily-champion-card.gold .gs-podium-crown{
+  top:-128px!important;
+  z-index:30!important;
+}
+#dailyTop3 .daily-champion-card.gold .gs-podium-photo{
+  top:-66px!important;
+}
+#dailyTop3 .daily-champion-card.gold{
+  padding-top:108px!important;
+}
 
-#dailyTop3{display:grid!important;grid-template-columns:1fr 1.2fr 1fr!important;gap:14px!important;align-items:end!important;
- padding:0 16px 25px!important;min-height:330px!important;background:radial-gradient(circle at 50% 10%,#fff,#eef7ff 62%,#dbeeff)!important}
-#dailyTop3 .daily-champion-card{position:relative!important;min-height:230px!important;padding:74px 10px 16px!important;
- border:0!important;border-radius:18px 18px 6px 6px!important;overflow:visible!important;text-align:center!important;
- box-shadow:0 12px 22px rgba(20,51,86,.2)!important;background:linear-gradient(135deg,#eef4f8,#aab9c6)!important}
-#dailyTop3 .daily-champion-card:nth-child(2){min-height:285px!important;padding-top:94px!important;background:linear-gradient(135deg,#fff8c9,#ffd159 55%,#fff0a4)!important}
-#dailyTop3 .daily-champion-card:nth-child(3){background:linear-gradient(135deg,#ffe7d0,#ef9a55)!important}
-#dailyTop3 .daily-champion-card:before{content:"♕"!important;position:absolute!important;left:50%!important;top:-58px!important;transform:translateX(-50%)!important;font-size:60px!important;color:#f2b51e!important;text-shadow:0 3px 0 #83550a!important;z-index:8!important}
-#dailyTop3 .daily-champion-card:nth-child(2):before{top:-78px!important;font-size:75px!important}
-#dailyTop3 .daily-champion-photo{position:absolute!important;left:50%!important;top:-55px!important;transform:translateX(-50%)!important;
- width:138px!important;height:138px!important;min-width:138px!important;min-height:138px!important;border-radius:50%!important;
- overflow:hidden!important;background:#dce9f4!important;border:7px solid #fff!important;outline:3px solid #a5b6c7!important;box-shadow:0 8px 17px #17385b55!important;z-index:6!important}
-#dailyTop3 .daily-champion-card:nth-child(2) .daily-champion-photo{top:-70px!important;width:166px!important;height:166px!important;min-width:166px!important;min-height:166px!important;outline-color:#efb925!important}
-#dailyTop3 .daily-champion-card:nth-child(3) .daily-champion-photo{outline-color:#e58943!important}
-#dailyTop3 .daily-champion-photo img{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important}
-#dailyTop3 .daily-champion-card .rank-badge,#dailyTop3 .daily-champion-card .daily-rank{
- position:relative!important;z-index:10!important;margin:-40px auto 7px!important;width:62px!important;height:62px!important;border-radius:50%!important;
- display:flex!important;align-items:center!important;justify-content:center!important;background:#e59a08!important;border:4px solid #fff!important;color:#fff!important;font-size:30px!important;font-weight:1000!important}
-#dailyTop3 .daily-champion-name{color:#102d59!important;font-size:clamp(19px,2.6vw,30px)!important;font-weight:1000!important;margin:5px 0!important}
-#dailyTop3 .daily-champion-score{color:#b70e0e!important;font-size:21px!important;font-weight:1000!important}
-#dailyTop3 .daily-champion-meta{color:#314966!important;font-weight:800!important}
+/* Winner information */
+#dailyTop3 .gs-winner-school,
+#dailyTop3 .gs-winner-time{
+  position:relative!important;
+  z-index:25!important;
+  width:100%!important;
+  margin-top:4px!important;
+  color:#203d60!important;
+  font-size:13px!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
 
-#dailyChampionsDashboard .daily-top10-wrap{position:relative!important;margin:5px 14px 0!important;padding:68px 10px 18px!important;overflow:hidden!important;
- border:2px solid #9bb7d4!important;border-radius:27px!important;background:linear-gradient(#fff,#eaf2fa)!important;box-shadow:0 10px 20px #123b6b22!important}
-#dailyChampionsDashboard .daily-top10-title{position:absolute!important;top:0!important;left:50%!important;transform:translateX(-50%)!important;z-index:50!important;
- min-width:390px!important;padding:13px 28px!important;margin:0!important;border-radius:0 0 25px 25px!important;white-space:nowrap!important;
- background:linear-gradient(90deg,#092e63,#19569d,#092e63)!important;border:2px solid #eabe38!important;color:#fff!important;font-size:clamp(20px,3vw,33px)!important;font-weight:1000!important;text-align:center!important}
-#dailyTop10List{display:flex!important;flex-wrap:nowrap!important;gap:10px!important;width:max-content!important;animation:none!important;will-change:transform!important;overflow:visible!important}
-#dailyTop10List>*{flex:0 0 112px!important;width:112px!important;min-width:112px!important;min-height:190px!important;height:190px!important;
- padding:8px 6px!important;box-sizing:border-box!important;border-radius:13px!important;background:linear-gradient(#fff,#edf2f7)!important;border:1px solid #b8c9db!important;box-shadow:0 5px 10px #123b6b20!important;overflow:hidden!important}
-#dailyTop10List img{width:68px!important;height:68px!important;min-width:68px!important;min-height:68px!important;display:block!important;object-fit:cover!important;border-radius:50%!important;border:3px solid #d6e4f2!important;margin:7px auto!important}
-#dailyTop10List .daily-top10-photo{width:68px!important;height:68px!important;overflow:hidden!important;border-radius:50%!important;margin:7px auto!important}
-#dailyTop10List .daily-top10-photo img{width:100%!important;height:100%!important;margin:0!important;border:0!important}
-#dailyTop10List .daily-top10-name{font-size:14px!important;font-weight:1000!important;color:#132e58!important;white-space:normal!important;overflow:hidden!important}
-#dailyTop10List .daily-top10-rank{background:#123d74!important;color:#fff!important;border-radius:7px!important;font-weight:1000!important}
+/* More room for all winner details */
+#dailyTop3 .daily-champion-card{
+  min-height:280px!important;
+  height:auto!important;
+}
+#dailyTop3 .daily-champion-card.gold{
+  min-height:345px!important;
+}
 
-#dailyChampionsDashboard .gs-dc-congrats{margin:22px 14px 0!important;padding:21px 12px!important;border-radius:24px!important;background:linear-gradient(90deg,#fff,#f3f8fd,#fff)!important;border:1px solid #cfdae7!important;color:#12305b!important;font-size:clamp(20px,3vw,34px)!important;font-weight:1000!important;text-align:center!important}
-#dailyChampionsDashboard .gs-dc-congrats strong{color:#c51515!important}
+/* Top 10 postcard cards: school + time visible */
+#dailyTop10List .daily-top10-row,
+#dailyTop10List .gs-top10-card{
+  min-height:235px!important;
+  height:235px!important;
+}
+#dailyTop10List .gs-top10-info{
+  width:100%!important;
+  text-align:center!important;
+}
+#dailyTop10List .gs-top10-school{
+  margin-top:3px!important;
+  color:#344f70!important;
+  font-size:10px!important;
+  line-height:1.15!important;
+  font-weight:750!important;
+  max-height:24px!important;
+  overflow:hidden!important;
+}
+#dailyTop10List .gs-top10-time{
+  margin-top:3px!important;
+  color:#a00f0f!important;
+  font-size:10px!important;
+  font-weight:900!important;
+}
 
 @media(max-width:600px){
- #dailyChampionsDashboard{border-radius:20px!important}
- #dailyChampionsDashboard .daily-champions-title-row{min-height:102px!important;margin-bottom:53px!important;padding:12px 46px!important;border-radius:0 0 26px 26px!important}
- #dailyChampionsDashboard .daily-champions-title-row:before{left:13px!important;top:28px!important;font-size:38px!important}
- #dailyChampionsDashboard .daily-champions-title-row:after{display:none!important}
- #dailyChampionsDashboard .daily-champions-title{font-size:clamp(28px,9vw,43px)!important}
- #dailyChampionsDashboard .daily-champions-date{font-size:15px!important}
- #dailyTop3{gap:5px!important;min-height:235px!important;padding:0 5px 13px!important}
- #dailyTop3 .daily-champion-card{min-height:168px!important;padding:48px 2px 7px!important;border-radius:13px 13px 6px 6px!important}
- #dailyTop3 .daily-champion-card:nth-child(2){min-height:205px!important;padding-top:63px!important}
- #dailyTop3 .daily-champion-card:before{top:-39px!important;font-size:37px!important}
- #dailyTop3 .daily-champion-card:nth-child(2):before{top:-51px!important;font-size:49px!important}
- #dailyTop3 .daily-champion-photo{top:-35px!important;width:72px!important;height:72px!important;min-width:72px!important;min-height:72px!important;border-width:4px!important;outline-width:2px!important}
- #dailyTop3 .daily-champion-card:nth-child(2) .daily-champion-photo{top:-44px!important;width:92px!important;height:92px!important;min-width:92px!important;min-height:92px!important}
- #dailyTop3 .daily-champion-name{font-size:10px!important;line-height:1.05!important}
- #dailyTop3 .daily-champion-score{font-size:10px!important}
- #dailyTop3 .daily-champion-meta{display:none!important}
- #dailyChampionsDashboard .daily-top10-wrap{margin:8px!important;padding:58px 7px 13px!important;border-radius:19px!important}
- #dailyChampionsDashboard .daily-top10-title{min-width:275px!important;padding:10px 15px!important;font-size:17px!important}
- #dailyTop10List>*{flex-basis:92px!important;width:92px!important;min-width:92px!important;min-height:162px!important;height:162px!important}
- #dailyTop10List img,#dailyTop10List .daily-top10-photo{width:55px!important;height:55px!important;min-width:55px!important;min-height:55px!important}
- #dailyTop10List .daily-top10-name{font-size:11px!important}
+  #dailyTop3 .daily-champion-card.gold .gs-podium-crown{
+    top:-78px!important;
+    font-size:45px!important;
+  }
+  #dailyTop3 .daily-champion-card.gold .gs-podium-photo{
+    top:-38px!important;
+  }
+  #dailyTop3 .daily-champion-card.gold{
+    padding-top:67px!important;
+    min-height:252px!important;
+  }
+  #dailyTop3 .daily-champion-card{
+    min-height:225px!important;
+  }
+  #dailyTop3 .gs-winner-school,
+  #dailyTop3 .gs-winner-time{
+    font-size:8px!important;
+    margin-top:2px!important;
+  }
+  #dailyTop10List .daily-top10-row,
+  #dailyTop10List .gs-top10-card{
+    min-height:190px!important;
+    height:190px!important;
+  }
+  #dailyTop10List .gs-top10-school,
+  #dailyTop10List .gs-top10-time{
+    font-size:8px!important;
+    line-height:1.05!important;
+  }
 }
 </style>
 
@@ -11053,8 +11070,10 @@ function startTeacherTest(){
           </div>
 
           <div class="daily-champion-meta">
-            ${esc(s.className || 'कक्षा')}
+            📚 ${esc(s.className || 'कक्षा')}
           </div>
+          <div class="gs-winner-school">🏫 ${esc(s.schoolName || 'विद्यालय उपलब्ध नहीं')}</div>
+          <div class="gs-winner-time">⏱️ समय: ${esc(s.time || s.testTime || '—')}</div>
         </div>
       `;
     }).join('');
@@ -11082,6 +11101,8 @@ function startTeacherTest(){
               <div class="gs-top10-info">
                 <div class="gs-top10-name">${esc(s.name)}</div>
                 <div class="gs-top10-class">${esc(s.className || 'कक्षा')}</div>
+                <div class="gs-top10-school">🏫 ${esc(s.schoolName || 'विद्यालय उपलब्ध नहीं')}</div>
+                <div class="gs-top10-time">⏱️ ${esc(s.time || s.testTime || '—')}</div>
               </div>
 
               <div class="gs-top10-score">
@@ -11162,6 +11183,33 @@ function startTeacherTest(){
     };
   }
 
+  async function attachWinnerSchools(students){
+    if(!Array.isArray(students) || !students.length) return;
+
+    const ids=students.map(s=>String(s.id||'').trim()).filter(Boolean);
+    if(!ids.length) return;
+
+    try{
+      const {data,error}=await supabaseClient
+        .from('students')
+        .select('student_id,school_name')
+        .in('student_id',ids);
+
+      if(error) throw error;
+
+      const map=new Map(
+        (data||[]).map(r=>[String(r.student_id||''), String(r.school_name||'')])
+      );
+
+      students.forEach(s=>{
+        const school=map.get(String(s.id||'')) || '';
+        if(school) s.schoolName=school;
+      });
+    }catch(e){
+      console.warn('Winner school lookup:',e);
+    }
+  }
+
   async function render(rows,resultDate){
 
     const best=new Map();
@@ -11184,6 +11232,7 @@ function startTeacherTest(){
           name:cleanName(r.student_name),
           mobile:r.mobile_number || '',
           className:r.class_name || '',
+          schoolName:r.school_name || '',
           total:Number(r.total_questions)||0,
           correct:Number(r.correct_answers)||0,
           percentage:Number(r.percentage)||0,
@@ -11231,11 +11280,12 @@ function startTeacherTest(){
     if(titleBox)
       titleBox.innerHTML=
         '<span class="gs-dc-main-title">DAILY CHAMPION</span>'+
-        '<span class="gs-dc-sub-title">★ आज के टॉप 3 विजेता ★</span>';
+        '<span class="gs-dc-sub-title">★ टेस्ट दिनांक: '+esc(hindiDate(resultDate))+' • टॉप 3 विजेता ★</span>';
 
     /*
      * Photos are optional. Failure never removes the winners.
      */
+    await attachWinnerSchools(top);
     await attachPhotos(top);
 
     renderTop3(top);
@@ -11252,7 +11302,7 @@ function startTeacherTest(){
     if(titleBox)
       titleBox.innerHTML=
         '<span class="gs-dc-main-title">DAILY CHAMPION</span>'+
-        '<span class="gs-dc-sub-title">★ आज के टॉप 3 विजेता ★</span>';
+        '<span class="gs-dc-sub-title">★ टेस्ट दिनांक: '+esc(hindiDate(resultDate))+' • टॉप 3 विजेता ★</span>';
 
     try{
 
