@@ -1,3 +1,4 @@
+alert("NEW WINNER JS LOADED");
 const winnerDB=window.supabaseClient;
 const defaultImage='assets/images/user.png';
 const e=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
