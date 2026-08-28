@@ -10278,6 +10278,50 @@ body{
 }
 </style>
 
+
+<!-- FINAL DAILY CHAMPION GAP FIX: only spacing, existing functionality untouched -->
+<style id="GS_DAILY_CHAMPION_SAFE_GAP_FINAL">
+/* Blue DAILY CHAMPION header and Top-3 winners now have a clear gap.
+   Top-10 slider, Supabase, scores, photos and existing data code are untouched. */
+#home-screen #dailyChampionsDashboard .daily-champions-title-row{
+  position:relative !important;
+  z-index:30 !important;
+}
+
+#home-screen #dailyChampionsDashboard .daily-top3{
+  position:relative !important;
+  z-index:10 !important;
+  margin-top:96px !important;
+}
+
+/* Keep crowns inside the new gap area and above winner photos */
+#home-screen #dailyChampionsDashboard .gs-podium-card{
+  overflow:visible !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-podium-crown{
+  z-index:60 !important;
+}
+
+@media(max-width:600px){
+  #home-screen #dailyChampionsDashboard .daily-top3{
+    margin-top:88px !important;
+  }
+}
+
+@media(max-width:430px){
+  #home-screen #dailyChampionsDashboard .daily-top3{
+    margin-top:82px !important;
+  }
+}
+
+@media(max-width:380px){
+  #home-screen #dailyChampionsDashboard .daily-top3{
+    margin-top:76px !important;
+  }
+}
+</style>
+
 </head>
 
 
