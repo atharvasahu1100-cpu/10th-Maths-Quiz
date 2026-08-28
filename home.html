@@ -10278,6 +10278,86 @@ body{
 }
 </style>
 
+
+<!-- =========================================================
+     GANIT SETU WINNER MODULE LOCK SYSTEM
+     FINAL BASE – 28 AUG 2026
+     ========================================================= -->
+<style id="GS_WINNER_MODULE_LOCKS">
+/*
+  LOCKED MODULE 1: DAILY CHAMPION HEADER
+  Scope: #dailyChampionModule
+*/
+#dailyChampionModule{isolation:isolate;contain:layout style;}
+
+/*
+  LOCKED MODULE 2: TOP 3 WINNERS
+  Scope: #top3WinnersModule
+*/
+#top3WinnersModule{isolation:isolate;contain:layout style;}
+
+/*
+  LOCKED MODULE 3: TOP 10 WINNERS
+  Scope: #top10WinnersModule
+*/
+#top10WinnersModule{isolation:isolate;contain:layout style;}
+
+/* Future module CSS must use these IDs so rules do not leak across modules. */
+</style>
+<script id="GS_WINNER_MODULE_LOCKS_JS">
+/*
+  Adds module wrappers only around the already-rendered winner sections.
+  Existing HTML/data/animation is preserved.
+*/
+(function(){
+  function wrapOnce(el, id){
+    if(!el || document.getElementById(id)) return;
+    const parent = el.parentNode;
+    if(!parent) return;
+    const box = document.createElement('div');
+    box.id = id;
+    box.setAttribute('data-gs-locked-module', id);
+    parent.insertBefore(box, el);
+    box.appendChild(el);
+  }
+
+  function lockWinnerModules(){
+    const dash = document.querySelector('#dailyChampionsDashboard');
+    if(!dash) return false;
+
+    const header =
+      dash.querySelector('.daily-champions-title-row') ||
+      dash.querySelector('.daily-champion-header');
+
+    const top3 =
+      dash.querySelector('.daily-top3') ||
+      dash.querySelector('.gs-top3') ||
+      dash.querySelector('.podium');
+
+    const top10 =
+      dash.querySelector('.top10-section') ||
+      dash.querySelector('.daily-top10') ||
+      dash.querySelector('.top10-winners');
+
+    wrapOnce(header, 'dailyChampionModule');
+    wrapOnce(top3, 'top3WinnersModule');
+    wrapOnce(top10, 'top10WinnersModule');
+
+    return !!(header || top3 || top10);
+  }
+
+  // Winner dashboard may be created after Supabase data loads.
+  let tries = 0;
+  const timer = setInterval(function(){
+    lockWinnerModules();
+    tries++;
+    if(tries > 40) clearInterval(timer);
+  }, 250);
+
+  document.addEventListener('DOMContentLoaded', lockWinnerModules);
+})();
+</script>
+
 </head>
 
 
