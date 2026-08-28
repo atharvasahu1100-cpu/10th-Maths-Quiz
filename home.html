@@ -11863,6 +11863,85 @@ function startTeacherTest(){
   if(root && window.MutationObserver) new MutationObserver(function(){setTimeout(apply,80);}).observe(root,{childList:true,subtree:true});
 })();
 </script>
+
+
+<!-- USER REQUEST ONLY: keep existing gap; make Winner 2 & 3 crowns same LARGE size as Winner 1 and sit on top outer edge of their photo circles. Winner 1 is never modified. -->
+<style id="GS_FINAL_ALL_CROWNS_OUTER_EDGE_ONLY">
+#dailyTop3 .daily-champion-card.silver,
+#dailyTop3 .daily-champion-card.bronze{
+  overflow:visible !important;
+}
+#dailyTop3 .daily-champion-card.silver .gs-podium-crown,
+#dailyTop3 .daily-champion-card.bronze .gs-podium-crown{
+  position:absolute !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  padding:0 !important;
+  z-index:100 !important;
+  line-height:1 !important;
+  pointer-events:none !important;
+  overflow:visible !important;
+}
+</style>
+
+<script id="GS_FINAL_CROWN_OUTER_EDGE_ONLY">
+(function(){
+  function placeSideCrowns(){
+    var root=document.getElementById('dailyTop3');
+    if(!root) return;
+
+    /* Winner 1 is reference only. It is never changed. */
+    var first=root.querySelector('.daily-champion-card.gold');
+    if(!first) return;
+    var ref=first.querySelector('.gs-podium-crown');
+    if(!ref) return;
+
+    var refStyle=getComputedStyle(ref);
+    var refFont=parseFloat(refStyle.fontSize)||52;
+    var refRect=ref.getBoundingClientRect();
+
+    ['silver','bronze'].forEach(function(rank){
+      var card=root.querySelector('.daily-champion-card.'+rank);
+      if(!card) return;
+      var crown=card.querySelector('.gs-podium-crown');
+      var photo=card.querySelector('.gs-podium-photo');
+      if(!crown || !photo) return;
+
+      /* Same large visual size as Winner 1. */
+      crown.style.fontSize=refFont+'px';
+      crown.style.width=refRect.width+'px';
+      crown.style.height=refRect.height+'px';
+      crown.style.left='50%';
+      crown.style.transform='translateX(-50%)';
+
+      /* Put crown on the OUTER TOP EDGE of the photo circle, not on the face. */
+      var photoTop=photo.offsetTop;
+      var photoHeight=photo.offsetHeight||photo.getBoundingClientRect().height;
+      var crownHeight=crown.offsetHeight||refRect.height;
+      var edgeOverlap=Math.max(4,Math.min(12,photoHeight*0.12));
+      crown.style.top=(photoTop-crownHeight+edgeOverlap)+'px';
+    });
+  }
+
+  function run(){
+    placeSideCrowns();
+    setTimeout(placeSideCrowns,100);
+    setTimeout(placeSideCrowns,400);
+    setTimeout(placeSideCrowns,1000);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+  window.addEventListener('load',run);
+  window.addEventListener('resize',run);
+
+  var root=document.getElementById('dailyTop3');
+  if(root && window.MutationObserver){
+    new MutationObserver(function(){setTimeout(placeSideCrowns,50);}).observe(root,{childList:true,subtree:true});
+  }
+})();
+</script>
 </body>
 </html>
 
@@ -12190,6 +12269,87 @@ function startTeacherTest(){
   var root=document.getElementById('dailyTop3');
   if(root && window.MutationObserver){
     new MutationObserver(function(){setTimeout(run,60);}).observe(root,{childList:true,subtree:true});
+  }
+})();
+</script>
+
+<!-- USER REQUEST ONLY: make all three crowns equal; keep Winner 1 unchanged; place Winner 2 & 3 on photo outer circle -->
+<style id="GS_CROWNS_EQUAL_OUTER_CIRCLE_FINAL">
+/* Do not touch Winner 1. Only Winner 2 and Winner 3 are positioned. */
+#home-screen #dailyTop3 .gs-podium-card.silver,
+#home-screen #dailyTop3 .gs-podium-card.bronze{
+  position:relative !important;
+  overflow:visible !important;
+}
+#home-screen #dailyTop3 .gs-podium-card.silver .gs-podium-crown,
+#home-screen #dailyTop3 .gs-podium-card.bronze .gs-podium-crown{
+  position:absolute !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:1 !important;
+  z-index:999 !important;
+  pointer-events:none !important;
+  max-width:none !important;
+  overflow:visible !important;
+}
+</style>
+
+<script id="GS_CROWNS_EQUAL_OUTER_CIRCLE_SYNC">
+(function(){
+  function placeCrowns(){
+    var root=document.getElementById('dailyTop3');
+    if(!root) return;
+
+    var first=root.querySelector('.gs-podium-card.gold');
+    if(!first) return;
+    var firstCrown=first.querySelector('.gs-podium-crown');
+    if(!firstCrown) return;
+
+    /* Winner 1 is reference only: never write any style to it. */
+    var firstRect=firstCrown.getBoundingClientRect();
+    var fontSize=parseFloat(getComputedStyle(firstCrown).fontSize);
+    var crownWidth=firstRect.width;
+    var crownHeight=firstRect.height;
+
+    ['silver','bronze'].forEach(function(rank){
+      var card=root.querySelector('.gs-podium-card.'+rank);
+      if(!card) return;
+      var crown=card.querySelector('.gs-podium-crown');
+      var photo=card.querySelector('.gs-podium-photo');
+      if(!crown || !photo) return;
+
+      /* Exactly the same visual crown size as Winner 1. */
+      if(fontSize) crown.style.fontSize=fontSize+'px';
+      crown.style.width=crownWidth+'px';
+      crown.style.height=crownHeight+'px';
+      crown.style.left='50%';
+      crown.style.transform='translateX(-50%)';
+
+      /* Put crown on the OUTER TOP EDGE of the photo circle, not on the face. */
+      var photoTop=photo.offsetTop;
+      var photoHeight=photo.offsetHeight || photo.getBoundingClientRect().height;
+      var edgeOverlap=Math.max(8, Math.min(14, photoHeight*0.18));
+      crown.style.top=(photoTop-crownHeight+edgeOverlap)+'px';
+    });
+  }
+
+  function run(){
+    placeCrowns();
+    setTimeout(placeCrowns,100);
+    setTimeout(placeCrowns,350);
+    setTimeout(placeCrowns,800);
+    setTimeout(placeCrowns,1500);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+  window.addEventListener('load',run);
+  window.addEventListener('resize',run);
+
+  var root=document.getElementById('dailyTop3');
+  if(root && window.MutationObserver){
+    new MutationObserver(function(){setTimeout(run,50);}).observe(root,{childList:true,subtree:true});
   }
 })();
 </script>
