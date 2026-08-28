@@ -9862,10 +9862,12 @@ body{
   }
 
   #home-screen #dailyChampionsDashboard .daily-champions-title-row::after{
+    content:"🏆" !important;
     right:7px !important;
-    top:21px !important;
-    font-size:17px !important;
-    letter-spacing:1px !important;
+    top:12px !important;
+    font-size:38px !important;
+    line-height:1 !important;
+    letter-spacing:0 !important;
   }
 
   #home-screen #dailyChampionsDashboard .daily-top3{
@@ -10171,6 +10173,51 @@ body{
   #home-screen #dailyChampionsDashboard .gs-top10-school{font-size:8.5px !important;}
   #home-screen #dailyChampionsDashboard .gs-top10-time{font-size:9px !important;}
   #home-screen #dailyChampionsDashboard .gs-top10-score{font-size:11px !important;}
+}
+</style>
+
+
+<style id="GS_SCORE_MOBILE_ALIGNMENT_FIX">
+/* Requested score alignment fix: keep 2nd and 3rd winner scores inside their cards. */
+#dailyTop3 .daily-champion-card.silver .daily-champion-score,
+#dailyTop3 .daily-champion-card.bronze .daily-champion-score{
+  width:100% !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  margin:4px auto 0 !important;
+  padding:0 1px !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:clip !important;
+  font-size:clamp(7px,2.15vw,10px) !important;
+  line-height:1.12 !important;
+  letter-spacing:-0.18px !important;
+}
+/* Keep the middle (1st rank) winner score exactly on its existing scale. */
+#dailyTop3 .daily-champion-card.gold .daily-champion-score{
+  overflow:visible !important;
+}
+@media(max-width:600px){
+  #dailyTop3 .daily-champion-card.silver .daily-champion-score,
+  #dailyTop3 .daily-champion-card.bronze .daily-champion-score{
+    font-size:8px !important;
+    letter-spacing:-0.25px !important;
+  }
+}
+
+/* Top-10 score: move it upward from the bottom and keep it centered in every card. */
+#dailyTop10List .gs-top10-score{
+  margin-top:5px !important;
+  margin-bottom:0 !important;
+  align-self:center !important;
+  text-align:center !important;
+  width:100% !important;
+  flex:0 0 auto !important;
+}
+#dailyTop10List .gs-top10-score span,
+#dailyTop10List .gs-top10-score strong{
+  vertical-align:middle !important;
 }
 </style>
 
