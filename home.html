@@ -12096,3 +12096,100 @@ function startTeacherTest(){
   }
 })();
 </script>
+
+
+<!-- FINAL CORRECTION: keep Winner 1 untouched; restore larger header-to-winner gap -->
+<style id="GS_USER_REQUESTED_FINAL_CORRECTION">
+/* IMPORTANT: Winner 1 (gold) crown/photo placement is intentionally NOT changed here. */
+
+/* Restore a clear gap between the blue DAILY CHAMPION panel and all three winners. */
+#home-screen #dailyChampionsDashboard .daily-top3{
+  padding-top:100px !important;
+  min-height:330px !important;
+}
+
+/* Do not alter the first winner at all. Only prepare side cards for crown matching. */
+#dailyTop3 .daily-champion-card.silver,
+#dailyTop3 .daily-champion-card.bronze{
+  overflow:visible !important;
+}
+
+/* Winner 2 and 3 crowns: same horizontal center and same visual size as Winner 1. */
+#dailyTop3 .daily-champion-card.silver .gs-podium-crown,
+#dailyTop3 .daily-champion-card.bronze .gs-podium-crown{
+  position:absolute !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  padding:0 !important;
+  z-index:80 !important;
+  pointer-events:none !important;
+  line-height:1 !important;
+  max-width:none !important;
+}
+
+@media(max-width:600px){
+  /* Mobile also keeps the restored gap; first winner remains untouched. */
+  #home-screen #dailyChampionsDashboard .daily-top3{
+    padding-top:100px !important;
+    min-height:330px !important;
+  }
+}
+</style>
+
+<script id="GS_USER_REQUESTED_CROWN_MATCH">
+(function(){
+  function matchSideCrowns(){
+    var root=document.getElementById('dailyTop3');
+    if(!root) return;
+
+    var first=root.querySelector('.daily-champion-card.gold');
+    if(!first) return;
+    var firstCrown=first.querySelector('.gs-podium-crown');
+    var firstPhoto=first.querySelector('.gs-podium-photo');
+    if(!firstCrown || !firstPhoto) return;
+
+    /* READ ONLY: Winner 1 is used purely as the reference and is never modified. */
+    var firstCrownRect=firstCrown.getBoundingClientRect();
+    var firstPhotoRect=firstPhoto.getBoundingClientRect();
+    var firstFont=parseFloat(getComputedStyle(firstCrown).fontSize) || 45;
+    var overlap=firstPhotoRect.top-(firstCrownRect.top+firstCrownRect.height);
+
+    ['silver','bronze'].forEach(function(rank){
+      var card=root.querySelector('.daily-champion-card.'+rank);
+      if(!card) return;
+      var crown=card.querySelector('.gs-podium-crown');
+      var photo=card.querySelector('.gs-podium-photo');
+      if(!crown || !photo) return;
+
+      /* Only Winner 2 and Winner 3 are changed. */
+      crown.style.fontSize=firstFont+'px';
+      crown.style.width=firstCrownRect.width+'px';
+      crown.style.height=firstCrownRect.height+'px';
+      crown.style.left='50%';
+      crown.style.transform='translateX(-50%)';
+
+      var photoTop=photo.offsetTop;
+      var crownHeight=crown.offsetHeight || firstCrownRect.height;
+      crown.style.top=(photoTop-crownHeight-overlap)+'px';
+    });
+  }
+
+  function run(){
+    matchSideCrowns();
+    setTimeout(matchSideCrowns,100);
+    setTimeout(matchSideCrowns,400);
+    setTimeout(matchSideCrowns,900);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+  window.addEventListener('load',run);
+  window.addEventListener('resize',run);
+
+  var root=document.getElementById('dailyTop3');
+  if(root && window.MutationObserver){
+    new MutationObserver(function(){setTimeout(run,60);}).observe(root,{childList:true,subtree:true});
+  }
+})();
+</script>
