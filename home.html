@@ -10221,6 +10221,53 @@ body{
 }
 </style>
 
+
+<!-- GS_MOBILE_FIX_20260828: compact responsive rules, no duplicate layout -->
+<style id="GS_MOBILE_FIX_20260828">
+@media (max-width:600px){
+  /* Keep the three winner cards inside the phone width */
+  #dailyTop3{width:100%!important;max-width:100%!important;display:flex!important;gap:4px!important;padding:0 3px!important;overflow:visible!important;}
+  #dailyTop3 .daily-champion-card{min-width:0!important;max-width:calc((100% - 8px)/3)!important;flex:1 1 0!important;overflow:hidden!important;}
+
+  /* Names: never cut midway; JS below reduces font only when necessary */
+  #dailyTop3 .daily-champion-name{width:100%!important;max-width:100%!important;min-width:0!important;white-space:normal!important;overflow:hidden!important;text-overflow:clip!important;overflow-wrap:anywhere!important;word-break:break-word!important;text-align:center!important;line-height:1.12!important;}
+
+  /* Side scores stay inside their own cards */
+  #dailyTop3 .daily-champion-card.silver .daily-champion-score,
+  #dailyTop3 .daily-champion-card.bronze .daily-champion-score{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;white-space:nowrap!important;overflow:hidden!important;text-align:center!important;line-height:1.1!important;padding:0 1px!important;}
+
+  /* Make 2nd/3rd crowns visually equal to the first crown */
+  #dailyTop3 .daily-champion-card.silver .gs-podium-crown,
+  #dailyTop3 .daily-champion-card.bronze .gs-podium-crown{font-size:45px!important;width:45px!important;height:45px!important;line-height:45px!important;max-width:none!important;z-index:30!important;}
+
+  /* Daily Champion subtitle centered */
+  #dailyChampionsDashboard .gs-dc-sub-title,
+  #dailyChampionsDashboard .daily-champions-subtitle,
+  #dailyChampionsDashboard .gs-dc-congrats{display:block!important;width:100%!important;max-width:100%!important;margin-left:auto!important;margin-right:auto!important;text-align:center!important;}
+}
+</style>
+<script id="GS_AUTO_FIT_TEXT_20260828">
+(function(){
+  function fit(el,min,max){
+    if(!el || window.innerWidth>600) return;
+    el.style.fontSize=max+'px';
+    var n=0;
+    while(n++<30 && parseFloat(el.style.fontSize)>min && (el.scrollWidth>el.clientWidth+1 || el.scrollHeight>el.clientHeight+1)){
+      el.style.fontSize=(parseFloat(el.style.fontSize)-0.5)+'px';
+    }
+  }
+  function run(){
+    document.querySelectorAll('#dailyTop3 .daily-champion-card.silver .daily-champion-score,#dailyTop3 .daily-champion-card.bronze .daily-champion-score').forEach(function(el){fit(el,6.5,9);});
+    document.querySelectorAll('#dailyTop3 .daily-champion-name').forEach(function(el){fit(el,7,11);});
+  }
+  function start(){run();setTimeout(run,300);setTimeout(run,1000);setTimeout(run,2000);}
+  document.addEventListener('DOMContentLoaded',start);
+  window.addEventListener('resize',start);
+  var t=document.getElementById('dailyTop3');
+  if(t && window.MutationObserver) new MutationObserver(function(){setTimeout(run,80);}).observe(t,{childList:true,subtree:true,characterData:true});
+})();
+</script>
+
 </head>
 
 
@@ -11745,124 +11792,6 @@ function startTeacherTest(){
   }
 }
 </style>
-
-<!-- GS DEFINITIVE MOBILE PATCH v20260828-0812 -->
-<style id="GS_DEFINITIVE_MOBILE_PATCH">
-@media screen and (max-width:600px){
-  #dailyTop3{
-    display:grid!important;
-    grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,1fr)!important;
-    gap:4px!important;
-    width:100%!important;
-    min-width:0!important;
-  }
-  #dailyTop3 .daily-champion-card{
-    min-width:0!important;
-    width:100%!important;
-    box-sizing:border-box!important;
-  }
-  /* 2nd/3rd: full name inside the box */
-  #dailyTop3 .daily-champion-card.silver .daily-champion-name,
-  #dailyTop3 .daily-champion-card.bronze .daily-champion-name{
-    display:block!important;
-    width:100%!important;
-    min-width:0!important;
-    max-width:100%!important;
-    white-space:normal!important;
-    overflow:visible!important;
-    text-overflow:clip!important;
-    overflow-wrap:anywhere!important;
-    word-break:break-word!important;
-    hyphens:auto!important;
-    text-align:center!important;
-    font-size:clamp(7px,2.35vw,10px)!important;
-    line-height:1.12!important;
-    padding:0 1px!important;
-    box-sizing:border-box!important;
-  }
-  /* 2nd/3rd: score can NEVER escape */
-  #dailyTop3 .daily-champion-card.silver .daily-champion-score,
-  #dailyTop3 .daily-champion-card.bronze .daily-champion-score{
-    display:block!important;
-    width:100%!important;
-    min-width:0!important;
-    max-width:100%!important;
-    box-sizing:border-box!important;
-    text-align:center!important;
-    white-space:nowrap!important;
-    overflow:hidden!important;
-    text-overflow:clip!important;
-    font-size:clamp(6px,2.1vw,9px)!important;
-    line-height:1.15!important;
-    padding:0!important;
-    margin:2px 0 0!important;
-    letter-spacing:-.25px!important;
-  }
-  /* Other side-card details also stay inside */
-  #dailyTop3 .daily-champion-card.silver .gs-winner-school,
-  #dailyTop3 .daily-champion-card.bronze .gs-winner-school,
-  #dailyTop3 .daily-champion-card.silver .gs-winner-time,
-  #dailyTop3 .daily-champion-card.bronze .gs-winner-time{
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-    white-space:nowrap!important;
-    font-size:clamp(6px,1.9vw,8px)!important;
-  }
-  /* Make 2nd and 3rd crowns exactly same size as the first winner */
-  #dailyTop3 .daily-champion-card.silver .gs-podium-crown,
-  #dailyTop3 .daily-champion-card.bronze .gs-podium-crown{
-    font-size:45px!important;
-    width:40px!important;
-    height:40px!important;
-    line-height:1!important;
-    max-width:none!important;
-    transform:none!important;
-    z-index:30!important;
-  }
-  /* Subtitle under Daily Champion */
-  #dailyChampionsDashboard .gs-dc-sub-title,
-  #dailyChampionsDashboard .daily-champions-subtitle,
-  #dailyChampionsDashboard .gs-dc-congrats{
-    display:block!important;
-    width:100%!important;
-    text-align:center!important;
-    margin-left:auto!important;
-    margin-right:auto!important;
-  }
-}
-</style>
-<script id="GS_DEFINITIVE_AUTOFIT_v20260828">
-(function(){
-  function fit(el,min,max){
-    if(!el) return;
-    el.style.fontSize=max+'px';
-    var n=0;
-    while(n++<60 && parseFloat(el.style.fontSize)>min &&
-      (el.scrollWidth>el.clientWidth+1 || el.scrollHeight>el.clientHeight+1)){
-      el.style.fontSize=(parseFloat(el.style.fontSize)-0.35)+'px';
-    }
-  }
-  function apply(){
-    if(window.innerWidth>600) return;
-    document.querySelectorAll('#dailyTop3 .silver .daily-champion-score,#dailyTop3 .bronze .daily-champion-score').forEach(function(e){fit(e,5.5,9);});
-    document.querySelectorAll('#dailyTop3 .silver .daily-champion-name,#dailyTop3 .bronze .daily-champion-name').forEach(function(e){fit(e,6.5,10);});
-    var first=document.querySelector('#dailyTop3 .daily-champion-card.gold .gs-podium-crown');
-    var firstSize=first?parseFloat(getComputedStyle(first).fontSize):45;
-    document.querySelectorAll('#dailyTop3 .silver .gs-podium-crown,#dailyTop3 .bronze .gs-podium-crown').forEach(function(e){
-      e.style.fontSize=firstSize+'px';
-    });
-  }
-  ['DOMContentLoaded','load'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(apply,200);setTimeout(apply,800);setTimeout(apply,1600);});});
-  window.addEventListener('resize',function(){setTimeout(apply,100);});
-  if(document.readyState!=='loading') setTimeout(apply,100);
-  var root=document.getElementById('dailyChampionsDashboard');
-  if(root && window.MutationObserver) new MutationObserver(function(){setTimeout(apply,80);}).observe(root,{childList:true,subtree:true});
-})();
-</script>
 </body>
 </html>
 
