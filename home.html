@@ -11075,7 +11075,7 @@ function startTeacherTest(){
     top3.innerHTML=ordered.map((s,i)=>{
       if(!s)return `<div class="daily-champion-card gs-podium-card ${classes[i]}"><div class="daily-champion-photo gs-podium-photo">—</div><div class="gs-podium-medal">${ranks[i]}</div><div class="daily-champion-name">अभी उपलब्ध नहीं</div><div class="daily-champion-score">स्कोर: —</div><div class="daily-champion-meta">कक्षा</div><div class="gs-winner-school">🏫 विद्यालय उपलब्ध नहीं</div><div class="gs-winner-time">⏱️ समय: —</div></div>`;
       return `<div class="daily-champion-card gs-podium-card ${classes[i]}">
-        <div class="gs-podium-crown">${i===1?'👑':'♕'}</div>
+        <div class="gs-podium-crown">${i===1?'👑':i===0?'👑':'👑'}</div>
         <div class="daily-champion-photo gs-podium-photo">${photoMarkup(s,'gs-podium-photo-img')}</div>
         <div class="gs-podium-medal">${ranks[i]}</div>${i===1?'<div class="gs-winner-ribbon">विजेता</div>':''}
         <div class="daily-champion-name">${esc(s.name)}</div>
@@ -11716,6 +11716,35 @@ function startTeacherTest(){
 <!-- GS PHOTO DIRECT MATCH: confirmed Storage path student-photos/students/<student_id>/profile.jpg -->
 
 <!-- GS FULL AUTO PHOTO: profile upload automatically updates students.photo_url -->
+
+<style id="GS_FINAL_SCORE_CROWN_FIX">
+/* Keep 2nd and 3rd winner scores safely inside their cards on mobile */
+@media(max-width:600px){
+  #dailyTop3 .daily-champion-card.silver .daily-champion-score,
+  #dailyTop3 .daily-champion-card.bronze .daily-champion-score{
+    font-size:8px!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    box-sizing:border-box!important;
+    padding:0 1px!important;
+  }
+  /* First winner remains untouched */
+  #dailyTop3 .daily-champion-card.silver .gs-podium-crown,
+  #dailyTop3 .daily-champion-card.bronze .gs-podium-crown{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    color:#9aa6b2!important;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.18))!important;
+  }
+  #dailyTop3 .daily-champion-card.bronze .gs-podium-crown{
+    color:#c9793f!important;
+  }
+}
+</style>
 </body>
 </html>
 
