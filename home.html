@@ -10040,139 +10040,63 @@ body{
 
 
 <style id="GS_TOP10_FINAL_DETAILS_AND_NO_ARROWS">
-/* Final Top-10 fix: remove blue side arrows and show every winner detail. */
+/* Compact mobile Top-10 marquee: one clean layout, no side arrows. */
 #home-screen #dailyChampionsDashboard .daily-top10-wrap::before,
-#home-screen #dailyChampionsDashboard .daily-top10-wrap::after{
-  content:none !important;
-  display:none !important;
-}
-
-#home-screen #dailyChampionsDashboard .daily-top10-wrap{
-  position:relative !important;
-  overflow:hidden !important;
-}
+#home-screen #dailyChampionsDashboard .daily-top10-wrap::after{content:none!important;display:none!important;}
+#home-screen #dailyChampionsDashboard .daily-top10-wrap{position:relative!important;overflow:hidden!important;}
 #home-screen #dailyChampionsDashboard .daily-top10-list{
-  min-height:270px !important;
-  height:270px !important;
-  overflow:hidden !important;
-  padding:6px 4px !important;
+  height:232px!important;min-height:232px!important;overflow:hidden!important;padding:4px 0 8px!important;
 }
 #home-screen #dailyChampionsDashboard .gs-top10-track{
-  display:flex !important;
-  flex-direction:row !important;
-  align-items:stretch !important;
-  gap:10px !important;
-  width:max-content !important;
-  transition:none !important;
+  display:flex!important;flex-direction:row!important;align-items:stretch!important;gap:8px!important;width:max-content!important;
+  transition:none!important;will-change:transform!important;
 }
 #home-screen #dailyChampionsDashboard .daily-top10-row,
 #home-screen #dailyChampionsDashboard .gs-top10-card{
-  flex:0 0 145px !important;
-  width:145px !important;
-  min-width:145px !important;
-  min-height:258px !important;
-  height:258px !important;
-  padding:9px 7px !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  justify-content:flex-start !important;
-  gap:5px !important;
-  overflow:hidden !important;
+  flex:0 0 132px!important;width:132px!important;min-width:132px!important;
+  height:218px!important;min-height:218px!important;padding:7px 6px!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;
+  gap:3px!important;overflow:hidden!important;box-sizing:border-box!important;
 }
-#home-screen #dailyChampionsDashboard .gs-top10-rank{
-  flex:0 0 auto !important;
-}
+#home-screen #dailyChampionsDashboard .gs-top10-rank{flex:0 0 auto!important;line-height:1!important;}
 #home-screen #dailyChampionsDashboard .gs-top10-photo{
-  width:66px !important;
-  height:66px !important;
-  min-width:66px !important;
-  min-height:66px !important;
-  flex:0 0 auto !important;
+  width:58px!important;height:58px!important;min-width:58px!important;min-height:58px!important;flex:0 0 auto!important;
 }
 #home-screen #dailyChampionsDashboard .gs-top10-info{
-  width:100% !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  text-align:center !important;
-  overflow:visible !important;
+  width:100%!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;
 }
 #home-screen #dailyChampionsDashboard .gs-top10-name{
-  display:block !important;
-  width:100% !important;
-  font-size:13px !important;
-  font-weight:950 !important;
-  line-height:1.12 !important;
-  white-space:normal !important;
-  overflow:visible !important;
-  text-overflow:clip !important;
+  width:100%!important;font-size:12px!important;font-weight:950!important;line-height:1.12!important;
+  white-space:normal!important;overflow:hidden!important;text-overflow:clip!important;overflow-wrap:anywhere!important;word-break:break-word!important;
+  min-height:2.24em!important;
 }
 #home-screen #dailyChampionsDashboard .gs-top10-class{
-  display:block !important;
-  width:100% !important;
-  margin-top:2px !important;
-  font-size:10px !important;
-  font-weight:800 !important;
-  line-height:1.15 !important;
-  white-space:normal !important;
-  overflow:visible !important;
+  width:100%!important;margin-top:2px!important;font-size:10px!important;font-weight:850!important;line-height:1.12!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
 }
 #home-screen #dailyChampionsDashboard .gs-top10-school{
-  display:block !important;
-  width:100% !important;
-  margin-top:3px !important;
-  color:#344f70 !important;
-  font-size:9px !important;
-  font-weight:850 !important;
-  line-height:1.18 !important;
-  white-space:normal !important;
-  max-height:none !important;
-  overflow:visible !important;
-  text-overflow:clip !important;
+  width:100%!important;margin-top:2px!important;color:#344f70!important;font-size:8px!important;font-weight:850!important;line-height:1.15!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
 }
 #home-screen #dailyChampionsDashboard .gs-top10-time{
-  display:block !important;
-  width:100% !important;
-  margin-top:3px !important;
-  color:#203d60 !important;
-  font-size:10px !important;
-  font-weight:900 !important;
-  line-height:1.15 !important;
-  white-space:normal !important;
-  overflow:visible !important;
+  width:100%!important;margin-top:2px!important;color:#203d60!important;font-size:9px!important;font-weight:900!important;line-height:1.12!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
 }
 #home-screen #dailyChampionsDashboard .gs-top10-score{
-  display:block !important;
-  width:100% !important;
-  margin-top:auto !important;
-  padding-top:3px !important;
-  color:#bd1414 !important;
-  font-size:12px !important;
-  font-weight:1000 !important;
-  white-space:nowrap !important;
+  display:block!important;width:100%!important;margin-top:6px!important;padding:0!important;color:#bd1414!important;
+  font-size:11px!important;font-weight:1000!important;line-height:1.12!important;white-space:nowrap!important;text-align:center!important;
 }
-#home-screen #dailyChampionsDashboard .gs-top10-score strong{
-  font-size:inherit !important;
-}
+#home-screen #dailyChampionsDashboard .gs-top10-score strong{font-size:inherit!important;}
 @media(max-width:600px){
-  #home-screen #dailyChampionsDashboard .daily-top10-list{
-    min-height:265px !important;
-    height:265px !important;
-  }
+  #home-screen #dailyChampionsDashboard .daily-top10-list{height:226px!important;min-height:226px!important;}
   #home-screen #dailyChampionsDashboard .daily-top10-row,
-  #home-screen #dailyChampionsDashboard .gs-top10-card{
-    flex:0 0 142px !important;
-    width:142px !important;
-    min-width:142px !important;
-    min-height:252px !important;
-    height:252px !important;
-  }
-  #home-screen #dailyChampionsDashboard .gs-top10-name{font-size:12px !important;}
-  #home-screen #dailyChampionsDashboard .gs-top10-class{font-size:10px !important;}
-  #home-screen #dailyChampionsDashboard .gs-top10-school{font-size:8.5px !important;}
-  #home-screen #dailyChampionsDashboard .gs-top10-time{font-size:9px !important;}
-  #home-screen #dailyChampionsDashboard .gs-top10-score{font-size:11px !important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-card{flex-basis:128px!important;width:128px!important;min-width:128px!important;height:212px!important;min-height:212px!important;padding:7px 5px!important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-photo{width:56px!important;height:56px!important;min-width:56px!important;min-height:56px!important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-name{font-size:11px!important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-class{font-size:9px!important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-school{font-size:7.8px!important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-time{font-size:8.5px!important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-score{font-size:10.5px!important;}
 }
 </style>
 
@@ -10250,18 +10174,9 @@ body{
     overflow:hidden!important;text-overflow:ellipsis!important;
   }
 
-  /* Smooth Top-10 marquee viewport; cards keep a fixed safe width. */
+  /* Top-10 marquee uses the compact fixed card rules above. */
   #home-screen #dailyChampionsDashboard .daily-top10-list{overflow:hidden!important;padding:2px 0 8px!important;}
   #home-screen #dailyChampionsDashboard .gs-top10-track{gap:8px!important;will-change:transform!important;}
-  #home-screen #dailyChampionsDashboard .daily-top10-row{
-    flex:0 0 calc((100vw - 52px)/2)!important;width:calc((100vw - 52px)/2)!important;
-    min-width:0!important;min-height:152px!important;padding:7px 5px!important;overflow:hidden!important;
-  }
-  #home-screen #dailyChampionsDashboard .gs-top10-name{font-size:clamp(10px,3vw,13px)!important;min-height:2.2em!important;line-height:1.1!important;}
-  #home-screen #dailyChampionsDashboard .gs-top10-school,
-  #home-screen #dailyChampionsDashboard .gs-top10-time{font-size:8px!important;}
-  #home-screen #dailyChampionsDashboard .gs-top10-score strong{font-size:clamp(10px,3vw,13px)!important;white-space:nowrap!important;}
-
   /* Header subtitle and congratulations remain truly centered. */
   #home-screen #dailyChampionsDashboard .gs-dc-sub-title,
   #home-screen #dailyChampionsDashboard .gs-dc-congrats{display:block!important;width:100%!important;text-align:center!important;margin-left:auto!important;margin-right:auto!important;}
@@ -10270,7 +10185,96 @@ body{
   #home-screen #dailyChampionsDashboard .daily-top3{gap:3px!important;padding-left:3px!important;padding-right:3px!important;}
   #home-screen #dailyChampionsDashboard .gs-podium-card.silver .daily-champion-score,
   #home-screen #dailyChampionsDashboard .gs-podium-card.bronze .daily-champion-score{font-size:7.5px!important;}
-  #home-screen #dailyChampionsDashboard .daily-top10-row{flex-basis:calc((100vw - 44px)/2)!important;width:calc((100vw - 44px)/2)!important;}
+}
+</style>
+
+
+<!-- GS_CROWN_AND_HEADER_FINAL_FIX_20260828 -->
+<style id="GS_CROWN_AND_HEADER_FINAL_FIX_20260828">
+/* FINAL FIX 1: crowns stay completely above the face/photo on every mobile size */
+#home-screen #dailyChampionsDashboard .gs-podium-card .gs-podium-crown,
+#home-screen #dailyChampionsDashboard .gs-podium-card.gold .gs-podium-crown{
+  top:-86px !important;
+  z-index:60 !important;
+  transform:translateX(-50%) !important;
+  pointer-events:none !important;
+}
+
+/* Keep the winner photos below the crowns */
+#home-screen #dailyChampionsDashboard .gs-podium-card .gs-podium-photo{
+  z-index:40 !important;
+}
+
+/* FINAL FIX 2: the test-date line remains exactly centered between both trophies */
+#home-screen #dailyChampionsDashboard .daily-champions-title-row{
+  position:relative !important;
+  padding:7px 74px !important;
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+}
+
+#home-screen #dailyChampionsDashboard .daily-champions-title{
+  width:100% !important;
+  max-width:calc(100% - 148px) !important;
+  margin:0 auto !important;
+  text-align:center !important;
+  align-items:center !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-dc-main-title,
+#home-screen #dailyChampionsDashboard .gs-dc-sub-title{
+  width:100% !important;
+  max-width:100% !important;
+  text-align:center !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+#home-screen #dailyChampionsDashboard .gs-dc-sub-title{
+  font-size:clamp(10px,2.55vw,17px) !important;
+  line-height:1.15 !important;
+  white-space:nowrap !important;
+  letter-spacing:0 !important;
+}
+
+#home-screen #dailyChampionsDashboard .daily-champions-title-row::before{
+  left:14px !important;
+  top:16px !important;
+  font-size:44px !important;
+}
+
+#home-screen #dailyChampionsDashboard .daily-champions-title-row::after{
+  right:14px !important;
+  top:16px !important;
+  font-size:44px !important;
+}
+
+/* Extra-small phones: keep all header text safely between trophies */
+@media(max-width:430px){
+  #home-screen #dailyChampionsDashboard .daily-champions-title-row{
+    height:82px !important;
+    min-height:82px !important;
+    padding:7px 62px !important;
+  }
+  #home-screen #dailyChampionsDashboard .daily-champions-title{
+    max-width:calc(100% - 124px) !important;
+  }
+  #home-screen #dailyChampionsDashboard .gs-dc-main-title{
+    font-size:clamp(20px,6.1vw,27px) !important;
+  }
+  #home-screen #dailyChampionsDashboard .gs-dc-sub-title{
+    font-size:clamp(9px,2.45vw,12px) !important;
+  }
+  #home-screen #dailyChampionsDashboard .daily-champions-title-row::before,
+  #home-screen #dailyChampionsDashboard .daily-champions-title-row::after{
+    top:18px !important;
+    font-size:38px !important;
+  }
+  #home-screen #dailyChampionsDashboard .gs-podium-card .gs-podium-crown,
+  #home-screen #dailyChampionsDashboard .gs-podium-card.gold .gs-podium-crown{
+    top:-82px !important;
+  }
 }
 </style>
 
