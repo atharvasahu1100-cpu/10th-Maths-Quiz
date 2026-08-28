@@ -10922,56 +10922,79 @@ function startTeacherTest(){
     `;
   }
 
+  function field(row, keys){
+    for(const k of keys){
+      const v=row && row[k];
+      if(clean(v)) return clean(v);
+    }
+    return '';
+  }
+
   async function attachStudentDetails(winners){
     if(!Array.isArray(winners) || !winners.length) return;
 
     try{
+      /* IMPORTANT: select(*) avoids failure if a column name differs
+         from an older/newer students-table schema. */
       const {data,error}=await supabaseClient
         .from('students')
-        .select('student_id,student_name,mobile_number,class_name,school_name,photo_url');
+        .select('*');
       if(error) throw error;
 
       const rows=Array.isArray(data) ? data : [];
       const byId=new Map(), byMobile=new Map(), byNameClass=new Map(), byName=new Map();
+
       rows.forEach(r=>{
-        const id=clean(r.student_id);
-        const mobile=clean(r.mobile_number);
-        const name=normalize(r.student_name);
-        const nc=name+'|'+normalize(r.class_name);
+        const id=field(r,['student_id','id','profile_id']);
+        const mobile=field(r,['mobile_number','mobile','phone','student_mobile']);
+        const name=normalize(field(r,['student_name','name','full_name']));
+        const cls=normalize(field(r,['class_name','class','student_class']));
         if(id) byId.set(id,r);
         if(mobile) byMobile.set(mobile,r);
         if(name) byName.set(name,r);
-        if(nc !== '|') byNameClass.set(nc,r);
+        if(name && cls) byNameClass.set(name+'|'+cls,r);
       });
 
-      // Rajesh profile is used as a safe fallback for the test dummy records.
-      const fallbackProfile = rows.find(r=>normalize(r.student_name)==='rajesh sahu') || rows.find(r=>clean(r.photo_url)||clean(r.school_name)) || null;
-      const fallbackSchool = clean(fallbackProfile?.school_name);
-      const fallbackPhoto = clean(fallbackProfile?.photo_url);
-      const fallbackId = clean(fallbackProfile?.student_id);
+      /* Rajesh Sahu is the confirmed master profile used as the
+         photo/school fallback for the 10 dummy winner records. */
+      const fallbackProfile =
+        rows.find(r=>normalize(field(r,['student_name','name','full_name']))==='rajesh sahu') ||
+        rows.find(r=>field(r,['photo_url','photo','profile_photo']) || field(r,['school_name','school'])) ||
+        null;
+
+      const fallbackId=field(fallbackProfile,['student_id','id','profile_id']);
+      const fallbackSchool=field(fallbackProfile,['school_name','school','schoolName']);
+      const fallbackPhoto=field(fallbackProfile,['photo_url','photo','profile_photo','image_url']);
 
       winners.forEach(w=>{
-        const id=clean(w.id), mobile=clean(w.mobile);
-        const nc=normalize(w.name)+'|'+normalize(w.className);
+        const id=clean(w.id);
+        const mobile=clean(w.mobile);
+        const name=normalize(w.name);
+        const cls=normalize(w.className);
+
         const matched=(id && byId.get(id)) ||
           (mobile && byMobile.get(mobile)) ||
-          byNameClass.get(nc) || byName.get(normalize(w.name)) || null;
+          (name && cls && byNameClass.get(name+'|'+cls)) ||
+          (name && byName.get(name)) ||
+          null;
 
+        /* Dummy records are intentionally allowed to fall back to the
+           Rajesh master profile for BOTH school and photo. */
         const source=matched || fallbackProfile;
-        if(source){
-          w.profileStudentId=clean(source.student_id);
-          const school=clean(source.school_name) || fallbackSchool;
-          if(school) w.schoolName=school;
-          const profilePhoto=clean(source.photo_url) || fallbackPhoto;
-          if(profilePhoto) w.photoUrl=profilePhoto;
-          if(!clean(w.className)) w.className=clean(source.class_name);
-        }
-        // Keep the Rajesh profile id as the final storage-photo fallback.
-        if(!clean(w.photoFallbackStudentId) && fallbackId) w.photoFallbackStudentId=fallbackId;
-        if(!clean(w.schoolName) && fallbackSchool) w.schoolName=fallbackSchool;
+        const sourceId=field(source,['student_id','id','profile_id']);
+        const school=field(source,['school_name','school','schoolName']) || fallbackSchool;
+        const photo=field(source,['photo_url','photo','profile_photo','image_url']) || fallbackPhoto;
+        const sourceClass=field(source,['class_name','class','student_class']);
+
+        if(sourceId) w.profileStudentId=sourceId;
+        if(fallbackId) w.photoFallbackStudentId=fallbackId;
+        if(school) w.schoolName=school;
+        if(photo) w.photoUrl=photo;
+        if(!clean(w.className) && sourceClass) w.className=sourceClass;
       });
+
     }catch(e){
-      console.warn('Winner student detail lookup:',e);
+      console.error('Winner student detail lookup failed:',e);
     }
   }
 
@@ -10979,18 +11002,35 @@ function startTeacherTest(){
     if(!Array.isArray(winners) || !winners.length) return;
 
     for(const winner of winners){
-      if(clean(winner.photoUrl)) continue;
+      let current=clean(winner.photoUrl);
 
-      const ids=[clean(winner.profileStudentId || winner.id), clean(winner.photoFallbackStudentId)].filter(Boolean);
-      for(const sid of [...new Set(ids)]){
-        const path='students/'+sid+'/profile.jpg';
+      /* A stored full URL/data URL can be rendered directly. */
+      if(current && (/^(https?:|data:image\/)/i.test(current))) continue;
+
+      /* If photo_url contains a Storage path, use that path first. */
+      const paths=[];
+      if(current) paths.push(current.replace(/^\/+/,''));
+
+      const ids=[
+        clean(winner.profileStudentId),
+        clean(winner.photoFallbackStudentId),
+        clean(winner.id)
+      ].filter(Boolean);
+
+      [...new Set(ids)].forEach(sid=>{
+        paths.push('students/'+sid+'/profile.jpg');
+      });
+
+      for(const path of [...new Set(paths)]){
         try{
-          const {data,error}=await supabaseClient.storage.from('student-photos').createSignedUrl(path,60*60*24*7);
+          const {data,error}=await supabaseClient.storage
+            .from('student-photos')
+            .createSignedUrl(path,60*60*24*7);
           if(!error && data && data.signedUrl){
             winner.photoUrl=clean(data.signedUrl);
             break;
           }
-        }catch(e){ console.warn('Winner photo lookup:',e); }
+        }catch(e){ console.warn('Winner photo lookup:',path,e); }
       }
     }
   }
