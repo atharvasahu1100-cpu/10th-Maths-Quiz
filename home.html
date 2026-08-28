@@ -10330,11 +10330,14 @@ body{
       dash.querySelector('.daily-champion-header');
 
     const top3 =
+      dash.querySelector('#dailyTop3') ||
       dash.querySelector('.daily-top3') ||
       dash.querySelector('.gs-top3') ||
       dash.querySelector('.podium');
 
     const top10 =
+      dash.querySelector('#dailyTop10List') ||
+      dash.querySelector('.daily-top10-list') ||
       dash.querySelector('.top10-section') ||
       dash.querySelector('.daily-top10') ||
       dash.querySelector('.top10-winners');
@@ -10699,6 +10702,193 @@ body{
   #home-screen #dailyChampionModule .daily-champions-title-row .daily-champions-title::after{
     font-size:9px !important;
     letter-spacing:.4px !important;
+  }
+}
+</style>
+
+
+<!-- LOCKED MODULE 2 ONLY — MOVE CROWNS TO PHOTO CIRCLE TOP EDGE -->
+<style id="GS_MODULE2_CROWN_POSITION_ONLY">
+#top3WinnersModule #home-screen #dailyChampionsDashboard .gs-podium-card,
+#top3WinnersModule .gs-podium-card{
+  overflow:visible !important;
+}
+
+/* Keep the CURRENT crown size; only change its position relative to the round photo. */
+#top3WinnersModule #home-screen #dailyChampionsDashboard .gs-podium-photo,
+#top3WinnersModule .gs-podium-photo{
+  position:relative !important;
+  overflow:visible !important;
+}
+
+#top3WinnersModule #home-screen #dailyChampionsDashboard .gs-podium-crown,
+#top3WinnersModule .gs-podium-crown{
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  bottom:auto !important;
+}
+
+/* Position each crown on the OUTER TOP edge of its own round photo.
+   Size is intentionally NOT changed. */
+#top3WinnersModule #home-screen #dailyChampionsDashboard .gs-podium-photo .gs-podium-crown,
+#top3WinnersModule .gs-podium-photo .gs-podium-crown{
+  top:-18px !important;
+}
+
+/* If crown is a sibling of the photo, align it using the existing card top area only. */
+#top3WinnersModule #home-screen #dailyChampionsDashboard .gs-podium-card > .gs-podium-crown,
+#top3WinnersModule .gs-podium-card > .gs-podium-crown{
+  top:-54px !important;
+}
+</style>
+
+
+<!-- LOCKED MODULE 2 — PRECISE FIX FOR 2ND & 3RD CROWNS ONLY -->
+<style id="GS_MODULE2_2ND_3RD_CROWN_PRECISE">
+/* Keep Winner 1 / gold completely untouched. */
+
+/* 2nd (silver) and 3rd (bronze): allow crown outside the card/photo area */
+#top3WinnersModule .gs-podium-card.silver,
+#top3WinnersModule .gs-podium-card.bronze{
+  overflow:visible !important;
+}
+
+/* Move ONLY Winner 2 and Winner 3 crowns upward and center them.
+   No width, height or font-size is changed here. */
+#top3WinnersModule .gs-podium-card.silver .gs-podium-crown,
+#top3WinnersModule .gs-podium-card.bronze .gs-podium-crown{
+  position:absolute !important;
+  left:50% !important;
+  top:-54px !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  z-index:100 !important;
+  bottom:auto !important;
+}
+
+/* Mobile: same placement principle, only vertical position adapted to current photo layout */
+@media(max-width:430px){
+  #top3WinnersModule .gs-podium-card.silver .gs-podium-crown,
+  #top3WinnersModule .gs-podium-card.bronze .gs-podium-crown{
+    top:-40px !important;
+  }
+}
+</style>
+
+
+<!-- LOCKED MODULE 2 — FINAL POSITION FIX: 2ND & 3RD CROWN ABOVE CIRCLE -->
+<style id="GS_MODULE2_2ND_3RD_CROWN_ABOVE_CIRCLE_FINAL">
+/* ONLY Winner 2 (silver) and Winner 3 (bronze).
+   Winner 1 and Modules 1/3 remain untouched.
+   Crown SIZE is not changed — only vertical position. */
+
+#top3WinnersModule .gs-podium-card.silver .gs-podium-crown,
+#top3WinnersModule .gs-podium-card.bronze .gs-podium-crown{
+  position:absolute !important;
+  left:50% !important;
+  top:-86px !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  bottom:auto !important;
+  z-index:100 !important;
+}
+
+/* Phone layout: move crowns ABOVE the round photo circle,
+   not onto the face. */
+@media(max-width:600px){
+  #top3WinnersModule .gs-podium-card.silver .gs-podium-crown,
+  #top3WinnersModule .gs-podium-card.bronze .gs-podium-crown{
+    top:-82px !important;
+  }
+}
+
+@media(max-width:430px){
+  #top3WinnersModule .gs-podium-card.silver .gs-podium-crown,
+  #top3WinnersModule .gs-podium-card.bronze .gs-podium-crown{
+    top:-82px !important;
+  }
+}
+
+@media(max-width:360px){
+  #top3WinnersModule .gs-podium-card.silver .gs-podium-crown,
+  #top3WinnersModule .gs-podium-card.bronze .gs-podium-crown{
+    top:-78px !important;
+  }
+}
+</style>
+
+
+<!-- LOCKED MODULE 2 — REAL DOM FIX FOR WINNER 2 & 3 CROWNS -->
+<style id="GS_MODULE2_REAL_DOM_CROWN_FIX">
+/* Only the real Top-3 container; Winner 1 and other modules are not styled here. */
+#dailyTop3 .gs-podium-card.silver,
+#dailyTop3 .gs-podium-card.bronze{
+  position:relative !important;
+  overflow:visible !important;
+}
+
+/* The crown is a DIRECT sibling before the photo in renderTop3().
+   Put it above the round photo, not over the face.
+   Crown size is NOT changed. */
+#dailyTop3 .gs-podium-card.silver > .gs-podium-crown,
+#dailyTop3 .gs-podium-card.bronze > .gs-podium-crown{
+  position:absolute !important;
+  left:50% !important;
+  top:-46px !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  bottom:auto !important;
+  z-index:999 !important;
+}
+
+/* Ensure the photo itself starts below the crown and remains visible. */
+#dailyTop3 .gs-podium-card.silver > .gs-podium-photo,
+#dailyTop3 .gs-podium-card.bronze > .gs-podium-photo{
+  position:relative !important;
+  z-index:2 !important;
+}
+
+@media(max-width:430px){
+  #dailyTop3 .gs-podium-card.silver > .gs-podium-crown,
+  #dailyTop3 .gs-podium-card.bronze > .gs-podium-crown{
+    top:-42px !important;
+  }
+}
+</style>
+
+
+<!-- MODULE 2 ONLY — TRUE CROWN ABOVE PHOTO FIX -->
+<style id="GS_MODULE2_TRUE_CROWN_ABOVE_PHOTO">
+/* ONLY Winner 2 (silver) and Winner 3 (bronze).
+   Winner 1 is intentionally untouched.
+   Crown size is intentionally untouched. */
+
+#home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.silver,
+#home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.bronze{
+  position:relative !important;
+  overflow:visible !important;
+}
+
+/* Anchor crown at the TOP EDGE of the photo and lift it by its own height.
+   This is the key fix: it prevents the crown from covering the face. */
+#home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.silver > .gs-podium-crown,
+#home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.bronze > .gs-podium-crown{
+  position:absolute !important;
+  left:50% !important;
+  top:-35px !important;
+  transform:translate(-50%,-100%) !important;
+  margin:0 !important;
+  bottom:auto !important;
+  z-index:1000 !important;
+}
+
+/* Mobile uses the same top edge as the current 2nd/3rd photo. */
+@media(max-width:600px){
+  #home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.silver > .gs-podium-crown,
+  #home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.bronze > .gs-podium-crown{
+    top:-29px !important;
+    transform:translate(-50%,-100%) !important;
   }
 }
 </style>
