@@ -10059,6 +10059,108 @@ body{
  #dailyTop10List .gs-top10-time{font-size:8px!important}
 }
 </style>
+
+<style id="GS_SCHOOL_FINAL_DISPLAY">
+/* CLEAR TOP 3 DETAILS */
+#dailyTop3 .daily-champion-card{
+  height:auto!important;
+  min-height:350px!important;
+  padding-bottom:20px!important;
+}
+#dailyTop3 .daily-champion-card:nth-child(2){
+  min-height:415px!important;
+}
+#dailyTop3 .daily-champion-meta,
+#dailyTop3 .gs-winner-school,
+#dailyTop3 .gs-winner-time{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:relative!important;
+  z-index:100!important;
+  width:100%!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-align:center!important;
+}
+#dailyTop3 .daily-champion-meta{
+  font-weight:900!important;
+  color:#173d68!important;
+  margin-top:5px!important;
+}
+#dailyTop3 .gs-winner-school{
+  font-weight:1000!important;
+  color:#123d68!important;
+  margin-top:6px!important;
+  line-height:1.3!important;
+}
+#dailyTop3 .gs-winner-time{
+  font-weight:1000!important;
+  color:#a20e0e!important;
+  margin-top:5px!important;
+}
+
+/* CENTER/FIRST WINNER PHOTO LOWER */
+#dailyTop3 .daily-champion-card:nth-child(2) .gs-podium-photo,
+#dailyTop3 .daily-champion-card:nth-child(2) .daily-champion-photo{
+  transform:translateX(-50%) translateY(30px)!important;
+}
+
+/* CLEAR TOP 10 DETAILS */
+#dailyTop10List .daily-top10-row,
+#dailyTop10List .gs-top10-card{
+  flex:0 0 160px!important;
+  width:160px!important;
+  min-width:160px!important;
+  height:320px!important;
+  min-height:320px!important;
+  padding:9px 7px!important;
+  box-sizing:border-box!important;
+}
+#dailyTop10List .gs-top10-info{
+  display:block!important;
+  width:100%!important;
+  text-align:center!important;
+}
+#dailyTop10List .gs-top10-name,
+#dailyTop10List .gs-top10-score,
+#dailyTop10List .gs-top10-class,
+#dailyTop10List .gs-top10-school,
+#dailyTop10List .gs-top10-time{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+#dailyTop10List .gs-top10-name{font-size:14px!important;font-weight:1000!important;min-height:34px!important;white-space:normal!important}
+#dailyTop10List .gs-top10-score{font-size:12px!important;font-weight:1000!important;color:#b30e0e!important;margin-top:4px!important}
+#dailyTop10List .gs-top10-class{font-size:11px!important;font-weight:900!important;color:#173d68!important;margin-top:4px!important}
+#dailyTop10List .gs-top10-school{font-size:11px!important;font-weight:1000!important;color:#123d68!important;line-height:1.25!important;min-height:45px!important;margin-top:5px!important;white-space:normal!important}
+#dailyTop10List .gs-top10-time{font-size:10px!important;font-weight:1000!important;color:#a20e0e!important;margin-top:5px!important}
+
+@media(max-width:600px){
+  #dailyTop3 .daily-champion-card{min-height:285px!important}
+  #dailyTop3 .daily-champion-card:nth-child(2){min-height:350px!important}
+  #dailyTop3 .daily-champion-card:nth-child(2) .gs-podium-photo,
+  #dailyTop3 .daily-champion-card:nth-child(2) .daily-champion-photo{
+    transform:translateX(-50%) translateY(24px)!important;
+  }
+  #dailyTop3 .daily-champion-meta{font-size:9px!important}
+  #dailyTop3 .gs-winner-school{font-size:8px!important;line-height:1.2!important}
+  #dailyTop3 .gs-winner-time{font-size:8px!important}
+
+  #dailyTop10List .daily-top10-row,
+  #dailyTop10List .gs-top10-card{
+    flex:0 0 125px!important;width:125px!important;min-width:125px!important;
+    height:260px!important;min-height:260px!important;padding:6px 4px!important;
+  }
+  #dailyTop10List .gs-top10-name{font-size:11px!important;min-height:27px!important}
+  #dailyTop10List .gs-top10-score{font-size:9px!important}
+  #dailyTop10List .gs-top10-class{font-size:8px!important}
+  #dailyTop10List .gs-top10-school{font-size:8px!important;min-height:35px!important}
+  #dailyTop10List .gs-top10-time{font-size:8px!important}
+}
+</style>
+
 </head>
 
 
@@ -11218,40 +11320,38 @@ function startTeacherTest(){
     try{
       const {data,error}=await supabaseClient
         .from('students')
-        .select('student_id,profile_id,student_name,mobile_number,school_name,class_name');
+        .select('student_id,student_name,mobile_number,school_name,class_name');
 
-      if(error) throw error;
+      if(error){
+        console.warn('School query error:', error);
+        return;
+      }
 
-      const norm=v=>String(v??'').trim().toLowerCase();
-      const digits=v=>String(v??'').replace(/\\D/g,'');
+      const norm=v=>String(v ?? '').trim().toLowerCase();
+      const digits=v=>String(v ?? '').replace(/\D/g,'');
 
       winners.forEach(w=>{
         const wid=norm(w.id);
-        const wprofile=norm(w.profileId);
         const wmobile=digits(w.mobile);
         const wname=norm(w.name);
 
-        const found=(data||[]).find(s=>{
-          const sid=norm(s.student_id);
-          const spid=norm(s.profile_id);
-          const smobile=digits(s.mobile_number);
-          const sname=norm(s.student_name);
+        const found=(data||[]).find(st=>{
+          const sid=norm(st.student_id);
+          const smobile=digits(st.mobile_number);
+          const sname=norm(st.student_name);
 
-          if(wid && (wid===sid || wid===spid)) return true;
-          if(wprofile && (wprofile===sid || wprofile===spid)) return true;
-          if(wmobile && smobile && wmobile===smobile) return true;
-          if(wname && sname && wname===sname) return true;
-          return false;
+          return (wid && sid && wid===sid) ||
+                 (wmobile && smobile && wmobile===smobile) ||
+                 (wname && sname && wname===sname);
         });
 
         if(found){
-          w.schoolName=String(found.school_name||w.schoolName||'').trim();
-          w.className=String(found.class_name||w.className||'').trim();
+          w.schoolName=String(found.school_name || '').trim();
+          if(found.class_name) w.className=String(found.class_name).trim();
         }
       });
-
     }catch(e){
-      console.warn('Winner school lookup:',e);
+      console.warn('Winner school lookup failed:',e);
     }
   }
 
@@ -11330,6 +11430,7 @@ function startTeacherTest(){
     /*
      * Photos are optional. Failure never removes the winners.
      */
+    await attachWinnerSchools(top);
     await attachWinnerSchools(top);
     await attachWinnerSchools(top);
     await attachPhotos(top);
@@ -12048,6 +12149,19 @@ function startTeacherTest(){
 <!-- GS PHOTO DIRECT MATCH: confirmed Storage path student-photos/students/<student_id>/profile.jpg -->
 
 <!-- GS FULL AUTO PHOTO: profile upload automatically updates students.photo_url -->
+
+<script id="GS_SCHOOL_FINAL_REFRESH">
+(function(){
+  // Keep all winner cards readable even while the Top 10 strip is moving.
+  document.addEventListener('DOMContentLoaded',()=>{
+    const list=document.getElementById('dailyTop10List');
+    if(list){
+      list.style.alignItems='stretch';
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
 
