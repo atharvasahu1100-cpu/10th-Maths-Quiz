@@ -11750,3 +11750,69 @@ function startTeacherTest(){
 
 
 
+
+
+<!-- Mobile responsive auto-fit safeguard -->
+<style>
+/* Universal safety: no text/card should escape its mobile container */
+#home-screen, #dailyChampionsDashboard, #dailyTop3, #dailyTop10List,
+#dailyChampionsDashboard *{box-sizing:border-box;max-width:100%;}
+
+#dailyTop3 .daily-champion-card,
+#dailyTop10List .gs-top10-card{min-width:0;overflow:hidden;}
+
+/* Long student names remain fully visible and adapt to available width */
+#dailyTop3 .daily-champion-name,
+#dailyTop10List .gs-top10-name{
+  min-width:0;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  white-space:normal;
+  line-height:1.18;
+  text-align:center;
+  font-size:clamp(10px,3.2vw,15px);
+}
+
+#dailyTop10List .gs-top10-name{text-align:left;font-size:clamp(10px,3vw,14px);}
+
+/* All details stay inside cards */
+#dailyTop3 .daily-champion-score,
+#dailyTop3 .daily-champion-meta,
+#dailyTop3 .gs-winner-school,
+#dailyTop3 .gs-winner-time,
+#dailyTop10List .gs-top10-class,
+#dailyTop10List .gs-top10-school,
+#dailyTop10List .gs-top10-time,
+#dailyTop10List .gs-top10-score{
+  max-width:100%;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+@media(max-width:480px){
+  #dailyTop3{display:flex;align-items:flex-end;justify-content:center;gap:5px;width:100%;padding:0 2px;}
+  #dailyTop3 .daily-champion-card{min-width:0!important;flex:1 1 0!important;}
+  #dailyTop3 .daily-champion-card.silver,
+  #dailyTop3 .daily-champion-card.bronze{font-size:11px!important;}
+  #dailyTop3 .daily-champion-card.silver .daily-champion-score,
+  #dailyTop3 .daily-champion-card.bronze .daily-champion-score{font-size:clamp(9px,2.7vw,11px)!important;white-space:normal!important;}
+  #dailyTop3 .daily-champion-card .gs-winner-school,
+  #dailyTop3 .daily-champion-card .gs-winner-time,
+  #dailyTop3 .daily-champion-card .daily-champion-meta{font-size:clamp(8px,2.4vw,10px)!important;}
+  #dailyTop10List .gs-top10-card{width:min(94vw,420px)!important;}
+  #dailyTop10List .gs-top10-info{min-width:0!important;flex:1 1 auto!important;}
+  #dailyTop10List .gs-top10-score{flex:0 1 31%!important;min-width:0!important;text-align:center!important;}
+  #dailyTop10List .gs-top10-score strong{font-size:clamp(10px,3vw,13px)!important;white-space:normal!important;}
+}
+
+@media(max-width:360px){
+  #dailyTop3{gap:3px;}
+  #dailyTop3 .daily-champion-name{font-size:9px!important;}
+  #dailyTop3 .daily-champion-card.silver .daily-champion-score,
+  #dailyTop3 .daily-champion-card.bronze .daily-champion-score{font-size:8px!important;}
+  #dailyTop3 .daily-champion-card .gs-winner-school,
+  #dailyTop3 .daily-champion-card .gs-winner-time,
+  #dailyTop3 .daily-champion-card .daily-champion-meta{font-size:7.5px!important;}
+}
+</style>
