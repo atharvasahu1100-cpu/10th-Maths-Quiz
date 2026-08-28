@@ -11774,5 +11774,30 @@ function startTeacherTest(){
 
 <!-- GS FULL AUTO PHOTO: profile upload automatically updates students.photo_url -->
 
+
+<!-- GS_TOP10_ONLY_FINAL_FIX: ONLY unique Top 10 + faster scrolling -->
+<script id="GS_TOP10_ONLY_FINAL_FIX">
+(function(){
+  /* Faster speed: keep the existing design, only speed up the movement */
+  const TOP10_SPEED = 75;
+
+  /* This helper is intentionally small and does not touch Top-3/crowns/scores/gaps. */
+  window.GS_TOP10_SPEED = TOP10_SPEED;
+
+  /* If the existing animation reads GS_TOP10_SPEED, this updates it immediately. */
+  document.addEventListener('DOMContentLoaded', function(){
+    const track =
+      document.querySelector('#dailyChampionsDashboard .top10-track') ||
+      document.querySelector('#dailyChampionsDashboard .daily-top10-track') ||
+      document.querySelector('.top10-track');
+
+    if(track){
+      track.style.setProperty('--top10-speed', TOP10_SPEED + 'px/s');
+      track.dataset.speed = TOP10_SPEED;
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
