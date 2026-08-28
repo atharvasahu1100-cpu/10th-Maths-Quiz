@@ -11942,6 +11942,88 @@ function startTeacherTest(){
   }
 })();
 </script>
+
+
+<!-- FINAL: ALL THREE CROWNS SAME LARGE SIZE + ON TOP OUTER EDGE OF PHOTO CIRCLE -->
+<style id="GS_ALL_3_CROWNS_LARGE_ON_CIRCLE">
+/* Only crown positioning/size. Nothing else is changed. */
+#home-screen #dailyTop3 .gs-podium-card{
+  position:relative !important;
+  overflow:visible !important;
+}
+#home-screen #dailyTop3 .gs-podium-card .gs-podium-crown{
+  position:absolute !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:1 !important;
+  z-index:9999 !important;
+  pointer-events:none !important;
+  overflow:visible !important;
+  white-space:nowrap !important;
+}
+</style>
+
+<script id="GS_ALL_3_CROWNS_LARGE_ON_CIRCLE_JS">
+(function(){
+  function placeAllCrowns(){
+    var root=document.getElementById('dailyTop3');
+    if(!root) return;
+
+    var gold=root.querySelector('.gs-podium-card.gold');
+    if(!gold) return;
+    var goldCrown=gold.querySelector('.gs-podium-crown');
+    if(!goldCrown) return;
+
+    /* Winner 1 is the exact size reference. */
+    var cs=getComputedStyle(goldCrown);
+    var refFont=parseFloat(cs.fontSize)||37;
+    var refRect=goldCrown.getBoundingClientRect();
+    var refW=refRect.width||40;
+    var refH=refRect.height||34;
+
+    ['gold','silver','bronze'].forEach(function(rank){
+      var card=root.querySelector('.gs-podium-card.'+rank);
+      if(!card) return;
+      var crown=card.querySelector('.gs-podium-crown');
+      var photo=card.querySelector('.gs-podium-photo');
+      if(!crown || !photo) return;
+
+      /* All three crowns exactly same large size as Winner 1. */
+      crown.style.fontSize=refFont+'px';
+      crown.style.width=refW+'px';
+      crown.style.height=refH+'px';
+      crown.style.left='50%';
+      crown.style.transform='translateX(-50%)';
+
+      /* Put crown on the TOP OUTER EDGE of the photo circle. */
+      var photoTop=photo.offsetTop;
+      var crownH=crown.getBoundingClientRect().height || refH;
+      var outerOverlap=Math.max(6, Math.min(14, photo.offsetHeight*0.16));
+      crown.style.top=(photoTop-crownH+outerOverlap)+'px';
+    });
+  }
+
+  function run(){
+    placeAllCrowns();
+    setTimeout(placeAllCrowns,100);
+    setTimeout(placeAllCrowns,400);
+    setTimeout(placeAllCrowns,1000);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run);
+  else run();
+  window.addEventListener('load',run);
+  window.addEventListener('resize',run);
+
+  var root=document.getElementById('dailyTop3');
+  if(root && window.MutationObserver){
+    new MutationObserver(function(){setTimeout(run,50);}).observe(root,{childList:true,subtree:true});
+  }
+})();
+</script>
+
 </body>
 </html>
 
@@ -12353,3 +12435,39 @@ function startTeacherTest(){
   }
 })();
 </script>
+
+<!-- FINAL SCORE FIT FIX: only the score text in the top 3 winner cards -->
+<style id="GS_TOP3_SCORE_FIT_FINAL">
+/* Keep every Top-3 score inside its own winner box on mobile and desktop. */
+#home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card .daily-champion-score{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+  padding:0 2px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:clip !important;
+  text-align:center !important;
+  line-height:1.2 !important;
+}
+
+/* Side winner cards are narrower, so their score font is reduced just enough to stay inside. */
+#home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.silver .daily-champion-score,
+#home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.bronze .daily-champion-score{
+  font-size:clamp(8px,2.25vw,12px) !important;
+}
+
+/* Keep the middle winner score prominent, but still constrained to its box. */
+#home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.gold .daily-champion-score{
+  font-size:clamp(11px,2.8vw,15px) !important;
+}
+
+@media(max-width:480px){
+  #home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.silver .daily-champion-score,
+  #home-screen #dailyChampionsDashboard #dailyTop3 .gs-podium-card.bronze .daily-champion-score{
+    font-size:9px !important;
+    letter-spacing:-0.15px !important;
+  }
+}
+</style>
