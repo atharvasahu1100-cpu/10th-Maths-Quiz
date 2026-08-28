@@ -10358,6 +10358,351 @@ body{
 })();
 </script>
 
+
+<!-- =========================================================
+ LOCKED MODULE 1 ONLY — DAILY CHAMPION HEADER DESIGN
+ Module 2 (Top 3) and Module 3 (Top 10) are untouched.
+ ========================================================= -->
+<style id="GS_MODULE1_DAILY_CHAMPION_FINAL_DESIGN">
+#dailyChampionModule .daily-champions-title-row,
+#home-screen #dailyChampionModule .daily-champions-title-row{
+  position:relative !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  align-items:center !important;
+  text-align:center !important;
+  min-height:116px !important;
+  margin:0 0 18px !important;
+  padding:13px 72px 14px !important;
+  gap:5px !important;
+  border-radius:20px !important;
+  overflow:hidden !important;
+  isolation:isolate !important;
+  background:
+    radial-gradient(circle at 18% 25%, rgba(255,255,255,.38), transparent 24%),
+    radial-gradient(circle at 82% 18%, rgba(255,229,116,.35), transparent 26%),
+    linear-gradient(135deg,#063a86 0%,#0867bd 45%,#07458f 100%) !important;
+  border:1px solid rgba(255,255,255,.52) !important;
+  box-shadow:
+    0 0 0 2px rgba(14,104,193,.18),
+    0 8px 24px rgba(0,59,132,.28),
+    inset 0 1px 0 rgba(255,255,255,.45),
+    inset 0 -12px 25px rgba(0,32,92,.18) !important;
+}
+
+/* Shining moving light in background */
+#dailyChampionModule .daily-champions-title-row::before,
+#home-screen #dailyChampionModule .daily-champions-title-row::before{
+  content:"" !important;
+  position:absolute !important;
+  width:72px !important;
+  height:190px !important;
+  left:-95px !important;
+  top:-36px !important;
+  transform:rotate(25deg) !important;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent) !important;
+  filter:blur(1px) !important;
+  animation:gsDailyChampionShine 4.5s ease-in-out infinite !important;
+  z-index:-1 !important;
+}
+
+/* Decorative line under the subtitle */
+#dailyChampionModule .daily-champions-title-row::after,
+#home-screen #dailyChampionModule .daily-champions-title-row::after{
+  content:"✦━━━━━━━━━━━━✦━━━━━━━━━━━━✦" !important;
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+  max-width:360px !important;
+  margin:3px auto 0 !important;
+  color:#ffe58a !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  letter-spacing:1px !important;
+  text-shadow:0 0 7px rgba(255,234,145,.95) !important;
+  z-index:2 !important;
+}
+
+@keyframes gsDailyChampionShine{
+  0%,18%{left:-110px;opacity:.05}
+  48%,62%{left:110%;opacity:.95}
+  100%{left:110%;opacity:.05}
+}
+
+/* Center title + subtitle safely between both trophies */
+#dailyChampionModule .daily-champions-title,
+#home-screen #dailyChampionModule .daily-champions-title{
+  width:100% !important;
+  max-width:100% !important;
+  margin:0 auto !important;
+  padding:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  white-space:normal !important;
+  position:relative !important;
+  z-index:3 !important;
+}
+
+#dailyChampionModule .gs-dc-main-title,
+#home-screen #dailyChampionModule .gs-dc-main-title{
+  display:block !important;
+  width:100% !important;
+  margin:0 auto !important;
+  text-align:center !important;
+  color:#fff3a6 !important;
+  font-size:clamp(25px,7vw,42px) !important;
+  font-weight:1000 !important;
+  line-height:1.02 !important;
+  letter-spacing:.4px !important;
+  text-shadow:
+    0 2px 0 #805000,
+    0 0 10px rgba(255,228,112,.68),
+    0 4px 10px rgba(0,0,0,.35) !important;
+}
+
+#dailyChampionModule .gs-dc-sub-title,
+#home-screen #dailyChampionModule .gs-dc-sub-title{
+  display:block !important;
+  width:100% !important;
+  margin:3px auto 0 !important;
+  text-align:center !important;
+  color:#ffffff !important;
+  font-size:clamp(12px,3.7vw,20px) !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+  text-shadow:0 2px 5px rgba(0,0,0,.42) !important;
+}
+
+/* Trophies fixed left/right and away from all letters */
+#dailyChampionModule .daily-champions-title-row .gs-dc-trophy,
+#home-screen #dailyChampionModule .daily-champions-title-row .gs-dc-trophy{
+  position:absolute !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  z-index:4 !important;
+  pointer-events:none !important;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.25)) drop-shadow(0 0 6px rgba(255,221,98,.38)) !important;
+}
+#dailyChampionModule .daily-champions-title-row .gs-dc-trophy:first-child,
+#home-screen #dailyChampionModule .daily-champions-title-row .gs-dc-trophy:first-child{left:16px !important;}
+#dailyChampionModule .daily-champions-title-row .gs-dc-trophy:last-child,
+#home-screen #dailyChampionModule .daily-champions-title-row .gs-dc-trophy:last-child{right:16px !important;}
+
+@media(max-width:430px){
+  #dailyChampionModule .daily-champions-title-row,
+  #home-screen #dailyChampionModule .daily-champions-title-row{
+    min-height:108px !important;
+    padding:12px 58px 13px !important;
+    margin-bottom:18px !important;
+  }
+  #dailyChampionModule .gs-dc-main-title,
+  #home-screen #dailyChampionModule .gs-dc-main-title{font-size:26px !important;}
+  #dailyChampionModule .gs-dc-sub-title,
+  #home-screen #dailyChampionModule .gs-dc-sub-title{font-size:12px !important;}
+  #dailyChampionModule .daily-champions-title-row::after,
+  #home-screen #dailyChampionModule .daily-champions-title-row::after{
+    font-size:8px !important;
+    letter-spacing:.4px !important;
+  }
+}
+
+@media(max-width:360px){
+  #dailyChampionModule .daily-champions-title-row,
+  #home-screen #dailyChampionModule .daily-champions-title-row{
+    padding-left:50px !important;
+    padding-right:50px !important;
+  }
+  #dailyChampionModule .gs-dc-main-title,
+  #home-screen #dailyChampionModule .gs-dc-main-title{font-size:23px !important;}
+  #dailyChampionModule .gs-dc-sub-title,
+  #home-screen #dailyChampionModule .gs-dc-sub-title{font-size:10px !important;}
+}
+</style>
+
+
+<!-- MODULE 1 TROPHY RESTORE FIX — only Daily Champion header -->
+<style id="GS_MODULE1_TROPHY_RESTORE">
+#dailyChampionModule .daily-champions-title-row,
+#home-screen #dailyChampionModule .daily-champions-title-row{
+  position:relative !important;
+}
+
+/* Left trophy */
+#dailyChampionModule .daily-champions-title-row::before,
+#home-screen #dailyChampionModule .daily-champions-title-row::before{
+  content:"🏆" !important;
+  position:absolute !important;
+  left:14px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  width:48px !important;
+  text-align:center !important;
+  font-size:42px !important;
+  line-height:1 !important;
+  z-index:10 !important;
+  opacity:1 !important;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.28)) drop-shadow(0 0 7px rgba(255,221,91,.45)) !important;
+  animation:none !important;
+}
+
+/* Right trophy */
+#dailyChampionModule .daily-champions-title-row::after,
+#home-screen #dailyChampionModule .daily-champions-title-row::after{
+  content:"🏆" !important;
+  position:absolute !important;
+  right:14px !important;
+  left:auto !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  width:48px !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-align:center !important;
+  font-size:42px !important;
+  line-height:1 !important;
+  letter-spacing:0 !important;
+  color:initial !important;
+  text-shadow:none !important;
+  z-index:10 !important;
+  opacity:1 !important;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.28)) drop-shadow(0 0 7px rgba(255,221,91,.45)) !important;
+}
+
+@media(max-width:430px){
+  #dailyChampionModule .daily-champions-title-row::before,
+  #dailyChampionModule .daily-champions-title-row::before,
+  #home-screen #dailyChampionModule .daily-champions-title-row::before,
+  #home-screen #dailyChampionModule .daily-champions-title-row::after{
+    left:10px !important;
+    width:42px !important;
+    font-size:36px !important;
+  }
+  #dailyChampionModule .daily-champions-title-row::after,
+  #home-screen #dailyChampionModule .daily-champions-title-row::after{
+    left:auto !important;
+    right:10px !important;
+  }
+}
+</style>
+
+
+<!-- MODULE 1 FINAL: BOTH TROPHIES + DECORATIVE LINE -->
+<style id="GS_MODULE1_BOTH_TROPHIES_LINE_FINAL">
+#dailyChampionModule .daily-champions-title-row,
+#home-screen #dailyChampionModule .daily-champions-title-row{
+  position:relative !important;
+  min-height:132px !important;
+  padding:14px 82px 26px !important;
+  overflow:hidden !important;
+}
+
+/* LEFT TROPHY — explicitly visible */
+#dailyChampionModule .daily-champions-title-row::before,
+#home-screen #dailyChampionModule .daily-champions-title-row::before{
+  content:"🏆" !important;
+  position:absolute !important;
+  display:block !important;
+  left:18px !important;
+  right:auto !important;
+  top:43% !important;
+  transform:translateY(-50%) !important;
+  width:58px !important;
+  height:58px !important;
+  font-size:52px !important;
+  line-height:58px !important;
+  text-align:center !important;
+  z-index:50 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  color:initial !important;
+  background:none !important;
+  animation:none !important;
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.30)) !important;
+}
+
+/* RIGHT TROPHY — explicitly visible */
+#dailyChampionModule .daily-champions-title-row::after,
+#home-screen #dailyChampionModule .daily-champions-title-row::after{
+  content:"🏆" !important;
+  position:absolute !important;
+  display:block !important;
+  right:18px !important;
+  left:auto !important;
+  top:43% !important;
+  transform:translateY(-50%) !important;
+  width:58px !important;
+  height:58px !important;
+  margin:0 !important;
+  padding:0 !important;
+  font-size:52px !important;
+  line-height:58px !important;
+  text-align:center !important;
+  letter-spacing:0 !important;
+  z-index:50 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  color:initial !important;
+  background:none !important;
+  animation:none !important;
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.30)) !important;
+}
+
+/* Decorative line placed safely below both title lines */
+#dailyChampionModule .daily-champions-title-row .daily-champions-title,
+#home-screen #dailyChampionModule .daily-champions-title-row .daily-champions-title{
+  position:relative !important;
+  z-index:10 !important;
+}
+
+#dailyChampionModule .daily-champions-title-row .daily-champions-title::after,
+#home-screen #dailyChampionModule .daily-champions-title-row .daily-champions-title::after{
+  content:"✦ ━━━━━━━━━━━ ✦ ━━━━━━━━━━━ ✦" !important;
+  display:block !important;
+  width:100% !important;
+  margin:9px auto 0 !important;
+  color:#ffe78a !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  letter-spacing:1px !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  text-shadow:0 0 8px rgba(255,231,138,.95) !important;
+}
+
+@media(max-width:430px){
+  #dailyChampionModule .daily-champions-title-row,
+  #home-screen #dailyChampionModule .daily-champions-title-row{
+    min-height:122px !important;
+    padding:13px 66px 24px !important;
+  }
+  #dailyChampionModule .daily-champions-title-row::before,
+  #home-screen #dailyChampionModule .daily-champions-title-row::before{
+    left:9px !important;
+    width:50px !important;
+    height:50px !important;
+    font-size:45px !important;
+    line-height:50px !important;
+  }
+  #dailyChampionModule .daily-champions-title-row::after,
+  #home-screen #dailyChampionModule .daily-champions-title-row::after{
+    right:9px !important;
+    width:50px !important;
+    height:50px !important;
+    font-size:45px !important;
+    line-height:50px !important;
+  }
+  #dailyChampionModule .daily-champions-title-row .daily-champions-title::after,
+  #home-screen #dailyChampionModule .daily-champions-title-row .daily-champions-title::after{
+    font-size:9px !important;
+    letter-spacing:.4px !important;
+  }
+}
+</style>
+
 </head>
 
 
