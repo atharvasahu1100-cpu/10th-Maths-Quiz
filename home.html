@@ -11655,6 +11655,60 @@ body{
 }
 </style>
 
+
+<!-- LOCKED MODULE 2 ONLY — ULTRA THIN WINNER PHOTO CIRCLE BORDER -->
+<style id="GS_MODULE2_ULTRA_THIN_PHOTO_CIRCLE">
+/* Only the photo circles of the three winners are changed.
+   Photo size, crown, text, scores and other modules remain untouched. */
+
+#dailyTop3 .gs-podium-photo{
+  border-width:1px !important;
+  outline:none !important;
+  box-shadow:none !important;
+}
+
+/* Remove any thick ring created by pseudo-elements */
+#dailyTop3 .gs-podium-photo::before,
+#dailyTop3 .gs-podium-photo::after{
+  border-width:1px !important;
+  box-shadow:none !important;
+}
+
+/* Keep just a very subtle visible circular line */
+#dailyTop3 .gold .gs-podium-photo,
+#dailyTop3 .silver .gs-podium-photo,
+#dailyTop3 .bronze .gs-podium-photo{
+  border-width:1px !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.18) !important;
+}
+</style>
+
+
+<!-- MODULE 2 ONLY — ACTUAL FINAL PHOTO RING THIN FIX -->
+<style id="GS_MODULE2_ACTUAL_THIN_RING_FIX">
+/* The real active CSS had a 6px white border + 4/5px outer ring.
+   Remove BOTH thick layers and keep only one very thin line. */
+
+#home-screen #dailyChampionsDashboard .gs-podium-photo,
+#home-screen #dailyChampionsDashboard .gs-podium-card.gold .gs-podium-photo,
+#home-screen #dailyChampionsDashboard .gs-podium-card.silver .gs-podium-photo,
+#home-screen #dailyChampionsDashboard .gs-podium-card.bronze .gs-podium-photo{
+  border:1px solid rgba(255,255,255,.75) !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.22) !important;
+  outline:0 !important;
+}
+
+/* Ensure the actual image uses the full inner circle */
+#home-screen #dailyChampionsDashboard .gs-podium-photo > img.gs-podium-photo-img{
+  width:100% !important;
+  height:100% !important;
+  border:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:50% !important;
+}
+</style>
+
 </head>
 
 
