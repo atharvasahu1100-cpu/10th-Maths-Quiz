@@ -10893,6 +10893,544 @@ body{
 }
 </style>
 
+
+<!-- LOCKED MODULE 1 ONLY — MOBILE TEXT/TROPHY SPACING + LINE BELOW -->
+<style id="GS_MODULE1_MOBILE_TITLE_LINE_FIX">
+/* Only Daily Champion header. Modules 2 and 3 are untouched. */
+#dailyChampionModule .daily-champions-title-row{
+  padding-left:72px !important;
+  padding-right:72px !important;
+}
+
+/* Keep both title lines centered and safely away from the right trophy */
+#dailyChampionModule .daily-champions-title{
+  width:100% !important;
+  max-width:100% !important;
+  text-align:center !important;
+}
+
+#dailyChampionModule .gs-dc-main-title{
+  white-space:nowrap !important;
+}
+
+/* Remove the old line position from the title area */
+#dailyChampionModule .daily-champions-title-row::after{
+  content:"" !important;
+}
+
+/* Put a longer decorative line BELOW the Daily Champion text/date */
+#dailyChampionModule .daily-champions-title::after{
+  content:"✦━━━━━━━━━━━━━━━━━━━━━━━━✦━━━━━━━━━━━━━━━━━━━━━━━━✦" !important;
+  display:block !important;
+  width:100% !important;
+  margin:11px auto 0 !important;
+  padding:0 !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  color:#ffe78a !important;
+  font-size:10px !important;
+  line-height:1 !important;
+  letter-spacing:.4px !important;
+  text-shadow:0 0 8px rgba(255,231,138,.95) !important;
+}
+
+/* Mobile: reserve more space for both trophies so text never touches them */
+@media(max-width:430px){
+  #dailyChampionModule .daily-champions-title-row{
+    min-height:132px !important;
+    padding-left:64px !important;
+    padding-right:64px !important;
+    padding-bottom:22px !important;
+  }
+
+  #dailyChampionModule .gs-dc-main-title{
+    font-size:23px !important;
+    line-height:1.05 !important;
+    letter-spacing:0 !important;
+  }
+
+  #dailyChampionModule .gs-dc-sub-title{
+    font-size:11px !important;
+  }
+
+  #dailyChampionModule .daily-champions-title::after{
+    margin-top:10px !important;
+    font-size:7px !important;
+    letter-spacing:0 !important;
+  }
+}
+
+@media(max-width:360px){
+  #dailyChampionModule .daily-champions-title-row{
+    padding-left:58px !important;
+    padding-right:58px !important;
+  }
+
+  #dailyChampionModule .gs-dc-main-title{
+    font-size:20px !important;
+  }
+}
+</style>
+
+
+<!-- LOCKED MODULE 1 ONLY — LOWER LINE + SAFE MOBILE TROPHY SPACING -->
+<style id="GS_MODULE1_LINE_LOWER_SAFE_TEXT">
+/* Only Module 1 is changed. */
+#dailyChampionModule .daily-champions-title-row{
+  min-height:148px !important;
+  padding-left:82px !important;
+  padding-right:82px !important;
+  padding-bottom:34px !important;
+}
+
+/* Keep the complete text in a protected center zone */
+#dailyChampionModule .daily-champions-title{
+  width:100% !important;
+  max-width:100% !important;
+  text-align:center !important;
+  position:relative !important;
+  z-index:20 !important;
+}
+
+#dailyChampionModule .gs-dc-main-title,
+#dailyChampionModule .gs-dc-sub-title{
+  width:100% !important;
+  max-width:100% !important;
+  text-align:center !important;
+}
+
+/* Make DAILY CHAMPION responsive enough that it never reaches trophies */
+#dailyChampionModule .gs-dc-main-title{
+  white-space:normal !important;
+  overflow-wrap:anywhere !important;
+}
+
+/* Decorative line moved clearly DOWN below all text */
+#dailyChampionModule .daily-champions-title::after{
+  content:"✦━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━✦" !important;
+  display:block !important;
+  width:100% !important;
+  margin:18px auto 0 !important;
+  padding:0 !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  color:#ffe78a !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  letter-spacing:.2px !important;
+}
+
+/* Keep trophies outside the protected text zone */
+#dailyChampionModule .daily-champions-title-row::before{
+  left:12px !important;
+  z-index:30 !important;
+}
+#dailyChampionModule .daily-champions-title-row::after{
+  right:12px !important;
+  z-index:30 !important;
+}
+
+@media(max-width:430px){
+  #dailyChampionModule .daily-champions-title-row{
+    min-height:145px !important;
+    padding-left:72px !important;
+    padding-right:72px !important;
+    padding-bottom:30px !important;
+  }
+
+  #dailyChampionModule .gs-dc-main-title{
+    font-size:21px !important;
+    line-height:1.08 !important;
+  }
+
+  #dailyChampionModule .gs-dc-sub-title{
+    font-size:10px !important;
+    line-height:1.2 !important;
+  }
+
+  /* Line clearly below subtitle on mobile */
+  #dailyChampionModule .daily-champions-title::after{
+    margin-top:20px !important;
+    font-size:7px !important;
+    transform:scaleX(.96) !important;
+    transform-origin:center !important;
+  }
+
+  /* Keep trophies at the extreme sides */
+  #dailyChampionModule .daily-champions-title-row::before{
+    left:5px !important;
+  }
+  #dailyChampionModule .daily-champions-title-row::after{
+    right:5px !important;
+  }
+}
+
+@media(max-width:360px){
+  #dailyChampionModule .daily-champions-title-row{
+    padding-left:62px !important;
+    padding-right:62px !important;
+  }
+  #dailyChampionModule .gs-dc-main-title{
+    font-size:19px !important;
+  }
+}
+</style>
+
+
+<!-- MODULE 1 ONLY — WIDER DOUBLE DECORATIVE LINES -->
+<style id="GS_MODULE1_DOUBLE_WIDE_LINES">
+/* Keep the real bottom line wide */
+#dailyChampionModule .gs-real-bottom-line{
+  width:calc(100% + 34px) !important;
+  max-width:none !important;
+  margin:18px -17px 0 !important;
+  font-size:13px !important;
+  overflow:visible !important;
+}
+
+/* Add one matching wide line ABOVE the Daily Champion text */
+#dailyChampionModule .daily-champions-title::before{
+  content:"✦━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━✦" !important;
+  display:block !important;
+  width:calc(100% + 34px) !important;
+  margin:0 -17px 13px !important;
+  padding:0 !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  color:#ffe78a !important;
+  font-size:13px !important;
+  line-height:1 !important;
+  letter-spacing:.2px !important;
+  text-shadow:0 0 8px rgba(255,231,138,.95) !important;
+}
+
+@media(max-width:430px){
+  #dailyChampionModule .daily-champions-title::before,
+  #dailyChampionModule .gs-real-bottom-line{
+    width:calc(100% + 18px) !important;
+    margin-left:-9px !important;
+    margin-right:-9px !important;
+    font-size:8px !important;
+  }
+  #dailyChampionModule .daily-champions-title::before{
+    margin-top:0 !important;
+    margin-bottom:14px !important;
+  }
+  #dailyChampionModule .gs-real-bottom-line{
+    margin-top:19px !important;
+  }
+}
+</style>
+
+
+<!-- LOCKED MODULE 1 ONLY — PREMIUM DAILY CHAMPION REDESIGN -->
+<style id="GS_MODULE1_PREMIUM_REDESIGN">
+/* Remove the previous problematic decorative lines */
+#dailyChampionModule .daily-champions-title::before,
+#dailyChampionModule .daily-champions-title::after,
+#dailyChampionModule .gs-real-bottom-line{
+  content:none !important;
+  display:none !important;
+}
+
+/* Premium glowing header */
+#dailyChampionModule .daily-champions-title-row{
+  position:relative !important;
+  min-height:142px !important;
+  padding:22px 82px 20px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+  border-radius:22px !important;
+  background:
+    radial-gradient(circle at 50% -15%, rgba(255,242,165,.45), transparent 38%),
+    radial-gradient(circle at 15% 85%, rgba(42,158,255,.35), transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(93,62,255,.28), transparent 40%),
+    linear-gradient(135deg,#032f78 0%,#086cc5 48%,#073b92 100%) !important;
+  border:1px solid rgba(255,255,255,.55) !important;
+  box-shadow:
+    0 10px 28px rgba(0,54,133,.32),
+    inset 0 1px 0 rgba(255,255,255,.45),
+    inset 0 -14px 28px rgba(0,24,78,.22) !important;
+}
+
+/* Soft moving shine */
+#dailyChampionModule .daily-champions-title-row .daily-champions-title{
+  position:relative !important;
+  z-index:10 !important;
+  width:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+}
+
+#dailyChampionModule .daily-champions-title::before{
+  content:"✦  ✦  ✦" !important;
+  display:block !important;
+  color:#ffe785 !important;
+  font-size:12px !important;
+  letter-spacing:8px !important;
+  margin:0 0 5px !important;
+  text-shadow:0 0 9px rgba(255,233,134,.95) !important;
+}
+
+/* Main title */
+#dailyChampionModule .gs-dc-main-title{
+  display:block !important;
+  width:100% !important;
+  margin:0 !important;
+  color:#fff0a1 !important;
+  font-size:clamp(25px,6.8vw,42px) !important;
+  font-weight:1000 !important;
+  line-height:1.02 !important;
+  letter-spacing:.8px !important;
+  text-align:center !important;
+  text-shadow:
+    0 2px 0 #8c5700,
+    0 0 12px rgba(255,223,99,.72),
+    0 5px 14px rgba(0,0,0,.35) !important;
+}
+
+/* Subtitle / date */
+#dailyChampionModule .gs-dc-sub-title{
+  display:inline-block !important;
+  width:auto !important;
+  max-width:100% !important;
+  margin:10px auto 0 !important;
+  padding:6px 15px !important;
+  border-radius:999px !important;
+  color:#fff !important;
+  background:rgba(0,26,79,.30) !important;
+  border:1px solid rgba(255,231,130,.50) !important;
+  font-size:clamp(11px,3.3vw,17px) !important;
+  font-weight:900 !important;
+  line-height:1.1 !important;
+  text-align:center !important;
+  box-shadow:0 0 12px rgba(255,229,123,.16), inset 0 1px 0 rgba(255,255,255,.18) !important;
+}
+
+/* Elegant bottom ornament instead of long broken lines */
+#dailyChampionModule .daily-champions-title::after{
+  content:"◆ ─────────── ✦ ─────────── ◆" !important;
+  display:block !important;
+  margin:12px auto 0 !important;
+  color:#ffe889 !important;
+  font-size:13px !important;
+  letter-spacing:1px !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  text-shadow:0 0 8px rgba(255,232,137,.85) !important;
+}
+
+/* Keep both trophies visible and separated from text */
+#dailyChampionModule .daily-champions-title-row::before{
+  content:"🏆" !important;
+  position:absolute !important;
+  left:16px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  width:58px !important;
+  height:58px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:48px !important;
+  z-index:30 !important;
+  filter:drop-shadow(0 4px 5px rgba(0,0,0,.30)) drop-shadow(0 0 10px rgba(255,221,88,.45)) !important;
+  animation:none !important;
+}
+
+#dailyChampionModule .daily-champions-title-row::after{
+  content:"🏆" !important;
+  position:absolute !important;
+  right:16px !important;
+  left:auto !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  width:58px !important;
+  height:58px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin:0 !important;
+  padding:0 !important;
+  color:initial !important;
+  background:none !important;
+  font-size:48px !important;
+  letter-spacing:0 !important;
+  line-height:1 !important;
+  z-index:30 !important;
+  filter:drop-shadow(0 4px 5px rgba(0,0,0,.30)) drop-shadow(0 0 10px rgba(255,221,88,.45)) !important;
+}
+
+@media(max-width:430px){
+  #dailyChampionModule .daily-champions-title-row{
+    min-height:135px !important;
+    padding:18px 64px 18px !important;
+    border-radius:18px !important;
+  }
+  #dailyChampionModule .gs-dc-main-title{
+    font-size:22px !important;
+    letter-spacing:.2px !important;
+  }
+  #dailyChampionModule .gs-dc-sub-title{
+    margin-top:8px !important;
+    padding:5px 9px !important;
+    font-size:10px !important;
+  }
+  #dailyChampionModule .daily-champions-title::after{
+    margin-top:10px !important;
+    font-size:8px !important;
+    letter-spacing:.2px !important;
+  }
+  #dailyChampionModule .daily-champions-title::before{
+    font-size:9px !important;
+    margin-bottom:4px !important;
+  }
+  #dailyChampionModule .daily-champions-title-row::before{
+    left:5px !important;
+    width:50px !important;
+    height:50px !important;
+    font-size:42px !important;
+  }
+  #dailyChampionModule .daily-champions-title-row::after{
+    right:5px !important;
+    width:50px !important;
+    height:50px !important;
+    font-size:42px !important;
+  }
+}
+
+@media(max-width:360px){
+  #dailyChampionModule .daily-champions-title-row{
+    padding-left:58px !important;
+    padding-right:58px !important;
+  }
+  #dailyChampionModule .gs-dc-main-title{
+    font-size:19px !important;
+  }
+}
+</style>
+
+
+<!-- LOCKED MODULE 1 ONLY — MOBILE PERFECT FIT -->
+<style id="GS_MODULE1_MOBILE_PERFECT_FIT">
+/* Prevent horizontal overflow only inside the Daily Champion module */
+#dailyChampionModule,
+#dailyChampionModule *{
+  box-sizing:border-box !important;
+}
+
+#dailyChampionModule{
+  width:100% !important;
+  max-width:100vw !important;
+  overflow:hidden !important;
+}
+
+/* Desktop remains attractive; mobile gets a protected layout */
+@media(max-width:600px){
+  #dailyChampionModule .daily-champions-title-row{
+    width:calc(100% - 16px) !important;
+    max-width:100% !important;
+    min-height:128px !important;
+    margin:0 auto 16px !important;
+    padding:16px 58px 16px !important;
+    overflow:hidden !important;
+  }
+
+  /* Center text gets its own safe zone */
+  #dailyChampionModule .daily-champions-title{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+  }
+
+  #dailyChampionModule .gs-dc-main-title{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    font-size:clamp(18px,6.2vw,24px) !important;
+    line-height:1.08 !important;
+    letter-spacing:0 !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+  }
+
+  #dailyChampionModule .gs-dc-sub-title{
+    max-width:100% !important;
+    font-size:clamp(9px,3vw,12px) !important;
+    line-height:1.2 !important;
+    padding:5px 7px !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+  }
+
+  /* Keep trophies completely inside the header and away from text */
+  #dailyChampionModule .daily-champions-title-row::before{
+    left:5px !important;
+    top:50% !important;
+    width:46px !important;
+    height:46px !important;
+    font-size:38px !important;
+    flex:none !important;
+  }
+
+  #dailyChampionModule .daily-champions-title-row::after{
+    right:5px !important;
+    top:50% !important;
+    width:46px !important;
+    height:46px !important;
+    font-size:38px !important;
+    flex:none !important;
+  }
+
+  /* Ornaments shrink safely instead of overflowing */
+  #dailyChampionModule .daily-champions-title::before{
+    max-width:100% !important;
+    overflow:hidden !important;
+    font-size:8px !important;
+    letter-spacing:5px !important;
+  }
+
+  #dailyChampionModule .daily-champions-title::after{
+    max-width:100% !important;
+    overflow:hidden !important;
+    font-size:7px !important;
+    letter-spacing:0 !important;
+    transform:none !important;
+  }
+}
+
+@media(max-width:380px){
+  #dailyChampionModule .daily-champions-title-row{
+    width:calc(100% - 10px) !important;
+    padding-left:52px !important;
+    padding-right:52px !important;
+    min-height:122px !important;
+  }
+
+  #dailyChampionModule .gs-dc-main-title{
+    font-size:18px !important;
+  }
+
+  #dailyChampionModule .gs-dc-sub-title{
+    font-size:9px !important;
+  }
+
+  #dailyChampionModule .daily-champions-title-row::before,
+  #dailyChampionModule .daily-champions-title-row::after{
+    width:42px !important;
+    height:42px !important;
+    font-size:34px !important;
+  }
+}
+</style>
+
 </head>
 
 
@@ -12413,6 +12951,59 @@ function startTeacherTest(){
   });
 })();
 </script>
+
+
+<!-- MODULE 1 ONLY: REAL DECORATIVE LINE BELOW TEXT -->
+<script id="GS_MODULE1_REAL_LINE_SCRIPT">
+document.addEventListener('DOMContentLoaded', function(){
+  const title = document.querySelector('#dailyChampionModule .daily-champions-title');
+  if(title && !title.querySelector('.gs-real-bottom-line')){
+    const line = document.createElement('div');
+    line.className = 'gs-real-bottom-line';
+    line.innerHTML = '✦━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━✦';
+    title.appendChild(line);
+  }
+});
+</script>
+<style id="GS_MODULE1_REAL_LINE_FIX">
+/* Disable all old pseudo decorative lines */
+#dailyChampionModule .daily-champions-title::after{
+  content:none !important;
+  display:none !important;
+}
+
+/* Real line always stays BELOW both title and date */
+#dailyChampionModule .gs-real-bottom-line{
+  display:block !important;
+  position:relative !important;
+  clear:both !important;
+  width:100% !important;
+  margin:16px auto 0 !important;
+  padding:0 !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  color:#ffe78a !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  letter-spacing:.2px !important;
+  text-shadow:0 0 8px rgba(255,231,138,.95) !important;
+  z-index:5 !important;
+}
+
+#dailyChampionModule .daily-champions-title{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+@media(max-width:430px){
+  #dailyChampionModule .gs-real-bottom-line{
+    margin-top:18px !important;
+    font-size:8px !important;
+  }
+}
+</style>
 
 </body>
 </html>
