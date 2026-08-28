@@ -9585,20 +9585,17 @@ body{
   filter:drop-shadow(0 3px 2px rgba(0,0,0,.3)) !important;
 }
 
-/* Stars stay ONLY on the right. */
+/* Trophy on the right — matching the left trophy. */
 #home-screen #dailyChampionsDashboard .daily-champions-title-row::after{
-  content:"★  ✦  ★" !important;
+  content:"🏆" !important;
   position:absolute !important;
   right:18px !important;
-  top:25px !important;
+  top:14px !important;
   z-index:8 !important;
-  color:#ffd84d !important;
-  font-size:23px !important;
-  font-weight:1000 !important;
+  font-size:48px !important;
   line-height:1 !important;
-  letter-spacing:2px !important;
+  filter:drop-shadow(0 3px 2px rgba(0,0,0,.3)) !important;
   white-space:nowrap !important;
-  text-shadow:0 2px 4px rgba(0,0,0,.35) !important;
 }
 
 /* ---------- THREE WINNERS ---------- */
@@ -9795,7 +9792,18 @@ body{
   align-items:stretch !important;
   gap:8px !important;
   width:max-content !important;
-  transition:transform .65s ease !important;
+  will-change:transform !important;
+  transition:none !important;
+  transform:translate3d(0,0,0) !important;
+}
+
+/* Continuous Top-10 marquee: fixed speed, no pauses, endless right-to-left loop */
+#home-screen #dailyChampionsDashboard .daily-top10-list{
+  overflow:hidden !important;
+  touch-action:pan-y !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-track.is-marquee{
+  animation:none !important;
 }
 
 #home-screen #dailyChampionsDashboard .gs-top10-card,
@@ -10025,6 +10033,144 @@ body{
     font-size:8px!important;
     line-height:1.05!important;
   }
+}
+</style>
+
+
+<style id="GS_TOP10_FINAL_DETAILS_AND_NO_ARROWS">
+/* Final Top-10 fix: remove blue side arrows and show every winner detail. */
+#home-screen #dailyChampionsDashboard .daily-top10-wrap::before,
+#home-screen #dailyChampionsDashboard .daily-top10-wrap::after{
+  content:none !important;
+  display:none !important;
+}
+
+#home-screen #dailyChampionsDashboard .daily-top10-wrap{
+  position:relative !important;
+  overflow:hidden !important;
+}
+#home-screen #dailyChampionsDashboard .daily-top10-list{
+  min-height:270px !important;
+  height:270px !important;
+  overflow:hidden !important;
+  padding:6px 4px !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-track{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:stretch !important;
+  gap:10px !important;
+  width:max-content !important;
+  transition:none !important;
+}
+#home-screen #dailyChampionsDashboard .daily-top10-row,
+#home-screen #dailyChampionsDashboard .gs-top10-card{
+  flex:0 0 145px !important;
+  width:145px !important;
+  min-width:145px !important;
+  min-height:258px !important;
+  height:258px !important;
+  padding:9px 7px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:5px !important;
+  overflow:hidden !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-rank{
+  flex:0 0 auto !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-photo{
+  width:66px !important;
+  height:66px !important;
+  min-width:66px !important;
+  min-height:66px !important;
+  flex:0 0 auto !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-info{
+  width:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  text-align:center !important;
+  overflow:visible !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-name{
+  display:block !important;
+  width:100% !important;
+  font-size:13px !important;
+  font-weight:950 !important;
+  line-height:1.12 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-class{
+  display:block !important;
+  width:100% !important;
+  margin-top:2px !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  line-height:1.15 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-school{
+  display:block !important;
+  width:100% !important;
+  margin-top:3px !important;
+  color:#344f70 !important;
+  font-size:9px !important;
+  font-weight:850 !important;
+  line-height:1.18 !important;
+  white-space:normal !important;
+  max-height:none !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-time{
+  display:block !important;
+  width:100% !important;
+  margin-top:3px !important;
+  color:#203d60 !important;
+  font-size:10px !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-score{
+  display:block !important;
+  width:100% !important;
+  margin-top:auto !important;
+  padding-top:3px !important;
+  color:#bd1414 !important;
+  font-size:12px !important;
+  font-weight:1000 !important;
+  white-space:nowrap !important;
+}
+#home-screen #dailyChampionsDashboard .gs-top10-score strong{
+  font-size:inherit !important;
+}
+@media(max-width:600px){
+  #home-screen #dailyChampionsDashboard .daily-top10-list{
+    min-height:265px !important;
+    height:265px !important;
+  }
+  #home-screen #dailyChampionsDashboard .daily-top10-row,
+  #home-screen #dailyChampionsDashboard .gs-top10-card{
+    flex:0 0 142px !important;
+    width:142px !important;
+    min-width:142px !important;
+    min-height:252px !important;
+    height:252px !important;
+  }
+  #home-screen #dailyChampionsDashboard .gs-top10-name{font-size:12px !important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-class{font-size:10px !important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-school{font-size:8.5px !important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-time{font-size:9px !important;}
+  #home-screen #dailyChampionsDashboard .gs-top10-score{font-size:11px !important;}
 }
 </style>
 
@@ -10894,11 +11040,38 @@ function startTeacherTest(){
   }
 
   function renderTop10(top){
-    top10.innerHTML=`<div class="gs-top10-track" id="gsTop10Track">${top.map((s,i)=>{const rank=i+1,medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'',cls=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';return `<div class="daily-top10-row gs-top10-card ${cls}"><div class="gs-top10-rank">${medal||rank}</div><div class="gs-top10-photo">${photoMarkup(s,'gs-top10-photo-img')}</div><div class="gs-top10-info"><div class="gs-top10-name">${esc(s.name)}</div><div class="gs-top10-class">📚 ${esc(s.className||'कक्षा')}</div><div class="gs-top10-school">🏫 ${esc(s.schoolName||'विद्यालय उपलब्ध नहीं')}</div><div class="gs-top10-time">⏱️ समय: ${esc(timeText(s))}</div></div><div class="gs-top10-score"><span>🏆</span><strong>${scoreText(s)}</strong></div></div>`;}).join('')}</div>`;
+    const cards=top.map((s,i)=>{
+      const rank=i+1,medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'',cls=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
+      return `<div class="daily-top10-row gs-top10-card ${cls}"><div class="gs-top10-rank">${medal||rank}</div><div class="gs-top10-photo">${photoMarkup(s,'gs-top10-photo-img')}</div><div class="gs-top10-info"><div class="gs-top10-name">${esc(s.name)}</div><div class="gs-top10-class">📚 ${esc(s.className||'कक्षा')}</div><div class="gs-top10-school">🏫 ${esc(s.schoolName||'विद्यालय उपलब्ध नहीं')}</div><div class="gs-top10-time">⏱️ समय: ${esc(timeText(s))}</div></div><div class="gs-top10-score"><span>🏆</span><strong>${scoreText(s)}</strong></div></div>`;
+    }).join('');
+    /* Same 10 cards are repeated once so the strip can loop seamlessly. */
+    top10.innerHTML=`<div class="gs-top10-track is-marquee" id="gsTop10Track">${cards}${cards}</div>`;
     startTop10Slider();
   }
-  let timer=null,index=0;
-  function startTop10Slider(){if(timer)clearInterval(timer);const track=document.getElementById('gsTop10Track');if(!track)return;index=0;track.style.transform='translateX(0px)';timer=setInterval(()=>{const cards=track.children;if(!cards.length)return;const step=cards[0].getBoundingClientRect().width+10,max=Math.max(0,track.scrollWidth-top10.clientWidth);index++;let off=index*step;if(off>max){index=0;off=0;}track.style.transform=`translateX(-${off}px)`;},2800);}
+  let marqueeRAF=null,marqueeOffset=0,marqueeLast=0;
+  function stopTop10Slider(){
+    if(marqueeRAF){cancelAnimationFrame(marqueeRAF);marqueeRAF=null;}
+    marqueeOffset=0;marqueeLast=0;
+  }
+  function startTop10Slider(){
+    stopTop10Slider();
+    const track=document.getElementById('gsTop10Track');
+    if(!track)return;
+    const speed=32; /* pixels per second: fixed and smooth */
+    const tick=(now)=>{
+      if(!document.getElementById('gsTop10Track')){stopTop10Slider();return;}
+      if(!marqueeLast)marqueeLast=now;
+      const dt=Math.min(64,now-marqueeLast);
+      marqueeLast=now;
+      const loopWidth=track.scrollWidth/2;
+      if(loopWidth>0){
+        marqueeOffset=(marqueeOffset+(speed*dt/1000))%loopWidth;
+        track.style.transform=`translate3d(${-marqueeOffset}px,0,0)`;
+      }
+      marqueeRAF=requestAnimationFrame(tick);
+    };
+    marqueeRAF=requestAnimationFrame(tick);
+  }
 
   async function render(rows,resultDate){
     const best=new Map();
