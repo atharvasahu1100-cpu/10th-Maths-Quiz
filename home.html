@@ -10105,7 +10105,7 @@ body{
 <div class="daily-champions-dashboard" id="dailyChampionsDashboard">
   <div class="daily-champions-title-row">
     <span class="daily-champions-title" aria-live="polite"></span>
-    <span class="daily-champions-date" id="dailyChampionsDate">कल</span>
+    <span class="daily-champions-date" id="dailyChampionsDate">आज</span>
   </div>
   <div class="daily-top3" id="dailyTop3">
     <div class="daily-champion-card loading">परिणाम लोड हो रहे हैं...</div>
@@ -10809,497 +10809,124 @@ function startTeacherTest(){
   'use strict';
 
   /* =========================================================
-     GANIT SETU — DAILY CHAMPION
-     FIXED DATA CONNECTION
-     ---------------------------------------------------------
-     1. Primary source: student_test_records.test_date
-     2. If test_date was not updated but record was created
-        on the result day, fallback to created_at for that day.
-     3. School/photo are matched safely from students table by:
-        student_id -> mobile_number -> name + class
+     GANIT SETU — DAILY CHAMPION / SUPABASE CONNECTION FIX
+     Design and buttons are untouched. Only data connection and
+     display mapping are corrected.
      ========================================================= */
+  const SUPABASE_URL="https://xgmeivfvuujculkplxjf.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY="sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
+  const top3=document.getElementById('dailyTop3');
+  const top10=document.getElementById('dailyTop10List');
+  const dateBox=document.getElementById('dailyChampionsDate');
+  const titleBox=document.querySelector('#dailyChampionsDashboard .daily-champions-title');
+  if(!top3||!top10||!window.supabase) return;
+  const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
-  const SUPABASE_URL = "https://xgmeivfvuujculkplxjf.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_cORbSXbHOaHzsIHuh2CACQ_vwFXy-zE";
-
-  const top3 = document.getElementById('dailyTop3');
-  const top10 = document.getElementById('dailyTop10List');
-  const dateBox = document.getElementById('dailyChampionsDate');
-  const titleBox = document.querySelector('#dailyChampionsDashboard .daily-champions-title');
-
-  if(!top3 || !top10 || !window.supabase) return;
-
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-
-  const esc = v => String(v ?? '').replace(/[&<>"']/g,c => ({
-    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
-  }[c]));
-
-  function clean(v){
-    return String(v ?? '').trim();
-  }
-
-  function normalize(v){
-    return clean(v).toLowerCase().replace(/\s+/g,' ');
-  }
+  const clean=v=>String(v??'').trim();
+  const esc=v=>clean(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const norm=v=>clean(v).toLowerCase().replace(/\s+/g,' ');
+  const n=v=>{const x=Number(v);return Number.isFinite(x)?x:0;};
+  const clampScore=v=>Math.max(0,Math.min(10,Math.round(n(v))));
 
   function indiaDate(){
-    const parts = new Intl.DateTimeFormat('en-CA',{
-      timeZone:'Asia/Kolkata',
-      year:'numeric', month:'2-digit', day:'2-digit'
-    }).formatToParts(new Date());
-
-    const o={};
-    parts.forEach(x=>o[x.type]=x.value);
-
-    return `${o.year}-${o.month}-${o.day}`;
+    const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+    const o={}; parts.forEach(x=>o[x.type]=x.value); return `${o.year}-${o.month}-${o.day}`;
   }
+  function previousDate(){const d=new Date(indiaDate()+'T00:00:00+05:30');d.setDate(d.getDate()-1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+  function hindiDate(iso){return new Date(iso+'T00:00:00').toLocaleDateString('hi-IN',{day:'numeric',month:'long',year:'numeric'});}
+  function bounds(iso){const st=new Date(iso+'T00:00:00+05:30');const en=new Date(st.getTime()+86400000);return {start:st.toISOString(),end:en.toISOString()};}
+  function timeSeconds(v){const t=clean(v);const m=t.match(/(\d{1,2}):(\d{2})(?::(\d{2}))?/);if(m)return +m[1]*3600 + +m[2]*60 + (+m[3]||0);const mn=t.match(/(\d+)\s*मिनट/),sc=t.match(/(\d+)\s*सेकंड/);return mn||sc?(mn?+mn[1]*60:0)+(sc?+sc[1]:0):99999999;}
+  function scoreText(s){return `${clampScore(s.correct)} / 10 अंक`;}
+  function timeText(s){return clean(s.time||s.testTime)||'—';}
 
-  function previousDate(){
-    const today = indiaDate();
-    const d = new Date(today + 'T00:00:00+05:30');
-    d.setDate(d.getDate()-1);
-
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  }
-
-  function hindiDate(iso){
-    const d = new Date(iso + 'T00:00:00');
-    return d.toLocaleDateString('hi-IN',{
-      day:'numeric', month:'long', year:'numeric'
-    });
-  }
-
-  function dayBoundsIST(isoDate){
-    const start = new Date(isoDate + 'T00:00:00+05:30');
-    const end = new Date(start.getTime() + 24*60*60*1000);
-
-    return {
-      start:start.toISOString(),
-      end:end.toISOString()
-    };
-  }
-
-  function timeSeconds(v){
-    const text=clean(v);
-    const hms=text.match(/(\d{1,2}):(\d{2})(?::(\d{2}))?/);
-
-    if(hms){
-      return (+hms[1]*3600)+(+hms[2]*60)+(+hms[3]||0);
-    }
-
-    const min=text.match(/(\d+)\s*मिनट/);
-    const sec=text.match(/(\d+)\s*सेकंड/);
-
-    if(min || sec){
-      return (min ? +min[1]*60 : 0) + (sec ? +sec[1] : 0);
-    }
-
-    return 99999999;
-  }
-
-  function cleanName(v){
-    return clean(v) || 'विद्यार्थी';
-  }
-
-  function photoMarkup(student, extraClass){
-    const url=clean(student.photoUrl);
-    if(!url) return '';
-
-    return `
-      <img
-        class="${extraClass || ''}"
-        src="${esc(url)}"
-        alt=""
-        aria-hidden="true"
-        loading="eager"
-        decoding="async"
-        referrerpolicy="no-referrer"
-      >
-    `;
-  }
-
-  function field(row, keys){
-    for(const k of keys){
-      const v=row && row[k];
-      if(clean(v)) return clean(v);
-    }
-    return '';
-  }
+  function photoMarkup(s,cls){const u=clean(s.photoUrl);return u?`<img class="${cls||''}" src="${esc(u)}" alt="${esc(s.name)}" loading="eager" decoding="async" referrerpolicy="no-referrer">`:'';}
 
   async function attachStudentDetails(winners){
-    if(!Array.isArray(winners) || !winners.length) return;
-
+    if(!winners.length) return;
     try{
-      /* IMPORTANT: select(*) avoids failure if a column name differs
-         from an older/newer students-table schema. */
-      const {data,error}=await supabaseClient
-        .from('students')
-        .select('*');
+      const {data,error}=await db.from('students').select('student_id,student_name,mobile_number,class_name,school_name,profile_id,photo_url');
       if(error) throw error;
-
-      const rows=Array.isArray(data) ? data : [];
-      const byId=new Map(), byMobile=new Map(), byNameClass=new Map(), byName=new Map();
-
-      rows.forEach(r=>{
-        const id=field(r,['student_id','id','profile_id']);
-        const mobile=field(r,['mobile_number','mobile','phone','student_mobile']);
-        const name=normalize(field(r,['student_name','name','full_name']));
-        const cls=normalize(field(r,['class_name','class','student_class']));
-        if(id) byId.set(id,r);
-        if(mobile) byMobile.set(mobile,r);
-        if(name) byName.set(name,r);
-        if(name && cls) byNameClass.set(name+'|'+cls,r);
+      const byId=new Map(),byProfile=new Map(),byMobile=new Map(),byNameClass=new Map(),byName=new Map();
+      (data||[]).forEach(r=>{
+        const id=norm(r.student_id), pid=norm(r.profile_id), mob=norm(r.mobile_number), nc=norm(r.student_name)+'|'+norm(r.class_name), nm=norm(r.student_name);
+        if(id)byId.set(id,r); if(pid)byProfile.set(pid,r); if(mob)byMobile.set(mob,r); if(nc!=='|')byNameClass.set(nc,r); if(nm&&!byName.has(nm))byName.set(nm,r);
       });
-
-      /* Rajesh Sahu is the confirmed master profile used as the
-         photo/school fallback for the 10 dummy winner records. */
-      const fallbackProfile =
-        rows.find(r=>normalize(field(r,['student_name','name','full_name']))==='rajesh sahu') ||
-        rows.find(r=>field(r,['photo_url','photo','profile_photo']) || field(r,['school_name','school'])) ||
-        null;
-
-      const fallbackId=field(fallbackProfile,['student_id','id','profile_id']);
-      const fallbackSchool=field(fallbackProfile,['school_name','school','schoolName']);
-      const fallbackPhoto=field(fallbackProfile,['photo_url','photo','profile_photo','image_url']);
-
       winners.forEach(w=>{
-        const id=clean(w.id);
-        const mobile=clean(w.mobile);
-        const name=normalize(w.name);
-        const cls=normalize(w.className);
-
-        const matched=(id && byId.get(id)) ||
-          (mobile && byMobile.get(mobile)) ||
-          (name && cls && byNameClass.get(name+'|'+cls)) ||
-          (name && byName.get(name)) ||
-          null;
-
-        /* Dummy records are intentionally allowed to fall back to the
-           Rajesh master profile for BOTH school and photo. */
-        const source=matched || fallbackProfile;
-        const sourceId=field(source,['student_id','id','profile_id']);
-        const school=field(source,['school_name','school','schoolName']) || fallbackSchool;
-        const photo=field(source,['photo_url','photo','profile_photo','image_url']) || fallbackPhoto;
-        const sourceClass=field(source,['class_name','class','student_class']);
-
-        if(sourceId) w.profileStudentId=sourceId;
-        if(fallbackId) w.photoFallbackStudentId=fallbackId;
-        if(school) w.schoolName=school;
-        if(photo) w.photoUrl=photo;
-        if(!clean(w.className) && sourceClass) w.className=sourceClass;
+        const matched=byId.get(norm(w.id))||byProfile.get(norm(w.id))||byId.get(norm(w.profileId))||byProfile.get(norm(w.profileId))||byMobile.get(norm(w.mobile))||byNameClass.get(norm(w.name)+'|'+norm(w.className))||byName.get(norm(w.name));
+        if(!matched) return;
+        w.profileStudentId=clean(matched.student_id);
+        w.profileId=clean(matched.profile_id);
+        if(clean(matched.student_name))w.name=clean(matched.student_name);
+        if(clean(matched.class_name))w.className=clean(matched.class_name);
+        if(clean(matched.school_name))w.schoolName=clean(matched.school_name);
+        if(clean(matched.photo_url))w.photoUrl=clean(matched.photo_url);
       });
-
-    }catch(e){
-      console.error('Winner student detail lookup failed:',e);
-    }
+    }catch(e){console.warn('Winner profile lookup:',e);}
   }
 
   async function attachPhotos(winners){
-    if(!Array.isArray(winners) || !winners.length) return;
-
-    for(const winner of winners){
-      let current=clean(winner.photoUrl);
-
-      /* A stored full URL/data URL can be rendered directly. */
-      if(current && (/^(https?:|data:image\/)/i.test(current))) continue;
-
-      /* If photo_url contains a Storage path, use that path first. */
-      const paths=[];
-      if(current) paths.push(current.replace(/^\/+/,''));
-
-      const ids=[
-        clean(winner.profileStudentId),
-        clean(winner.photoFallbackStudentId),
-        clean(winner.id)
-      ].filter(Boolean);
-
-      [...new Set(ids)].forEach(sid=>{
-        paths.push('students/'+sid+'/profile.jpg');
-      });
-
-      for(const path of [...new Set(paths)]){
+    for(const w of winners){
+      if(clean(w.photoUrl)) continue;
+      const keys=[clean(w.profileStudentId),clean(w.profileId),clean(w.id)].filter((v,i,a)=>v&&a.indexOf(v)===i);
+      for(const key of keys){
         try{
-          const {data,error}=await supabaseClient.storage
-            .from('student-photos')
-            .createSignedUrl(path,60*60*24*7);
-          if(!error && data && data.signedUrl){
-            winner.photoUrl=clean(data.signedUrl);
-            break;
-          }
-        }catch(e){ console.warn('Winner photo lookup:',path,e); }
+          const {data,error}=await db.storage.from('student-photos').createSignedUrl(`students/${key}/profile.jpg`,60*60*24*7);
+          if(!error&&data?.signedUrl){w.photoUrl=data.signedUrl;break;}
+        }catch(e){}
       }
     }
   }
 
   function renderTop3(top){
-    const winnerByRank=[
-      top[1] || null,
-      top[0] || null,
-      top[2] || null
-    ];
-
-    const medals=['♕','♕','♕'];
-    const ranks=[2,1,3];
-    const classes=['silver','gold','bronze'];
-
-    top3.innerHTML=winnerByRank.map((s,i)=>{
-
-      if(!s){
-        return `
-          <div class="daily-champion-card gs-podium-card ${classes[i]}">
-            <div class="gs-podium-crown">${medals[i]}</div>
-            <div class="daily-champion-photo gs-podium-photo">—</div>
-            <div class="gs-podium-medal">${ranks[i]}</div>
-            <div class="daily-champion-name">अभी उपलब्ध नहीं</div>
-            <div class="daily-champion-score">— / —</div>
-            <div class="daily-champion-meta">कक्षा</div>
-            <div class="gs-winner-school">🏫 विद्यालय उपलब्ध नहीं</div>
-            <div class="gs-winner-time">⏱️ समय: —</div>
-          </div>
-        `;
-      }
-
-      const score=`${esc(s.correct)} / ${esc(s.total)}`;
-
-      return `
-        <div class="daily-champion-card gs-podium-card ${classes[i]}">
-          <div class="gs-podium-crown">${i===1 ? '👑' : medals[i]}</div>
-
-          <div class="daily-champion-photo gs-podium-photo">
-            ${photoMarkup(s,'gs-podium-photo-img')}
-          </div>
-
-          <div class="gs-podium-medal">${ranks[i]}</div>
-          ${i===1 ? '<div class="gs-winner-ribbon">विजेता</div>' : ''}
-
-          <div class="daily-champion-name">${esc(s.name)}</div>
-          <div class="daily-champion-score">🏆 ${score}</div>
-          <div class="daily-champion-meta">📚 ${esc(s.className || 'कक्षा')}</div>
-          <div class="gs-winner-school">🏫 ${esc(s.schoolName || 'विद्यालय उपलब्ध नहीं')}</div>
-          <div class="gs-winner-time">⏱️ समय: ${esc(s.time || s.testTime || '—')}</div>
-        </div>
-      `;
+    const ordered=[top[1]||null,top[0]||null,top[2]||null],ranks=[2,1,3],classes=['silver','gold','bronze'];
+    top3.innerHTML=ordered.map((s,i)=>{
+      if(!s)return `<div class="daily-champion-card gs-podium-card ${classes[i]}"><div class="daily-champion-photo gs-podium-photo">—</div><div class="gs-podium-medal">${ranks[i]}</div><div class="daily-champion-name">अभी उपलब्ध नहीं</div><div class="daily-champion-score">स्कोर: —</div><div class="daily-champion-meta">कक्षा</div><div class="gs-winner-school">🏫 विद्यालय उपलब्ध नहीं</div><div class="gs-winner-time">⏱️ समय: —</div></div>`;
+      return `<div class="daily-champion-card gs-podium-card ${classes[i]}">
+        <div class="gs-podium-crown">${i===1?'👑':'♕'}</div>
+        <div class="daily-champion-photo gs-podium-photo">${photoMarkup(s,'gs-podium-photo-img')}</div>
+        <div class="gs-podium-medal">${ranks[i]}</div>${i===1?'<div class="gs-winner-ribbon">विजेता</div>':''}
+        <div class="daily-champion-name">${esc(s.name)}</div>
+        <div class="daily-champion-score">🏆 स्कोर: ${scoreText(s)}</div>
+        <div class="daily-champion-meta">📚 ${esc(s.className||'कक्षा')}</div>
+        <div class="gs-winner-school">🏫 ${esc(s.schoolName||'विद्यालय उपलब्ध नहीं')}</div>
+        <div class="gs-winner-time">⏱️ समय: ${esc(timeText(s))}</div></div>`;
     }).join('');
   }
 
   function renderTop10(top){
-    top10.innerHTML=`
-      <div class="gs-top10-track" id="gsTop10Track">
-        ${top.map((s,i)=>{
-          const rank=i+1;
-          const medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
-          const cls=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
-          const score=`${esc(s.correct)} / ${esc(s.total)}`;
-
-          return `
-            <div class="daily-top10-row gs-top10-card ${cls}">
-              <div class="gs-top10-rank">${medal || rank}</div>
-
-              <div class="gs-top10-photo">
-                ${photoMarkup(s,'gs-top10-photo-img')}
-              </div>
-
-              <div class="gs-top10-info">
-                <div class="gs-top10-name">${esc(s.name)}</div>
-                <div class="gs-top10-class">📚 ${esc(s.className || 'कक्षा')}</div>
-                <div class="gs-top10-school">🏫 ${esc(s.schoolName || 'विद्यालय उपलब्ध नहीं')}</div>
-                <div class="gs-top10-time">⏱️ समय: ${esc(s.time || s.testTime || '—')}</div>
-              </div>
-
-              <div class="gs-top10-score">
-                <span>🏆</span>
-                <strong>${score}</strong>
-              </div>
-            </div>
-          `;
-        }).join('')}
-      </div>
-    `;
-
+    top10.innerHTML=`<div class="gs-top10-track" id="gsTop10Track">${top.map((s,i)=>{const rank=i+1,medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'',cls=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';return `<div class="daily-top10-row gs-top10-card ${cls}"><div class="gs-top10-rank">${medal||rank}</div><div class="gs-top10-photo">${photoMarkup(s,'gs-top10-photo-img')}</div><div class="gs-top10-info"><div class="gs-top10-name">${esc(s.name)}</div><div class="gs-top10-class">📚 ${esc(s.className||'कक्षा')}</div><div class="gs-top10-school">🏫 ${esc(s.schoolName||'विद्यालय उपलब्ध नहीं')}</div><div class="gs-top10-time">⏱️ समय: ${esc(timeText(s))}</div></div><div class="gs-top10-score"><span>🏆</span><strong>${scoreText(s)}</strong></div></div>`;}).join('')}</div>`;
     startTop10Slider();
   }
-
-  let top10Timer=null;
-  let top10Index=0;
-
-  function startTop10Slider(){
-    if(top10Timer) clearInterval(top10Timer);
-
-    const viewport=top10;
-    const track=document.getElementById('gsTop10Track');
-
-    if(!viewport || !track) return;
-
-    top10Index=0;
-    track.style.transform='translateX(0px)';
-
-    top10Timer=setInterval(()=>{
-      const cards=track.children;
-      if(!cards.length) return;
-
-      const cardWidth=cards[0].getBoundingClientRect().width;
-      const gap=10;
-      const visibleWidth=viewport.clientWidth;
-      const maxOffset=Math.max(0,track.scrollWidth-visibleWidth);
-
-      top10Index++;
-
-      let offset=top10Index*(cardWidth+gap);
-
-      if(offset>maxOffset){
-        top10Index=0;
-        offset=0;
-      }
-
-      track.style.transform=`translateX(-${offset}px)`;
-    },2800);
-
-    viewport.onmouseenter=()=>{ if(top10Timer) clearInterval(top10Timer); };
-    viewport.onmouseleave=()=>{ startTop10Slider(); };
-    viewport.ontouchstart=()=>{ if(top10Timer) clearInterval(top10Timer); };
-    viewport.ontouchend=()=>{ startTop10Slider(); };
-  }
+  let timer=null,index=0;
+  function startTop10Slider(){if(timer)clearInterval(timer);const track=document.getElementById('gsTop10Track');if(!track)return;index=0;track.style.transform='translateX(0px)';timer=setInterval(()=>{const cards=track.children;if(!cards.length)return;const step=cards[0].getBoundingClientRect().width+10,max=Math.max(0,track.scrollWidth-top10.clientWidth);index++;let off=index*step;if(off>max){index=0;off=0;}track.style.transform=`translateX(-${off}px)`;},2800);}
 
   async function render(rows,resultDate){
-
     const best=new Map();
-
-    (Array.isArray(rows) ? rows : []).forEach(r=>{
-      const key=clean(r.student_id) ||
-                clean(r.mobile_number) ||
-                (normalize(r.student_name)+'|'+normalize(r.class_name));
-
-      if(!key) return;
-
-      const item={
-        id:clean(r.student_id),
-        name:cleanName(r.student_name),
-        mobile:clean(r.mobile_number),
-        className:clean(r.class_name),
-        schoolName:'',
-        total:Number(r.total_questions)||0,
-        correct:Number(r.correct_answers)||0,
-        percentage:Number(r.percentage)||0,
-        time:clean(r.time_taken),
-        testTime:clean(r.test_time),
-        photoUrl:''
-      };
-
-      const old=best.get(key);
-
-      if(!old ||
-         item.percentage>old.percentage ||
-         (item.percentage===old.percentage && item.correct>old.correct) ||
-         (item.percentage===old.percentage &&
-          item.correct===old.correct &&
-          timeSeconds(item.time)<timeSeconds(old.time))){
-        best.set(key,item);
-      }
+    (rows||[]).forEach(r=>{
+      const key=clean(r.student_id)||clean(r.mobile_number)||(norm(r.student_name)+'|'+norm(r.class_name)); if(!key)return;
+      const item={id:clean(r.student_id),name:clean(r.student_name)||'विद्यार्थी',mobile:clean(r.mobile_number),className:clean(r.class_name),schoolName:'',profileId:'',total:10,correct:clampScore(r.correct_answers),percentage:clampScore(r.correct_answers)*10,time:clean(r.time_taken),testTime:clean(r.test_time),photoUrl:''};
+      const old=best.get(key);if(!old||item.correct>old.correct||(item.correct===old.correct&&timeSeconds(item.time)<timeSeconds(old.time)))best.set(key,item);
     });
-
-    const students=Array.from(best.values()).sort((a,b)=>{
-      if(b.percentage!==a.percentage) return b.percentage-a.percentage;
-      if(b.correct!==a.correct) return b.correct-a.correct;
-      return timeSeconds(a.time)-timeSeconds(b.time);
-    });
-
+    const students=[...best.values()].sort((a,b)=>b.correct-a.correct||timeSeconds(a.time)-timeSeconds(b.time));
     const top=students.slice(0,10);
-
-    window.__dailyChampionsStudents=students;
-    window.__dailyChampionsMaxScore=100;
-
-    if(dateBox)
-      dateBox.textContent='📅 '+hindiDate(resultDate);
-
-    if(titleBox)
-      titleBox.innerHTML=
-        '<span class="gs-dc-main-title">DAILY CHAMPION</span>'+
-        '<span class="gs-dc-sub-title">★ टेस्ट दिनांक: '+esc(hindiDate(resultDate))+' • टॉप 3 विजेता ★</span>';
-
-    /*
-     * First connect every winner with the master students table.
-     * This is what fixes the missing school name.
-     */
-    await attachStudentDetails(top);
-    await attachPhotos(top);
-
-    renderTop3(top);
-    renderTop10(top);
+    window.__dailyChampionsStudents=students;window.__dailyChampionsMaxScore=10;
+    if(dateBox)dateBox.textContent='📅 '+hindiDate(resultDate);
+    if(titleBox)titleBox.innerHTML='<span class="gs-dc-main-title">DAILY CHAMPION</span><span class="gs-dc-sub-title">★ टेस्ट दिनांक: '+esc(hindiDate(resultDate))+' • टॉप 3 विजेता ★</span>';
+    await attachStudentDetails(top);await attachPhotos(top);renderTop3(top);renderTop10(top);
   }
 
+  // अभी केवल आज (India/Kolkata) का result दिखाया जाएगा.
+  // भविष्य में कल का result दिखाना हो तो नीचे indiaDate() को previousDate() कर देना।
   async function loadDailyChampions(){
-
-    const resultDate=previousDate();
-
-    if(dateBox)
-      dateBox.textContent='📅 '+hindiDate(resultDate);
-
-    if(titleBox)
-      titleBox.innerHTML=
-        '<span class="gs-dc-main-title">DAILY CHAMPION</span>'+
-        '<span class="gs-dc-sub-title">★ टेस्ट दिनांक: '+esc(hindiDate(resultDate))+' • टॉप 3 विजेता ★</span>';
-
+    const resultDate=indiaDate();
     try{
-      /*
-       * PRIMARY:
-       * Correctly use test_date for normal daily results.
-       */
-      let {data,error}=await supabaseClient
-        .from('student_test_records')
-        .select(
-          'student_id,student_name,mobile_number,class_name,'+
-          'total_questions,correct_answers,percentage,'+
-          'time_taken,test_date,test_time,created_at'
-        )
-        .eq('test_date',resultDate);
-
-      if(error) throw error;
-
-      /*
-       * FALLBACK FOR DUMMY/OLD RECORDS:
-       * If records were changed to the new created_at date but their
-       * test_date remained old, still show the records created on the
-       * required Daily Champion date.
-       */
-      if(!Array.isArray(data) || data.length===0){
-        const bounds=dayBoundsIST(resultDate);
-
-        const fallback=await supabaseClient
-          .from('student_test_records')
-          .select(
-            'student_id,student_name,mobile_number,class_name,'+
-            'total_questions,correct_answers,percentage,'+
-            'time_taken,test_date,test_time,created_at'
-          )
-          .gte('created_at',bounds.start)
-          .lt('created_at',bounds.end);
-
-        if(fallback.error) throw fallback.error;
-
-        data=fallback.data || [];
-      }
-
-      await render(Array.isArray(data)?data:[],resultDate);
-
-    }catch(error){
-
-      console.error('Supabase Daily Champions Error:',error);
-
-      top3.innerHTML=
-        '<div class="daily-champion-card loading">'+
-        'Daily Winner का result लोड नहीं हो पाया।'+
-        '</div>';
-
-      top10.innerHTML='';
-    }
+      let q=await db.from('student_test_records').select('student_id,student_name,mobile_number,class_name,total_questions,correct_answers,percentage,time_taken,test_date,test_time,created_at').eq('test_date',resultDate);
+      if(q.error)throw q.error;let rows=q.data||[];
+      if(!rows.length){const b=bounds(resultDate);const f=await db.from('student_test_records').select('student_id,student_name,mobile_number,class_name,total_questions,correct_answers,percentage,time_taken,test_date,test_time,created_at').gte('created_at',b.start).lt('created_at',b.end);if(f.error)throw f.error;rows=f.data||[];}
+      await render(rows,resultDate);
+    }catch(e){console.error('Supabase Daily Champions Error:',e);top3.innerHTML='<div class="daily-champion-card loading">Daily Winner का result लोड नहीं हो पाया।</div>';top10.innerHTML='';}
   }
-
   loadDailyChampions();
-
 })();
 </script>
 
@@ -11609,9 +11236,9 @@ function startTeacherTest(){
     const time=c(found.time);
 
     box.innerHTML =
-      '<span class="rank-value">#'+rank+'</span>' +
-      '<span class="rank-extra"> • '+correct+'/'+total+
-      ' • '+pct+'%'+(time ? ' • '+time : '')+'</span>';
+      '<span class="rank-value">रैंक: #'+rank+'</span>' +
+      '<span class="rank-extra"> • स्कोर: '+correct+' / 10 अंक'+
+      (time ? ' • समय: '+time : '')+'</span>';
 
     box.classList.add('show');
     return true;
